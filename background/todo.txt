@@ -1,0 +1,10 @@
+24/05/18
+----------
+
+Need to consolidate the background section, fold information from CASES and Streamit paper together.
+
+Add more information on Streaming languages.
+
+Add more information on core-fusion.
+
+Add more information on EDGE.
