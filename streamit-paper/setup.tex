@@ -8,10 +8,9 @@ In addition, we look at the impact of loop unrolling and how it helps exploit la
 %Maybe need to change graph
 \begin{figure}[t]
     \centering
-    \includegraphics[width=0.5\textwidth]{streamit-paper/graphics/explanation.pdf}
+    \includegraphics[width=1\textwidth]{streamit-paper/graphics/explanation.pdf}
     \caption{Description of our workflow.
     Two distinct machine-learning models are used to predict the optimal thread partitioning and core composition based on static code features.}
-\vspace{-5mm}
     \label{fig:overview}
 \end{figure}
 
@@ -64,12 +63,11 @@ For each benchmark we used the default input provided in the repository and the 
     \end{tabular}
   \caption{Design space considered per application.}
   \label{tab:space}
-\vspace{5mm}
 \end{table}
 
 \begin{figure}[t]
   \centering
-    \includegraphics[width=0.49\textwidth]{streamit-paper/graphics/ESCProx.pdf}
+    \includegraphics[width=1\textwidth]{streamit-paper/graphics/ESCProx.pdf}
     \caption{Statistical (plain line) and actual proximity (dotted line) to best performance using a subset of the sample space.}\label{fig:prox}
 \end{figure}
 
@@ -79,7 +77,6 @@ For each benchmark we used the default input provided in the repository and the 
     \caption{Performance as a function of the number of threads. The performance metric is number of cycles. Each benchmark has the performance measured with cores composed and with threads mapped to a single core.}\label{fig:threadtrend}
 \end{figure*}
 
-\vspace{2mm}
 
 \subsection{Design Space}
 
@@ -89,7 +86,6 @@ We restrict each core to running only a single thread (no preemptive scheduling)
 Cores can be fused together to form a logical core with up to 15 physical cores, making the total number of cores assigned to a thread between 1 and 15.
 This leads to a total space size of 32,767 unique combination per benchmark.
 
-\vspace{2mm}
 \subsection{Sample Space}
 
 Given a partitioning, any benchmark that is split into 15 threads requires 32,767 executions to cover the entire space.

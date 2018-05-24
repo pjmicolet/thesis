@@ -1,5 +1,4 @@
 % Small intro, re-explain that finding thread/core pairing is complicated and thus ML is a good idea.
-\vspace{3mm}
 As seen in the previous section, selecting the right number of threads and a good combination of cores is difficult.
 This difficulty arises from trying to balance between exploiting larger composed cores with block speculation and ILP and between exploiting a larger number of logical cores via TLP.
 
@@ -44,13 +43,10 @@ Yet, these variables seem to hold less influence on the number of threads a prog
 This is most certainly due to the fact that whilst SplitJoins make parallelizable areas more visible, the amount of work contained in each stream of the SplitJoin, especially when this size is small, may actually make parallelizing the program worse due to ratio of communication to computation.
 
 \begin{figure}
-  \includegraphics[width=0.51\textwidth]{streamit-paper/graphics/corrGraph.pdf}
+  \includegraphics[width=1\textwidth]{streamit-paper/graphics/corrGraph.pdf}
   \caption{The ten highest correlating features with the best number of threads for 1000 synthetic benchmarks.}\label{fig:corr}
-\vspace{4mm}
 \end{figure}
-
-\vspace{2mm}
-
+ 
 \paragraph{KNN Model}
 
 We chose to use a k-Nearest Neighbor (kNN) to determine the number of threads to use for the application.
