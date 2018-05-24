@@ -28,7 +28,7 @@ Given a certain number of cores, if the prediction accuracy is under the limits 
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=\textwidth]{graphics/limit_study/prediction_req.pdf}
+    \includegraphics[width=\textwidth]{cases-paper/graphics/limit_study/prediction_req.pdf}
 \vspace*{-5mm}
     \caption{Required prediction accuracy for a logical core size to be efficient given an average block size.}
     \label{fig:req_pred}
@@ -55,7 +55,7 @@ SyncCost_i = \frac{\sum_{n=0}^{i-1}\left(AvBlocksInFlight \right) \times n }{i}
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=\textwidth]{graphics/limit_study/sync_cost.pdf}
+    \includegraphics[width=\textwidth]{cases-paper/graphics/limit_study/sync_cost.pdf}
 \vspace*{-5mm}
     \caption{Synchronization Cost in cycles for a given number of cores in a composition and an average block size.} %Each core has 4 lanes and each lane can fetch a block of up to 32 instructions. Lower is better.}
     \label{fig:sync_cost}
@@ -76,7 +76,7 @@ It shows that larger logical processors can easily under-perform; for example we
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=0.60\textwidth]{graphics/limit_study/summary.pdf}
+    \includegraphics[width=0.60\textwidth]{cases-paper/graphics/limit_study/summary.pdf}
     \caption{IPC estimate given a logical processor size, average branch prediction and average block size for a dual-issue core. A higher IPC means better performance.}
     \label{fig:lm_summ}
 \vspace{5mm}
