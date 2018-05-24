@@ -33,7 +33,7 @@
 %%  draft: produce a single-spaced, double-sided thesis with narrow margins
 %%
 %% For a PhD thesis -- you must also specify a research institute:
-\documentclass[phd,ilcc,twoside]{infthesis}
+\documentclass[phd,icsa,twoside]{infthesis}
 
 %% For an MPhil thesis -- also needs an institute
 % \documentclass[mphil,ianc]{infthesis}
@@ -94,7 +94,7 @@
 
 %% Information about the title, etc.
 \title{How I Did It}
-\author{Victor von Frankenstein}
+\author{Paul-Jules Micolet}
 
 %% If the year of submission is not the current year, uncomment this line and 
 %% specify it here:
@@ -143,7 +143,9 @@ Igor, my faithful lab assistant.
 %%%%%%%%
 %% Include your chapter files here. See the sample chapter file for the basic
 %% format.
-
+\include{./introduction/introduction}
+\include{./background/background}
+\include{./relatedwork/relatedwork}
 \include{./streamit-paper/streamit-chapter}
 \include{./cases-paper/cases-chapter}
 % \include{chap2}
