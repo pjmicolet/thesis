@@ -22,7 +22,7 @@ Finally we also observe that executions without compositions always perform wors
 This demonstrates that composing cores is essential to obtain the best performance from a workload.
 
 \begin{figure}[t]
-  \includegraphics[width=0.5\textwidth]{graphics/audiobeam_tots.pdf}
+  \includegraphics[width=0.5\textwidth]{streamit-paper/graphics/audiobeam_tots.pdf}
   \caption{Distribution of Audiobeam performance when modifying the amount of threads and compositions.}\label{fig:audiototal}
 \end{figure}
 \vspace{3mm}
@@ -45,7 +45,7 @@ For this benchmark the impact of core composition is actually very large for the
 Interestingly, as more threads are used,  performance shifts worsens, echoing the results shown in the previous section.
 
 \begin{figure}[t]
-  \includegraphics[width=0.5\textwidth]{graphics/unrolled_fm.pdf}
+  \includegraphics[width=0.5\textwidth]{streamit-paper/graphics/unrolled_fm.pdf}
   \caption{Distribution of FMRadio performance when modifying the amount of threads, composition and unrolling factor.}\label{fig:fmunroll}
 \end{figure}
 
@@ -69,7 +69,7 @@ This signifies that the amount of resources available to each thread must be tak
 \begin{figure*}[t]
  \centering
   \centering
-    \includegraphics[width=1\textwidth]{graphics/threadcompbench.pdf}
+    \includegraphics[width=1\textwidth]{streamit-paper/graphics/threadcompbench.pdf}
     \caption{Speedup obtained by choosing best core composition, best
       thread number and the combination of both optimisations. The baseline for the speedup measurement is single core, single thread execution using O2 compiler optimisations. Higher
       is better.}\label{fig:overviewhist}

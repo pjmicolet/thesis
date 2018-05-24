@@ -44,7 +44,7 @@ Yet, these variables seem to hold less influence on the number of threads a prog
 This is most certainly due to the fact that whilst SplitJoins make parallelizable areas more visible, the amount of work contained in each stream of the SplitJoin, especially when this size is small, may actually make parallelizing the program worse due to ratio of communication to computation.
 
 \begin{figure}
-  \includegraphics[width=0.51\textwidth]{graphics/corrGraph.pdf}
+  \includegraphics[width=0.51\textwidth]{streamit-paper/graphics/corrGraph.pdf}
   \caption{The ten highest correlating features with the best number of threads for 1000 synthetic benchmarks.}\label{fig:corr}
 \vspace{4mm}
 \end{figure}
@@ -69,6 +69,6 @@ This average is measured by looking at the thread performances without compositi
 
 \begin{figure*}
   \center
-  \includegraphics[width=1\textwidth]{graphics/lineargraphs.pdf}
+  \includegraphics[width=1\textwidth]{streamit-paper/graphics/lineargraphs.pdf}
   \caption{Optimal number of cores in relation to the three highest correlating features. The maximum number of cores plateaus on the right hand side as this is the maximum possible amount.}\label{fig:maxav}
 \end{figure*}
