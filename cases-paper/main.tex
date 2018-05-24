@@ -1,0 +1,184 @@
+\documentclass[format=acmsmall, review=false, screen=true]{acmart}
+\usepackage{listings}
+\usepackage{lstlinebgrd}
+
+\usepackage{booktabs} % For formal tables
+\newcommand{\bm}[1]{\textit{#1}}
+%test
+% Copyright
+%\setcopyright{none}
+%\setcopyright{acmcopyright}
+%\setcopyright{acmlicensed}
+%\setcopyright{rightsretained}
+%\setcopyright{usgov}
+%\setcopyright{usgovmixed}
+%\setcopyright{cagov}
+%\setcopyright{cagovmixed}
+\usepackage{subfig}
+
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{mathtools}
+
+\usepackage{float}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+% DOI
+\acmDOI{none}
+
+% ISBN
+%\acmISBN{123-4567-24-567/08/06}
+\acmJournal{TECS}
+
+\received{April 2017}
+\received[revised]{June 2017}
+\received[accepted]{June 2017}
+
+%Conference
+%\acmConference[CASES '17]{International Conference on Compilers,Architecture, and Synthesis for Embedded Systems}{October 2017}{ Seoul, South Korea}
+%\acmYear{2017}
+%\copyrightyear{2017}
+%\acmPrice{15.00}
+%  Paso, Texas USA} 
+%\acmYear{1997}
+%\copyrightyear{2016}
+%
+%\acmPrice{15.00}
+
+\setlength{\textfloatsep}{0.1cm}
+
+\usepackage{xspace}
+
+
+\newcommand{\ie}{\emph{i.e.},\xspace}
+\newcommand{\eg}{\emph{e.g.},\xspace}
+
+
+\begin{document}
+\title{A Study of Dynamic Phase Adaptation Using a Dynamic Multicore Processor}
+%\titlenote{A Study of Dynamic Phase Adaptation Using a Dynamic Multicore Processor}
+%\subtitle{Extended Abstract}
+%\subtitlenote{The full version of the author's guide is available as
+%  \texttt{acmart.pdf} document}
+
+
+
+\author{Paul-Jules Micolet}
+\orcid{0000-0003-4292-0115}
+\affiliation{%
+  \institution{University of Edinburgh}
+  \department{School of Informatics}
+  \streetaddress{10 Crichton St}
+  \postcode{EH8 9AB}
+  \city{Edinburgh}
+}
+\email{p.r.r.micolet@sms.ed.ac.uk}
+
+\author{Aaron Smith}
+\affiliation{
+\institution{University of Edinburgh and Microsoft Research}
+}
+\email{aaron.smith@microsoft.com}
+
+\author{Christophe Dubach}
+\affiliation{
+\institution{University of Edinburgh}
+  \department{School of Informatics}
+  \streetaddress{10 Crichton St}
+  \postcode{EH8 9AB}
+  \city{Edinburgh}
+}
+\email{christophe.dubach@sms.ed.ac.uk}
+
+\thanks{This article was presented in the International Conference on Compilers, Architecture, and Synthesis for Embedded Systems (CASES) 2017 and appears as part of the ESWEEK-TECS special issue}
+\thanks{This work has been supported by Microsoft Research through its PhD Scholarship Programme.}
+\thanks{Authors's address: P.J. Micolet: Informatics Forum, 10 Crichton St., Edinburgh EH8 9AB; A. Smith: One Microsoft Way, Redmond, WA 98052 USA; C. Dubach: Informatics Forum, 10 Crichton St., Edinburgh EH8 9AB}
+\thanks{Corresponding authors' email addresses: P.J. Micolet: p.r.r.micolet@sms.ed.ac.uk; A. Smith: aaron.smith@microsoft.com; C. Dubach: christophe.dubach@ed.ac.uk}
+\begin{abstract}
+
+Heterogeneous processors such as ARM's big.LITTLE have become popular for embedded systems.
+They offer a choice between running workloads on a high performance core or a low-energy core leading to increased energy efficiency.
+However, the core configurations are fixed at design time which offers a limited amount of adaptation.
+
+Dynamic Multicore Processors (DMPs) bridge the gap between homogeneous and fully reconfigurable systems.
+Cores can fuse dynamically to adapt the computational resources to the needs of different workloads.
+There exists multiple examples of DMPs in the literature, yet the focus has mainly been on static partitioning.
+
+This paper conducts the first thorough study of the potential for dynamic reconfiguration of DMPs at runtime.
+We study how performance varies with static partitioning and what software optimizations are required to achieve high performance.
+We show that energy consumption is reduced considerably when adapting the number of cores to program phases, and introduce a simple online model which predicts the optimal number of cores to use to minimize energy consumption while maintaining high performance.
+Using the San Diego Vision Benchmark Suite as a use case, the dynamic scheme leads to $\sim40\%$ energy savings on average without decreasing performance.
+
+
+\end{abstract}
+
+ \begin{CCSXML}
+<ccs2012>
+<concept>
+<concept_id>10010520.10010521.10010542.10010543</concept_id>
+<concept_desc>Computer systems organization~Reconfigurable computing</concept_desc>
+<concept_significance>500</concept_significance>
+</concept>
+<concept>
+<concept_id>10010520.10010521.10010542.10010546</concept_id>
+<concept_desc>Computer systems organization~Heterogeneous (hybrid) systems</concept_desc>
+<concept_significance>300</concept_significance>
+</concept>
+</ccs2012>
+\end{CCSXML}
+
+\ccsdesc[500]{Computer systems organization~Reconfigurable computing}
+\ccsdesc[300]{Computer systems organization~Heterogeneous (hybrid) systems}
+
+\keywords{Dynamic Multicore Processor, Limit Study}
+\maketitle
+
+\section{Introduction}\label{sect:introduction}
+\input{introduction.tex}
+
+\section{Dynamic Multicore Processor}\label{sect:background}
+\input{background.tex}
+
+\vspace{-2mm}
+\section{Motivation}\label{sec:motivation}
+\input{motivationFinal.tex}
+
+\section{A Study of Core Fusion}\label{sec:lim_study}
+\input{limitstudy.tex}
+
+\section{Experimental Setup}\label{sec:setup}
+\input{experimental_setup.tex}
+
+\section{Code Optimizations}\label{sec:opt}
+\input{compiler_opts.tex}
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{graphics/Exploration/ipcs_16_2.pdf}
+    \vspace*{-8mm}
+    \caption{IPC as a function of time for each benchmark when run on 16 fused cores.}
+    \label{fig:sxt}
+\vspace{5mm}
+\end{figure*}
+
+\vspace{5mm}
+\section{Benchmark Exploration}\label{sec:expl}
+\input{bmark_exploration.tex}
+
+\section{Dynamic Core Fusion}\label{sec:dynamic}
+\input{dynamic_core_fusion.tex}
+
+
+\section{Linear Regression Model}\label{sec:model}
+\input{linear_reg.tex}
+
+\section{Related Work}\label{sec:related}
+\input{related_work.tex}
+
+\section{Conclusion}\label{sec:conc}
+\input{conclusion.tex}
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{references} 
+
+\end{document}

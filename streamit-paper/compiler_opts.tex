@@ -1,0 +1,17 @@
+\subsection{Loop Unrolling}
+In some cases, filters must be modified in order to better match with the potential hardware optimisations.
+Filters containing a large amount of loops may result in blocks of operation that are too small to take advantage of fusing multiple cores.
+Unrolling loops may also increase the size of hyperblocks as is decreases the amount of control flow.
+For example, when potential vectorization may not easily be extracted from a loop unrolling it may yield similar results.
+The StreamIt benchmarks often contain tightly knit loops that can be unrolled~\cite{}.
+Determining the loop unroll factor can be difficult~\cite{} and depends on a varying set of factors.
+One of the common constraints is on the stress loop unrolling can have on Instruction Caches by increasing the number of cache misses.
+Fusing cores will allow us to reduce some of the penalties incurred by loop unrolling.
+This is due to the E2's ability of allocating a greater amount of resources to a single thread through cache fusion.
+
+Figure X presents an example of how loop unrolling can affect performance on the \textbf{FMRadio} benchmark.
+In this example we experimented using 3 different unroll factors: 2, 4, 8, 16, 32 and 64.
+As we can see, the higher the unroll facter the greater the performance increase becomes.
+This is due to the fact that by increasing the average block size we are able to fuse more cores together, resulting in a higher level of instruction level parallelism. 
+
+

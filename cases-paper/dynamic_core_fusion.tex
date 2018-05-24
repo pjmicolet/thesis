@@ -1,0 +1,153 @@
+\begin{figure*}[t]
+\vspace{-4mm}
+     \centering
+     \subfloat[][Disparity]{\includegraphics[width=0.33\textwidth]{graphics/Pareto/DispN3.pdf}\vspace*{-4mm}\label{subfig:disp}}
+     \subfloat[][Localization]{\includegraphics[width=0.33\textwidth]{graphics/Pareto/LocN3.pdf}\vspace*{-4mm}\label{subfig:loc}}
+\vspace{-4mm}
+     \subfloat[][MSER]{\includegraphics[width=0.33\textwidth]{graphics/Pareto/MSERN3.pdf}\label{subfig:mser}}\
+     \subfloat[][Multi\_Ncut]{\includegraphics[width=0.33\textwidth]{graphics/Pareto/MultiN3.pdf}\label{subfig:mult}}
+     \subfloat[][Sift]{\includegraphics[width=0.33\textwidth]{graphics/Pareto/SiftN3.pdf}\label{subfig:sift}}
+\vspace{-4mm}
+     \subfloat[][Stitch]{\includegraphics[width=0.33\textwidth]{graphics/Pareto/StitchN3.pdf}\label{subfig:stitch}}\
+     \subfloat[][SVM]{\includegraphics[width=0.33\textwidth]{graphics/Pareto/SVMN3.pdf}\label{subfig:svm}}
+     \subfloat[][Texture\_Synthesis]{\includegraphics[width=0.33\textwidth]{graphics/Pareto/TextN3.pdf}\label{subfig:text}}
+     \subfloat[][Tracking]{\includegraphics[width=0.33\textwidth]{graphics/Pareto/TrackingN3.pdf}\label{subfig:track}}
+     \caption{Time (x-axis) vs. Energy (y-axis) tradeoffs using Static and Dynamic Composition Schemes.}
+     \label{fig:paretos}
+\vspace{5mm}
+\end{figure*}
+
+Having studied the behavior of our program under a fix number of cores, we now study the impact of varying the number of fused cores throughout program execution.
+We first describe how we generate traces for the dynamic core fusion schemes.
+Before we begin the analysis we define two types of static core fusion:
+\begin{itemize}
+	\item \textbf{Static Benchmark}: A fixed fused-core which is optimal for the benchmark at hand (SB).
+	\item \textbf{Static Suite}: A fixed fused-core which represents the average best for the entire suite of benchmarks. This represents our baseline for the paper (SS).
+\end{itemize}
+We then compare the static fused-core scheme with the results obtained for the dynamic one for the SD-VBS benchmarks.
+This is followed by a closer analysis for two dynamic core fusion objectives: one that optimizes speed and another that optimizes for efficiency.
+
+\subsection{Creating Dynamic Core Fusion Traces}
+
+With dynamic core fusion, we have the ability to change the number of cores for each time tick (an interval of 640 blocks) during program execution.
+In order to explore the different performance and energy trade-off that is possible to achieve with this technique, we collect traces of execution for the whole application.
+We run the whole application on 1,2,4,8 and 16 fused cores and record for each time tick the cycle count.
+Using these 5 traces, we can then reconstruct any arbitrary dynamic execution and generate dynamic traces.
+
+To simplify the exploration process, time ticks of the same phase will always be attributed the same number of cores.
+This is done to reduce the search space as on average we have 48494 ticks which would result in an average of $5^{48,494}$ different possible executions.
+Since the maximum number of clusters found is 6 (for SVM), we only build a maximum of $5^{6} = 15625$ different dynamic execution traces.
+When we switch the size of the logical core (LC), we use the performance of that LC from its respective trace file and add an extra 100 cycle penalty for switching the size of a LC.
+With all these different dynamic core fusion traces, we can now find the optimal schemes for maximizing speed or maximizing efficiency.
+
+\subsection{Dynamic Core Fusion}
+Figure~\ref{fig:paretos} shows the trade off between time and energy using either a static scheme fixed once at the beginning of the program or a dynamic scheme.
+The dotted line represents the static core fusion scheme whilst the solid line represents the Pareto Front of all the dynamic core fusion traces.
+The vertical line represents the amount of energy that can be saved from using a dynamic core fusion scheme that matches the same speed as the best static scheme.
+
+Figure~\ref{fig:paretos} demonstrates how static core fusion fails to maintain good energy efficiency as we improve speed.
+For example, \bm{Disparity} (Figure~\ref{subfig:disp}) is fastest on 16 fused cores, but has an 1.63x increase in energy consumption for a 1.22x improvement in speed.
+When using the dynamic scheme, it is clear that energy consumption increases at a slower rate when increasing speed.
+In this case the number of cores is adapted to the current program phase, using just enough cores to maintain high performance without wasting energy.
+
+
+\begin{figure*}[t]
+    \centering
+	\includegraphics[width=1\textwidth]{graphics/results/speed_bars.pdf}
+\vspace*{-2em}
+    \caption{Maximizing speed for all the SD-VBS benchmarks. For Speedup, higher means better, for Energy, lower is better.}
+    \label{fig:speedres}
+\vspace{5mm}
+\end{figure*}
+%
+
+\subsection{Optimizing for Speed} \label{sec:dyn:speed}
+
+In this section we define our dynamic scheme to be one that matches the same speed performance as the fastest static core fusion for the benchmark: \textbf{DSpeed}.
+This is equivalent to the vertical line found in Figure~\ref{fig:paretos}.
+This scheme enables us to maintain good performance whilst reducing energy consumption drastically.
+
+Figure~\ref{fig:speedres} shows the speedup of \textbf{DSpeed} and SB and the respective energy consumption.
+The results are normalized against the performance of SS, which is 8 cores fused.
+The SS core count is obtained by averaging the number of cores for each benchmark using the SB scheme. 
+The speed performances are the same for SB and \textbf{DSpeed} as the dynamic scheme is designed to match the static speed.
+We can see that some benchmark perform better when using benchmark specific core fusions rather than SS.
+Both \bm{Disparity} and \bm{Sift} obtain a 1.25x speedup when using the SB scheme whilst \bm{Tracking} benefits from a 1.10x speedup.
+
+When looking at the Energy graph of Figure~\ref{fig:speedres}, we can clearly notice where the SS scheme fails.
+Benchmarks \bm{MSER} and \bm{Multi\_NCut} feature very little improvements when using core fusion, therefore the SS will perform very poorly when it comes to energy consumption for the benchmarks.
+SB does not always perform well neither; as we can see, for the benchmarks \bm{Disparity}, \bm{Sift}, \bm{Texture\_Synthesis} the energy consumption is much higher.
+This is due to the fact that these benchmarks perform best on a 16-core system, however as we saw in Figure~\ref{fig:stddev}, the variation in performance always increases when fusing this many cores.
+The \textbf{DSpeed} scheme always performs better than the SB scheme and can even match the SS scheme on energy consumption whilst improving speed such as in the \bm{Sift} benchmark.
+For the \bm{Localization} benchmark, the \textbf{DSpeed} matches the performance of both the SB and SS whilst reducing energy consumption by 65\%.
+
+Overall, by using \textbf{DSpeed}, we can reduce energy consumption by 42\% compared to both SB and SS without impacting performance.
+This illustrates the greatest advantage of using a DMP since the number of fused core can be adapted continuously depending on the amount of ILP available for each phase.
+
+\subsection{Optimizing for Efficiency}
+
+In this section we define our dynamic scheme to maximize the efficiency metric EDD, which is defined as $Energy \times Delay \times Delay$ where Delay is the execution time.
+This metric attempts to optimize speed whilst remaining energy efficient; we call the scheme \textbf{DEff}.
+Figure~\ref{fig:effres} shows the speedup performance of \textbf{DEff} and SB and their respective energy consumption.
+The results are normalized against SS which is a fixed-composition of 4 fused cores.
+
+Unlike the previous results in Figure~\ref{fig:speedres}, we can see that there are differences in the speedup obtained by \textbf{DEff} and SB.
+For benchmarks \bm{Disparity}, \bm{Sift} and \bm{Tracking} the \textbf{DEff} scheme is 1.30x faster than the SB scheme and at least 1.75x faster than the SS scheme.
+It is important to note that this extra speedup does not incur great increases in energy consumption compared to SB: only 1.10x for \bm{Disparity} and \bm{Sift}.
+In fact, for \bm{Tracking} \textbf{DEff} saves 20\% in energy compared to SB.
+When comparing to SS \textbf{DEff} is 1.75x times faster for only 19\% more energy for the \bm{Tracking} benchmark.
+
+Overall, \textbf{DEff} results in a 1.25x speed increase compared to SB and SS whilst consuming 25\% less energy than SS.
+This shows how dynamic core fusion's flexibility allows us to get better speedups whilst not drastically increasing our energy consumption.
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{graphics/results/edd_bars.pdf}
+\vspace*{-8mm}
+    \caption{Maximizing efficiency for all the SD-VBS benchmarks. For Speedup, higher means better, for Energy, lower is better.}
+    \label{fig:effres}
+\vspace{5mm}
+\end{figure*}
+
+
+
+\subsection{Reconfiguration Latency} \label{sec:reconfoverhead}
+
+Up until now, the paper has assumed a reconfiguration latency of 100 cycles whenever dynamic reconfiguration occurs as explained in section~\ref{sec:coresufion}.
+This section studies the impact of a larger reconfiguration overhead on energy savings.
+First, figure~\ref{fig:avlen} shows the average phase length for each benchmarks when maximizing energy savings while maintaining performance (\textbf{DSpeed}).
+As can be seen, the majority of the benchmarks run for long period of several ten of thousands cycles before any switching occurs.
+Therefore, we expect that even if the reconfiguration latency would be increased to larger value (\eg 1,000 cycles), its impact might be minimal.
+
+Furthermore, we always have the option to reconfigure less often, in the case where a change in configuration only brings marginal reduction in energy.
+In such case it might be more beneficial to keep running on the slightly less optimal configuration than paying a cost for reconfiguration.
+Figure~\ref{fig:enlatency} illustrates perfectly this scenario, showing how energy behaves as a function of the reconfiguration overhead (averaged across benchmarks).
+For each latency value, we determine the best trace of reconfiguration to keep performance constant while minimizing energy (\textbf{DSpeed}).
+The left y-axis expresses the energy savings relative to the static scheme, while the right y-axis shows the total number of switches.
+The energy savings remains high up to a latency of 1,000 cycles, with a noticeable decrease in the number of switches.
+For latency values over 1,000 cycles, the energy savings drop considerably, with very few switching occurring.
+This data shows that even if the reconfiguration overhead is 1,000 cycles, average energy savings of 38\% are possible compared to 42\% when the overhead is 100 cycles.
+
+\begin{figure}[t]
+    \centering
+	\includegraphics[width=\textwidth]{graphics/Exploration/phase_len.pdf}
+\vspace*{-6mm}
+    \caption{Average number of cycles without switching.}
+    \label{fig:avlen}
+\vspace{-2mm}
+\end{figure}
+\begin{figure}[t]
+\centering
+	\includegraphics[width=\textwidth]{graphics/Exploration/latency_en_sp_sw.pdf}
+    \caption{Energy savings and number of switches as a function of the switching latency in cycles.}
+    \label{fig:enlatency}
+\vspace{5mm}
+\end{figure}
+
+\subsection{Summary}
+
+Overall, we have seen that whether we optimize for speed or efficiency, dynamic core fusion will always lead to higher speedup or lower energy consumption than a fixed configuration.
+This is due to the presence of phases in applications that the dynamic scheme can exploit to reduce wasting energy in low ILP phases.
+We have shown that maximizing speed can be highly energy inefficient when using a static LC and that a dynamic scheme can help reduce energy consumption by 42\% on average.
+When optimizing for efficiency, we have shown that a dynamic scheme can help improve both speed and energy consumption, for example in the case of \bm{Tracking}, and overall we can improve speed by 1.25x whilst saving 25\% energy.
+

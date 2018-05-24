@@ -1,0 +1,54 @@
+% current problem: parallel applications, lack of hardware performance
+
+% Hardware point of view: shift toward tiled architecture
+Multicore processors are now common in all computing systems ranging from mobile devices to data centers.
+As advances in single threaded performance have slowed, multicore processors have offered a way to use the increasing numbers of transistors available.
+However, designing processors that scale to a large number of cores is difficult and a shift towards tiled architecture seems inevitable.
+A tiled architecture such as Tilera~\cite{bell2008tile} or Raw~\cite{waingold1997raw} is composed of smaller simpler cores that are placed on a regular grid.
+This improves hardware scalability and enables multi-threaded applications to exploit the large core count.
+
+% Tiled architecture problem: cores too weak => need reconfiguration
+However, workloads that require high single threaded performance are penalized by the simple nature of each core~\cite{eyerman2010amdahl}.
+One solution to this problem is heterogeneous multicores which utilize cores with different levels of power and performance.
+Although heterogeneous multicores are common place in mobile devices, they have little reconfiguration or adaptive capabilities (\eg only two type of cores available for ARM big.LITTLE).
+Dynamic multicore processors offer a solution to this problem by allowing cores to compose (or fuse) together~\cite{ipek2007corefusion} into larger logical cores to accelerate single threads.
+This produces ``on-demand'' heterogeneity where cores are grouped to adapt to the workload's demand.
+
+% Software point of view: the problem
+While dynamic multicore processors sound like a promising approach, they come with their own challenges, particularly on the software side~\cite{wells2009needfordmc}.
+In most parallel programming models such as OpenMP, the user is directly responsible for mapping parallelism to the hardware; a difficult and time consuming task.
+This problem is further exacerbated when hardware resources can be combined since programmers have to take into account the dynamic behavior of the architecture~\cite{bower2008impactd}.
+
+% Solution for the software: data flow programming
+To solve this problem, we first argue that there is a need to raise the programming abstraction and remove the burden of mapping parallelism from programmers.
+Dataflow programming models such as StreamIt~\cite{theis2002streamit} and Lime~\cite{auerbach2012lime} offer one part of the solution.
+Applications are expressed as dataflow graphs and --- ideally --- the compiler or runtime determines the mapping of parallelism onto the available hardware and controls the grouping of hardware resources.
+However, optimally mapping parallelism and managing hardware resources remains an open problem given the sheer complexity of the resulting design space.
+
+% What we do: 1st an analysis
+In this paper, we first conduct an analysis of the design space and show the impact of modifying resources and thread mapping.
+We conduct this analysis using a set of StreamIt programs and run them on a verified cycle-level simulator for a tiled reconfigurable architecture with support for core composition.
+% it gets even better: machine-learning!
+We develop a machine learning model using the information gathered from our exploration.
+This model predicts the best number of threads for a given application and an optimal number of cores to allocate to each thread.
+
+To demonstrate the viability of our approach we compare the results of the predictive model to the best sampled thread and core composition pairing in a space of more than 32,000 design points.
+The model matches, and even outperforms in some cases, the performance of the best sampled points in the space, with speedups of up to 9x on a 16 core processor compared to single threaded execution on a single core. 
+
+% contributions
+The main contributions of this paper are:
+\vspace{-1mm}
+\begin{itemize}
+\item An analysis of the co-design space of thread partitioning and core composition;
+\item A study on the impact of a simple loop transformation on the optimal core composition;
+\item A machine-learning model to determine the optimal core composition and thread partitioning;
+\item An analysis of the most important static code features used by the model.
+\end{itemize}
+
+
+The rest of the paper is structured as follow.
+Section~\ref{sec:background} presents information on dynamic multicore processors and dataflow programming models.
+Section~\ref{sec:motiviation} motivates this work by showing the complexity of the design space.
+Section~\ref{sec:setup} describes our methodology and section~\ref{sec:dse} presents an in-depth analysis of the design space.
+Section~\ref{sec:ml} develops a machine-learning model to predict the best thread mapping and core composition while Section~\ref{sec:results} shows the performance achieved by our model.
+Related work is discussed in Section~\ref{sec:related} and Section~\ref{sec:conclusion} concludes this paper.

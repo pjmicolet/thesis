@@ -1,0 +1,343 @@
+%-----------------------------------------------------------------------------
+%
+%               Template for sigplanconf LaTeX Class
+%
+% Name:         sigplanconf-template.tex
+%
+% Purpose:      A template for sigplanconf.cls, which is a LaTeX 2e class
+%               file for SIGPLAN conference proceedings.
+%
+% Guide:        Refer to "Author's Guide to the ACM SIGPLAN Class,"
+%               sigplanconf-guide.pdf
+%
+% Author:       Paul C. Anagnostopoulos
+%               Windfall Software
+%               978 371-2316
+%               paul@windfall.com
+%
+% Created:      15 February 2005
+%
+%-----------------------------------------------------------------------------
+
+
+\documentclass{sigplanconf}
+
+% The following \documentclass options may be useful:
+
+% preprint      Remove this option only once the paper is in final form.
+% 10pt          To set in 10-point type instead of 9-point.
+% 11pt          To set in 11-point type instead of 9-point.
+% authoryear    To obtain author/year citation style instead of numeric.
+
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{subfig}
+
+
+\begin{document}
+
+\special{papersize=8.5in,11in}
+\setlength{\pdfpageheight}{\paperheight}
+\setlength{\pdfpagewidth}{\paperwidth}
+
+\conferenceinfo{CONF 'yy}{Month d--d, 20yy, City, ST, Country} 
+\copyrightyear{20yy} 
+\copyrightdata{978-1-nnnn-nnnn-n/yy/mm} 
+\doi{nnnnnnn.nnnnnnn}
+
+% Uncomment one of the following two, if you are not going for the 
+% traditional copyright transfer agreement.
+
+%\exclusivelicense                % ACM gets exclusive license to publish, 
+                                  % you retain copyright
+
+%\permissiontopublish             % ACM gets nonexclusive license to publish
+                                  % (paid open-access papers, 
+                                  % short abstracts)
+
+\titlebanner{banner above paper title}        % These are ignored unless
+\preprintfooter{short description of paper}   % 'preprint' option specified.
+
+\title{Title Text}
+\subtitle{Subtitle Text, if any}
+
+\authorinfo{Name1}
+           {Affiliation1}
+           {Email1}
+\authorinfo{Name2\and Name3}
+           {Affiliation2/3}
+           {Email2/3}
+
+\maketitle
+
+\begin{abstract}
+    The emergence of dynamic multicore systems allows for new hardware
+    optimisations where hardware modifies itself to match the software's needs.
+    In this paper we describe an automatic method of determining how to
+    partition a program and associate each partition to a set of fused cores in
+    order  to improve the performance of streaming applications through the use
+    of machine learning. We explore the difficulties of extracting important
+    features out of programs in order to accurately decide the correct chip
+    topology.  Using the methods described in the paper we can achieve up to 2
+    times speedup on certain applications.
+\end{abstract}
+
+\category{CR-number}{subcategory}{third-level}
+
+% general terms are not compulsory anymore, 
+% you may leave them out
+\terms
+term1, term2
+
+\keywords
+keyword1, keyword2
+
+\section{Introduction}
+\input{intro}
+
+\section{Motivation}
+\input{motivation}
+
+\section{Background}
+\input{background}
+
+\section{Experimental Setup}
+\input{setup}
+
+\section{Design Space Exploration}
+\input{analysis.tex}
+
+\section{Building a model for thread estimation}
+\input{thread_model.tex}
+
+\input{core.tex}
+
+\section{Results}
+\input{results.tex}
+
+\appendix
+\section{Appendix Title}
+
+This is the text of the appendix, if you need one.
+
+\acks
+
+Acknowledgments, if needed.
+
+% We recommend abbrvnat bibliography style.
+
+\bibliographystyle{abbrvnat}
+\bibliography{references}
+
+
+% The bibliography should be embedded for final submission.
+
+\begin{thebibliography}{}
+\softraggedright
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Auerbach et~al.(2012)Auerbach, Bacon, Burcea, Cheng, Fink, Rabbah, and
+  Shukla]{auerbach2012lime}
+J.~Auerbach, D.~Bacon, I.~Burcea, P.~Cheng, S.~Fink, R.~Rabbah, and S.~Shukla.
+\newblock A compiler and runtime for heterogeneous computing.
+\newblock In \emph{Design Automation Conference (DAC), 2012 49th
+  ACM/EDAC/IEEE}, pages 271--276, June 2012.
+
+\bibitem[Buck et~al.(2004)Buck, Foley, Horn, Sugerman, Fatahalian, Houston, and
+  Hanrahan]{buck2004brook}
+I.~Buck, T.~Foley, D.~Horn, J.~Sugerman, K.~Fatahalian, M.~Houston, and
+  P.~Hanrahan.
+\newblock Brook for gpus: Stream computing on graphics hardware.
+\newblock In \emph{ACM SIGGRAPH 2004 Papers}, SIGGRAPH '04, pages 777--786, New
+  York, NY, USA, 2004. ACM.
+\newblock \doi{10.1145/1186562.1015800}.
+\newblock URL \url{http://doi.acm.org/10.1145/1186562.1015800}.
+
+\bibitem[Chen et~al.(2005)Chen, Gordon, Thies, Zwicker, Pulli, and
+  Durand]{chen2005rawstream}
+J.~Chen, M.~I. Gordon, W.~Thies, M.~Zwicker, K.~Pulli, and F.~Durand.
+\newblock A reconfigurable architecture for load-balanced rendering.
+\newblock In \emph{Proceedings of the ACM SIGGRAPH/EUROGRAPHICS Conference on
+  Graphics Hardware}, HWWS '05, pages 71--80, New York, NY, USA, 2005. ACM.
+\newblock ISBN 1-59593-086-8.
+\newblock \doi{10.1145/1071866.1071878}.
+\newblock URL \url{http://doi.acm.org/10.1145/1071866.1071878}.
+
+\bibitem[Gordon et~al.(2006)Gordon, Thies, and
+  Amarasinghe]{gordon2006coarsegrainstream}
+M.~I. Gordon, W.~Thies, and S.~Amarasinghe.
+\newblock Exploiting coarse-grained task, data, and pipeline parallelism in
+  stream programs.
+\newblock \emph{SIGARCH Comput. Archit. News}, 34\penalty0 (5):\penalty0
+  151--162, Oct. 2006.
+\newblock ISSN 0163-5964.
+\newblock \doi{10.1145/1168919.1168877}.
+\newblock URL \url{http://doi.acm.org/10.1145/1168919.1168877}.
+
+\bibitem[Hagiescu et~al.(2009)Hagiescu, Wong, Bacon, and
+  Rabbah]{hagiescu2009fpgafolding}
+A.~Hagiescu, W.-F. Wong, D.~F. Bacon, and R.~Rabbah.
+\newblock A computing origami: Folding streams in fpgas.
+\newblock In \emph{Proceedings of the 46th Annual Design Automation
+  Conference}, DAC '09, pages 282--287, New York, NY, USA, 2009. ACM.
+\newblock ISBN 978-1-60558-497-3.
+\newblock \doi{10.1145/1629911.1629987}.
+\newblock URL \url{http://doi.acm.org/10.1145/1629911.1629987}.
+
+\bibitem[Hill and Marty(2008)]{mark2008amdahl}
+M.~D. Hill and M.~R. Marty.
+\newblock Amdahl's law in the multicore era.
+\newblock \emph{Computer}, 41\penalty0 (7):\penalty0 33--38, 2008.
+\newblock ISSN 0018-9162.
+\newblock \doi{http://doi.ieeecomputersociety.org/10.1109/MC.2008.209}.
+
+\bibitem[Ipek et~al.(2007)Ipek, Kirman, Kirman, and
+  Martinez]{ipek2007corefusion}
+E.~Ipek, M.~Kirman, N.~Kirman, and J.~F. Martinez.
+\newblock Core fusion: Accommodating software diversity in chip
+  multiprocessors.
+\newblock \emph{SIGARCH Comput. Archit. News}, 35\penalty0 (2):\penalty0
+  186--197, June 2007.
+\newblock ISSN 0163-5964.
+\newblock \doi{10.1145/1273440.1250686}.
+\newblock URL \url{http://doi.acm.org/10.1145/1273440.1250686}.
+
+\bibitem[Kim et~al.(2007)Kim, Sethumadhavan, Govindan, Ranganathan, Gulati,
+  Burger, and Keckler]{kim2007composableproc}
+C.~Kim, S.~Sethumadhavan, M.~S. Govindan, N.~Ranganathan, D.~Gulati, D.~Burger,
+  and S.~W. Keckler.
+\newblock Composable lightweight processors.
+\newblock In \emph{Proceedings of the 40th Annual IEEE/ACM International
+  Symposium on Microarchitecture}, MICRO 40, pages 381--394, Washington, DC,
+  USA, 2007. IEEE Computer Society.
+\newblock ISBN 0-7695-3047-8.
+\newblock \doi{10.1109/MICRO.2007.10}.
+\newblock URL \url{http://dx.doi.org/10.1109/MICRO.2007.10}.
+
+\bibitem[Kudlur and Mahlke(2008)]{kudlur2008orchestratingstreamprog}
+M.~Kudlur and S.~Mahlke.
+\newblock Orchestrating the execution of stream programs on multicore
+  platforms.
+\newblock \emph{SIGPLAN Not.}, 43\penalty0 (6):\penalty0 114--124, June 2008.
+\newblock ISSN 0362-1340.
+\newblock \doi{10.1145/1379022.1375596}.
+\newblock URL \url{http://doi.acm.org/10.1145/1379022.1375596}.
+
+\bibitem[Nagatsuka et~al.(2011)Nagatsuka, Sakaguchi, Matsumura, and
+  Kise]{nagatsuka2011coresymphony}
+T.~Nagatsuka, Y.~Sakaguchi, T.~Matsumura, and K.~Kise.
+\newblock Coresymphony: An efficient reconfigurable multi-core architecture.
+\newblock \emph{SIGARCH Comput. Archit. News}, 39\penalty0 (4):\penalty0
+  32--37, Dec. 2011.
+\newblock ISSN 0163-5964.
+\newblock \doi{10.1145/2082156.2082165}.
+\newblock URL \url{http://doi.acm.org/10.1145/2082156.2082165}.
+
+\bibitem[Putnam et~al.(2011)Putnam, Smith, and Burger]{putnam2010dynamicvece2}
+A.~Putnam, A.~Smith, and D.~Burger.
+\newblock Dynamic vectorization in the e2 dynamic multicore architecture.
+\newblock \emph{SIGARCH Comput. Archit. News}, 38\penalty0 (4):\penalty0
+  27--32, Jan. 2011.
+\newblock ISSN 0163-5964.
+\newblock \doi{10.1145/1926367.1926373}.
+\newblock URL \url{http://doi.acm.org/10.1145/1926367.1926373}.
+
+\bibitem[R()]{rknn}
+R.
+\newblock R: K-nearest neighbor.
+\newblock URL
+  \url{https://stat.ethz.ch/R-manual/R-devel/library/class/html/knn.html}.
+
+\bibitem[Smith et~al.(2006)Smith, Burrill, Gibson, Maher, Nethercote, Yoder,
+  Burger, and McKinley]{smith2006compilingedge}
+A.~Smith, J.~Burrill, J.~Gibson, B.~Maher, N.~Nethercote, B.~Yoder, D.~Burger,
+  and K.~McKinley.
+\newblock Compiling for edge architectures.
+\newblock In \emph{Code Generation and Optimization, 2006. CGO 2006.
+  International Symposium on}, pages 11 pp.--, March 2006.
+\newblock \doi{10.1109/CGO.2006.10}.
+
+\bibitem[Suleman et~al.(2009)Suleman, Mutlu, Qureshi, and
+  Patt]{suleman2009asymmetric}
+M.~A. Suleman, O.~Mutlu, M.~K. Qureshi, and Y.~N. Patt.
+\newblock Accelerating critical section execution with asymmetric multi-core
+  architectures.
+\newblock \emph{SIGPLAN Not.}, 44\penalty0 (3):\penalty0 253--264, Mar. 2009.
+\newblock ISSN 0362-1340.
+\newblock \doi{10.1145/1508284.1508274}.
+\newblock URL \url{http://doi.acm.org/10.1145/1508284.1508274}.
+
+\bibitem[Thies et~al.(2002{\natexlab{a}})Thies, Karczmarek, and
+  Amarasinghe]{theis2002streamit}
+W.~Thies, M.~Karczmarek, and S.~P. Amarasinghe.
+\newblock Streamit: A language for streaming applications.
+\newblock In \emph{Proceedings of the 11th International Conference on Compiler
+  Construction}, CC '02, pages 179--196, London, UK, UK, 2002{\natexlab{a}}.
+  Springer-Verlag.
+\newblock ISBN 3-540-43369-4.
+\newblock URL \url{http://dl.acm.org/citation.cfm?id=647478.727935}.
+
+\bibitem[Thies et~al.(2002{\natexlab{b}})Thies, Karczmarek, Gordon, Maze, Wong,
+  Hoffmann, Brown, and Amarasinghe]{theis2002languagegrid}
+W.~Thies, M.~Karczmarek, M.~Gordon, D.~Maze, J.~Wong, H.~Hoffmann, M.~Brown,
+  and S.~Amarasinghe.
+\newblock A common machine language for grid-based architectures.
+\newblock \emph{SIGARCH Comput. Archit. News}, 30\penalty0 (3):\penalty0
+  13--14, June 2002{\natexlab{b}}.
+\newblock ISSN 0163-5964.
+\newblock \doi{10.1145/571666.571673}.
+\newblock URL \url{http://doi.acm.org/10.1145/571666.571673}.
+
+\bibitem[Waingold et~al.(1997)Waingold, Taylor, Srikrishna, Sarkar, Lee, Lee,
+  Kim, Frank, Finch, Barua, Babb, Amarasinghe, and Agarwal]{waingold1997raw}
+E.~Waingold, M.~Taylor, D.~Srikrishna, V.~Sarkar, W.~Lee, V.~Lee, J.~Kim,
+  M.~Frank, P.~Finch, R.~Barua, J.~Babb, S.~Amarasinghe, and A.~Agarwal.
+\newblock Baring it all to software: Raw machines.
+\newblock \emph{Computer}, 30\penalty0 (9):\penalty0 86--93, Sep 1997.
+\newblock ISSN 0018-9162.
+\newblock \doi{10.1109/2.612254}.
+
+\bibitem[Wang and O'boyle(2008)]{wang2013partitionstreamit}
+Z.~Wang and M.~F.~P. O'boyle.
+\newblock Using machine learning to partition streaming programs.
+\newblock \emph{ACM Trans. Archit. Code Optim.}, 10\penalty0 (3):\penalty0
+  20:1--20:25, Sept. 2008.
+\newblock ISSN 1544-3566.
+\newblock \doi{10.1145/2512436}.
+\newblock URL \url{http://doi.acm.org/10.1145/2512436}.
+
+\bibitem[Watanabe et~al.(2010)Watanabe, Davis, and Wood]{watanabe2010widget}
+Y.~Watanabe, J.~D. Davis, and D.~A. Wood.
+\newblock Widget: Wisconsin decoupled grid execution tiles.
+\newblock \emph{SIGARCH Comput. Archit. News}, 38\penalty0 (3):\penalty0 2--13,
+  June 2010.
+\newblock ISSN 0163-5964.
+\newblock \doi{10.1145/1816038.1815965}.
+\newblock URL \url{http://doi.acm.org/10.1145/1816038.1815965}.
+
+\bibitem[Zhou and Wentzlaff(2014)]{zhou2014sharingarch}
+Y.~Zhou and D.~Wentzlaff.
+\newblock The sharing architecture: Sub-core configurability for iaas clouds.
+\newblock \emph{SIGPLAN Not.}, 49\penalty0 (4):\penalty0 559--574, Feb. 2014.
+\newblock ISSN 0362-1340.
+\newblock \doi{10.1145/2644865.2541950}.
+\newblock URL \url{http://doi.acm.org/10.1145/2644865.2541950}.
+
+
+\end{thebibliography}
+
+
+
+\end{document}
+
+%                       Revision History
+%                       -------- -------
+%  Date         Person  Ver.    Change
+%  ----         ------  ----    ------
+
+%  2013.06.29   TU      0.1--4  comments on permission/copyright notices
+

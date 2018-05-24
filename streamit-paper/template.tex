@@ -1,0 +1,65 @@
+\documentclass[pageno]{jpaper}
+
+%replace XXX with the submission number you are given from the ASPLOS submission site.
+\newcommand{\asplossubmissionnumber}{XXX}
+
+\usepackage[normalem]{ulem}
+
+\begin{document}
+
+\title{}
+
+\date{}
+\maketitle
+
+\thispagestyle{empty}
+
+\begin{abstract}     
+    The emergence of dynamic multicore systems allows for new hardware
+    optimisations where hardware modifies itself to match the software's needs.
+    In this paper we describe an automatic method of determining how to
+    partition a program and associate each partition to a set of fused cores in
+    order  to improve the performance of streaming applications through the use
+    of machine learning. We explore the difficulties of extracting important
+    features out of programs in order to accurately decide the correct chip
+    topology.  Using the methods described in the paper we can achieve up to 2
+    times speedup on certain applications.
+  
+\end{abstract}
+
+\section{Introduction}
+\input{intro}
+
+\section{Motivation}
+\input{motivation}
+
+\section{Background}
+\input{background}
+
+\section{Experimental Setup}
+\input{setup}
+
+\section{Design Space Exploration}
+\input{analysis.tex}
+
+\section{Building a model for thread estimation}
+\input{thread_model.tex}
+
+\input{core.tex}
+
+\section{Papers}
+
+EDGE~\cite{edge_architecture,spdi}, TRIPS \cite{trips_cs}, E2
+\cite{e2_arch}, Core Fusion~\cite{CoreFusion}, Sharing Architecture
+\cite{sharing_arch} WiDGET~\cite{widget}, StreamIt \cite{stream_lang,
+grid_streamit, machine_partitioning, empirical_stream_prog} and
+mention other streaming languages~\cite{brook_gpu,wavescript_cmp}
+
+
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+
+\end{document}
+

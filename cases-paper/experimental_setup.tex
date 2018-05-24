@@ -1,0 +1,49 @@
+The previous section studied the performance potential for core fusion using an analytical model.
+We now present the experimental setup used for the remaining parts of the paper where we conduct a thorough evaluation of core fusion with a cycle-level simulator.
+
+\subsection{Benchmarks}
+
+For this paper we study the performance of our Dynamic Multicore Processor (DMP) on a set of Vision Benchmarks designed for hardware and compiler research~\cite{sdvbs}.
+The San Diego Vision Benchmark suite (SD-VBS) is composed of nine single-threaded C benchmarks ranging from image analysis to motion tracking.
+These benchmarks represent state-of-the-art applications in image and vision recognition which are prevalent in embedded systems.
+
+Vision applications typically have regular and simple control flow which enables the formation of large blocks of instructions.
+Our processor relies on the ability to form large blocks to exploit ILP which makes these applications particularly well suited.
+As the results will show, the phase length has minimal impact on energy savings when the reconfiguration overhead is low.
+
+\subsection{Architecture and Simulator}
+
+We use a cycle-level simulator of an EDGE-based Dynamic Multicore Processor~\cite{e2} whose core pipeline is verified against an RTL implementation within 5\%. 
+This validation is done by running workloads on RTL and comparing the traces cycle-by-cycle with the software simulator.
+The architecture and core fusion mechanics are similar to the work described in~\cite{kim2007tflex,putnam2010e2}.
+We configure the simulator to model a 16 core multiprocessor, with 32 KB private L1 caches, and allow each core to fetch up to 4 blocks of instructions, 
+and issue up to 2 instructions per block for a maximum of 64 blocks in flight.
+
+
+\subsection{Fusing Cores} \label{sec:coresufion}
+
+In this processor, the micro-architecture is distributed: register files, Load Store Queues (LSQs), L1 caches and ALUs all look like nodes on a network.
+This means that when cores fuse together, this is similar to adding an extra node to the network.
+When cores are fused, one of the cores will execute a non-speculative block from a single thread whilst all other cores execute speculative blocks that are predicted from the same thread.
+For our study, we use a simple round robin policy to choose which core is going to execute the next speculative block.
+When we start a new thread on a fused core the OS and runtime write the new core mapping to a system register.
+The hardware then flushes these cores if they are not idle and sets the PC of the first block of that thread on one core in the logical processor and starts executing.
+
+Fusing cores is therefore a lightweight process.
+We estimate that switching the size of the logical-core (LC) results in a delay of 100 cycles on average.
+The actual time varies based on the time it takes the cache coherence protocol to move the data around the memory system.
+Section~\ref{sec:reconfoverhead} discusses in more details how latency affects energy efficiency and shows that dynamic core fusion is still highly beneficial even when considering overheads of 1,000 cycles.
+
+\subsection{Compiler}
+Each benchmark is compiled with the Microsoft C++ compiler for EDGE~\cite{e2}, with -O2 optimisations and using instruction predication for hyperblock formation~\cite{smith2006edge}.
+
+\subsection{Measuring Performance and Power}
+
+We run five simulations per benchmark, one for each LC size: 1, 2, 4, 8 and 16.
+For each LC we record the IPC of the LC at an interval of 640 committed blocks.
+We selected 640 committed blocks as it allows each core in a LC to execute enough blocks before taking the measurement.
+This is due to the fact that the highest LC of 16 cores can execute up to 64 blocks at a time, thus recording performance after 640 blocks allows each core to have executed at least 10 blocks.
+Using committed blocks as an interval allows us to easily compare each simulation as the total number of committed blocks does not change even if the LCs are different.
+
+Due to the fact that we study an EDGE ISA~\cite{smith2006edge}, we cannot use McPAT to model power consumption as it differs from traditional CISC/RISC cores modeled in McPAT.
+Instead we use a coarse grained power model where either a core is turned on or or it is off. 

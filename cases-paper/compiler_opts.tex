@@ -1,0 +1,99 @@
+\begin{figure}[t]
+\begin{minipage}[t]{0.48\textwidth}
+\lstset{language=C,numbersep=4pt,basicstyle=\small}
+\begin{lstlisting}
+for(int i = 0; i < 1000; i++)
+  for(int j = 0; j < 1000; j++)
+     for(int k = 0;k < 5; k++)
+         a[i][j] = a[i][j] * b[k][j];
+\end{lstlisting}
+\vspace*{-5mm}
+\caption{Example of an inner-most loop which should be completely unrolled.}
+\label{lst:small}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\lstset{language=C,numbersep=4pt,basicstyle=\small}
+\begin{lstlisting}
+for(int i = 0; i < 1000; i++)
+  for(int j = 0; j < 1000; j++)
+      a[i][j] = a[i][j-1] 
+                       * b[i][j];
+\end{lstlisting}
+\vspace*{-5mm}
+\caption{Example of a data dependency which can be removed by interchanging the loops.}
+\label{lst:dep}
+\end{minipage}
+\vspace{9mm}
+\end{figure}
+
+This section describes optimizations focused on reducing control flow and expanding block sizes which is necessary for high performance as seen in section~\ref{sec:lim_study}.
+
+\subsection{Loop Unrolling}
+Loop unrolling is a common optimization used to reduce the overhead of the loop header and to better expose Instruction Level Parallelism (ILP).
+When dealing with tightly-knit loops, logical cores may perform poorly due to the fact that they execute many small blocks, thus increasing the Synchronization Cost.
+Unrolling loops will both reduce the number of blocks required to execute the loop and increase the size of the blocks, thus reducing the Synchronization Cost and increasing ILP.
+For example, the innermost loop in Figure~\ref{lst:small} should be completely unrolled and its outer loop unrolled partially to increase the block size.
+There are certain factors which can limit the usefulness of loop unrolling which we examine later on.
+In the architecture we evaluate, we may not have more than 32 load or store instructions per block.
+Therefore, if we unroll memory intensive loops, we must ensure we do not go above this threshold.
+Going above this threshold leads to creating a new block which will put a strain on the branch predictor.
+Another issue is that unrolling loops with conditional statements may not help improve the size of the block as the conditional branches might still segment the new blocks.
+So we should avoid unrolling such loops.
+
+
+
+\subsection{Loop Interchange}
+When dealing with nested loops there is one reason we have determined for interchanging the loops.
+The case arises when interchanging the loop removes dependencies in the inner-most loop.
+The dependency in Figure~\ref{lst:dep} can be removed by interchanging the loops. 
+This allows us to unroll the inner loop efficiently, but also remove any kind of dependency between blocks.
+Since two blocks from the same loop may execute on different cores, we want to reduce any kind of data dependency, minimizing core communication.
+
+\begin{figure}[t]
+     \centering
+     \includegraphics[width=\textwidth]{graphics/Exploration/ipc_comp.pdf}
+\vspace*{-8mm}
+     \caption{Average IPC using the optimal sized logical-core, with and without optimizations. Higher is better.}
+     \label{fig:ipccom}
+     \vspace{0.5em}
+\vspace{5mm}
+    \centering
+    \includegraphics[width=\textwidth]{graphics/Exploration/comp_speed.pdf}
+\vspace*{-8mm}
+    \caption{Speedup from using code-optimizations over baseline source code using the same optimal sized logical-core.}
+    \label{fig:speedcomp}
+\vspace{5mm}
+\end{figure}
+
+\subsection{Predication and Hyperblock Formation}
+EDGE compilers must split blocks whenever control-flow is present~\cite{smith2006edge}.
+If a loop contains a conditional statement, the loop body has to be split in two unless if-conversion is applied.
+Hyperblock formation aims to reduce branching and increase block size by combining two or more blocks into a single predicated block~\cite{smith2006edge}.
+Hyperblocks reduce both synchronization cost and branch prediction requirements as discussed previously.
+This is especially important in control-flow intensive loops where unrolling increases the number of conditional statements.
+
+\vspace{5mm}
+\subsection{Results}
+
+While the optimizations described above and their tuning would be easy to implement in a compiler, we did not have access to the compiler's source code.
+We therefore modified the source code of our benchmarks by manually interchanging or unrolling loops.
+In the case of predication and hyperblock formation, we converted simple if-then-else statements into ternary operators whenever possible.
+We also tried to reorder statements within the body of a loop to avoid having control flow in the middle of the body.
+We then verified that our source code modification had the intended effect by dissembling the binary produced by the compiler.
+We modified between 0 and 12 loops depending on the benchmark.
+
+We compare the best static core fusion using the optimized code with the unmodified code, both version compiled with \texttt{-O2}.
+Figure~\ref{fig:ipccom} shows the resulting IPC for the baseline case and the optimized benchmarks when run on a core with the optimal number of fused core to maximize performance.
+The IPC of the baseline is very low for the majority of the benchmarks which might give the impression that core fusion is rather inefficient.
+However, after applying the simple optimizations described above, the average IPC is significantly increased in many cases.
+
+Since optimizations change the total number of instructions, we also show the actual speedup obtained using cycle count in Figure~\ref{fig:speedcomp}.
+As we can see, benchmarks \bm{MSER} and \bm{Multi-NCut} do not perform any differently.
+This is due to the fact that none of these optimizations can be successfully applied on these benchmarks.
+For the other benchmarks we see significant improvements of up to 12$\times$ for \bm{Sift} when the optimizations are applied.
+
+\subsection{Summary}
+
+Overall, this section shows that classical loop transformations can have a large impact on the performance of fused cores.
+Without these optimizations, it would be more difficult to motivate the use of core fusion even at a static-level as the IPC does not deviate enough from a single core.

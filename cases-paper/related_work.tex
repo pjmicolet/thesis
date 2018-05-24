@@ -1,0 +1,40 @@
+
+\paragraph{Reconfigurable Processors}
+
+ElasticCore~\cite{tavanaElastic} proposes a morphable core that uses dynamic voltage and frequency scaling (DVFS) and microarchitectural modifications such as instruction bandwidth and capacity.
+They propose a linear regressor model to determine reconfiguration, which uses more runtime information than ours, such as branch prediction and cache misses.
+Overall Tavana et al's architecture is 30\% more energy efficient than a big.LITTLE architecture.
+
+In~\cite{dubach13dynamic} they also propose a similar core architecture that modifies microarchitectural features.
+They provide extensive analysis of SPEC 2000 benchmarks and demonstrate that machine learning and dynamic adaptation can double the energy/performance efficiency compared to a static configuration.
+
+MorphCore~\cite{khubaibMorphCore2012} focuses on reconfiguring a core for thread level parallelism.
+It switches between out-of-order (OoO) when running single threaded applications and an in-order core optimised for simultaneous multi threading (SMT) workloads.
+This provides an opposite solution to our DMP: providing a large core made for ILP that can be modified to better fit TLP workloads.
+MorphCore outperform a 2-Way SMT OoO core by 10\% whilst being 22\% more efficient.
+
+All these projects focus on uni-core modifications, and traditional CISC/RISC like architecture which differs from our work.
+
+\vspace{-0.5em}
+\paragraph{Dynamic Multicore Processors}
+Previous work on Dynamic Multicore Processors includes CoreFusion~\cite{ipek2007CoreFusion} and Bahurupi~\cite{pricopi2012bahurupi,pricopiSchedCoreComp2014}.
+These architectures use a standard ISA and either fetch fixed sized instruction windows~\cite{ipek2007CoreFusion} or entire basic blocks~\cite{pricopi2012bahurupi}.
+Other DMPs such as TFlex~\cite{kim2007tflex} and E2~\cite{e2} use an hybrid-dataflow EDGE ISA~\cite{burger04edge}. 
+In TFlex, instructions from a block are executed on different fused cores.
+In E2, a block is mapped to a fused core and all instructions from that block execute locally.
+
+\vspace{-0.5em}
+\paragraph{Dynamic Core Fusion}
+In the work of Pricopi et al.~\cite{pricopiSchedCoreComp2014}, they show how dynamic reconfiguration is beneficial when it comes to scheduling tasks.
+However, they do not discuss any method of automatically deciding the optimal configuration beyond a 4 core fusion.
+Instead they use speedup functions determined from profile executions of applications to determine how to schedule tasks.
+They do not discuss what software characteristics help determine when to reconfigure the cores, or how to optimise software.
+
+Work on using machine learning to automatically choose a composition was achieved in~\cite{micolet2016dmpstream}.
+This work does not involve changing the core fusion dynamically during the execution of the benchmark.
+The machine learning model focuses on using high-level information from StreamIt's~\cite{thiesStreamit2010} language constructs.
+
+\vspace{-0.5em}
+\paragraph{Voltage Scaling}
+Voltage scaling is another method of reducing energy consumption~\cite{paganiEECHM2017}, however this approach is orthogonal to DMPs~\cite{sibi}.
+Whilst both methods adapt to programs phases, DMPs can also be used to speed up the execution of programs.

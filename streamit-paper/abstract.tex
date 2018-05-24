@@ -1,0 +1,16 @@
+Dataflow programming languages facilitate the design of data intensive programs such as streaming applications commonly found in embedded systems.
+They also expose parallelism that can be exploited using multicore processors which are now part of the mobile landscape.
+In recent years a shift has occurred towards heterogeneity (\eg ARM big.LITTLE) and reconfigurability.
+Dynamic Multicore Processors (DMPs) bridge the gap between fully reconfigurable processors and homogeneous multicore systems.
+They can re-allocate their resources at runtime to create larger more powerful logical processors fine-tuned to the workload.
+
+Unfortunately, there exists no accurate method to determine how to partition the cores in a DMP among application threads.
+Often programmers rely on analyzing the application manually and using a set of hand picked heuristics.
+This leads to sub-optimal performance, reducing the potential of DMPs.
+What is needed is a way to determine the optimal partitioning and grouping of resources to maximize performance.
+
+As a first step, this paper studies the effect of thread partitioning and hardware resource allocation on a set of StreamIt applications.
+We show that the resulting space is not trivial and exhibits a large performance variation depending on the combination of parameters.
+We introduce a machine-learning based methodology to tackle the space complexity.
+Our machine-learning model is able to directly predict the best combination of parameters using static code features.
+The predicted set of parameters leads to performance on-par with the best performance found in a space of more than 32,000 configurations per application.
