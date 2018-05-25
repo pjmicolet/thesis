@@ -1,11 +1,53 @@
 \chapter{Background}
+This chapter covers the different topics that are present in this thesis.
+The background starts by briefly covering Chip Multicore Processors and Heterogeneous Chip Multicore Processors to motivate the existence of Dynamic Multicore Processors.
+Then the core-fusion technique, which is the main mechanism brought forward by Dynamic Multicore Processors is described in detail.
+This is followed by a description of the EDGE instruction set architecture which is used in the Dynamic Multicore Processor described in this thesis.
+Finally, streaming programming languages, which are used in Chapter~ref{}, are explained.
 
 \section{Chip Multicore Processors}
-Chip Multiprocessors (CMPs) have become ubiquitous due to the difficulty in scaling single core performance.
-CMPs with homogeneous cores have dominated the space as they reduce the complexity of the design problem.
+
+\begin{figure}[t]
+ \center
+ \includegraphics[width=1\textwidth]{background/graphics/i7intel.jpg}
+ \caption{Intel Core i7 processor internal die photograph taken from intel whitepaper}\label{fig:i7}
+\end{figure}
+ 
+Chip Multicore Processors (CMPs) have become ubiquitous due to the difficulty in scaling single core performance.
+In a CMP, multiple processor cores are put on a single package as can be seen in Figure~\ref{fig:i7}.
+The most common CMP uses homogeneous cores as they reduce the design complexity both from a hardware and software perspective~\cite{}.
+Unlike single core systems, the performance improvement in CMPs come from running multiple tasks in parallel.
+These tasks can either be different programs or multiple threads from the same program running on the multiple cores.
+By defining speedup \textit{S} to be the original execution time of the program over the new execution time with \textit{n} processors and \textit{f} representing the fraction of the program which can be parallelised; Amdahl's Law states
+
+\begin{equation}
+S = \frac{1}{(1-f) + \frac{f}{n}}
+\end{equation}\label{amdlaw}
+
+thus, given an infinite number of processor cores~\cite{ekhout2010amdalh}
+
+\begin{equation}
+\lim_{n\to\infty} S = \frac{1}{(1-f)}
+\end{equation}
+
+This second equation demonstrates how, given any program, the speedup obtained by using a CMP will be limited to the fraction \textit{f} of parallel code found in the program itself.
+As all the processor cores are homogeneous this will cause serial bottlenecks to severely reduce the potential speedup as no core is adapted to speedup such regions.
+This implication has pushed research into finding ways of parallelising code to its fullest~\cite{}, however this may not always be possible~\cite{}.
+Thus whilst CMPs have become a mainstain in processor design, the homogeneous model has its limits.
 
 \section{Heterogeneous Chip Multicore Processors}
-Yet research shows that using heterogeneous cores allows for better performance~\cite{suleman2009asymmetric}, albeit with increased design complexity. 
+
+Heterogeneous Chip Multicore Processors (HCMPs) or Asymmetrical Chip Multicore Processors (ACMPs) bring a variety of cores onto a single package.
+This may come in different forms, such as multi-instruction set architectures on the same system on chip (SoC)~\cite{}, to same ISA, different size cores on an SoC~\cite{}.
+Unlike CMPs, the variety of cores on an HCMP attempt to provide a certain amount of hardware flexibility to the software.
+This can be used to provide efficient tradeoffs between speedup and energy/power savings by having programs run on larger or smaller cores~\cite{}.
+
+\begin{figure}[t]
+ \center
+ \includegraphics[width=1\textwidth]{background/graphics/biglittle.png}
+ \caption{Example of a heterogeneous multicore processor proposed by ARM (big.LITTLE)}\label{fig:blarm}
+\end{figure}
+
 
 \section{Dynamic Multicore Processors}
 
@@ -21,12 +63,24 @@ The advantage of DMPs over the traditional CMP is the ability to reconfigure the
 For example, large sequential sections of code with high Instruction Level Parallelism (ILP) can be accelerated on a set of fused cores that mimic a wide superscalar processor.
 On a parallel workload the DMP can be reconfigured by splitting the fused cores to match the Thread Level Parallelism (TLP).
 
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{background/graphics/EDGE_3.pdf}
+    \caption{High-level view of the EDGE ISA flow.}
+    \label{fig:EdgeHigh}
+\end{figure}
+\section{EDGE ISA} We assume a DMP similar to TFlex~\cite{kim2007tflex} using an Explicit Data Graph Execution~\cite{burger04edge} (EDGE) instruction set architecture (ISA).
+EDGE ISAs encode dependencies between instructions at the ISA level.
+Code is organised as blocks of instructions where all instruction communication is local to the block~\cite{smith2006edge}.
+Each block has a single entry point but may have multiple exits.
+This enables the architecture to dispatch blocks speculatively, with low overhead~\cite{putnam2010e2,kim2007tflex}, therefore, increasing exploitation of ILP.
+
 \subsection{Core Fusion}
- \begin{figure*}[t]
+ \begin{figure}[t]
  \center
  \includegraphics[width=1\textwidth]{cases-paper/graphics/background/proc_test.pdf}
  \caption{Core Fusion Mechanisms for our EDGE-based architecture.}\label{fig:dmp}
- \end{figure*}
+ \end{figure}
  
 Core Fusion is achieved by fusing a set of \textit{physical} cores to create larger \textit{logical} cores.
 This does not modify the physical structure of the chip, instead it provides a unified view of a group of physical cores to the software.
@@ -54,18 +108,6 @@ We discuss this in further detail in Section~\ref{sec:setup}.
 %Multiple sets of cores can be fused to create logical cores of different sizes.
 %In Figure~\ref{fig:dynmulticore} for example, LP1 is composed of four physical cores whereas LP2 is composed of two.
 %At runtime, physical cores may be decomposed from a logical processor to remove them from the core composition.
-
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=1\textwidth]{background/graphics/EDGE_3.pdf}
-    \caption{High-level view of the EDGE ISA flow.}
-    \label{fig:EdgeHigh}
-\end{figure}
-\section{EDGE ISA} We assume a DMP similar to TFlex~\cite{kim2007tflex} using an Explicit Data Graph Execution~\cite{burger04edge} (EDGE) instruction set architecture (ISA).
-EDGE ISAs encode dependencies between instructions at the ISA level.
-Code is organised as blocks of instructions where all instruction communication is local to the block~\cite{smith2006edge}.
-Each block has a single entry point but may have multiple exits.
-This enables the architecture to dispatch blocks speculatively, with low overhead~\cite{putnam2010e2,kim2007tflex}, therefore, increasing exploitation of ILP.
 
 \section{Streaming Programming Languages}
 
