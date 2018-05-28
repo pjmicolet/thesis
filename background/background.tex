@@ -35,12 +35,8 @@ As all the processor cores are homogeneous this will cause serial bottlenecks to
 This implication has pushed research into finding ways of parallelising code to its fullest~\cite{}, however this may not always be possible~\cite{}.
 Thus whilst CMPs have become a mainstain in processor design, the homogeneous model has its limits.
 
-\section{Heterogeneous Chip Multicore Processors}
 
-Heterogeneous Chip Multicore Processors (HCMPs) or Asymmetrical Chip Multicore Processors (ACMPs) bring a variety of cores onto a single package.
-This may come in different forms, such as multi-instruction set architectures on the same system on chip (SoC)~\cite{}, to same ISA, different size cores on an SoC~\cite{}.
-Unlike CMPs, the variety of cores on an HCMP attempt to provide a certain amount of hardware flexibility to the software.
-This can be used to provide efficient tradeoffs between speedup and energy/power savings by having programs run on larger or smaller cores~\cite{}.
+\section{Heterogeneous Chip Multicore Processors}
 
 \begin{figure}[t]
  \center
@@ -48,6 +44,21 @@ This can be used to provide efficient tradeoffs between speedup and energy/power
  \caption{Example of a heterogeneous multicore processor proposed by ARM (big.LITTLE)}\label{fig:blarm}
 \end{figure}
 
+Unlike CMPs, Heterogeneous Chip Multicore Processors (HCMPs) or Asymmetrical Chip Multicore Processors (ACMPs) bring a variety of cores onto a single package.
+This may come in different forms, such as having multiple instruction set architectures on the same system on chip (MPSoCs)~\cite{venkatharnessingISA,hipstr}, or same ISA different size cores on an SoC~\cite{bigLittle}.
+For example, Figure~\ref{fig:blarm} shows a schemata for ARM's big.LITTLE HCMP, where a high-performance Cortex-A15 is paired with a simpler, power efficient Cortex-A7.
+The two cores are connected via a cache coherent interconnect which provides data coherence at the bus-level, allowing the cores to make reads to its neighbor.
+Software is then run on one of the cores depending on a profile; if the user requires performance over energy, then the Cortex-A15 will be chosen, however if energy/power efficiency is required then the Cortex-A7 will be chosen.
+
+This small example already demonstrates an advantage of HCMPs; unlike CMPs, the variety of cores on an HCMP provide a flexibility to the hardware.
+This can be used for different purposes, such as security~\cite{hipstr}, energy/power savings~\cite{venkatharnessingISA} and speeding up applications~\cite{venkatharnessingISA}.
+In their 2014 paper, Venkat et al.~\cite{venkatharnessingISA} demonstrate that a multi-ISA HCMP can improve performance by up to 1.4x and achieve energy savings of up to 40\% compared to a CMP on a peak-power budget of 40W.
+They motivate the idea that HCMPs with heterogeneous ISAs even improve over the performance of single-ISA HCMPs with speedups around 15\% and energy savings of 21.5\%.
+
+However, whilst the hardware diversity in HCMPs is an advantage compared to CMPs, it also increases programming complexity.
+For example, Gupta et al. in ~\cite{dypo} show that a single-ISA octa-core big.LITTLE architecture can have 20 CPU cores, combined with the ability to dynamically modify the voltage, this leads to 4000 different configurations.
+This highly increases the complexity of obtaining the correct settings for different programs.
+MPSoCs also face a similar issue as having more than a single ISA not only adds design challenges, but program migration between different cores may in fact deteriorate performance~\cite{asplos2012}.
 
 \section{Dynamic Multicore Processors}
 
