@@ -67,12 +67,43 @@ MPSoCs also face a similar issue as having more than a single ISA not only adds 
 In both CMPs and HCMPs, once the chip is fabricated the design cannot be modified, meaning that many of the trade-offs between power, performance and area cannot be changed after production.
 Dynamic Multicore Processors (DMPs) attempt to bridge the gap between the two previous designs by allowing the execution substrate to adapt dynamically at runtime.
 Mitall's survey ~\cite{MittalSurv2016} defines three types of modifiable resources: the core count~\cite{ipek2007CoreFusion}, number of resources that each core has~\cite{Homayoun3DPooling2012} and microarchitectural features~\cite{fallinhetblock2014,BauerRSE08,tavanaElastic}.
-In this thesis I focus on DMPs that modify the core count.
 
-Here, a DMP is composed of a group of homogeneous cores with a reconfigurable fabric.
-The advantage of DMPs over the traditional CMP is the ability to reconfigure the processor to better match the tasks at hand.
-For example, large sequential sections of code with high Instruction Level Parallelism (ILP) can be accelerated on a set of fused cores that mimic a wide superscalar processor.
-On a parallel workload the DMP can be reconfigured by splitting the fused cores to match the Thread Level Parallelism (TLP).
+\subsection{Core Fusion Dynamic Multicore Processors}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=.7\textwidth]{streamit-paper/graphics/dmcgraph.pdf}
+    \caption{High-level view of a dynamic multicore processor that can modify its core count.}
+    \label{fig:dynmulticore}
+\end{figure}
+
+A DMP that modifies core count is composed of homogeneous cores with a reconfigurable fabric.
+Physical cores can function either on their own or as a group of physical cores; this is called a Logical Core (LC).
+Throughout this thesis, the term core-fusion will be used to define the mechanism of cores creating an LC.
+A logical core will fetch instructions from a single source and execute them accross all the physical cores that compose the LC.
+Cores can fuse dynamically and create a logical core of any sizes.
+For example in Figure~\ref{fig:dynmulticore}, the DMP fuses cores into 3 LCs of sizes 1, 8 and 6 physical cores.
+The exact mechanism of core-fusion are described later on in Section~\ref{sec}.
+
+The advantage of a core-fusion DMP over the traditional CMP or HCMP is the ability to reconfigure the processor dynamically to better match the tasks at hand.
+For example, large sequential sections of code with high Instruction Level Parallelism (ILP) can be accelerated on a logical core that mimics a wide superscalar processor.
+On parallel workloads the DMP can be reconfigured by de-composing the logical cores as seen in Figure~\ref{fig:dynmulticore} to match the Thread Level Parallelism (TLP).
+
+%More here
+\subsection{Resource Sharing Dynamic Multicore Processors}
+A more fine-grained reconfiguration can be found in resource-sharing DMPs.
+There exist different models for resource sharing DMPs.
+For example the WiDGET DMP by Watanabe et al.~\cite{watanabe}, cores are built out of Instruction Engine front-ends which function similarly to Out of Order (OoO) cores' front and back ends.
+They then are connected to Execution Units which they can choose to use.
+Each core in the WiDGET DMP also have access to their neighbors Execution Units, allowing for more variation.
+Another example of resource sharing can be found in Rodrigues et al.'s work~\cite{} where a core can use resources such as Arithmetic Logic Units (ALUs) from other cores.
+
+%More here
+\subsection{Microarchitectural Reconfigurable Dynamic Multicore Processors}
+A final example is a DMP which can reconfigure microarchitectural features to better fit the current application.
+Fallin et al.~\cite{fallin} observe that serial code can exhibit phases that fit different microarchitectural features.
+According to them, these phases may only been in the ten to hundred thousands instructions long.
+These DMPs can therefore modify microarchitecural features, such as in-order or out-of-order execution, to best match the current phase of a program.
 
 \begin{figure}[t]
     \centering
@@ -105,21 +136,6 @@ When un-fusing, the master core informs the other cores, which then commit or fl
 The extra hardware required to support dynamic reconfiguration is very minimal~\cite{kim2007tflex} since most of the machinery already in place can be reused such as the cache coherence protocol when fusing and un-fusing the cores.
 We discuss this in further detail in Section~\ref{sec:setup}.
 
-%\begin{figure}[t]
-%    \centering
-%    \includegraphics[width=.7\textwidth]{streamit-paper/graphics/dmcgraph.pdf}
-%    \caption{High-level view of a dynamic multicore processor considered in this paper.}
-%    \label{fig:dynmulticore}
-%\end{figure}
-
-%Explain the figure
-%In this paper we consider a dynamic multicore processor which allows cores to compose their execution resources, register files and private L1 caches to create logical processors to accelerate a single thread.
-%Figure~\ref{fig:dynmulticore} shows a high-level view of the architecture and the two possible states: composed and decomposed.
-%The composed state represents a set of physical cores fused to create a larger logical core.
-%Multiple sets of cores can be fused to create logical cores of different sizes.
-%In Figure~\ref{fig:dynmulticore} for example, LP1 is composed of four physical cores whereas LP2 is composed of two.
-%At runtime, physical cores may be decomposed from a logical processor to remove them from the core composition.
-
 \section{Streaming Programming Languages}
 
 % % This section should explain what steaming programming is (remove all the details about each language)
@@ -138,3 +154,4 @@ Features of streaming programming languages make them an ideal language for targ
 The explicit data communication between the different tasks in the program, the ability to estimate the amount of work performed in each task and information about data rates between tasks allows the compiler to easily generate a multi-threaded application that can run on a dynamic multicore processor.
 However, the main challenge consists of deciding how to map the different tasks onto threads and how to allocate the right amount of resources to maximize performance.
 
+\section{Machine-learning guided optimisations}
