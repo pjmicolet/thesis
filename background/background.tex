@@ -44,20 +44,20 @@ Thus whilst CMPs have become a mainstain in processor design, the homogeneous mo
 \end{figure}
 
 Unlike CMPs, Heterogeneous Chip Multicore Processors (HCMPs) or Asymmetrical Chip Multicore Processors (ACMPs) bring a variety of cores onto a single package.
-This may come in different forms, such as having multiple instruction set architectures on the same system on chip (MPSoCs)~\cite{venkatharnessingISA,hipstr}, or same ISA different size cores on an SoC~\cite{bigLittle}.
+This may come in different forms, such as having multiple instruction set architectures on the same system on chip (MPSoCs)~\cite{venkat2014harnessingisa,venkatHipstr2016}, or same ISA different size cores on an SoC~\cite{bigLittle}.
 For example, Figure~\ref{fig:blarm} shows a schemata for ARM's big.LITTLE HCMP, where a high-performance Cortex-A15 is paired with a simpler, power efficient Cortex-A7.
 The two cores are connected via a cache coherent interconnect which provides data coherence at the bus-level, allowing the cores to make reads to its neighbor.
 Software is then run on one of the cores depending on a profile; if the user requires performance over energy, then the Cortex-A15 will be chosen, however if energy/power efficiency is required then the Cortex-A7 will be chosen.
 
 This small example already demonstrates an advantage of HCMPs; unlike CMPs, the variety of cores on an HCMP provide a flexibility to the hardware.
-This can be used for different purposes, such as security~\cite{hipstr}, energy/power savings~\cite{venkatharnessingISA} and speeding up applications~\cite{venkatharnessingISA}.
-In their 2014 paper, Venkat et al.~\cite{venkatharnessingISA} demonstrate that a multi-ISA HCMP can improve performance by up to 1.4x and achieve energy savings of up to 40\% compared to a CMP on a peak-power budget of 40W.
+This can be used for different purposes, such as security~\cite{venkatHipstr2016}, energy/power savings~\cite{venkat2014harnessingisa} and speeding up applications~\cite{venkat2014harnessingisa}.
+In their 2014 paper, Venkat et al.~\cite{venkat2014harnessingisa} demonstrate that a multi-ISA HCMP can improve performance by up to 1.4x and achieve energy savings of up to 40\% compared to a CMP on a peak-power budget of 40W.
 They motivate the idea that HCMPs with heterogeneous ISAs even improve over the performance of single-ISA HCMPs with speedups around 15\% and energy savings of 21.5\%.
 
 However, whilst the hardware diversity in HCMPs is an advantage compared to CMPs, it also increases programming complexity.
-For example, Gupta et al. in ~\cite{dypo} show that a single-ISA octa-core big.LITTLE architecture can have 20 CPU cores, combined with the ability to dynamically modify the voltage, this leads to 4000 different configurations.
+For example, Gupta et al. in ~\cite{Gupta2017Dypo} show that a single-ISA octa-core big.LITTLE architecture can have 20 CPU cores, combined with the ability to dynamically modify the voltage, this leads to 4000 different configurations.
 This highly increases the complexity of obtaining the correct settings for different programs.
-MPSoCs also face a similar issue as having more than a single ISA not only adds design challenges, but program migration between different cores may in fact deteriorate performance~\cite{asplos2012}.
+MPSoCs also face a similar issue as having more than a single ISA not only adds design challenges, but program migration between different cores may in fact deteriorate performance~\cite{DeVuystMigration2012}.
 
 \section{Dynamic Multicore Processors}
 
@@ -92,10 +92,10 @@ On parallel workloads the DMP can be reconfigured by de-composing the logical co
 \subsection{Resource Sharing Dynamic Multicore Processors}
 A more fine-grained reconfiguration can be found in resource-sharing DMPs.
 There exist different models for resource sharing DMPs.
-For example the WiDGET DMP by Watanabe et al.~\cite{watanabe}, cores are built out of Instruction Engine front-ends which function similarly to Out of Order (OoO) cores' front and back ends.
+For example the WiDGET DMP by Watanabe et al.~\cite{Watanabe2010Widget}, cores are built out of Instruction Engine front-ends which function similarly to Out of Order (OoO) cores' front and back ends.
 They then are connected to Execution Units which they can choose to use.
 Each core in the WiDGET DMP also have access to their neighbors Execution Units, allowing for more variation.
-Another example of resource sharing can be found in Rodrigues et al.'s work~\cite{} where a core can use resources such as Arithmetic Logic Units (ALUs) from other cores.
+Another example of resource sharing can be found in Rodrigues et al.'s work~\cite{rodrigues2014perf} where a core can use resources such as Arithmetic Logic Units (ALUs) from other cores.
 
 %More here
 \subsection{Microarchitectural Reconfigurable Dynamic Multicore Processors}

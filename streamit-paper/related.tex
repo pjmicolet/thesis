@@ -1,8 +1,8 @@
 \paragraph{Dynamic Multicore Processors}
 
-DMPs such as CoreFusion~\cite{ipek2007corefusion} differentiate themselves to EDGE based DMPs on their Instruction Set Architecture (ISA).
+DMPs such as CoreFusion~\cite{ipek2007CoreFusion} differentiate themselves to EDGE based DMPs on their Instruction Set Architecture (ISA).
 CoreFusion uses a CISC/RISC based architecture which limits the degree of scalability (fusion), whereas EDGE based DMPs have shown promising scalability~\cite{kim2007composablelight, sibi2014}.
-Other types of DMPs such as WidGET~\cite{watanabe2010widget} and Sharing Architecture~\cite{zhou2014sharingarch} present a fine-grain level of composition.
+Other types of DMPs such as WidGET~\cite{Watanabe2010Widget} and Sharing Architecture~\cite{zhou2014sharingarch} present a fine-grain level of composition.
 In these two architectures, cores can be created out of different components on the processor, including ALUs, floating point units and memory units.
 This differs from CoreFusion and EDGE where a logical core is composed out of a set of physical cores.
 This fine-grained composition can allow for even more optimisation but it increases the complexity of the problem.
@@ -10,7 +10,7 @@ This fine-grained composition can allow for even more optimisation but it increa
 \paragraph{Core Configuration}
 
 Little work has been done on automatically determining the correct core composition for a given application.
-The work conducted in~\cite{ipek2007corefusion,kim2007composablelight} manually configure their processors before running benchmarks.
+The work conducted in~\cite{ipek2007CoreFusion,kim2007composablelight} manually configure their processors before running benchmarks.
 In~\cite{santos2013nocdmc} they use information provided by the application to determine how to reconfigure some components of the processor.
 This initial information then assists the rest of the reconfiguration, this process still requires input from the programmer though.
 Therefore we present a novel method for automating the choice of core composition.  

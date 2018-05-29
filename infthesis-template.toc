@@ -1,3 +1,91 @@
-\contentsline {chapter}{\numberline {1}Experimental Procedure}{1}
-\contentsline {chapter}{\numberline {A}Aliquam erat volutpat}{3}
-\contentsline {section}{\numberline {A.1}Proin consequat}{3}
+\contentsline {chapter}{\numberline {1}Introduction}{1}
+\contentsline {chapter}{\numberline {2}Background}{3}
+\contentsline {section}{\numberline {2.1}Chip Multicore Processors}{3}
+\contentsline {section}{\numberline {2.2}Heterogeneous Chip Multicore Processors}{4}
+\contentsline {section}{\numberline {2.3}Dynamic Multicore Processors}{6}
+\contentsline {subsection}{\numberline {2.3.1}Core Fusion Dynamic Multicore Processors}{6}
+\contentsline {subsection}{\numberline {2.3.2}Resource Sharing Dynamic Multicore Processors}{7}
+\contentsline {subsection}{\numberline {2.3.3}Microarchitectural Reconfigurable Dynamic Multicore Processors}{7}
+\contentsline {section}{\numberline {2.4}EDGE Instruction Set Architecture}{7}
+\contentsline {section}{\numberline {2.5}EDGE Processor}{9}
+\contentsline {subsection}{\numberline {2.5.1}Core Lanes}{9}
+\contentsline {subsection}{\numberline {2.5.2}Core Fusion}{9}
+\contentsline {section}{\numberline {2.6}Streaming Programming Languages}{11}
+\contentsline {section}{\numberline {2.7}Machine-learning guided optimisations}{11}
+\contentsline {chapter}{\numberline {3}Related Work}{13}
+\contentsline {chapter}{\numberline {4}Streamit}{15}
+\contentsline {section}{\numberline {4.1}Introduction}{15}
+\contentsline {section}{\numberline {4.2}Motivation}{17}
+\contentsline {section}{\numberline {4.3}Methodology}{17}
+\contentsline {subsection}{\numberline {4.3.1}Overview}{18}
+\contentsline {subsection}{\numberline {4.3.2}Dynamic Multicore Processor}{18}
+\contentsline {subsection}{\numberline {4.3.3}StreamIt Benchmarks}{18}
+\contentsline {subsection}{\numberline {4.3.4}Design Space}{19}
+\contentsline {subsection}{\numberline {4.3.5}Sample Space}{19}
+\contentsline {section}{\numberline {4.4}Design Space Exploration}{20}
+\contentsline {subsection}{\numberline {4.4.1}Thread Partitioning}{21}
+\contentsline {subsection}{\numberline {4.4.2}Core Composition}{21}
+\contentsline {subsection}{\numberline {4.4.3}Impact of Loop Unrolling}{22}
+\contentsline {subsection}{\numberline {4.4.4}Co-Design Space Best Results}{22}
+\contentsline {subsection}{\numberline {4.4.5}Summary}{23}
+\contentsline {section}{\numberline {4.5}Machine Learning Models}{23}
+\contentsline {subsection}{\numberline {4.5.1}Predicting the Best Number of Threads}{24}
+\contentsline {paragraph}{\numberline {4.5.1.0.1}Synthetic Benchmark Generation}{24}
+\contentsline {paragraph}{\numberline {4.5.1.0.2}Extracting Features}{24}
+\contentsline {paragraph}{\numberline {4.5.1.0.3}KNN Model}{25}
+\contentsline {subsection}{\numberline {4.5.2}Predicting Core Composition}{25}
+\contentsline {paragraph}{\numberline {4.5.2.0.1}Gathering Training Data}{25}
+\contentsline {paragraph}{\numberline {4.5.2.0.2}Analyzing Features}{26}
+\contentsline {paragraph}{\numberline {4.5.2.0.3}Linear Regression Model}{26}
+\contentsline {section}{\numberline {4.6}Results}{27}
+\contentsline {subsection}{\numberline {4.6.1}Evaluation Methodology}{27}
+\contentsline {subsection}{\numberline {4.6.2}Evaluation}{27}
+\contentsline {subsection}{\numberline {4.6.3}Summary}{28}
+\contentsline {section}{\numberline {4.7}Related Work}{28}
+\contentsline {paragraph}{\numberline {4.7.0.0.1}Dynamic Multicore Processors}{28}
+\contentsline {paragraph}{\numberline {4.7.0.0.2}Core Configuration}{28}
+\contentsline {paragraph}{\numberline {4.7.0.0.3}Streaming Programming Languages}{29}
+\contentsline {paragraph}{\numberline {4.7.0.0.4}Partitioning StreamIt on multicore chip}{29}
+\contentsline {paragraph}{\numberline {4.7.0.0.5}Machine Learning}{29}
+\contentsline {section}{\numberline {4.8}Conclusion}{29}
+\contentsline {chapter}{\numberline {5}CASES}{41}
+\contentsline {section}{\numberline {5.1}Introduction}{41}
+\contentsline {section}{\numberline {5.2}Motivation}{42}
+\contentsline {subsection}{\numberline {5.2.1}Dynamic Core Fusion}{43}
+\contentsline {subsection}{\numberline {5.2.2}Code Optimizations}{43}
+\contentsline {subsection}{\numberline {5.2.3}Summary}{44}
+\contentsline {section}{\numberline {5.3}A Study of Core Fusion}{44}
+\contentsline {subsection}{\numberline {5.3.1}Branch Prediction}{44}
+\contentsline {subsection}{\numberline {5.3.2}Synchronization Cost}{45}
+\contentsline {subsection}{\numberline {5.3.3}Summary}{46}
+\contentsline {section}{\numberline {5.4}Experimental Setup}{47}
+\contentsline {subsection}{\numberline {5.4.1}Benchmarks}{47}
+\contentsline {subsection}{\numberline {5.4.2}Architecture and Simulator}{48}
+\contentsline {subsection}{\numberline {5.4.3}Compiler}{48}
+\contentsline {subsection}{\numberline {5.4.4}Measuring Performance and Power}{48}
+\contentsline {section}{\numberline {5.5}Code Optimizations}{48}
+\contentsline {subsection}{\numberline {5.5.1}Loop Unrolling}{49}
+\contentsline {subsection}{\numberline {5.5.2}Loop Interchange}{49}
+\contentsline {subsection}{\numberline {5.5.3}Predication and Hyperblock Formation}{50}
+\contentsline {subsection}{\numberline {5.5.4}Results}{50}
+\contentsline {subsection}{\numberline {5.5.5}Summary}{51}
+\contentsline {section}{\numberline {5.6}Benchmark Exploration}{52}
+\contentsline {subsection}{\numberline {5.6.1}Phase Detection}{52}
+\contentsline {subsection}{\numberline {5.6.2}Static Core Fusion Exploration}{53}
+\contentsline {section}{\numberline {5.7}Dynamic Core Fusion}{54}
+\contentsline {subsection}{\numberline {5.7.1}Creating Dynamic Core Fusion Traces}{55}
+\contentsline {subsection}{\numberline {5.7.2}Dynamic Core Fusion}{55}
+\contentsline {subsection}{\numberline {5.7.3}Optimizing for Speed}{56}
+\contentsline {subsection}{\numberline {5.7.4}Optimizing for Efficiency}{57}
+\contentsline {subsection}{\numberline {5.7.5}Reconfiguration Latency}{58}
+\contentsline {subsection}{\numberline {5.7.6}Summary}{58}
+\contentsline {section}{\numberline {5.8}Linear Regression Model}{59}
+\contentsline {subsection}{\numberline {5.8.1}Model}{59}
+\contentsline {subsection}{\numberline {5.8.2}Results}{60}
+\contentsline {section}{\numberline {5.9}Related Work}{61}
+\contentsline {paragraph}{\numberline {5.9.0.0.1}Reconfigurable Processors}{61}
+\contentsline {paragraph}{\numberline {5.9.0.0.2}Dynamic Multicore Processors}{62}
+\contentsline {paragraph}{\numberline {5.9.0.0.3}Dynamic Core Fusion}{62}
+\contentsline {paragraph}{\numberline {5.9.0.0.4}Voltage Scaling}{62}
+\contentsline {section}{\numberline {5.10}Conclusion}{62}
+\contentsline {chapter}{Bibliography}{65}
