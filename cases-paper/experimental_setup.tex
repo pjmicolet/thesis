@@ -20,20 +20,6 @@ We configure the simulator to model a 16 core multiprocessor, with 32 KB private
 and issue up to 2 instructions per block for a maximum of 64 blocks in flight.
 
 
-\subsection{Fusing Cores} \label{sec:coresufion}
-
-In this processor, the micro-architecture is distributed: register files, Load Store Queues (LSQs), L1 caches and ALUs all look like nodes on a network.
-This means that when cores fuse together, this is similar to adding an extra node to the network.
-When cores are fused, one of the cores will execute a non-speculative block from a single thread whilst all other cores execute speculative blocks that are predicted from the same thread.
-For our study, we use a simple round robin policy to choose which core is going to execute the next speculative block.
-When we start a new thread on a fused core the OS and runtime write the new core mapping to a system register.
-The hardware then flushes these cores if they are not idle and sets the PC of the first block of that thread on one core in the logical processor and starts executing.
-
-Fusing cores is therefore a lightweight process.
-We estimate that switching the size of the logical-core (LC) results in a delay of 100 cycles on average.
-The actual time varies based on the time it takes the cache coherence protocol to move the data around the memory system.
-Section~\ref{sec:reconfoverhead} discusses in more details how latency affects energy efficiency and shows that dynamic core fusion is still highly beneficial even when considering overheads of 1,000 cycles.
-
 \subsection{Compiler}
 Each benchmark is compiled with the Microsoft C++ compiler for EDGE~\cite{e2}, with -O2 optimisations and using instruction predication for hyperblock formation~\cite{smith2006edge}.
 

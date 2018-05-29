@@ -35,7 +35,6 @@ As all the processor cores are homogeneous this will cause serial bottlenecks to
 This implication has pushed research into finding ways of parallelising code to its fullest~\cite{}, however this may not always be possible~\cite{}.
 Thus whilst CMPs have become a mainstain in processor design, the homogeneous model has its limits.
 
-
 \section{Heterogeneous Chip Multicore Processors}
 
 \begin{figure}[t]
@@ -111,11 +110,56 @@ These DMPs can therefore modify microarchitecural features, such as in-order or 
     \caption{High-level view of the EDGE ISA flow.}
     \label{fig:EdgeHigh}
 \end{figure}
-\section{EDGE ISA} We assume a DMP similar to TFlex~\cite{kim2007tflex} using an Explicit Data Graph Execution~\cite{burger04edge} (EDGE) instruction set architecture (ISA).
-EDGE ISAs encode dependencies between instructions at the ISA level.
-Code is organised as blocks of instructions where all instruction communication is local to the block~\cite{smith2006edge}.
-Each block has a single entry point but may have multiple exits.
-This enables the architecture to dispatch blocks speculatively, with low overhead~\cite{putnam2010e2,kim2007tflex}, therefore, increasing exploitation of ILP.
+
+\section{EDGE Instruction Set Architecture} 
+The Explicit Data Graph Execution~\cite{burger04edge} (EDGE) instruction set architecture (ISA) is a data-flow based ISA.
+Figure~\ref{fig:EdgeHigh} shows a high-level overview of how EDGE differs from a traditional instruction set architecture.
+The EDGE compiler has a first pass which generates instructions from the original source code.
+Blocks are then generated from the basic-blocks found in the code generation pass.
+
+%what I'm trying to say here is that registers are used only for outer communication, in a block instructions are 
+Unlike traditional ISAs, blocks do not communicate via registers, but rather the output targets of instructions are encoded to instruction inputs~\cite{smith2006edge}.
+Loads and stores in each EDGE block are assigned unique identifiers which are used resolve load-store dependencies.
+Thus, the EDGE ISAs encode dependencies between instructions at the ISA level, registers are only used for inter-communication between blocks.
+An EDGE block also contains a header that will inform the hardware about the number of stores and register writes contained in the block~\cite{e2paper}, this is used to facilitate committing blocks.
+
+EDGE blocks also have a set of restrictions to satisfy correctness.
+If a block does not meet these requirements, it may need to be broken down into smaller blocks.
+These restrictions are:
+
+\begin{itemize}
+\item Block Size: an EDGE block may be between 4 to 128 instructions.
+\item Load/Store: an EDGE block may have at most 32 load/store instructions.
+\item Entry/Exit: an EDGE block may have a single exit but may have multiple exits.
+\end{itemize}
+
+To increase the average size of EDGE blocks, multiple blocks can be combined together to form one large block called a hyperblock.
+This is achieved through the use of instruction predication.
+For example given an if/else statement, the compiler can generate a single block, predicating all instructions of the else statement.
+As the compiler needs to declare the number of stores and register writes in the block header, extra instructions may need to be generated to ensure the block always executes the same amount of stores.
+
+Overall, the EDGE ISA enables the architecture to dispatch blocks speculatively, with low overhead~\cite{putnam2010e2,kim2007tflex}, therefore, increasing exploitation of ILP.
+
+\section{EDGE Processor}
+
+\subsection{Core Lanes}
+ \begin{figure}[t]
+ \center
+ \includegraphics[width=1\textwidth]{background/graphics/e2segment.png}
+ \caption{Example of a four lane core on an EDGE processor taken from~\cite{e2smith}.}\label{fig:e2segment}
+ \end{figure}
+ 
+EDGE instruction blocks can be up to 128 instructions long, however this often isn't the case.
+To maximize core-utilisation, each core on an EDGE Processor is segmented into a set number of lanes which can each fetch and decode their own blocks.
+A lane is able to fetch a block of maximum size
+
+\begin{equation}
+\frac{128}{NumberOfLanes}
+\end{equation}
+
+For example, a four lane core as seen in Figure~\ref{fig:e2segment} can have up to four blocks of 32 instructions.
+Fetching blocks larger than 32 instructions will fill up more than one lane.
+Lanes allow EDGE cores to be more flexible to block size variability.
 
 \subsection{Core Fusion}
  \begin{figure}[t]
@@ -126,15 +170,28 @@ This enables the architecture to dispatch blocks speculatively, with low overhea
  
 Core Fusion is achieved by fusing a set of \textit{physical} cores to create larger \textit{logical} cores.
 This does not modify the physical structure of the chip, instead it provides a unified view of a group of physical cores to the software.
-For example, fusing two cores generates a logical core with twice the amount of execution units, register files and L1 cache.
+In the processor used throughout the thesis, the micro-architecture is distributed: register files, Load Store Queues (LSQs), L1 caches and ALUs all look like nodes on a network.
+This means that when cores fuse together, this is similar to adding an extra node to the network.
 Fusion is a dynamic modification and may occur during the execution of a program to better fit the workload.
 Unlike traditional CMPs, fused cores will operate on the same thread and attempt to extract Instruction Level Parallelism (ILP) rather than Thread Level Parallelism (TLP)~\cite{micolet2016dmpstream,pricopi2012bahurupi}.
+
 Figure~\ref{fig:dmp} shows the different stages and mechanisms of core fusion for a four core system.
 When creating a new core fusion a master core informs all other cores about the fusion and sends the predicted next block address to the next available fused core.
+When we start a new thread on a fused core the OS and runtime write the new core mapping to a system register.
+The hardware then flushes these cores if they are not idle and sets the PC of the first block of that thread on one core in the logical processor and starts executing.
 When a core mispredicts a branch in a fusion, it informs the other cores which flush any younger blocks.
 When un-fusing, the master core informs the other cores, which then commit or flush their blocks and power down while the master core continues to fetch and execute blocks from the thread.
 The extra hardware required to support dynamic reconfiguration is very minimal~\cite{kim2007tflex} since most of the machinery already in place can be reused such as the cache coherence protocol when fusing and un-fusing the cores.
-We discuss this in further detail in Section~\ref{sec:setup}.
+
+When a logical core fetches multiple blocks, it may execute them out of order.
+However memory instructions and instructions that modify registers pass through the LSQ and register-file and are executed in order.
+This ensures that blocks operate on memory in a consistent fashion.
+In case of a memory violation caused by undetected dependencies a flush of all blocks younger than the violator, including the violating block, is performed.
+
+%Fusing cores is therefore a lightweight process.
+%We estimate that switching the size of the logical-core (LC) results in a delay of 100 cycles on average.
+%The actual time varies based on the time it takes the cache coherence protocol to move the data around the memory system.
+%Section~\ref{sec:reconfoverhead} discusses in more details how latency affects energy efficiency and shows that dynamic core fusion is still highly beneficial even when considering overheads of 1,000 cycles.
 
 \section{Streaming Programming Languages}
 
