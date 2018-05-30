@@ -5,9 +5,9 @@
   \caption{The ten highest correlating features with the optimal number of cores.}\label{fig:corrCore}
 \end{figure}
 \paragraph{Gathering Training Data}
-Given that the optimal number of cores for a thread is independent of the number of threads found in the program, we only use the single threaded versions to determine the optimal number of cores.
+Given that the optimal number of cores for a thread is independent of the number of threads found in the program, only the single threaded versions is used to determine the optimal number of cores.
 For example, all benchmarks will only have a single core per thread when the application is partitioned in 15 threads as this is the maximum amount of cores that may be given to each thread rather than it being the optimal solution. 
-We include multiple versions of the benchmarks using different amounts of unrolling.
+Multiple versions of the benchmarks using different amounts of unrolling are included.
 To determine the optimal number of cores we only select training data that has a performance within 1\% of the best. 
 
 \paragraph{Analyzing Features}
@@ -20,13 +20,13 @@ The next two feature compare the size of the average size of an unconditional bl
 The fifth feature measures the ratio of the number of unconditional blocks to conditional.
 
 Overall there are no features distinct to StreamIt, such as pipelines or splitjoins that correlate highly with the optimal number of cores.
-We can thus infer that the optimal number of cores is independent of the structure of a StreamIt program.
+It can thus be infered that the optimal number of cores is independent of the structure of a StreamIt program.
 Instead, it is more dependent on the amount of computation.
 
 EDGE architecture's ability to fetch atomic instruction blocks and out-of-order execution encourages the focus on determining how much speculation is extracted from each filter.
 Unfortunately StreamIt programs do not tend to have a large quantity of conditional statements and when they do they tend to be quite small.
 This statement is reinforced by the correlation between the average number of conditional blocks with the optimal number of cores, which is only 0.2, compared to 0.809 for the average size of unconditional blocks.
-We thus do not focus on using any speculative features from the StreamIt graph.
+Thus there is no focus on using any speculative features from the StreamIt graph.
 
 \paragraph{Linear Regression Model}
 Given that the optimal number of cores is highly correlated with a few features, a linear regressor is a natural choice to predict the best number of threads.
