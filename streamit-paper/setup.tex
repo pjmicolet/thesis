@@ -1,6 +1,6 @@
-In this section we present our design exploration of a set of streaming applications being executed on a DMP.
-We describe how changing the thread mapping and core composition affect the benchmarks and what we can learn from this.
-In addition, we look at the impact of loop unrolling and how it helps exploit larger fused cores.
+This section presents the design exploration of a set of streaming applications being executed on a DMP.
+The section describes how changing the thread mapping and core composition affect the benchmarks and what we can learn from this.
+In addition, the impact of loop unrolling and how it helps exploit larger fused cores is investigated.
 
 \subsection{Overview}
 
@@ -15,24 +15,24 @@ In addition, we look at the impact of loop unrolling and how it helps exploit la
 \end{figure}
 
 Figure~\ref{fig:overview} presents the workflow of our system.
-First, we use the source-to-source StreamIt compiler to unroll loops as this is usually beneficial when cores are composed as we will see later.
-Then, we extract static code features such as the program's graph structure.
+First, the source-to-source StreamIt compiler is used to unroll loops as this is usually beneficial when cores are composed as will be seen later.
+Then, static code features such as the program's graph structure are extracted.
 These features are used as an input to our first machine-learning model to determine the Thread Level Parallelism (TLP).
 This information is used to partition the program into threads and the StreamIt compiler produces a C++ program which  is then compiled using our C++ compiler.
 
 Then, a second machine-learning model is used which uses static code features extracted from the SteamIt code.
 This model is used to decide on the core topology.
 This is achieved by finding the amount of Instruction Level Parallelism (ILP) in each thread and by determining how many physical cores should be fused for that thread.
-Finally, we reconfigure the processor to fuse the requested resources and execute the partitioned program.
+Finally, the processor is reconfigured to fuse the requested resources and execute the partitioned program.
 
 
 \subsection{Dynamic Multicore Processor}
 
-We use a Dynamic Multicore Processor for our research based on an Explicit Data Graph Execution (EDGE) Instruction Set Architecture that resembles~\cite{sibi2014}.
+The Dynamic Multicore Processor used for the research is based on an Explicit Data Graph Execution (EDGE) Instruction Set Architecture that resembles~\cite{sibi2014}.
 This differs from other DMPs such as CoreFusion, WidGET and Shared Architecture~\cite{ipek2007CoreFusion,Watanabe2010Widget,zhou2014sharingarch} which utilize a CISC/RISC instruction set.
-To evaluate our work we use a customizable cycle-level simulator verified within 4\% of RTL.
-The simulator is highly configurable, allowing us to model a variety of parameters such as the number of cores, details of the memory hierarchy and synchronisation schemes.
-For our experiments we use a 16 core dual issue configuration with 16 KB private L1 caches and a 2 MB shared L2.
+To evaluate the work a customizable cycle-level simulator verified within 4\% of RTL is used.
+The simulator is highly configurable, allowing the modelling of a variety of parameters such as the number of cores, details of the memory hierarchy and synchronisation schemes.
+For the experiments in this chapter a 16 core dual issue configuration with 16 KB private L1 caches and a 2 MB shared L2 is used.
 
 \subsection{StreamIt Benchmarks}
 
@@ -47,8 +47,8 @@ The output of all the filters in a SplitJoin are then concatenated in a round-ro
 Finally a Feedback Loop provides a way for filters to operate on their outputs.
 The resulting program written in StreamIt represents a graph where the nodes are filters and their edges represent the incoming and outgoing data streams.
 
-In this paper, we use 15 StreamIt benchmark  all taken from the official StreamIt repository.
-For each benchmark we used the default input provided in the repository and the default iteration count of 10. 
+This chapter explores 15 StreamIt benchmark  all taken from the official StreamIt repository.
+For each benchmark the default inputs provided in the repository are used and the default iteration count is set to 10. 
 \begin{table}
 \centering
 \begin{tabular} { p{5.2cm}  p{1.8cm} }
@@ -81,8 +81,8 @@ For each benchmark we used the default input provided in the repository and the 
 \subsection{Design Space}
 
 The parameters and size of the space are given in table~\ref{tab:space}.
-In this study we use 16 cores and assign core 0 to the main thread and for runtime management. This leaves 15 cores available for each application.
-We restrict each core to running only a single thread (no preemptive scheduling) which leads to a possible number of threads between 1 and 15.
+In this study all 16 cores are utilised and assign core 0 to the main thread and for runtime management. This leaves 15 cores available for each application.
+Each core is restricted to running only a single thread (no preemptive scheduling) which leads to a possible number of threads between 1 and 15.
 Cores can be fused together to form a logical core with up to 15 physical cores, making the total number of cores assigned to a thread between 1 and 15.
 This leads to a total space size of 32,767 unique combination per benchmark.
 
@@ -90,19 +90,19 @@ This leads to a total space size of 32,767 unique combination per benchmark.
 
 Given a partitioning, any benchmark that is split into 15 threads requires 32,767 executions to cover the entire space.
 Running an exhaustive exploration of the space requires approximately a week of simulation on a 572+ node supercomputer.
-For this reason, we decided to sample 1,316 random points from the entire space.
+For this reason, a sample of 1,316 random points from the entire space is utilised.
 This roughly corresponds to 100 core compositions for each number of threads (the actual number, 1,316 is smaller than 1,500 since for low thread counts there are less than 100 possible different core composition).
 \bench{InsertionSort} is the only exception since it can at most only be split into 5 threads leading to 415 sample points.
 
-To gain confidence that the best configuration from the sample space is indeed close to the real best in the entire space, we used a statistical model based on the Stopping Criterion defined in~\cite{vuduc2003AutomaticPerf}.
+To gain confidence that the best configuration from the sample space is indeed close to the real best in the entire space, a statistical model based on the Stopping Criterion defined in~\cite{vuduc2003AutomaticPerf} is deployed.
 This model estimates, given a sample of the total space, if the best observed performance of that sample space is within a percentage of the statistical best performance.
-Our results demonstrate that the sample space selected is representative of the whole space.
+The results demonstrate that the sample space selected is representative of the whole space.
 
 Figure~\ref{fig:prox} shows, for each of the benchmarks, the proximity to the statistical best when increasing the sub-sample space given a maximal uncertainty of 5\%  (\ie minimum 95\% confidence).
 As can be seen by the plain line, the model shows that the best sample point is actually within 5\% (0.05 proximity) of the best for all benchmark.
-To further prove that the statistical model based on the Stopping Criterion is indeed accurate, we conducted an exhaustive exploration for five benchmarks.
+To further prove that the statistical model based on the Stopping Criterion is indeed accurate, an exhaustive exploration of five benchmarks was conducted.
 The dotted line in figure~\ref{fig:prox} shows the actual proximity to the best for \bench{Audiobeam}, \bench{Beamformer}, \bench{BitonicSort}, \bench{CFAR} and \bench{FMRadio}.
 As can be seen after 1316 samples, the performance we achieve is actually very similar to the one predicted by the statistical model, hence confirming prior work~\cite{vuduc2003AutomaticPerf}.
-To summarize, we can conclude that the best point found in our sample space of 1,316 points is at least within 5\% of the real best in the exhaustive space with 95\% confidence.
+To summarize, it can be concluded that the best point found in the sample space of 1,316 points is at least within 5\% of the real best in the exhaustive space with 95\% confidence.
 
 
