@@ -1,4 +1,4 @@
-We now conduct an exploration of the software/hardware co-design space.
+This section describes the exploration of the software/hardware co-design space.
 The software side includes partitioning the program, determining the number of threads and the loop unrolling compiler optimization.
 The hardware side is about finding out the best core composition that maximizes performance for a given partitioning.
 
@@ -34,12 +34,14 @@ Whilst this flexibility is advantageous, choosing the right amount of cores for 
 Figure~\ref{fig:audiototal} shows how threading and composition affects performance for the \bench{Audiobeam} benchmark.
 The curves represent the density distribution for different core compositions as a function of the number of threads.
 The right hand side Y-axis represents the number of threads present in the current version of the benchmark normalized by the total number of points in the design space.
-For each of the threaded versions we ran the benchmark using on average 100 different compositions.
+For each of the threaded versions the benchmark was ran using on average 100 different compositions.
 The density curve for thread 15 is a single point as there exists only a single composition.
 
 The variance of each of the curves represents the influence of composition on the benchmark's performance for a given number of threads.
 For this benchmark the impact of core composition is actually very large for the best performing number of threads (1--5).
 Interestingly, as more threads are used,  performance shifts worsens, echoing the results shown in the previous section.
+Increasing the number of threads will increase communication between cores; which explains these results.
+By fusing cores, this can reduce the stress of having multiple threads whilst still getting performance from having more cores being used.
 
 \begin{figure}[t]
   \includegraphics[width=1\textwidth]{streamit-paper/graphics/unrolled_fm.pdf}
@@ -63,7 +65,7 @@ As the number of cores fused can now be greater we encounter a resource problem 
 This example demonstrates that whilst the optimal number of threads is independent of the number of cores there still exists trade-offs between the two.
 This signifies that the amount of resources available to each thread must be taken into consideration before generating the program to balance the trade off between ILP and TLP.
 
-\begin{figure*}[t]
+\begin{figure*}[ht]
  \centering
   \centering
     \includegraphics[width=1\textwidth]{streamit-paper/graphics/threadcompbench.pdf}

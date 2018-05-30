@@ -5,9 +5,9 @@ This difficulty arises from trying to balance between exploiting larger composed
 The problem can be decomposed into two stages; first, determining the right number of threads and then selecting a good core composition.
 In this section, two machine-learning models that predict the best thread partitioning and core composition to maximize performance are presented.
 
-\subsection{Predicting the Best Number of Threads}
+\section{Predicting the Best Number of Threads}
 
-\paragraph{Synthetic Benchmark Generation}
+\subsection{Synthetic Benchmark Generation}
 
 One of the difficulties of building a machine learning based model for StreamIt is the lack of benchmarks available~\cite{wang2013partitionstreamit}.
 Whilst there exists at least 30 realistic applications for StreamIt~\cite{theis2010empericalcharstreamit} this is simply not enough to create a large enough data set.
@@ -20,7 +20,7 @@ For each generated application, 15 different threaded versions are generated.
 Each of these versions is ran using a single core per thread and the cycle count is recorded.
 This was repeated for 1000 unique randomly generated applications and record the best number of threads each time.
 
-\paragraph{Extracting Features}
+\subsection{Extracting Features}
 
 Once the benchmarks have been generated, the next step consists of gathering features for each applications.
 In order to build the two machine learning models an initial set of over 50 features are extracted from StreamIt programs.
@@ -48,7 +48,7 @@ This is most certainly due to the fact that whilst SplitJoins make parallelizabl
   \caption{The ten highest correlating features with the best number of threads for 1000 synthetic benchmarks.}\label{fig:corr}
 \end{figure}
  
-\paragraph{KNN Model}
+\subsection{KNN Model}
 
 A k-Nearest Neighbor (kNN) model was chosen to determine the number of threads to use for the application.
 Given a new application to predict, the kNN classifier determines the $k$ closest generated applications in terms of the features.
@@ -63,9 +63,3 @@ Using cross validation the model generated in this chapter has a 33\% accuracy o
 This increases to 57\% when allowing a prediction to be 1 thread away from the best and 67\% when 2 threads away.
 Whilst the performance of pin-point accuracy is disappointing it does not incur more than a 12\% performance penalty when choosing a thread number which is +/- 1 from the best and 19\% when moving up to 2 threads away from the best.
 This average is measured by looking at the thread performances without composition.
-
-\begin{figure*}
-  \center
-  \includegraphics[width=1\textwidth]{streamit-paper/graphics/lineargraphs.pdf}
-  \caption{Optimal number of cores in relation to the three highest correlating features. The maximum number of cores plateaus on the right hand side as this is the maximum possible amount.}\label{fig:maxav}
-\end{figure*}

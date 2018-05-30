@@ -2,11 +2,11 @@ This section presents the design exploration of a set of streaming applications 
 The section describes how changing the thread mapping and core composition affect the benchmarks and what we can learn from this.
 In addition, the impact of loop unrolling and how it helps exploit larger fused cores is investigated.
 
-\subsection{Overview}
+\section{Overview}
 
 %CGO REBUTTAL: This is considered confusing, need to specify that all source2source is done via StreamIt compiler.
 %Maybe need to change graph
-\begin{figure}[t]
+\begin{figure}
     \centering
     \includegraphics[width=1\textwidth]{streamit-paper/graphics/explanation.pdf}
     \caption{Description of our workflow.
@@ -14,25 +14,25 @@ In addition, the impact of loop unrolling and how it helps exploit larger fused 
     \label{fig:overview}
 \end{figure}
 
-Figure~\ref{fig:overview} presents the workflow of our system.
+Figure~\ref{fig:overview} presents the workflow of the system used in this chapter.
 First, the source-to-source StreamIt compiler is used to unroll loops as this is usually beneficial when cores are composed as will be seen later.
 Then, static code features such as the program's graph structure are extracted.
-These features are used as an input to our first machine-learning model to determine the Thread Level Parallelism (TLP).
+These features are used as an input to the first machine-learning model to determine the Thread Level Parallelism (TLP).
 This information is used to partition the program into threads and the StreamIt compiler produces a C++ program which  is then compiled using our C++ compiler.
 
 Then, a second machine-learning model is used which uses static code features extracted from the SteamIt code.
 This model is used to decide on the core topology.
-This is achieved by finding the amount of Instruction Level Parallelism (ILP) in each thread and by determining how many physical cores should be fused for that thread.
-Finally, the processor is reconfigured to fuse the requested resources and execute the partitioned program.
+This is achieved by estimating the amount of Instruction Level Parallelism (ILP) that can be possibly extracted in each thread and by determining how many physical cores should be fused for that thread.
+Finally, the processor is reconfigured to fuse the requested resources ahead of time and execute the partitioned program.
 
 
 \subsection{Dynamic Multicore Processor}
 
-The Dynamic Multicore Processor used for the research is based on an Explicit Data Graph Execution (EDGE) Instruction Set Architecture that resembles~\cite{sibi2014}.
-This differs from other DMPs such as CoreFusion, WidGET and Shared Architecture~\cite{ipek2007CoreFusion,Watanabe2010Widget,zhou2014sharingarch} which utilize a CISC/RISC instruction set.
+%In this chapter the Dynamic Multicore Processor used for the research is based on an Explicit Data Graph Execution (EDGE) Instruction Set Architecture that resembles~\cite{sibi2014}.
+%This differs from other DMPs such as CoreFusion, WidGET and Shared Architecture~\cite{ipek2007CoreFusion,Watanabe2010Widget,zhou2014sharingarch} which utilize a CISC/RISC instruction set.
 To evaluate the work a customizable cycle-level simulator verified within 4\% of RTL is used.
 The simulator is highly configurable, allowing the modelling of a variety of parameters such as the number of cores, details of the memory hierarchy and synchronisation schemes.
-For the experiments in this chapter a 16 core dual issue configuration with 16 KB private L1 caches and a 2 MB shared L2 is used.
+For the experiments in this chapter a 16 core dual issue configuration with 4 lanes per core, 16 KB private L1 caches and a 2 MB shared L2 is used.
 
 \subsection{StreamIt Benchmarks}
 
