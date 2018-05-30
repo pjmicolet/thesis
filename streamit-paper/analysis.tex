@@ -21,7 +21,7 @@ This motivates our use of machine learning to decide the optimal number of threa
 Finally we also observe that executions without compositions always perform worse.
 This demonstrates that composing cores is essential to obtain the best performance from a workload.
 
-\begin{figure}[t]
+\begin{figure}[h]
   \includegraphics[width=1\textwidth]{streamit-paper/graphics/audiobeam_tots.pdf}
   \caption{Distribution of Audiobeam performance when modifying the amount of threads and compositions.}\label{fig:audiototal}
 \end{figure}
@@ -43,13 +43,13 @@ Interestingly, as more threads are used,  performance shifts worsens, echoing th
 Increasing the number of threads will increase communication between cores; which explains these results.
 By fusing cores, this can reduce the stress of having multiple threads whilst still getting performance from having more cores being used.
 
-\begin{figure}[t]
+\begin{figure}
   \includegraphics[width=1\textwidth]{streamit-paper/graphics/unrolled_fm.pdf}
   \caption{Distribution of FMRadio performance when modifying the amount of threads, composition and unrolling factor.}\label{fig:fmunroll}
 \end{figure}
 
 \subsection{Impact of Loop Unrolling}
-In this section we study the impact of one compiler optimization by focusing on loop unrolling.
+In this section the impact of one compiler optimization is studied by focusing on loop unrolling.
 Filters containing large amounts of loops potentially contain high degrees of instruction level and memory level parallelism.
 Unrolling may increase the degree of parallelism which is advantageous to a wider fused processor.
 Loop unrolling may also yield similar results to vectorization when vectorization may not easily be applied or available.
@@ -60,19 +60,20 @@ Figure~\ref{fig:fmunroll} shows that unrolling loops for \bench{FMRadio} can gre
 
 Another observation is that the best execution times for each of the threaded versions when unrolling does not follow the same trend previously described.
 The leftmost curve performance peaks at two threads whereas the rightmost peaks at five.
-As the number of cores fused can now be greater we encounter a resource problem when increasing the number of threads.
-
-This example demonstrates that whilst the optimal number of threads is independent of the number of cores there still exists trade-offs between the two.
+As the number of cores fused can now be greater we encounter a resource problem when increasing the number of threads, by a factor of 3x.
+It is important to note that when increasing the amount of unrolling, the optimal thread shifts towards a smaller number.
+This is due to the fact that more ILP can be extracted over TLP.
+This example therefore demonstrates that whilst the optimal number of threads is independent of the number of cores there still exists trade-offs between the two.
 This signifies that the amount of resources available to each thread must be taken into consideration before generating the program to balance the trade off between ILP and TLP.
 
-\begin{figure*}[ht]
+\begin{sidewaysfigure}
  \centering
   \centering
     \includegraphics[width=1\textwidth]{streamit-paper/graphics/threadcompbench.pdf}
     \caption{Speedup obtained by choosing best core composition, best
       thread number and the combination of both optimisations. The baseline for the speedup measurement is single core, single thread execution using O2 compiler optimisations. Higher
       is better.}\label{fig:overviewhist}
-\end{figure*}
+\end{sidewaysfigure}
 
 \subsection{Co-Design Space Best Results}
 
