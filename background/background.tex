@@ -212,3 +212,26 @@ The explicit data communication between the different tasks in the program, the 
 However, the main challenge consists of deciding how to map the different tasks onto threads and how to allocate the right amount of resources to maximize performance.
 
 \section{Machine-learning guided optimisations}
+
+Using machine learning to guide optimisations has been a popular area of research as of late~\cite{cummins2017pact,wang2018ml,dubach13dynamic}.
+There are two areas in which machine learning is used: compiler driven optimisations and runtime driven optimisations.
+This section covers the machine learning techniques applied in both areas and their utilisations.
+
+\subsection{Linear Regression}
+
+In a Dynamically reconfigurable processor machine learning can be used to detect when hardware must switch configurations~\cite{micolet2017cases, tavanaElastic}.
+Knowing when to reconfigure the processor necessitates fast decision making to minimize the overall cost of reconfiguration.
+Machine learning models therefore need to be lightweight to ensure that the computations required to operate the model are as low as possible.
+In these situations, a popular model is Linear Regression as it has a fairly low computational footprint~\cite{tavanaElastic}.
+
+Linear Regression assumes a linear relationship between a set of inputs and the predicted output and generates a model in the form of:
+
+\begin{equation}
+y = \beta_0 + \beta_1X_1 + \beta_2X_2 + ... + \beta_nX_n
+\end{equation}
+
+where y is the predicted output, $X_{1..n}$ are the inputs and $\beta_{0.n}$ are weighted regression coefficients.
+When training a linear regression, it generates the $\beta$ weights as to minimize the square-error between the training inputs and predicted outputs.
+Once a model has been generated from input data, it can be implemented as a set of sums in hardware, making it an efficient way of making predictions.
+
+\subsection{k Nearest Neighbors} 
