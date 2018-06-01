@@ -1,4 +1,12 @@
 This section describes the performance achieved by the model when predicting the number of threads and core composition to use for each of the StreamIt benchmarks.
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.6\textwidth]{streamit-paper/graphics/results.pdf}
+    \caption{Performance of the machine learning model against the best execution from random sampling. The baseline for the speedup measurement is single core, single thread execution using O2 compiler optimisations. Higher is better.}\label{fig:results}
+\end{figure}
+
 \subsection{Evaluation Methodology}
 
 Leave-one-out cross-validation is used for testing the linear model.
@@ -25,7 +33,7 @@ This is the cause of the performance penalty, for ~\bench{ChannelVocoder} it is 
 
 Aside from this case, the machine learning model obtains similar speedups to the best sample.
 
-\begin{table}[!htb]
+\begin{table}[hb]
 
   \small
  \begin{tabular} { | l | l | l | l | l | l | l | l | l | l |l| }
@@ -65,12 +73,6 @@ Aside from this case, the machine learning model obtains similar speedups to the
  \end{tabular}
   \caption{Number of Threads and Cores used for Best of Sample Space and Machine Learning Model.}\label{tab:summary}
 \end{table}
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=1\textwidth]{streamit-paper/graphics/results.pdf}
-    \caption{Performance of the machine learning model against the best execution from random sampling. The baseline for the speedup measurement is single core, single thread execution using O2 compiler optimisations. Higher is better.}\label{fig:results}
-\end{figure}
-
 \subsection{Summary}
 
 This section has demonstrated that it is possible to build a machine-learning model that achieves high level of performance using simple source code static features.
