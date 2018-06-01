@@ -26,13 +26,11 @@ This informs us in two ways; first of all large LCs will need to run on code sec
 Second of all, branch prediction can be a simple method of evaluating the current effectiveness of a LC.
 Given a certain number of cores, if the prediction accuracy is under the limits presented in Figure~\ref{fig:req_pred} it can be easily determine that the LC is sub-optimal.
 
-\begin{figure}[t]
+\begin{figure}[h]
     \centering
     \includegraphics[width=\textwidth]{cases-paper/graphics/limit_study/prediction_req.pdf}
-\vspace*{-5mm}
     \caption{Required prediction accuracy for a logical core size to be efficient given an average block size.}
     \label{fig:req_pred}
-\vspace{5mm}
 \end{figure}
 \subsection{Synchronization Cost}
 
@@ -47,16 +45,16 @@ If a core's instruction window is full then it must commit a block before it fet
 The Synchronization Cost, in cycles, is defined in equation~\ref{form:synccost} and is measured by averaging the overall number of cycles each fused core waits until it can continue to fetch and execute new blocks.
 \textit{AvBlocksInFlight} represents the average number of blocks in flight on a single core in the LC.
 This is a worst-case estimate as block sizes will fluctuate during the execution of a program.
-\vspace{5mm}
+
 \begin{equation}\label{form:synccost}
 SyncCost_i = \frac{\sum_{n=0}^{i-1}\left(AvBlocksInFlight \right) \times n }{i}
 \end{equation}
-\vspace{5mm}
 
-\begin{figure}[t]
+
+\begin{figure}[h]
     \centering
     \includegraphics[width=\textwidth]{cases-paper/graphics/limit_study/sync_cost.pdf}
-\vspace*{-5mm}
+
     \caption{Synchronization Cost in cycles for a given number of cores in a composition and an average block size.} %Each core has 4 lanes and each lane can fetch a block of up to 32 instructions. Lower is better.}
     \label{fig:sync_cost}
 \end{figure}
@@ -74,7 +72,7 @@ Figure~\ref{fig:lm_summ} presented a worst-case estimate of IPC performance assu
 From what was previously explained, Figure~\ref{fig:lm_summ} shows us that to obtain optimal performance requires a high branch prediction accuracy and large blocks.
 It shows that larger logical processors can easily under-perform; for example it can be seen that 16 fused cores often have IPCs under 15, meaning that each core has an IPC under~1.
 
-\begin{figure}[t]
+\begin{figure}[h]
     \centering
     \includegraphics[width=0.60\textwidth]{cases-paper/graphics/limit_study/summary.pdf}
     \caption{IPC estimate given a logical processor size, average branch prediction and average block size for a dual-issue core. A higher IPC means better performance.}
