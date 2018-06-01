@@ -78,6 +78,21 @@ This signifies that the amount of resources available to each thread must be tak
 
 \subsection{Co-Design Space Best Results}
 
+\begin{table}[!htb]
+% The FFT need are variable
+  \small
+ \begin{tabular} { | l | l | l | l | l | }
+ \hline
+   \cellcolor[gray]{0.7}Audiobeam&  \cellcolor[gray]{0.7} Beamformer& \cellcolor[gray]{0.7}Bitonic-Sort  &  \cellcolor[gray]{0.7} BubbleSort &  \cellcolor[gray]{0.7}  CFAR\\ \hline
+  1 & 2 & 33 & 0 & 0 \\ \hline
+   \cellcolor[gray]{0.7}ChannelVocoder &  \cellcolor[gray]{0.7} FFT&  \cellcolor[gray]{0.7}FFT3 &  \cellcolor[gray]{0.7} FFT6&  \cellcolor[gray]{0.7}FilterBank \\ \hline
+  1 & 12 & 44 & 96 & 9 \\ \hline 
+   \cellcolor[gray]{0.7}FIR &  \cellcolor[gray]{0.7} FMRadio &  \cellcolor[gray]{0.7} InsertionSort &  \cellcolor[gray]{0.7} Matmul-Block &  \cellcolor[gray]{0.7} RadixSort\\ \hline
+  0 & 7 & 0 & 7 & 0 \\ \hline
+ \end{tabular}
+  \caption{Number of split joins present in each benchmark.}\label{tab:splitjoin}
+\end{table}
+
 This section  presents the results of the entire co-design space exploration.
 Figure~\ref{fig:overviewhist} characterizes how much of a performance increase is obtainable using a baseline of executing the benchmark on a single thread and single core without unrolling.
 For each benchmark, the \textit{THREAD} bar represents the maximal speedup obtained by dividing the program into threads without fusing cores.
@@ -85,12 +100,16 @@ The \textit{CORE} bar represents the best speedup when the benchmark is executed
 \textit{BOTH} represents the best speedup obtained for each benchmark using a combination of \textit{THREAD} and \textit{CORE}.
 Finally, for each benchmark, these results were obtained for both an unrolled and not unrolled to compare how unrolling affects performance.
 Figure~\ref{fig:overviewhist} shows that when loops are not unrolled, composing cores will not greatly improve performance.
+This is due to the fact that the amount of ILP found in filters, without the unrolling, is too little for there to be any benefit or composing cores.
 
 When studying the geometric mean, without unrolling, finding the correct number of threads gives a speedup of 1.92 compared to 1.33 when using only core composition.
 This changes when taking unrolling into account as the core compositions can be used more efficiently.
-In this case, the speedup obtained from only composing cores is 13\% worse than using only threads. 
+In this case, the speedup obtained from only composing cores is only 13\% worse than using only threads. 
 The unrolling demonstrates that the StreamIt programs must be modified to take advantage of the core composition.
-Finally, it is important to note that whilst finding the optimal thread mapping is better than the best composition, the best performance is always obtained through a combination of both optimizations. 
+Overall, in the StreamIt programs, multi-threading is the prevalent leader of performance.
+This is natural as StreamIt applications are naturally geared towards TLP as most programs have at least one SplitJoin as seen in the Table~\ref{tab:splitjoin} which gives the number of split-joins per benchmark.
+Benchmarks with SplitJoins will naturally benefit from splitting the program into threads~\cite{thiesStreamit2010}.
+However, it is important to note that whilst finding the optimal thread mapping is better than the best composition, the best performance is always obtained through a combination of both optimizations. 
 
 \subsection{Summary}
 
