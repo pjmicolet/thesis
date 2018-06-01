@@ -1,22 +1,22 @@
 The previous section studied the performance potential for core fusion using an analytical model.
-We now present the experimental setup used for the remaining parts of the paper where we conduct a thorough evaluation of core fusion with a cycle-level simulator.
+This section now presents the experimental setup used for the remaining parts of the chapter where a thorough evaluation of core fusion is conducted with a cycle-level simulator.
 
 \subsection{Benchmarks}
 
-For this paper we study the performance of our Dynamic Multicore Processor (DMP) on a set of Vision Benchmarks designed for hardware and compiler research~\cite{sdvbs}.
+For this paper the performance of the Dynamic Multicore Processor (DMP) is studied on a set of Vision Benchmarks designed for hardware and compiler research~\cite{sdvbs}.
 The San Diego Vision Benchmark suite (SD-VBS) is composed of nine single-threaded C benchmarks ranging from image analysis to motion tracking.
 These benchmarks represent state-of-the-art applications in image and vision recognition which are prevalent in embedded systems.
 
 Vision applications typically have regular and simple control flow which enables the formation of large blocks of instructions.
-Our processor relies on the ability to form large blocks to exploit ILP which makes these applications particularly well suited.
+The processor relies on the ability to form large blocks to exploit ILP which makes these applications particularly well suited.
 As the results will show, the phase length has minimal impact on energy savings when the reconfiguration overhead is low.
 
 \subsection{Architecture and Simulator}
 
-We use a cycle-level simulator of an EDGE-based Dynamic Multicore Processor~\cite{e2} whose core pipeline is verified against an RTL implementation within 5\%. 
+A cycle-level simulator of an EDGE-based Dynamic Multicore Processor~\cite{e2} is used, whose core pipeline is verified against an RTL implementation within 5\%. 
 This validation is done by running workloads on RTL and comparing the traces cycle-by-cycle with the software simulator.
 The architecture and core fusion mechanics are similar to the work described in~\cite{kim2007tflex,putnam2010e2}.
-We configure the simulator to model a 16 core multiprocessor, with 32 KB private L1 caches, and allow each core to fetch up to 4 blocks of instructions, 
+The simulator is configured to model a 16 core multiprocessor, with 32 KB private L1 caches, and allow each core to fetch up to 4 blocks of instructions, 
 and issue up to 2 instructions per block for a maximum of 64 blocks in flight.
 
 
@@ -25,11 +25,11 @@ Each benchmark is compiled with the Microsoft C++ compiler for EDGE~\cite{e2}, w
 
 \subsection{Measuring Performance and Power}
 
-We run five simulations per benchmark, one for each LC size: 1, 2, 4, 8 and 16.
-For each LC we record the IPC of the LC at an interval of 640 committed blocks.
-We selected 640 committed blocks as it allows each core in a LC to execute enough blocks before taking the measurement.
+Five simulations per benchmark are ran, one for each LC size: 1, 2, 4, 8 and 16.
+For each LC the IPC of the LC at an interval of 640 committed blocks is recoreded.
+640 committed blocks is chosen as it allows each core in a LC to execute enough blocks before taking the measurement.
 This is due to the fact that the highest LC of 16 cores can execute up to 64 blocks at a time, thus recording performance after 640 blocks allows each core to have executed at least 10 blocks.
 Using committed blocks as an interval allows us to easily compare each simulation as the total number of committed blocks does not change even if the LCs are different.
 
-Due to the fact that we study an EDGE ISA~\cite{smith2006edge}, we cannot use McPAT to model power consumption as it differs from traditional CISC/RISC cores modeled in McPAT.
-Instead we use a coarse grained power model where either a core is turned on or or it is off. 
+Due to the fact that an EDGE ISA~\cite{smith2006edge} is used, McPAT cannot be used to model power consumption as it differs from traditional CISC/RISC cores modeled in McPAT.
+Instead a coarse grained power model is applied where either a core is turned on or or it is off. 

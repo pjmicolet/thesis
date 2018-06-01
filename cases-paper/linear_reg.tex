@@ -1,19 +1,19 @@
-Having shown the potential that a DMP has to offer, we now present a simple scheme that is used to exploit the large energy savings available.
+Having shown the potential that a DMP has to offer, this section now presents a simple scheme that is used to exploit the large energy savings available.
 The main idea is to monitor at runtime some performance counters and make a decision at a regular interval on how to reconfigure the cores.
-For this purpose, we train a model offline using the data collected and presented earlier in the paper.
+For this purpose, a model is trained offline using the data collected and presented earlier in the paper.
 Once trained, the model predicts the optimal number of cores based on the performance counters from the previous time interval and reconfiguration occurs if it is different from the current number of cores.
 
 \vspace{10mm}
 \subsection{Model}
 
-We use a linear regressor which makes predictions using a simple weighted sum of the input features, which is very lightweight and easy to integrate in hardware.
-The model is trained offline using the traces gathered from our prior analysis for the \textbf{DSpeed} scenario which maximizes energy savings while maintaining performance.
+The model is linear regressor which makes predictions using a simple weighted sum of the input features, which is very lightweight and easy to integrate in hardware.
+The model is trained offline using the traces gathered from the prior analysis for the \textbf{DSpeed} scenario which maximizes energy savings while maintaining performance.
 The dataset consists of a set of four input features (average block size, and percentage of integer, floating point and load operations) and the optimal number of cores for each time tick for each program.
 These features were chosen as they are easy to extract from the hardware.
-To speedup the learning process, we create a single data point per phase, averaging the features of all the ticks in a phase, resulting in a total of 34 pairs of optimal core number and features.
+To speedup the learning process, a single data point is created per phase, averaging the features of all the ticks in a phase, resulting in a total of 34 pairs of optimal core number and features.
 
 The training consists of finding the weights that minimize the error when predicting the optimal number of cores to use across all time ticks and benchmarks.
-Since we have only considered core configurations which use a power of two number of cores, the linear model is built to predict the logarithm (base 2) of the number of cores.
+Since only core configurations which use a power of two number of cores are considered, the linear model is built to predict the logarithm (base 2) of the number of cores.
 The prediction is rounded up to the nearest integer in the interval $[0,4]$.
 The following equation represents the trained linear model which can be used to make prediction:
 \vspace{-1mm}
@@ -22,7 +22,7 @@ The following equation represents the trained linear model which can be used to 
  &0.069 \cdot \textbf{\%fp\_ops}\ +\ 0.21 \cdot \textbf{\%ld\_ops}
 \end{align*}
 
-For instance, if we observe at runtime an average block size of 6 instructions, and 77\%, 1\% and 18\% of integer, floating point and load operations, respectively, then the predicted value will be 2.092.
+For instance, if at runtime an average block size of 6 instructions, and 77\%, 1\% and 18\% of integer, floating point and load operations, respectively, then the predicted value will be 2.092.
 Rounded up to the nearest integer value, 2, the optimal number of cores predicted will, therefore, be 4.
 As can be seen, the largest weight is on the percentage of loads operations.
 This is due to the fact that loads can be fired independently to the Load-Store Queue.
@@ -34,19 +34,19 @@ By increasing the core count on load heavy blocks this will improve performance 
     \centering
 	\includegraphics[width=1\textwidth]{cases-paper/graphics/results/lr_speed.pdf}
 \vspace*{-8mm}
-    \caption{Performance results for maximizing speed for the SD-VBS benchmarks using our linear regressor (LR) model.}% For Speedup, higher means better, for energy lower is better.}
+    \caption{Performance results for maximizing speed for the SD-VBS benchmarks using the linear regressor (LR) model.}% For Speedup, higher means better, for energy lower is better.}
     \label{fig:speedlr}
 \vspace{5mm}
 \end{figure*}
 \subsection{Results}
 
-To evaluate the performance of our model, we use leave-one-out cross-validation, a standard machine-learning methodology which tests the model using not seen during training.
-For instance, if we want to test the model for one program, let say \textit{Disparity}, we train the model using the dataset from all the other programs combined.
-We then use the resulting trained linear model to predict the optimal core number for each time tick of the disparity program and report the performance achieved.
+To evaluate the performance of the model leave-one-out cross-validation  is used; it is a standard machine-learning methodology which tests the model using not seen during training.
+For instance, if the model is tested for one program, let say \textit{Disparity}, the model is then trained using the dataset from all the other programs combined.
+Then the resulting trained linear model is used to predict the optimal core number for each time tick of the disparity program and report the performance achieved.
 
-Figure~\ref{fig:speedlr} shows the performance in terms of speed and energy that is achieved using our linear model normalized by a fixed static configuration.
+Figure~\ref{fig:speedlr} shows the performance in terms of speed and energy that is achieved using the linear model normalized by a fixed static configuration.
 The fixed configuration maximized performance across all the benchmarks using 8 cores and is the same as in the previous results presented in figure~\ref{fig:speedres}.
-On average, our linear regressor model is able to consume 37\% less energy compared to the 8 cores fixed configuration and is able to exactly match its speed.
+On average, the linear regressor model is able to consume 37\% less energy compared to the 8 cores fixed configuration and is able to exactly match its speed.
 
 The performance is also compared with the best possible choice of dynamic reconfiguration, \textbf{DSpeed} which acts as an Oracle.
 As can be seen, the linear model is able to exploit similar energy savings to the \textbf{Dspeed} scheme in most cases.

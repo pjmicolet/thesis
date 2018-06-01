@@ -13,7 +13,7 @@ It also shows that loop optimizations have a significant performance impact when
 Previous work in core fusion has focused on delivering performance improvements~\cite{ipek2007CoreFusion,kim2007tflex} and demonstrated how to predict static core fusion~\cite{micolet2016dmpstream}.
 A static fusion will fuse cores into a single logical core (LC) and execute a thread on this new core.
 As evident from this prior work, fusion improves the performance of the program by maximizing speed.
-However, as we will show, static core fusion may not be the perfect match for all situations.
+However, as will be shown, static core fusion may not be the perfect match for all situations.
 
 Figure~\ref{fig:disp_ex} plots the Instruction Per Cycle (IPC) performance variation over the execution of the \bm{Disparity} Benchmark~\cite{sdvbs} on a fused 4 core and 16 core processor.
 On 4 cores, the performance oscillates between an IPC of 2 and 6 depending on the phase while on 16 cores the IPC can be as high as 16.
@@ -22,8 +22,8 @@ A DMP could exploit this to minimize energy consumption while maximizing perform
 
 \subsection{Code Optimizations}
 When cores are fused they execute blocks of instructions in parallel on each physical core in the LC.
-In order to obtain the best results, we must generate large blocks as this leads to a higher IPC on the LC~\cite{micolet2016dmpstream}.
-The optimizations we apply include aggressive loop unrolling, inlining and replacing conditional statements with either software predication or architecture-level predication.
+In order to obtain the best results, large blocks must be generated as this leads to a higher IPC on the LC~\cite{micolet2016dmpstream}.
+The optimizations applied include aggressive loop unrolling, inlining and replacing conditional statements with either software predication or architecture-level predication.
 These optimizations are well known and do not require any structural modifications of the program.
 
 \begin{figure}[t]
@@ -40,6 +40,6 @@ More details about the loop transformations are given in section~\ref{sec:opt} b
 \subsection{Summary}
 This section has shown that programs exhibit phases with various amount of ILP available.
 A dynamic multicore processor can take advantage of this property to fuse a large number of cores for the high-ILP phases and fuse a smaller number of cores when ILP drops to conserve energy.
-We have also illustrated the importance of fine-tuned code transformations to achieve sustained performance and increase the potential for fusing cores.
+The section also illustrated the importance of fine-tuned code transformations to achieve sustained performance and increase the potential for fusing cores.
 The next section will study in more details the expected impact of fusion using an analytical model.
 
