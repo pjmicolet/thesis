@@ -58,13 +58,6 @@ For each benchmark the default inputs provided in the repository are used and th
 
 \subsection{Design Space}
 
-The parameters and size of the space are given in table~\ref{tab:space}.
-In this study all 16 cores are utilised; Core 0 is assigned to the main thread and for runtime management. 
-This leaves 15 cores available for each application.
-Each core is restricted to running only a single thread (no preemptive scheduling) which leads to a possible number of threads between 1 and 15.
-Cores can be fused together to form a logical core with up to 15 physical cores, making the total number of cores assigned to a thread between 1 and 15.
-This leads to a total space size of 32,767 unique combination per benchmark.
-
 \begin{table}
 \centering
 \begin{tabular} { p{5.2cm}  p{1.8cm} }
@@ -80,6 +73,14 @@ This leads to a total space size of 32,767 unique combination per benchmark.
   \caption{Design space considered per application.}
   \label{tab:space}
 \end{table}
+
+The parameters and size of the space are given in table~\ref{tab:space}.
+In this study all 16 cores are utilised; Core 0 is assigned to the main thread and for runtime management. 
+This leaves 15 cores available for each application.
+Each core is restricted to running only a single thread (no preemptive scheduling) which leads to a possible number of threads between 1 and 15.
+Cores can be fused together to form a logical core with up to 15 physical cores, making the total number of cores assigned to a thread between 1 and 15.
+This leads to a total space size of 32,767 unique combination per benchmark.
+
 \subsection{Sample Space}
 
 \begin{figure}[h]
@@ -93,12 +94,14 @@ This leads to a total space size of 32,767 unique combination per benchmark.
     \includegraphics[width=1\textwidth]{streamit-paper/graphics/threadingmaybe.pdf}
     \caption{Performance as a function of the number of threads. The performance metric is number of cycles. Each benchmark has the performance measured with cores composed and with threads mapped to a single core.}\label{fig:threadtrend}
 \end{figure*}
+
 Given a partitioning, any benchmark that is split into 15 threads requires 32,767 executions to cover the entire space.
 Running an exhaustive exploration of the space requires approximately a week of simulation on a 572+ node supercomputer.
 For this reason, a sample of 1,316 random points from the entire space is utilised.
 This roughly corresponds to 100 core compositions for each number of threads (the actual number, 1,316 is smaller than 1,500 since for low thread counts there are less than 100 possible different core composition).
 \bench{InsertionSort} is the only exception since it can at most only be split into 5 threads leading to 415 sample points.
 
+%Define stopping criterion?
 To gain confidence that the best configuration from the sample space is indeed close to the real best in the entire space, a statistical model based on the Stopping Criterion defined in~\cite{vuduc2003AutomaticPerf} is deployed.
 This model estimates, given a sample of the total space, if the best observed performance of that sample space is within a percentage of the statistical best performance.
 The results demonstrate that the sample space selected is representative of the whole space.

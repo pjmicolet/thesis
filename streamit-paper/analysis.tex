@@ -4,30 +4,31 @@ The hardware side is about finding out the best core composition that maximizes 
 
 \subsection{Thread Partitioning}
 
-We start by analyzing the impact of thread partitioning on performance.
+This section first starts with analyzing the impact of thread partitioning on performance.
 Thread partitioning is about deciding how many threads to create and how to partition StreamIt filters into these threads.
-To simplify this study, we use the default streaming partitioner to decide on how to allocate filters to cores which is based on simulated annealing.
-On the hardware side, we consider two scenarios:
+To simplify this study, the default streaming partitioner is used to decide on how to allocate filters to cores which is based on simulated annealing.
+%Define this
+On the hardware side, two scenarios are considered:
 the ``without composition scenario'' where there is exactly one core per thread and the ``with composition scenario'' where each thread receives between 1 and 15 cores.
 
 Figure~\ref{fig:threadtrend} shows how performance varies under both scenarios as a function of the number of threads.
-We observe that regardless of how cores are composed all curves follow the same trend.
+Regardless of how cores are composed it can be observed that all curves follow the same trend.
 The optimal number of threads using core composition is very similar to the scenario without composition.
-This important observation means that we can estimate the optimal number of threads for a benchmark independently of the hardware composition.
-Our system can therefore proceed in two stages: first determine the optimal number of threads and then decide on a core composition.
+This important observation means that the optimal number of threads for a benchmark can be estimated independently from the hardware composition.
+The system can therefore proceed in two stages: first determine the optimal number of threads and then decide on a core composition.
 
-Figure~\ref{fig:threadtrend} also shows that the performance of most benchmarks starts deteriorating passed a certain number of threads making it critical to not over-allocate threads.
-This motivates our use of machine learning to decide the optimal number of threads to use.
-Finally we also observe that executions without compositions always perform worse.
+Figure~\ref{fig:threadtrend} also shows that the performance of most benchmarks starts to deteriorate passed a certain number of threads making it critical to not over-allocate threads.
+This number of threads varies between benchmarks, thus it motivates the use of machine learning to decide the optimal number of threads to use.
+Finally it is important to observe that executions without compositions always perform worse.
 This demonstrates that composing cores is essential to obtain the best performance from a workload.
+
+
+\subsection{Core Composition}
 
 \begin{figure}[h]
   \includegraphics[width=1\textwidth]{streamit-paper/graphics/audiobeam_tots.pdf}
   \caption{Distribution of Audiobeam performance when modifying the amount of threads and compositions.}\label{fig:audiototal}
 \end{figure}
-
-\subsection{Core Composition}
-
 Using core composition, the processor fuses a number of cores and associates them to a thread to increase single threaded performance.
 Whilst this flexibility is advantageous, choosing the right amount of cores for a given thread is difficult due to the large number of possible configurations~\cite{gulati2008multitaskingdmc}.
 
@@ -80,12 +81,12 @@ This signifies that the amount of resources available to each thread must be tak
 This section  presents the results of the entire co-design space exploration.
 Figure~\ref{fig:overviewhist} characterizes how much of a performance increase is obtainable using a baseline of executing the benchmark on a single thread and single core without unrolling.
 For each benchmark, the \textit{THREAD} bar represents the maximal speedup obtained by dividing the program into threads without fusing cores.
-The \textit{CORE} bar represents the best speedup when we execute the benchmark in a single thread and fuse cores.
+The \textit{CORE} bar represents the best speedup when the benchmark is executed in a single thread and fuse cores.
 \textit{BOTH} represents the best speedup obtained for each benchmark using a combination of \textit{THREAD} and \textit{CORE}.
-Finally, for each benchmark, we obtained these results for both an unrolled and not unrolled to compare how unrolling affects performance.
+Finally, for each benchmark, these results were obtained for both an unrolled and not unrolled to compare how unrolling affects performance.
 Figure~\ref{fig:overviewhist} shows that when loops are not unrolled, composing cores will not greatly improve performance.
 
-When studying the geometric mean we see that, without unrolling, finding the correct number of threads gives a speedup of 1.92 compared to 1.33 when using only core composition.
+When studying the geometric mean, without unrolling, finding the correct number of threads gives a speedup of 1.92 compared to 1.33 when using only core composition.
 This changes when taking unrolling into account as the core compositions can be used more efficiently.
 In this case, the speedup obtained from only composing cores is 13\% worse than using only threads. 
 The unrolling demonstrates that the StreamIt programs must be modified to take advantage of the core composition.
@@ -94,7 +95,7 @@ Finally, it is important to note that whilst finding the optimal thread mapping 
 \subsection{Summary}
 
 This section demonstrated that each parameter has a large effect on the performance of the workload.
-We have seen that regardless of using core composition or not, there exists for each benchmark an optimal number of threads.
+Regardless of using core composition or not, there exists for each benchmark an optimal number of threads.
 Unrolling is effective at exposing more opportunities for composition due to increased ILP but there is a balance to strike between extracting ILP and TLP.
 Figure~\ref{fig:overviewhist} shows there is a 3x benefit (overall) by automating the partitioning of both the software (threads) and hardware (cores).
 
