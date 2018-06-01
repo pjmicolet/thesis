@@ -6,6 +6,13 @@
      \label{fig:beamformermotiv}
 \end{figure}
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{streamit-paper/graphics/temp_motivation_2.pdf}
+    \caption{Distribution of the runtime with different core composition thread pairings.}
+     \label{fig:threadcoremotiv}
+\end{figure}
+
 This section illustrates the difficulty of finding a good partition and resource allocation.
 A simple experiment is conducted where one StreamIt benchmark is taken, \bench{Beamformer}.
 The benchmark's tasks are partitioned into threads and a various number of cores are allocated to each thread.
@@ -20,7 +27,11 @@ It is important to notice how the small the number of sample points that approac
 This shows that finding the right combination of thread mapping and core composition is critical since a wrong choice often leads to suboptimal performance.
 
 %Insert an example to show that it's a mix of threads and cores that matters.
+Figure~\ref{fig:threadcoremotiv} shows the performance of different core-thread pairings for another StreamIt benchmark.
+In this figure, the points represent the performance for specific configurations, such as only using multithreading, using homogeneous core-compositions with threads and using heterogeneous core-compositions with threads.
+In the figure, the different core-composition configurations were plotted using 3 threads, which was the optimal number of threads for the benchmark.
+The different configurations show that multithreading on its own will not result in the optimal solution and therefore the best configurations will have to be a mix of core-composition and multithreading.
 
-This example illustrates the necessity for designing the technique to predict both the optimal number of threads and core composition to use.
+These examples illustrates the necessity for designing the technique to predict both the optimal number of threads and core composition to use.
 The next section will present a more in-depth analysis of the design space before presenting our machine-learning predictive model.
 
