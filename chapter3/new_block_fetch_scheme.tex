@@ -25,7 +25,7 @@ However, unlike the current serial model, cores should attempt to submit a fetch
 To understand how the new block mechanism behaves, it will be described in two parts.
 The first part will use a concrete example of 2 cores fused, whilst the second part will generalise the mechanism to n-cores fused.
 
-Given a 2 core-fusion \{$Core_0$,$Core_1$\} using a multi-block ahead branch predictor described by A. Seznec et al in~\cite{SeseznecMultipleBlock} the cores can make two predictions in a single cycle: one for itself and one for the next core.
+Given a 2 core-fusion \{$Core_0$,$Core_1$\} using a ITTAGE~\cite{SeznecITTAGE} multi-block ahead branch predictor described by A. Seznec et al in~\cite{SeseznecMultipleBlock} the cores can make two predictions in a single cycle: one for itself and one for the next core.
 Figure~\ref{fig:new_fetch_ex} gives an overview of the first few cycles of using the new block-fetching scheme with the two cores fused.
 When $Core_0$ starts the composition and fetches the first block, $block_0$, if it is able to predict $block_2$ is will submit a fetch request for $block_1$ on $Core_1$ whilst also attempting to fetch $block_2$ for itself.
 On the next cycle $Core_1$ receives the request for $block_1$ and starts fetching the block.
@@ -50,7 +50,7 @@ It submits a fetch request to the next core in the composition for $block_{i+1}$
 When committing $block_i$ (Algorithm~\ref{alg:commit}, the core sets the next core in line to be the non-speculative core.
 If the next core in line does not have $block_{i+1}$ due to no prediction having been made, then the committing core will submit the resolved PC.
 
-\begin{algorithm}[t]
+\begin{algorithm}
 
 \textbf{n} = Number of cores in the composition\\
 \textbf{Composition[n]} = Core Composition Array\\
@@ -83,7 +83,15 @@ If the next core in line does not have $block_{i+1}$ due to no prediction having
 \caption{Overview of fetching algorithm for \textit{n} cores fused}~\label{alg:fetch}
 \end{algorithm}
 
-\begin{algorithm}[t]
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{chapter3/graphics/new_vs_old_synthetic.pdf}
+    \caption{Comparing the new fetching model to the current fetching model on the synethtic benchmark defined in Section~\ref{ch3:sec:bfn}.}
+    \label{fig:synthetic_ex}
+\end{figure}
+
+
+\begin{algorithm}
 \textbf{n} = Number of cores in the composition\\
 \textbf{Composition[n]} = Core Composition Array\\
 
@@ -103,13 +111,6 @@ If the next core in line does not have $block_{i+1}$ due to no prediction having
 \end{algorithm}
 
 \subsection{Synthetic Results}
-
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/new_vs_old_synthetic.pdf}
-    \caption{Comparing the new fetching model to the current fetching model on the synethtic benchmark defined in Section~\ref{ch3:sec:bfn}.}
-    \label{fig:synthetic_ex}
-\end{figure}
 
 Figure~\ref{fig:synthetic_ex} shows the performance of the new fetching mechanism against the current mechanism on the Synthetic benchmark defined in~\ref{sec:ch3:bfn}.
 The performance is recorded for two processors with 16 cores, each core featuring 4 lanes, running a synthetic benchmark composed of a single block who's length (in cycles) can be defined ahead of time.

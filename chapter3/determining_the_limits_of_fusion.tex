@@ -1,4 +1,4 @@
-\subsection{Block Fetching as a Bottle Neck}~\label{ch3:sec:bfn}
+\subsection{Block Fetching as a Bottleneck}~\label{ch3:sec:bfn}
 
 \begin{figure}[h]
     \centering
@@ -38,3 +38,16 @@ This explains why a 16 core-composition would require blocks to be at least of l
 
 As single-lane blocks can be at most 32 instructions, and cores can execute up to two instructions per cycle, finding blocks that will satisfy such cycle requirements is difficult.
 Thus, the block-fetching scheme can be considered a bottleneck in such cases.
+
+\subsection{Inter-block communication}
+
+In Chapter 2, the concept of inter-block memory dependencies was briefly mentioned as a potential issue for core-fusion.
+This section covers how memory dependencies both in load/store instructions and register writes affect the performance on core-composition.
+To understand how memory dependencies influence performance it is important to recall how EDGE handles memory instructions.
+As previously stated in the EDGE instruction set architecture (ISA), architectural registers are only used for inter-block communication.
+One of the main constraints of EDGE is that only non-speculative blocks can execute store instructions~\cite{smith2006compilingedge}.
+This restriction is also applied to writes to registers.
+When a speculative block attempts to execute a register read instruction, if an older block has a write to the same register that hasn't executed, the younger block must wait until the write has been executed.
+Loads can be executed speculatively via store-set dependency predictor~\cite{chrysos1998storesets, smith2006compilingedge} to speed-up execution.
+In case of memory violation from a speculative blocks, all blocks younger than the violating block and including the violating block must be flushed.
+

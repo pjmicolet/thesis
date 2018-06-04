@@ -1,21 +1,17 @@
-\begin{figure*}[t]
-\vspace{-4mm}
+\begin{figure}
      \centering
-     \subfloat[][Disparity]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Pareto/DispN3.pdf}\vspace*{-4mm}\label{subfig:disp}}
-     \subfloat[][Localization]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Pareto/LocN3.pdf}\vspace*{-4mm}\label{subfig:loc}}
-\vspace{-4mm}
-     \subfloat[][MSER]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Pareto/MSERN3.pdf}\label{subfig:mser}}\
-     \subfloat[][Multi\_Ncut]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Pareto/MultiN3.pdf}\label{subfig:mult}}
-     \subfloat[][Sift]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Pareto/SiftN3.pdf}\label{subfig:sift}}
-\vspace{-4mm}
-     \subfloat[][Stitch]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Pareto/StitchN3.pdf}\label{subfig:stitch}}\
-     \subfloat[][SVM]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Pareto/SVMN3.pdf}\label{subfig:svm}}
-     \subfloat[][Texture\_Synthesis]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Pareto/TextN3.pdf}\label{subfig:text}}
-     \subfloat[][Tracking]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Pareto/TrackingN3.pdf}\label{subfig:track}}
+     \subfloat[][Disparity]{\includegraphics[width=0.5\textwidth]{cases-paper/graphics/Pareto/DispN3.pdf}\vspace*{-4mm}\label{subfig:disp}}
+     \subfloat[][Localization]{\includegraphics[width=0.5\textwidth]{cases-paper/graphics/Pareto/LocN3.pdf}\vspace*{-4mm}\label{subfig:loc}}\
+     \subfloat[][MSER]{\includegraphics[width=0.5\textwidth]{cases-paper/graphics/Pareto/MSERN3.pdf}\label{subfig:mser}}
+     \subfloat[][Multi\_Ncut]{\includegraphics[width=0.5\textwidth]{cases-paper/graphics/Pareto/MultiN3.pdf}\label{subfig:mult}}\
+     \subfloat[][Sift]{\includegraphics[width=0.5\textwidth]{cases-paper/graphics/Pareto/SiftN3.pdf}\label{subfig:sift}}
+     \subfloat[][Stitch]{\includegraphics[width=0.5\textwidth]{cases-paper/graphics/Pareto/StitchN3.pdf}\label{subfig:stitch}}\
+     \subfloat[][SVM]{\includegraphics[width=0.5\textwidth]{cases-paper/graphics/Pareto/SVMN3.pdf}\label{subfig:svm}}
+     \subfloat[][Texture\_Synthesis]{\includegraphics[width=0.5\textwidth]{cases-paper/graphics/Pareto/TextN3.pdf}\label{subfig:text}}\\
+     \subfloat[][Tracking]{\includegraphics[width=0.5\textwidth]{cases-paper/graphics/Pareto/TrackingN3.pdf}\label{subfig:track}}
      \caption{Time (x-axis) vs. Energy (y-axis) tradeoffs using Static and Dynamic Composition Schemes.}
      \label{fig:paretos}
-\vspace{5mm}
-\end{figure*}
+\end{figure}
 
 Having studied the behavior of the program under a fix number of cores, the impact of varying the number of fused cores throughout program execution is studied.
 The section first describe how the traces are generated for the dynamic core fusion schemes.
@@ -33,7 +29,7 @@ Dynamic core fusion gives the ability to change the number of cores for each tim
 In order to explore the different performance and energy trade-off that is possible to achieve with this technique, traces of execution for the whole application are collected.
 The whole application is then ran on 1,2,4,8 and 16 fused cores and record for each time tick the cycle count.
 Using these 5 traces, any arbitrary dynamic execution can be constructed to generate dynamic traces.
-
+\newpage
 To simplify the exploration process, time ticks of the same phase will always be attributed the same number of cores.
 This is done to reduce the search space as on average there are 48494 ticks which would result in an average of $5^{48,494}$ different possible executions.
 Since the maximum number of clusters found is 6 (for SVM), a maximum of $5^{6} = 15625$ different dynamic execution traces are built.
@@ -50,16 +46,6 @@ For example, \bm{Disparity} (Figure~\ref{subfig:disp}) is fastest on 16 fused co
 When using the dynamic scheme, it is clear that energy consumption increases at a slower rate when increasing speed.
 In this case the number of cores is adapted to the current program phase, using just enough cores to maintain high performance without wasting energy.
 
-
-\begin{figure*}[t]
-    \centering
-	\includegraphics[width=1\textwidth]{cases-paper/graphics/results/speed_bars.pdf}
-\vspace*{-2em}
-    \caption{Maximizing speed for all the SD-VBS benchmarks. For Speedup, higher means better, for Energy, lower is better.}
-    \label{fig:speedres}
-\vspace{5mm}
-\end{figure*}
-%
 
 \subsection{Optimizing for Speed} \label{sec:dyn:speed}
 
@@ -84,6 +70,15 @@ For the \bm{Localization} benchmark, the \textbf{DSpeed} matches the performance
 Overall, by using \textbf{DSpeed}, the energy consumption can be reduced by 42\% compared to both SB and SS without impacting performance.
 This illustrates the greatest advantage of using a DMP since the number of fused core can be adapted continuously depending on the amount of ILP available for each phase.
 
+\begin{figure}
+    \centering
+	\includegraphics[width=1\textwidth]{cases-paper/graphics/results/speed_bars.pdf}
+    \caption{Maximizing speed for all the SD-VBS benchmarks. For Speedup, higher means better, for Energy, lower is better.}
+    \label{fig:speedres}
+	\vspace{5mm}
+\end{figure}
+%
+
 \subsection{Optimizing for Efficiency}
 
 This section defines the dynamic scheme to maximize the efficiency metric EDD, which is defined as $Energy \times Delay \times Delay$ where Delay is the execution time.
@@ -100,14 +95,13 @@ When comparing to SS \textbf{DEff} is 1.75x times faster for only 19\% more ener
 Overall, \textbf{DEff} results in a 1.25x speed increase compared to SB and SS whilst consuming 25\% less energy than SS.
 This shows how dynamic core fusion's flexibility allows us to get better speedups whilst not drastically increasing the energy consumption.
 
-\begin{figure*}[t]
+\begin{figure}
     \centering
     \includegraphics[width=1\textwidth]{cases-paper/graphics/results/edd_bars.pdf}
-\vspace*{-8mm}
     \caption{Maximizing efficiency for all the SD-VBS benchmarks. For Speedup, higher means better, for Energy, lower is better.}
     \label{fig:effres}
-\vspace{5mm}
-\end{figure*}
+		\vspace{5mm}
+\end{figure}
 
 
 

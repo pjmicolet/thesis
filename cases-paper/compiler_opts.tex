@@ -1,5 +1,4 @@
 \begin{figure}[t]
-\begin{minipage}[t]{0.48\textwidth}
 \lstset{language=C,numbersep=4pt,basicstyle=\small}
 \begin{lstlisting}
 for(int i = 0; i < 1000; i++)
@@ -10,9 +9,6 @@ for(int i = 0; i < 1000; i++)
 \vspace*{-5mm}
 \caption{Example of an inner-most loop which should be completely unrolled.}
 \label{lst:small}
-\end{minipage}
-\hfill
-\begin{minipage}[t]{0.48\textwidth}
 \lstset{language=C,numbersep=4pt,basicstyle=\small}
 \begin{lstlisting}
 for(int i = 0; i < 1000; i++)
@@ -23,7 +19,6 @@ for(int i = 0; i < 1000; i++)
 \vspace*{-5mm}
 \caption{Example of a data dependency which can be removed by interchanging the loops.}
 \label{lst:dep}
-\end{minipage}
 \vspace{9mm}
 \end{figure}
 

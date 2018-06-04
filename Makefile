@@ -11,5 +11,5 @@ $(THESIS).pdf: $(TEX) $(BIB)
 	pdflatex $(THESIS)
 
 clean:
-	rm -f */*.aux */*.bbl */*.blg */*.log */*.out $(THESIS).pdf
+	rm -f *.aux *.bbl *.blg *.log *.out */*.aux */*.bbl */*.blg */*.log */*.out $(THESIS).pdf
          

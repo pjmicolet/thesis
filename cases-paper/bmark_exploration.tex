@@ -2,6 +2,14 @@ This section explores how core fusion affects the performance of the SD-VBS benc
 First a phase analysis is performed, followed by a study of the IPC variation for static core fusion.
 Then the use of dynamic core fusion is motived by using the information gathered.
 
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{cases-paper/graphics/Exploration/clusters2.pdf}
+    \caption{Number of phases determined for each benchmark using kMeans clustering and their distribution.}
+    \label{fig:clust}
+\label{some example}
+\end{figure}
+
 \subsection{Phase Detection}
 Figure~\ref{fig:sxt} presents the IPC performance through time for all the benchmarks when using a logical core (LC) composed of 16 cores.
 The IPC is calculated for each time tick, which is set at interval of 640 blocks committed.
@@ -14,7 +22,6 @@ This process is only done for the purpose of exploring this set of benchmarks.
 Intervals that exhibit similar IPC values when run on different core counts are classified in the same cluster.
 In order to find the correct number of clusters the Sum of Square Errors (SSE) is plotted for a given cluster size from 1 to 15 and determine the optimal cluster to be in the elbow in the plot~\cite{everitCluster2001}.
 
-\vspace{5mm}
 Figure~\ref{fig:clust} shows us the optimal number of clusters for each benchmark and the frequency of each cluster.
 The data can be corroborated with the information found in Figure~\ref{fig:sxt}.
 For example, benchmarks \bm{MSER} and \bm{Multi\_NCut} feature two phases, with one dominating phase.
@@ -23,23 +30,12 @@ For all the other benchmarks, they each have at least two dominant phases.
 Since each phase is a cluster of similar IPC values, having two or more clusters will result in a higher chance of benefiting from dynamic core fusion.
 
 
-\begin{figure*}[t]
+\begin{figure}
     \centering
-    \includegraphics[width=1\textwidth]{cases-paper/graphics/Exploration/clusters2.pdf}
-        \vspace*{-7mm}
-    \caption{Number of phases determined for each benchmark using kMeans clustering and their distribution.}
-    \label{fig:clust}
-\label{some example}
-\end{figure*}
-
-\begin{figure*}[t]
-    \centering
-    \includegraphics[width=1\textwidth]{cases-paper/graphics/Exploration/stddev.pdf}
-        \vspace*{-7mm}
+    \includegraphics[width=1\textwidth]{cases-paper/graphics/Exploration/stddev2.pdf}
     \caption{Comparing average, smallest and greatest IPC for each SD-VBS benchmark using logical-core size of 16.}
     \label{fig:stddev}
-\vspace{5mm}
-\end{figure*}
+\end{figure}
 \subsection{Static Core Fusion Exploration}
 
 Figure~\ref{fig:stddev} shows how the average Instructions Per Cycle (IPC) changes as the size of a LC is increased, going in powers of 2 from 1 to 16 fused cores.
