@@ -1,4 +1,3 @@
-
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{chapter3/graphics/fetching-model.pdf}
@@ -6,6 +5,7 @@
     \caption{Example of new fetching model on a 2 core composition. Each core has 4 segments, the arrows represent the block generating the predictions. This figure shows the first 3 steps of a new core composition fetching blocks.}
     \label{fig:new_fetch_ex}
 \end{figure}
+
 Serialising block fetches in a core-composition is one of the main bottlenecks for performance when large blocks cannot be produced.
 As discussed in Section~\ref{ch3:sec:bfn} this is due to the requirement that cores be full before submitting a prediction to another core.
 This means that work cannot be parallelised on cores as quickly as more traditional methods such as multi-threading.
@@ -15,7 +15,7 @@ A mechanism that can alleviate communication between cores is a first step in im
 In this chapter, a new block-fetching scheme is introduced which reduces the amount of reliance on other cores in the composition.
 This new scheme is then evaluated against the old fetching scheme on the synethtic benchmark from section~\ref{ch3:sec:bfn}.
 
-\subsection{Independent block fetching scheme}
+\subsection{Example using a two core composition}
 
 In a core-composition, cores should be able to fetch blocks without requiring a signal from a previous core in the same composition.
 Instead, to enable maximum block throughput cores must limit communication to flushes and an initial fetch request.
@@ -40,4 +40,80 @@ The reason behind this is to minimize the Synchronization Cost defined in Chapte
 In the case that $Core_0$ cannot make a prediction for $block_2$ it will only send a fetch request for $block_1$ to $Core_1$.
 When this happens, $Core_0$ will no longer be able to fetch blocks until it is sent a PC from $Core_1$.
 The request will happen once $Core_1$ commits $block_1$ and the PC of $block_2$ is resolved.
+Whilst this case may impact overall throughput, it is no different than the current model as the current model would also stop fetching after $block_1$ and wait for $block_2$'s PC to be resolved.
 
+\subsection{Generalised form}
+
+Algorithm~\ref{alg:fetch} explains how the new fetching mechanism works for \textit{n} cores in a composition.
+In the general case, when a core fetches $block_i$ it will request a prediction for $block_{i+1}$ and $block_{i+n}$.
+It submits a fetch request to the next core in the composition for $block_{i+1}$ if the next core is not already executing a block and attempts to fetch $block_{i+n}$.
+When committing $block_i$ (Algorithm~\ref{alg:commit}, the core sets the next core in line to be the non-speculative core.
+If the next core in line does not have $block_{i+1}$ due to no prediction having been made, then the committing core will submit the resolved PC.
+
+\begin{algorithm}[t]
+
+\textbf{n} = Number of cores in the composition\\
+\textbf{Composition[n]} = Core Composition Array\\
+\textbf{branches[2]} = Branch Predictions for current block\\
+
+\While{Program is Executing}
+{
+\If{LastFetchedBlock not branchPredicted}
+{
+	branches = prediction[i+1, i+n]
+}
+\eIf{size(branches) == 2}
+{
+	\eIf{empty(Composition[currentPosition+1])}
+	{
+		submitToNextCore(branches[0])\\
+		submitToMyself(branches[1])
+	}
+	{
+		submitToMyself(branches[1])\\
+	}
+}
+{
+	\If{empty(Composition[currentPosition+1])}
+	{
+		submitToNextCore(branches[0])\\
+	}
+}	
+}
+\caption{Overview of fetching algorithm for \textit{n} cores fused}~\label{alg:fetch}
+\end{algorithm}
+
+\begin{algorithm}[t]
+\textbf{n} = Number of cores in the composition\\
+\textbf{Composition[n]} = Core Composition Array\\
+
+\While{Program is Executing}
+{
+	\If{block is committing}
+	{
+		Composition[currentPosition+1] = Non Speculative\;
+	}
+	\If{not IsBlockRunning(Composition[currentPosition+1], block+1)}
+	{
+		submitToNextCore(block+1 PC)
+	}
+}
+
+\caption{Overview of commit stage for \textit{n} cores fused}~\label{alg:commit}
+\end{algorithm}
+
+\subsection{Synthetic Results}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{chapter3/graphics/new_vs_old_synthetic.pdf}
+    \caption{Comparing the new fetching model to the current fetching model on the synethtic benchmark defined in Section~\ref{ch3:sec:bfn}.}
+    \label{fig:synthetic_ex}
+\end{figure}
+
+Figure~\ref{fig:synthetic_ex} shows the performance of the new fetching mechanism against the current mechanism on the Synthetic benchmark defined in~\ref{sec:ch3:bfn}.
+The performance is recorded for two processors with 16 cores, each core featuring 4 lanes, running a synthetic benchmark composed of a single block who's length (in cycles) can be defined ahead of time.
+The X axis represents the number of cores fused whilst the Y axis represents the speedup as 
+\begin{equation}
+Speedup = \frac{ExecutionTimeOfOneCore}{ExecutionTimeOnComposition}
+\end{equation}
