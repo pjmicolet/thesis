@@ -114,6 +114,18 @@ If the next core in line does not have $block_{i+1}$ due to no prediction having
 Figure~\ref{fig:synthetic_ex} shows the performance of the new fetching mechanism against the current mechanism on the Synthetic benchmark defined in~\ref{sec:ch3:bfn}.
 The performance is recorded for two processors with 16 cores, each core featuring 4 lanes, running a synthetic benchmark composed of a single block who's length (in cycles) can be defined ahead of time.
 The X axis represents the number of cores fused whilst the Y axis represents the speedup as 
+
 \begin{equation}
 Speedup = \frac{ExecutionTimeOfOneCore}{ExecutionTimeOnComposition}
 \end{equation}
+
+whilst the facets represent the number of cycles required to execute the synthetic block.
+Figure~\ref{fig:synthetic_ex} clearly shows that the new fetching mechanism can improve the performance of large compositions.
+At low cycle counts, 10 and 20 cycle for example, core-compositions of sizes 2 to 8.
+This is an important improvement as this enables core fusion to be considered usefull under strict constraints.
+On longer cycle counts such as 40 cycles, a 16 core composition is 12x faster than a single core.
+This is a 3x improvement over the current methodology.
+Even at an execution time of 80 cycles the new fetching model is 2x faster than the current model for 16 cores.
+
+Overall the new fetch mechanism reveals how communication between cores in the current model is penalising performance.
+This motivates the use of a model that makes block fetching on cores in a composition independent.
