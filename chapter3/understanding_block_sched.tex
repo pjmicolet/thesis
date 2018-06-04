@@ -248,7 +248,7 @@ A paper from 1996 by Andre Seznec et al. from INRIA proposed a multi-block branc
 We could use this work to do predictions for number of blocks.
 
 Currently, if we have 16 cores, each fetching 4 blocks, if we assume that it takes at least 4 cycles to fetch a block and send a prediction, we have
-$fetchlat=(16 * 4)*4$  so 256 cycles before each core has filled up.
+$fetchlat=(16 * 4)*4$  so 326 cycles before each core has filled up.
 By pipelining we can reduce this down to $fetchlat=4+(15*4)+4$  so 68 cycles which is a 3.7x speedup.
 Refering back to Figure~\ref{fig:lss}, having an overhed of 68 cycles would place us between the 40 and 80 cycles facet, which means that if we are able to maximize speedup around those facets, that's a 2.6x speedup for a 16 core, 4 segment fusion.
 This should, in theory, allow us to better utilise core-fusion as it decreases the restrictions on how long a block should take to execute for a given core-composition size.

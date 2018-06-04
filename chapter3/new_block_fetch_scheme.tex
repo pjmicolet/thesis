@@ -39,4 +39,5 @@ The reason behind this is to minimize the Synchronization Cost defined in Chapte
 
 In the case that $Core_0$ cannot make a prediction for $block_2$ it will only send a fetch request for $block_1$ to $Core_1$.
 When this happens, $Core_0$ will no longer be able to fetch blocks until it is sent a PC from $Core_1$.
-This request will happen once $Core_1$ commits $block_1$ and its PC is resolved.
+The request will happen once $Core_1$ commits $block_1$ and the PC of $block_2$ is resolved.
+
