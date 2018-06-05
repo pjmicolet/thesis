@@ -2,13 +2,15 @@ This section explores how core fusion affects the performance of the SD-VBS benc
 First a phase analysis is performed, followed by a study of the IPC variation for static core fusion.
 Then the use of dynamic core fusion is motived by using the information gathered.
 
+
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{cases-paper/graphics/Exploration/clusters2.pdf}
     \caption{Number of phases determined for each benchmark using kMeans clustering and their distribution.}
     \label{fig:clust}
-\label{some example}
+		\vspace{5mm}
 \end{figure}
+
 
 \subsection{Phase Detection}
 Figure~\ref{fig:sxt} presents the IPC performance through time for all the benchmarks when using a logical core (LC) composed of 16 cores.
@@ -35,6 +37,15 @@ Since each phase is a cluster of similar IPC values, having two or more clusters
     \includegraphics[width=1\textwidth]{cases-paper/graphics/Exploration/stddev2.pdf}
     \caption{Comparing average, smallest and greatest IPC for each SD-VBS benchmark using logical-core size of 16.}
     \label{fig:stddev}
+		\vspace{5mm}
+\end{figure}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{cases-paper/graphics/Exploration/SizeBuckets.pdf}
+    \caption{Distribution of block sizes for each benchmark. The sizes were clustered in buckets equivalent to number of lanes occupied.}
+    \label{fig:block_sizes}
+	\vspace{5mm}
 \end{figure}
 \subsection{Static Core Fusion Exploration}
 
@@ -45,6 +56,17 @@ Benchmarks \bm{Disparity}, \bm{Localization}, \bm{Sift}, \bm{Stitch}, \bm{Textur
 However increasing the size of a LC is not always beneficial as can be seen in benchmarks \bm{Localization}, \bm{MSER}, \bm{Multi\_NCut}, \bm{Stich}, and \bm{SVM}.
 For benchmarks \bm{Localization} and \bm{Stitch} the performance increases when fusing up to 8 cores, where-as \bm{MSER} and \bm{Multi\_NCut} never benefit from core fusion. 
 Referring back to Figures~\ref{fig:sxt} and~\ref{fig:clust}, \bm{MSER} and \bm{Multi\_NCut} feature one dominating long phase, both performing poorly.
+Figure~\ref{fig:block_sizes} shows the distribution of block-sizes for each of the benchmarks.
+As fine-grained sizes do not matter as much as overall number of lanes being occupied, the block sizes were clustered into groups which represent how ever many number of lanes will be occupied (one lane may execute a block of up to 32 instructions).
+
+Figure~\ref{fig:block_sizes} helps explain why benchmarks \bm{MSER} and \bm{Multi\_NCut} do not perform any better with core-fusion.
+For both cases, not only do they have a single detected phase, but both are predominantly formed of blocks that will occupy a single lane.
+In fact, the most frequent block in \bm{MSER}, comprising 21\% the total executed blocks are comprised of only 8 instructions, whilst 31\% of \bm{Multi\_NCut}'s blocks are of 28 instructions.
+Having such small blocks will always increase both the \textit{SynchronizationCost} and the branch-prediction requirements.
+For \bm{MSER}, the fact that an important percentage of blocks are only 8 instructions long signifies that the overhead of fetching enough blocks for a large core-composition and the synchronization cost for committing them outweighs executing the blocks on a single core.
+The reason there is no degredation of performance is due to the fact that when fusing a high amount of cores, if the overhead of fetching the blocks outweighs the time required to execute them, cores will simply not execute blocks.
+For example, fusing 16 cores and executing \bm{MSER} may in fact result in a single core being used due to it executing blocks faster than it being able to dispatch the blocks to a next core.
+Hence, in this case, \bm{MSER} would be wasting a lot of energy trying to use 16 cores in a composition, whilst effectively only executing on a single core. 
 This explains the lack of scaling for these two benchmarks.
 
 Figure~\ref{fig:stddev} also shows the standard deviation of the IPC for each given LC size represented by the grayed out areas.
@@ -56,3 +78,19 @@ Thus, if the logical-core could change size, there is a possibility that this co
 
 Overall, most benchmarks that benefit from large logical-cores will also be met with important standard deviations of IPC performance.
 The high standard deviation is evidence of performance phases found in each application which are likely to benefit from dynamic adaptation.
+
+\begin{figure}
+     \centering
+     \subfloat[][Disparity]{\includegraphics[width=0.5\textwidth]{cases-paper/graphics/Pareto/DispN3.pdf}\vspace*{-4mm}\label{subfig:disp}}
+     \subfloat[][Localization]{\includegraphics[width=0.5\textwidth]{cases-paper/graphics/Pareto/LocN3.pdf}\vspace*{-4mm}\label{subfig:loc}}\
+     \subfloat[][MSER]{\includegraphics[width=0.5\textwidth]{cases-paper/graphics/Pareto/MSERN3.pdf}\label{subfig:mser}}
+     \subfloat[][Multi\_Ncut]{\includegraphics[width=0.5\textwidth]{cases-paper/graphics/Pareto/MultiN3.pdf}\label{subfig:mult}}\
+     \subfloat[][Sift]{\includegraphics[width=0.5\textwidth]{cases-paper/graphics/Pareto/SiftN3.pdf}\label{subfig:sift}}
+     \subfloat[][Stitch]{\includegraphics[width=0.5\textwidth]{cases-paper/graphics/Pareto/StitchN3.pdf}\label{subfig:stitch}}\
+     \subfloat[][SVM]{\includegraphics[width=0.5\textwidth]{cases-paper/graphics/Pareto/SVMN3.pdf}\label{subfig:svm}}
+     \subfloat[][Texture\_Synthesis]{\includegraphics[width=0.5\textwidth]{cases-paper/graphics/Pareto/TextN3.pdf}\label{subfig:text}}\\
+     \subfloat[][Tracking]{\includegraphics[width=0.5\textwidth]{cases-paper/graphics/Pareto/TrackingN3.pdf}\label{subfig:track}}
+     \caption{Time (x-axis) vs. Energy (y-axis) tradeoffs using Static and Dynamic Composition Schemes.}
+     \label{fig:paretos}
+\end{figure}
+\newpage
