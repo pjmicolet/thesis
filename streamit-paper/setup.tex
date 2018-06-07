@@ -13,14 +13,14 @@ In addition, the impact of loop unrolling and how it helps exploit larger fused 
 \end{figure}
 
 Figure~\ref{fig:overview} presents the workflow of the system used in this chapter.
-First, the source-to-source StreamIt compiler is used to unroll loops as this is often beneficial when cores are composed as will be seen later in Section~\ref{core}.
+First, the source-to-source StreamIt compiler is used to unroll loops as this is often beneficial when cores are composed as will be seen later in Section~\ref{sec:streamit:dse}.
 Then, static code features such as the program's graph structure are extracted from the StreamIt code.
 These features are used as an input to the first machine-learning model that determines the Thread Level Parallelism (TLP).
 This information is used to partition the program into threads which is done by the StreamIt compiler which produces a C++ program using pthreads.
 This C++ program is then compiled using the compiler for EDGE.
 
-Then, a second machine-learning model is used which uses static code features extracted from the SteamIt code.
-This model is used to decide on the core topology.
+Then, a second machine-learning model is deployed which also analyzses static code features extracted from the SteamIt code.
+This model decides on the number of cores each thread will have.
 This is achieved by estimating the amount of Instruction Level Parallelism (ILP) that can be possibly extracted in each thread and by determining how many physical cores should be fused for that thread.
 Finally, the processor is reconfigured to fuse the requested resources ahead of time and execute the partitioned program.
 
@@ -29,7 +29,7 @@ Finally, the processor is reconfigured to fuse the requested resources ahead of 
 
 %In this chapter the Dynamic Multicore Processor used for the research is based on an Explicit Data Graph Execution (EDGE) Instruction Set Architecture that resembles~\cite{sibi2014}.
 %This differs from other DMPs such as CoreFusion, WidGET and Shared Architecture~\cite{ipek2007CoreFusion,Watanabe2010Widget,zhou2014sharingarch} which utilize a CISC/RISC instruction set.
-To evaluate the work a customizable cycle-level simulator verified within 4\% of RTL is used.
+To evaluate the work a customizable cycle-level simulator verified against RTL is used.
 The simulator is highly configurable, allowing the modelling of a variety of parameters such as the number of cores, details of the memory hierarchy and synchronisation schemes.
 For the experiments in this chapter a 16 core dual issue configuration with 4 lanes per core, 16 KB private L1 caches and a 2 MB shared L2 is used.
 
@@ -39,23 +39,25 @@ For the experiments in this chapter a 16 core dual issue configuration with 4 la
     \caption{Visual representation of the three different StreamIt structures.}
     \label{fig:streamittypes}
 \end{figure}
-\subsection{StreamIt Programming Language}
 
-StreamIt is a high-level synchronous dataflow streaming programming language that defines programs as directed graphs.
+\subsection{StreamIt Programming Language}
+StreamIt~\cite{theis2002streamit} is a high-level synchronous dataflow streaming programming language that defines programs as directed graphs.
 StreamIt offers an elegant way of describing streaming applications, abstracting away how infinite data streams are managed to allow the programmer to solely focus on how the data must be treated.
 A StreamIt program is composed of functions - called \textit{Filters} - which operate on streams of data.
-Filters can be connected via \textit{Pipelines}, \textit{SplitJoins} or \textit{Feedback Loops}.
+Filters declare a certain amount of data which is to be consumed and produced per schedule.
+Filters can be connected via \textit{Pipelines}, \textit{SplitJoins} or \textit{Feedback Loops} to create the streaming application.
 
-Figure~\ref{fig:streamittypes} displays the different methods of connections.
-Pipelines (Figure~\ref{fig:streamittypes}(a)) represent a sequence of connecting filters operating on the same stream, each filter operating on the output of the previous filter.
-In a SplitJoin (Figure~\ref{fig:streamittypes}(c)), data in the stream is passed through a split filter and either duplicated and passed on in parallel to the filters or distributed amongst the filters in a round-robin manner.
+Figure~\ref{fig:streamittypes} displays the different methods of connections in detail.
+Pipelines (Figure~\ref{fig:streamittypes}(a)) represent a sequence of connecting filters operating on the same stream, each filter in the stream will operate on the output of the previous filter.
+In a SplitJoin (Figure~\ref{fig:streamittypes}(c)), data from the stream is passed through a split filter and is either duplicated and passed on in parallel to the filters or distributed amongst the filters in a round-robin fashion.
 The output of all the filters in a SplitJoin are then concatenated in a round-robin fashion through a joiner filter.
 Finally a Feedback Loop (Figure~\ref{fig:streamittypes}(b)) provides a way for filters to operate on their outputs.
 The resulting program written in StreamIt represents a graph where the nodes are filters and their edges represent the incoming and outgoing data streams.
 
 This chapter explores 15 StreamIt benchmark all taken from the official StreamIt repository.
-To include a variety of situations, 10 of the StreamIt benchmarks chosen feature SplitJoins which leads to multithreading whilst 5 do not.
-For each benchmark the default inputs provided in the repository are used and the default iteration count is set to 10. 
+To include a variety of situations, 10 of the StreamIt benchmarks chosen feature SplitJoins which leads to task-based multithreading whilst 5 do not.
+The 5 applications which do not feature SplitJoins can still be split into threads and will operate in a pipelined fashion.
+For each benchmark the default inputs provided in the repository~\cite{streamitrepo} are used and the default iteration count is set to 10. 
 
 \subsection{Design Space}
 
