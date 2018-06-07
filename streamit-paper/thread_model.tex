@@ -1,8 +1,9 @@
 % Small intro, re-explain that finding thread/core pairing is complicated and thus ML is a good idea.
 As seen in the previous section, selecting the right number of threads and a good combination of cores is difficult.
-This difficulty arises from trying to balance between exploiting larger composed cores with block speculation and ILP and between exploiting a larger number of logical cores via TLP.
+This difficulty arises from trying to balance between exploiting ILP by fusing a large amount of cores and TLP by generating more threads.
+As the design space is large, it is important to automate the decision making to alleviate the task of getting the best performance out of the streaming application at hand.
 
-The problem can be decomposed into two stages; first, determining the right number of threads and then selecting a good core composition.
+The problem of automating this decision can be decomposed into two stages; first, determining the right number of threads and second, selecting a good core composition.
 In this section, two machine-learning models that predict the best thread partitioning and core composition to maximize performance are presented.
 
 \subsection{Synthetic Benchmark Generation}
@@ -25,11 +26,11 @@ These features were extracted using pre-existing analytical tools within StreamI
 As 50 features may not necessarily contain any valuable information, the features selected for the models were determine through correlation analysis.
 %In this section, when discussing correlation we specifically look at which variables correlate with the optimal number of threads.
 
-\subsection{KNN Model}
+\subsection{Correlation Analysis and kNN model}
 In this section, variables which correlate with the optimal number of threads are explored.
 These features are used by the model to make a prediction about the number of threads to use.
 Figure~\ref{fig:corr} shows the 10 variables that correlate the most with determining the optimal thread number.
-In StreamIt the term multiplicity references the number of times a filter will have to execute in a time slice when the graph is in a steady state~\cite{gordon2002streamcomp}.
+In StreamIt the term \textit{multiplicity} defines the number of times a filter will have to execute in a time slice when the graph is in a steady state~\cite{gordon2002streamcomp}.
 
 \begin{figure}
   \includegraphics[width=1\textwidth]{streamit-paper/graphics/corrGraph.pdf}
@@ -56,13 +57,14 @@ There are very little variables that highly correlate beyond Number of Distinct 
 A high number of distinct multiplicities implies that the StreamIt application features an important amount of filters with different execution rates.
 This means that certain filters may be local bottlenecks in a Pipeline for example.
 When the number of distinct multiplicities is high this requires more threads to group filters with similar multiplicities together.
-For example, the benchmark \bench{ChannelVocoder} only has 66\% of its filters sharing the same average multiplicity~\cite{theis2010empericalcharstreamit} of 50, with a minimum multiplicity of 1. 
+For example, the benchmark \bench{ChannelVocoder} only has 66\% of its filters sharing the same average multiplicity of 50~\cite{theis2010empericalcharstreamit}, with a minimum multiplicity of 1. 
 The benchmark features a single SplitJoin yet when recalling section \ref{sec:streamit:dse}'s Figure~\ref{fig:overviewhist} \bench{ChannelVocoder}'s performance is greatly improved via multi-threading.
 The number of threads also depends on certain structural features such as Pipelines, SplitJoins and number of Filters.
 Yet, these variables seem to hold less influence on the number of threads a program needs than the different multiplicities found in the graph.
 This is most certainly due to the fact that whilst SplitJoins make parallelizable areas more visible, the amount of work contained in each stream of the SplitJoin, especially when this size is small, may actually make parallelizing the program worse due to ratio of communication to computation.
 It is also important to understand that a high number of Pipelines implies the use of SplitJoins.
-This is due to the fact that a StreamIt application with no SplitJoins will feature only a singe Pipeline, thus a larger number of pipelines implies at least one SplitJoin.\\
+This is due to the fact that a StreamIt application with no SplitJoins will feature only a singe Pipeline, thus a larger number of pipelines implies at least one SplitJoin.
+This is why the number of SplitJoins is not present in the correlating features; because the number of Pipeline already correlates with this feature.\\
 
 A k-Nearest Neighbor (kNN) model is deployed to determine the number of threads to use for an application.
 Given a new application, the kNN classifier determines the $k$ closest generated applications.
