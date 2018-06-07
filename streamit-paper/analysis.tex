@@ -71,14 +71,14 @@ Therefore, if the number of threads is increased, this reduces the potential num
 This example therefore demonstrates that whilst the optimal number of threads is independent of the number of cores there still exists trade-offs between the two when including certain optimisations.
 This signifies that the amount of resources available to each thread must be taken into consideration before generating the program to balance the trade off between ILP and TLP.
 
-\begin{sidewaysfigure}
- \centering
-  \centering
-    \includegraphics[width=1\textwidth]{streamit-paper/graphics/threadcompbench.pdf}
+\begin{landscape}
+\begin{figure}\hspace{-1em}
+    \includegraphics[width=1\linewidth,keepaspectratio]{streamit-paper/graphics/threadcompbench.pdf}
     \caption{Speedup obtained by choosing best core composition, best
       thread number and the combination of both optimisations. The baseline for the speedup measurement is single core, single thread execution using O2 compiler optimisations. Higher
       is better.}\label{fig:overviewhist}
-\end{sidewaysfigure}
+\end{figure}
+\end{landscape}
 
 \subsection{Co-Design Space Best Results}
 
@@ -104,19 +104,26 @@ The \textit{CORE} bar represents the best speedup when the benchmark is executed
 \textit{BOTH} represents the best speedup obtained for each benchmark using a combination of \textit{THREAD} and \textit{CORE}.
 Finally, for each benchmark, these results were obtained for both an unrolled and not unrolled to compare how unrolling affects performance.
 Figure~\ref{fig:overviewhist} shows that when loops are not unrolled, composing cores will not greatly improve performance.
-This is due to the fact that the amount of ILP found in filters, without the unrolling, is too little for there to be any benefit or composing cores.
+This is due to the fact that the amount of ILP found in filters without the unrolling is too little for there to be any benefit or composing cores.
+Therefore, in the scenario where there are no specific optimisations for composition, multithreading will be the main source of performance.
 
-When studying the geometric mean, without unrolling, finding the correct number of threads gives a speedup of 1.92 compared to 1.33 when using only core composition.
+This can be seen when studying the geometric mean, without unrolling, finding the correct number of threads gives a speedup of 1.92 compared to 1.33 when using only core composition.
 This changes when taking unrolling into account as the core compositions can be used more efficiently.
-In this case, the speedup obtained from only composing cores is only 13\% worse than using only threads. 
-The unrolling demonstrates that the StreamIt programs must be modified to take advantage of the core composition.
+In this case, the speedup obtained from only composing cores is only 13\% worse than using only threads.
+For the \bench{FMRadio} benchmark, unrolling makes using only core-composition better than only using threads.
+This information corroberates with the data seen in Figure~\ref{fig:fmunroll}; it presents a unique case where the effect of core fusion is important enough to change the dominant performance enhancer.
+Loop unrolling demonstrates that the StreamIt programs must be modified to take advantage of the core composition.
+
 Overall, in the StreamIt programs, multi-threading is the prevalent leader of performance.
 This is natural as StreamIt applications are naturally geared towards TLP as most programs have at least one SplitJoin as seen in the Table~\ref{tab:splitjoin} which gives the number of split-joins per benchmark.
 Benchmarks with SplitJoins will naturally benefit from splitting the program into threads~\cite{thiesStreamit2010}.
-However, it is important to note that whilst finding the optimal thread mapping is better than the best composition, the best performance is always obtained through a combination of both optimizations. 
+%Make sure this is 100% true but as far as I remember this is the case
+Those that do not feature SplitJoins can still be parallelised by splitting a Pipeline into multiple parts.
+For example, benchmark \bench{FIR} features no SplitJoins, yet splitting the Pipeline in 2 will result in a 1.40x speedup.
+However, it is important to note that whilst finding the optimal thread mapping may result in higher performance improvements than finding the optimal composition for a single thread, the best performance is always obtained through a combination of both optimizations.
+For cases such as \bench{BeamFormer} the optimal pairing results in a 1.8x speedup compared to simply finding the best multit-threaded version, whilst on average, the optimal combination leads to a 1.5x performance increase compared to only multithreading.
 
 \subsection{Summary}
-
 This section demonstrated that each parameter has a large effect on the performance of the workload.
 Regardless of using core composition or not, there exists for each benchmark an optimal number of threads.
 Unrolling is effective at exposing more opportunities for composition due to increased ILP but there is a balance to strike between extracting ILP and TLP.

@@ -53,7 +53,8 @@ The output of all the filters in a SplitJoin are then concatenated in a round-ro
 Finally a Feedback Loop (Figure~\ref{fig:streamittypes}(b)) provides a way for filters to operate on their outputs.
 The resulting program written in StreamIt represents a graph where the nodes are filters and their edges represent the incoming and outgoing data streams.
 
-This chapter explores 15 StreamIt benchmark  all taken from the official StreamIt repository.
+This chapter explores 15 StreamIt benchmark all taken from the official StreamIt repository.
+To include a variety of situations, 10 of the StreamIt benchmarks chosen feature SplitJoins which leads to multithreading whilst 5 do not.
 For each benchmark the default inputs provided in the repository are used and the default iteration count is set to 10. 
 
 \subsection{Design Space}
