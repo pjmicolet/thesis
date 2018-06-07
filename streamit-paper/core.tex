@@ -4,38 +4,61 @@
   \caption{The ten highest correlating features with the optimal number of cores.}\label{fig:corrCore}
 \end{figure}
 
-\begin{figure}[t]
+
+\subsection{Gathering Training Data for Core-Composition}
+Given that the optimal number of cores for a thread is independent of the number of threads found in the program, only the single threaded version of a StreamIt benchmark is used to determine the optimal number of cores.
+This also allows for the exploration of all possible core-compositions, as partitioning the program into threads can lead to a reduction in the search space.
+For example, if the 15 thread versions of the benchmarks were to be used, the could only have a single core allocated per thread when as this is the maximum amount of cores that may be given to each thread rather than it being the optimal solution.
+
+For the exploration of core-composition, only the 15 StreamIt benchmarks were used.
+To increase the amount of data available, multiple versions of the benchmarks using different amounts of unrolling are included in the search space.
+To determine the optimal number of cores only the training data that has a performance within 1\% of the best is selected.
+
+\subsection{Analyzing Features}
+
+Figure~\ref{fig:corrCore} shows the highest correlating features with the optimal number of cores.
+
+The ten features can be described as follows
+\begin{itemize}
+\item Average Size of All Blocks: Average number of operations per block of code.
+\item Average Size of Unconditional Blocks: Average number of operations per blocks that must execute unconditionally.
+\item Average / Smallest Uncondional Size: The ratio between the average size of a block compared to the smallest size of unconditional blocks.
+\item Average / Largest Uncondional Size: The ratio between the average size of a block compared to the largest size of unconditional blocks.
+\item Ratio of Uncoditional Blocks to Conditional Blocks.
+\item Percentage of blocks that have the largest number of operations.
+\item Filters with mode multiplicity: number of filters that have the average mode multiplicity.
+\item Number of arithmetic operations found in the program.
+\item Number of distinct multiplicites found in the program.
+\item Number of filters that have a multiplicity of 1.
+\end{itemize}
+
+\begin{figure}[h]
   \center
   \includegraphics[width=1\textwidth]{streamit-paper/graphics/lineargraphs.pdf}
   \caption{Optimal number of cores in relation to the three highest correlating features. The maximum number of cores plateaus on the right hand side as this is the maximum possible amount.}\label{fig:maxav}
 \end{figure}
 
-
-\subsection{Gathering Training Data}
-Given that the optimal number of cores for a thread is independent of the number of threads found in the program, only the single threaded versions is used to determine the optimal number of cores.
-For example, all benchmarks will only have a single core per thread when the application is partitioned in 15 threads as this is the maximum amount of cores that may be given to each thread rather than it being the optimal solution. 
-Multiple versions of the benchmarks using different amounts of unrolling are included.
-To determine the optimal number of cores only the training data that has a performance within 1\% of the best is selected. 
-
-\subsection{Analyzing Features}
-
-Figure~\ref{fig:corrCore} shows the highest correlating features with the optimal number of cores.
 The features are very different from the ones presented in Figure~\ref{fig:corr} and overall there are higher correlating features.
 The highest correlating value has a correlation factor of 0.88 which represents the number of operations found in a basic block of code.
-The second feature is similar but only takes into account blocks that will be executed unconditionally, we have chosen to exclude blocks found in loops for this metric as there is still some form of condition for those blocks to be executed.
+It is important to note that the concept of an operation here is at the StreamIt level and not the architectural level.
+This is due to the fact that the machine learning model will get information from the source-level StreamIt translation.
+With that in mind, the number of operations will correlate with number of instructions found at the instruction level.
+The second feature is similar to the first but only takes into account blocks that will be executed unconditionally.
+Blocks found in loops were excluded for this metric as there is still some form of condition for those blocks to be executed, they are counted as conditional.
 The next two feature compare the size of the average size of an unconditional block to the largest and smallest unconditional block.
 The fifth feature measures the ratio of the number of unconditional blocks to conditional.
 
-Overall there are no features distinct to StreamIt, such as pipelines or splitjoins that correlate highly with the optimal number of cores.
+Overall the highest correlating features are not features distinct to StreamIt, such as pipelines or splitjoins.
 This is due to the fact that, from a single-threaded perspective, splitJoins and pipelines are less visible in terms of performance.
 This is especially true of splitjoins as they will not be distributing data amongst different threads and, technically, a single-threaded StreamIt program is a long pipeline structure.
 It can thus be infered that the optimal number of cores is independent of the structure of a StreamIt program.
-Instead, it is more dependent on the amount of computation found in each program.
+Instead determining the correct core-composition is more dependent on the amount of computation found in each program.
 
-From Figure~\ref{fig:corrCore} the highest correlating features fit naturally under the assumptions that higher core compositions will perform better with larger blocks.
-This is due to the fact that large blocks reduce the amount of branches predicted to populate all the cores with blocks which, in turn, reduces the latency of fetching blocks for all cores.
-The necessity to correctly predict blocks to ensure that all cores are fully utilised explains why a higher number of unconditionally executed blocks compared to conditional blocks correlates highly.
+From Figure~\ref{fig:corrCore} the highest correlating features fit naturally under the assumptions that higher core compositions will perform better with larger blocks of operations and thus blocks of instructions.
+This is due to the fact that large blocks reduce the amount of branches predictions required to populate all the cores with blocks which, in turn, reduces the latency of fetching blocks for all cores.
+The necessity to correctly predict blocks to ensure that all cores are fully utilised explains why a higher number of unconditionally executed blocks compared to conditional blocks correlates positively with large core compositions.
 This is once again due to reducing strain on branch prediction for higher core compositions.
+The importance of size is also apparent as the difference between the largest block size and the average block size negatively correlates with core-composition.
 StreamIt programs tend to not have a large quantity of conditional statements, thus the ratio of unconditional and conditional blocks is considered less important than the sizes of blocks.
 
 Other features that were analysed included more fine-grained data on what types of operations were found in the blocks of code.
@@ -49,8 +72,10 @@ According to the correlation graph in Figure~\ref{fig:corrCore}, the composition
 %Thus there is no focus on using any speculative features from the StreamIt graph.
 
 \subsection{Linear Regression Model}
-Given that the optimal number of cores is highly correlated with a few features, a linear regressor is a natural choice to predict the best number of threads.
-Figures~\ref{fig:maxav} represent how the first three highest correlating values affect the number of cores.
-This figure was obtained by finding the best number of cores for a single threaded benchmark.
-It is important to note that the top right corner points will always be flat as we can only allocate a maximum of 15 cores.
+Given that the optimal number of cores highly correlates with a few features, a linear regressor is a natural choice to predict the best number of threads.
+Figures~\ref{fig:maxav} represent how the first three highest correlating values affect the optimal number of cores for a single thread.
+This figure was obtained by finding the best number of cores for the single threaded version of each of the StreamIt benchmarks whilst varying the amount of loop unrolling.
+It is important to note that the top right corner points will always be flat as only a maximum number of 15 cores can be allocated.
+Overall, Figure~\ref{fig:maxav} shows that StreamIt applications with large unconditionally executed blocks will require large compositions.
+
 
