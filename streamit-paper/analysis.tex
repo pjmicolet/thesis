@@ -6,13 +6,13 @@ The hardware side is about finding out the best core composition that maximizes 
 
 This section first starts with analyzing the impact of thread partitioning on performance.
 Thread partitioning is about deciding how many threads to create and how to partition StreamIt filters into these threads.
-To simplify this study, the default streaming partitioner is used to decide on how to allocate filters to cores which is based on simulated annealing.
-%Define this
+To simplify this study, the default streaming partitioner is used to decide on how to allocate filters to threads which is based on simulated annealing~\cite{simulatedAnnealing1983}.
+
 On the hardware side, two scenarios are considered:
 the ``without composition scenario'' where there is exactly one core per thread and the ``with composition scenario'' where each thread receives between 1 and 15 cores.
 
 Figure~\ref{fig:threadtrend} shows how performance varies under both scenarios as a function of the number of threads.
-Regardless of how cores are composed it can be observed that all curves follow the same trend.
+Regardless of how cores are composed it can be observed that curves for a benchmark follow the same trend.
 The optimal number of threads using core composition is very similar to the scenario without composition.
 This important observation means that the optimal number of threads for a benchmark can be estimated independently from the hardware composition.
 The system can therefore proceed in two stages: first determine the optimal number of threads and then decide on a core composition.
@@ -33,17 +33,21 @@ This demonstrates that composing cores is essential to obtain the best performan
 Using core composition, the processor fuses a number of cores and associates them to a thread to increase single threaded performance.
 Whilst this flexibility is advantageous, choosing the right amount of cores for a given thread is difficult due to the large number of possible configurations~\cite{gulati2008multitaskingdmc}.
 
-Figure~\ref{fig:audiototal} shows how threading and composition affects performance for the \bench{Audiobeam} benchmark.
+Figure~\ref{fig:audiototal} shows how threading and core-compositions affect performance for the \bench{Audiobeam} benchmark.
 The curves represent the density distribution for different core compositions as a function of the number of threads.
-The right hand side Y-axis represents the number of threads present in the current version of the benchmark normalized by the total number of points in the design space.
-For each of the threaded versions the benchmark was ran using on average 100 different compositions.
-The density curve for thread 15 is a single point as there exists only a single composition.
+The right hand side Y-axis represents the number of threads present in the current version of the benchmark whilst the left Y-Axis represents the density normalized by the total number of points in the design space.
+For each of the threaded versions the benchmark was ran using 100 different core-compositions.
+The density curve for thread 15 is a single point as there exists only a single composition, so a line was drawn to represent where that point lies.
 
 The variance of each of the curves represents the influence of composition on the benchmark's performance for a given number of threads.
 For this benchmark the impact of core composition is actually very large for the best performing number of threads (1--5).
-Interestingly, as more threads are used,  performance shifts worsens, echoing the results shown in the previous section.
-Increasing the number of threads will increase communication between cores; which explains these results.
-By fusing cores, this can reduce the stress of having multiple threads whilst still getting performance from having more cores being used.
+Interestingly, as more threads are used, performance worsens, echoing the results shown in the previous section.
+This signifies that for the benchmark \bench{Audiobeam}, it is more important to fuse cores than add threads for the DMP.
+Adding threads will incur an extra cost of synchronization by increasing the number of thread barriers.
+Since fusing cores can improve the performance of serial execution, thread synchronization can be avoided. 
+However as increasing the number of threads will reduce the amount of cores that can potentially be composed per thread, this reduces the potential speedup.
+; which explains these results.
+%By fusing cores, this can reduce the stress of having multiple threads whilst still getting performance from having more cores being used.
 
 \begin{figure}
   \includegraphics[width=1\textwidth]{streamit-paper/graphics/unrolled_fm.pdf}
@@ -51,21 +55,20 @@ By fusing cores, this can reduce the stress of having multiple threads whilst st
 \end{figure}
 
 \subsection{Impact of Loop Unrolling}
-In this section the impact of one compiler optimization is studied by focusing on loop unrolling.
-Filters containing large amounts of loops potentially contain high degrees of instruction level and memory level parallelism.
-Unrolling may increase the degree of parallelism which is advantageous to a wider fused processor.
+In this section the impact compiler optimizations is studied by focusing on loop unrolling.
+Filters containing large amounts of loops potentially contain high degrees of instruction level (ILP) and memory level parallelism.
+In the case of the EDGE ISA, loop unrolling will increase the size of blocks, which facilitates the ability to extract ILP out of blocks.
 Loop unrolling may also yield similar results to vectorization when vectorization may not easily be applied or available.
 
 Figure~\ref{fig:fmunroll} presents an example of how loop unrolling affects performance on the \bench{FMRadio} benchmark.
 The graph presents the same information as Figure~\ref{fig:audiototal} but with different executions of the benchmark when optimizing for speed and unroll factors 4, 16, and 64.
 Figure~\ref{fig:fmunroll} shows that unrolling loops for \bench{FMRadio} can greatly improve performance.
 
-Another observation is that the best execution times for each of the threaded versions when unrolling does not follow the same trend previously described.
+Another observation is that the best execution times for each of the threaded versions when unrolling does not follow the same trend seen in Figure~\ref{fig:threadtrend}.
 The leftmost curve performance peaks at two threads whereas the rightmost peaks at five.
-As the number of cores fused can now be greater we encounter a resource problem when increasing the number of threads, by a factor of 3x.
-It is important to note that when increasing the amount of unrolling, the optimal thread shifts towards a smaller number.
-This is due to the fact that more ILP can be extracted over TLP.
-This example therefore demonstrates that whilst the optimal number of threads is independent of the number of cores there still exists trade-offs between the two.
+As increasing the unrolling factor reveals more ILP, core-composition can be used more efficiently.
+Therefore, if the number of threads is increased, this reduces the potential number of cores that can be fused per thread.
+This example therefore demonstrates that whilst the optimal number of threads is independent of the number of cores there still exists trade-offs between the two when including certain optimisations.
 This signifies that the amount of resources available to each thread must be taken into consideration before generating the program to balance the trade off between ILP and TLP.
 
 \begin{sidewaysfigure}

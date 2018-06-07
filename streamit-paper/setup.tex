@@ -89,20 +89,20 @@ This leads to a total space size of 32,767 unique combination per benchmark.
     \caption{Statistical (plain line) and actual proximity (dotted line) to best performance using a subset of the sample space.}\label{fig:prox}
 \end{figure}
 
-\begin{figure*}[h]
+\begin{figure}[h]
  \centering
     \includegraphics[width=1\textwidth]{streamit-paper/graphics/threadingmaybe2.pdf}
     \caption{Performance as a function of the number of threads. The performance metric is number of cycles. Each benchmark has the performance measured with cores composed and with threads mapped to a single core.}\label{fig:threadtrend}
-\end{figure*}
+\end{figure}
 
-Given a partitioning, any benchmark that is split into 15 threads requires 32,767 executions to cover the entire space.
-Running an exhaustive exploration of the space requires approximately a week of simulation on a 572+ node supercomputer.
+Given a partition, any benchmark that is split into 15 threads requires 32,767 executions to cover the entire space.
+Running an exhaustive exploration of the space for a single benchmark requires approximately a week of simulation on a 572+ node supercomputer.
 For this reason, a sample of 1,316 random points from the entire space is utilised.
-This roughly corresponds to 100 core compositions for each number of threads (the actual number, 1,316 is smaller than 1,500 since for low thread counts there are less than 100 possible different core composition).
+This roughly corresponds to 100 core compositions for each number of threads; the actual number, 1,316 is smaller than 1,500 since for low thread counts there are less than 100 possible different core composition.
 \bench{InsertionSort} is the only exception since it can at most only be split into 5 threads leading to 415 sample points.
 
 %Define stopping criterion?
-To gain confidence that the best configuration from the sample space is indeed close to the real best in the entire space, a statistical model based on the Stopping Criterion defined in~\cite{vuduc2003AutomaticPerf} is deployed.
+To gain confidence that the best configuration from the sample space is indeed close to the real best in the entire space, a statistical model based on the Early Stopping Criterion defined in~\cite{vuduc2003AutomaticPerf} is deployed. 
 This model estimates, given a sample of the total space, if the best observed performance of that sample space is within a percentage of the statistical best performance.
 The results demonstrate that the sample space selected is representative of the whole space.
 
