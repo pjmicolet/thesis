@@ -7,9 +7,7 @@ The hardware side is about finding out the best core composition that maximizes 
 This section first starts with analyzing the impact of thread partitioning on performance.
 Thread partitioning is about deciding how many threads to create and how to partition StreamIt filters into these threads.
 To simplify this study, the default streaming partitioner is used to decide on how to allocate filters to threads which is based on simulated annealing~\cite{simulatedAnnealing1983}.
-
-On the hardware side, two scenarios are considered:
-the ``without composition scenario'' where there is exactly one core per thread and the ``with composition scenario'' where each thread receives between 1 and 15 cores.
+On the hardware side, two scenarios are considered: the ``without composition scenario'' where there is exactly one core per thread and the ``with composition scenario'' where each thread receives between 1 and 15 cores.
 
 Figure~\ref{fig:threadtrend} shows how performance varies under both scenarios as a function of the number of threads.
 Regardless of how cores are composed it can be observed that curves for a benchmark follow the same trend.
@@ -39,15 +37,14 @@ The right hand side Y-axis represents the number of threads present in the curre
 For each of the threaded versions the benchmark was ran using 100 different core-compositions.
 The density curve for thread 15 is a single point as there exists only a single composition, so a line was drawn to represent where that point lies.
 
-The variance of each of the curves represents the influence of composition on the benchmark's performance for a given number of threads.
+The variance of each of the curves represents the influence of composition on the \bench{Audiobeam}'s performance for a given number of threads.
 For this benchmark the impact of core composition is actually very large for the best performing number of threads (1--5).
+For example, for two threads, the best configuration can lead to a 1.5x speedup compared to the worst point.
 Interestingly, as more threads are used, performance worsens, echoing the results shown in the previous section.
-This signifies that for the benchmark \bench{Audiobeam}, it is more important to fuse cores than add threads for the DMP.
-Adding threads will incur an extra cost of synchronization by increasing the number of thread barriers.
-Since fusing cores can improve the performance of serial execution, thread synchronization can be avoided. 
-However as increasing the number of threads will reduce the amount of cores that can potentially be composed per thread, this reduces the potential speedup.
-; which explains these results.
-%By fusing cores, this can reduce the stress of having multiple threads whilst still getting performance from having more cores being used.
+This is due to the fact that when the number of threads is increased, synchonization between threads will increase whilst the potential number of corse which can be fused decreases.
+In the case where the application does not feature highly parallel tasks, de-prioritising core compositions can negatively impact performance.
+This signifies that for the benchmark \bench{Audiobeam}, it is more important to fuse cores than add more and more threads to the application.
+
 
 \begin{figure}
   \includegraphics[width=1\textwidth]{streamit-paper/graphics/unrolled_fm.pdf}
@@ -57,13 +54,12 @@ However as increasing the number of threads will reduce the amount of cores that
 \subsection{Impact of Loop Unrolling}
 In this section the impact compiler optimizations is studied by focusing on loop unrolling.
 Filters containing large amounts of loops potentially contain high degrees of instruction level (ILP) and memory level parallelism.
-In the case of the EDGE ISA, loop unrolling will increase the size of blocks, which facilitates the ability to extract ILP out of blocks.
+When considering that the DMP uses the EDGE ISA, loop unrolling will increase the size of blocks, which facilitates the ability to extract ILP out of blocks.
 Loop unrolling may also yield similar results to vectorization when vectorization may not easily be applied or available.
 
 Figure~\ref{fig:fmunroll} presents an example of how loop unrolling affects performance on the \bench{FMRadio} benchmark.
 The graph presents the same information as Figure~\ref{fig:audiototal} but with different executions of the benchmark when optimizing for speed and unroll factors 4, 16, and 64.
-Figure~\ref{fig:fmunroll} shows that unrolling loops for \bench{FMRadio} can greatly improve performance.
-
+Figure~\ref{fig:fmunroll} shows that unrolling loops for \bench{FMRadio} can greatly improve performance by up to 8x compared to the non-unrolled version.
 Another observation is that the best execution times for each of the threaded versions when unrolling does not follow the same trend seen in Figure~\ref{fig:threadtrend}.
 The leftmost curve performance peaks at two threads whereas the rightmost peaks at five.
 As increasing the unrolling factor reveals more ILP, core-composition can be used more efficiently.
@@ -102,26 +98,28 @@ Figure~\ref{fig:overviewhist} characterizes how much of a performance increase i
 For each benchmark, the \textit{THREAD} bar represents the maximal speedup obtained by dividing the program into threads without fusing cores.
 The \textit{CORE} bar represents the best speedup when the benchmark is executed in a single thread and fuse cores.
 \textit{BOTH} represents the best speedup obtained for each benchmark using a combination of \textit{THREAD} and \textit{CORE}.
-Finally, for each benchmark, these results were obtained for both an unrolled and not unrolled to compare how unrolling affects performance.
+Finally, for each benchmark, the results were obtained for both an unrolled and not unrolled version to compare how the compiler optimisation affects performance.
 Figure~\ref{fig:overviewhist} shows that when loops are not unrolled, composing cores will not greatly improve performance.
-This is due to the fact that the amount of ILP found in filters without the unrolling is too little for there to be any benefit or composing cores.
-Therefore, in the scenario where there are no specific optimisations for composition, multithreading will be the main source of performance.
+This is due to the fact that the amount of ILP found in filters without the unrolling is too little for there to be any benefit of composing cores.
 
-This can be seen when studying the geometric mean, without unrolling, finding the correct number of threads gives a speedup of 1.92 compared to 1.33 when using only core composition.
+In the scenario where there are no specific optimisations for composition, multithreading will be the main source of performance.
+This can be seen when studying the geometric mean,without unrolling.
+Finding the correct number of threads gives a speedup of 1.92 compared to 1.33 when using only core composition, which is an improvement of 44\%.
 This changes when taking unrolling into account as the core compositions can be used more efficiently.
 In this case, the speedup obtained from only composing cores is only 13\% worse than using only threads.
 For the \bench{FMRadio} benchmark, unrolling makes using only core-composition better than only using threads.
-This information corroberates with the data seen in Figure~\ref{fig:fmunroll}; it presents a unique case where the effect of core fusion is important enough to change the dominant performance enhancer.
-Loop unrolling demonstrates that the StreamIt programs must be modified to take advantage of the core composition.
+This information corroberates with the data seen in Figure~\ref{fig:fmunroll}; it presents a unique case where the effect of core composition is important enough to change the dominant performance enhancer.
+Thus loop unrolling demonstrates that the StreamIt programs must be modified to take advantage of the core composition.
 
-Overall, in the StreamIt programs, multi-threading is the prevalent leader of performance.
+Overall the StreamIt programs demonstrate that multi-threading is the prevalent leader of performance, even with unrolling turned on.
 This is natural as StreamIt applications are naturally geared towards TLP as most programs have at least one SplitJoin as seen in the Table~\ref{tab:splitjoin} which gives the number of split-joins per benchmark.
 Benchmarks with SplitJoins will naturally benefit from splitting the program into threads~\cite{thiesStreamit2010}.
 %Make sure this is 100% true but as far as I remember this is the case
 Those that do not feature SplitJoins can still be parallelised by splitting a Pipeline into multiple parts.
 For example, benchmark \bench{FIR} features no SplitJoins, yet splitting the Pipeline in 2 will result in a 1.40x speedup.
 However, it is important to note that whilst finding the optimal thread mapping may result in higher performance improvements than finding the optimal composition for a single thread, the best performance is always obtained through a combination of both optimizations.
-For cases such as \bench{BeamFormer} the optimal pairing results in a 1.8x speedup compared to simply finding the best multit-threaded version, whilst on average, the optimal combination leads to a 1.5x performance increase compared to only multithreading.
+For cases such as \bench{BeamFormer} the optimal pairing results in a 1.8x speedup compared to simply finding the best multit-threaded version.
+On average, the optimal combination leads to a 1.5x performance increase compared to only multithreading.
 
 \subsection{Summary}
 This section demonstrated that each parameter has a large effect on the performance of the workload.
