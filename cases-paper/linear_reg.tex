@@ -31,8 +31,14 @@ The following equation represents the trained linear model which can be used to 
 
 For instance, if at runtime an average block size of 6 instructions, and 77\%, 1\% and 18\% of integer, floating point and load operations, respectively, then the predicted value will be 2.092.
 Rounded up to the nearest integer value, 2, the optimal number of cores predicted will, therefore, be 4.
+
 As can be seen, the largest weight is on the percentage of loads operations.
-This is due to the fact that loads can be fired independently to the Load-Store Queue.
+This is due to different reasons, mainly execution time and the fact that Load-Store Queues are fused.
+When it comes to execution time, loads may take from 3 to 128 cycles depending on whether or not it is a cache miss or hit.
+Whether it is a cache hit or miss, a block that takes longer to execute will often minimize the \textit{SynchronizationCost} penalty.
+A block composed mainly of integer or floating point operations will often result in shorter execution rates; thus may execute faster, making it harder for large logical cores to improve performance.
+More discussion on how the time it takes to execute a block influences the performance of LCs is discussed in Chapter~\ref{chp3}.
+The other reason loads are prefered is due to the fact that loads can be fired independently to the Load-Store Queue.
 Unlike stores that depend on previous memory instructions blocks being committed, loads can be fired with less overhead.
 As data can be speculatively fetched, loads instructions can receive data from other cores before the data is stored, speeding up the load instruction.
 By increasing the core count on load heavy blocks this will improve performance more reliably due to cores being able to issue loads in parallel.
