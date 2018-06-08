@@ -1,27 +1,3 @@
-\begin{figure}[t]
-\lstset{language=C,numbersep=4pt,basicstyle=\small}
-\begin{lstlisting}
-for(int i = 0; i < 1000; i++)
-  for(int j = 0; j < 1000; j++)
-     for(int k = 0;k < 5; k++)
-         a[i][j] = a[i][j] * b[k][j];
-\end{lstlisting}
-\vspace*{-5mm}
-\caption{Example of an inner-most loop which should be completely unrolled.}
-\label{lst:small}
-\lstset{language=C,numbersep=4pt,basicstyle=\small}
-\begin{lstlisting}
-for(int i = 0; i < 1000; i++)
-  for(int j = 0; j < 1000; j++)
-      a[i][j] = a[i][j-1] 
-                       * b[i][j];
-\end{lstlisting}
-\vspace*{-5mm}
-\caption{Example of a data dependency which can be removed by interchanging the loops.}
-\label{lst:dep}
-\vspace{9mm}
-\end{figure}
-
 This section describes optimizations focused on reducing control flow and expanding block sizes which is necessary for high performance as seen in section~\ref{sec:lim_study}.
 
 \subsection{Loop Unrolling}
@@ -36,6 +12,30 @@ Going above this threshold leads to creating a new block which will put a strain
 Another issue is that unrolling loops with conditional statements may not help improve the size of the block as the conditional branches might still segment the new blocks.
 So these loops should not be unrolled.
 
+\begin{figure}[t]
+\lstset{language=C,numbersep=4pt,basicstyle=\small}
+\begin{lstlisting}
+for(int i = 0; i < 1000; i++)
+  for(int j = 0; j < 1000; j++)
+     for(int k = 0;k < 5; k++)
+         a[i][j] = a[i][j] * b[k][j];
+\end{lstlisting}
+\caption{Example of an inner-most loop which should be completely unrolled.}
+\end{figure}
+
+\begin{figure}[t]
+\label{lst:small}
+
+\lstset{language=C,numbersep=4pt,basicstyle=\small}
+\begin{lstlisting}
+for(int i = 0; i < 1000; i++)
+  for(int j = 0; j < 1000; j++)
+      a[i][j] = a[i][j-1] 
+                       * b[i][j];
+\end{lstlisting}
+\caption{Example of a data dependency which can be removed by interchanging the loops.}
+\label{lst:dep}
+\end{figure}
 
 
 \subsection{Loop Interchange}
