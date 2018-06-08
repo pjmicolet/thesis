@@ -23,7 +23,7 @@ The training consists of finding the weights that minimize the error when predic
 Since only core configurations which use a power of two number of cores are considered, the linear model is built to predict the logarithm (base 2) of the number of cores.
 The prediction is rounded up to the nearest integer in the interval $[0,4]$.
 The following equation represents the trained linear model which can be used to make prediction:
-\vspace{-1mm}
+
 \begin{align*}
   log_2(\textbf{\#cores}) = & -7.7\ +\ 0.028 \cdot \textbf{avgBlkSze}\ +\ 0.075 \cdot \textbf{\%int\_ops}\ +\\
  &0.069 \cdot \textbf{\%fp\_ops}\ +\ 0.21 \cdot \textbf{\%ld\_ops}
@@ -37,14 +37,12 @@ Unlike stores that depend on previous memory instructions blocks being committed
 As data can be speculatively fetched, loads instructions can receive data from other cores before the data is stored, speeding up the load instruction.
 By increasing the core count on load heavy blocks this will improve performance more reliably due to cores being able to issue loads in parallel.
 
-\begin{figure*}[t]
+\begin{figure}[t]
     \centering
 	\includegraphics[width=1\textwidth]{cases-paper/graphics/results/lr_speed2.pdf}
-\vspace*{-8mm}
     \caption{Performance results for maximizing speed for the SD-VBS benchmarks using the linear regressor (LR) model.}% For Speedup, higher means better, for energy lower is better.}
     \label{fig:speedlr}
-\vspace{5mm}
-\end{figure*}
+\end{figure}
 
 \subsection{Results}
 
