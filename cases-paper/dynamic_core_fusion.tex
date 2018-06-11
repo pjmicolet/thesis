@@ -1,4 +1,19 @@
 
+\begin{figure}
+     \centering
+     \subfloat[][Disparity]{\includegraphics[width=0.5\textwidth]{cases-paper/graphics/Pareto/DispN3.pdf}\vspace*{-4mm}\label{subfig:disp}}
+     \subfloat[][Localization]{\includegraphics[width=0.5\textwidth]{cases-paper/graphics/Pareto/LocN3.pdf}\vspace*{-4mm}\label{subfig:loc}}\
+     \subfloat[][MSER]{\includegraphics[width=0.5\textwidth]{cases-paper/graphics/Pareto/MSERN3.pdf}\label{subfig:mser}}
+     \subfloat[][Multi\_Ncut]{\includegraphics[width=0.5\textwidth]{cases-paper/graphics/Pareto/MultiN3.pdf}\label{subfig:mult}}\
+     \subfloat[][Sift]{\includegraphics[width=0.5\textwidth]{cases-paper/graphics/Pareto/SiftN3.pdf}\label{subfig:sift}}
+     \subfloat[][Stitch]{\includegraphics[width=0.5\textwidth]{cases-paper/graphics/Pareto/StitchN3.pdf}\label{subfig:stitch}}\
+     \subfloat[][SVM]{\includegraphics[width=0.5\textwidth]{cases-paper/graphics/Pareto/SVMN3.pdf}\label{subfig:svm}}
+     \subfloat[][Texture\_Synthesis]{\includegraphics[width=0.5\textwidth]{cases-paper/graphics/Pareto/TextN3.pdf}\label{subfig:text}}\\
+     \subfloat[][Tracking]{\includegraphics[width=0.5\textwidth]{cases-paper/graphics/Pareto/TrackingN3.pdf}\label{subfig:track}}
+     \caption{Time (x-axis) vs. Energy (y-axis) tradeoffs using Static and Dynamic Composition Schemes.}
+     \label{fig:paretos}
+\end{figure}
+
 Having studied the behavior of the program under a fix number of cores, the impact of varying the number of fused cores throughout program execution is studied.
 The section first describe how the traces are generated for the dynamic core fusion schemes.
 Before the analysis two types of static core fusion are defined:
@@ -33,6 +48,14 @@ When using the dynamic scheme, it is clear that energy consumption increases at 
 In this case the number of cores is adapted to the current program phase, using just enough cores to maintain high performance without wasting energy.
 
 
+\begin{figure}
+    \centering
+	\includegraphics[width=1\textwidth]{cases-paper/graphics/results/speed_bars2.pdf}
+    \caption{Maximizing speed for all the SD-VBS benchmarks. For Speedup, higher means better, for Energy, lower is better.}
+    \label{fig:speedres}
+	\vspace{1em}
+\end{figure}
+
 \subsection{Optimizing for Speed} \label{sec:dyn:speed}
 
 In this section the dynamic scheme is defined to be one that matches the same speed performance as the fastest static core fusion for the benchmark: \textbf{DSpeed}.
@@ -56,15 +79,14 @@ For the \bm{Localization} benchmark, the \textbf{DSpeed} matches the performance
 Overall, by using \textbf{DSpeed}, the energy consumption can be reduced by 42\% compared to both SB and SS without impacting performance.
 This illustrates the greatest advantage of using a DMP since the number of fused core can be adapted continuously depending on the amount of ILP available for each phase.
 
+
 \begin{figure}
     \centering
-	\includegraphics[width=1\textwidth]{cases-paper/graphics/results/speed_bars2.pdf}
-    \caption{Maximizing speed for all the SD-VBS benchmarks. For Speedup, higher means better, for Energy, lower is better.}
-    \label{fig:speedres}
-	\vspace{5mm}
+    \includegraphics[width=1\textwidth]{cases-paper/graphics/results/edd_bars2.pdf}
+    \caption{Maximizing efficiency for all the SD-VBS benchmarks. For Speedup, higher means better, for Energy, lower is better.}
+    \label{fig:effres}
+	\vspace{1em}
 \end{figure}
-%
-
 \subsection{Optimizing for Efficiency}
 
 This section defines the dynamic scheme to maximize the efficiency metric EDD, which is defined as $Energy \times Delay \times Delay$ where Delay is the execution time.
@@ -81,12 +103,6 @@ When comparing to SS \textbf{DEff} is 1.75x times faster for only 19\% more ener
 Overall, \textbf{DEff} results in a 1.25x speed increase compared to SB and SS whilst consuming 25\% less energy than SS.
 This shows how dynamic core fusion's flexibility allows us to get better speedups whilst not drastically increasing the energy consumption.
 
-\begin{figure}
-    \centering
-    \includegraphics[width=1\textwidth]{cases-paper/graphics/results/edd_bars2.pdf}
-    \caption{Maximizing efficiency for all the SD-VBS benchmarks. For Speedup, higher means better, for Energy, lower is better.}
-    \label{fig:effres}
-\end{figure}
 
 
 

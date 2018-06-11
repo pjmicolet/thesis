@@ -87,6 +87,8 @@ Since optimizations change the total number of instructions, the actual speedup 
 As can be seen, benchmarks \bm{MSER} and \bm{Multi-NCut} do not perform any differently.
 This is due to the fact that none of these optimizations can be successfully applied on these benchmarks.
 For the other benchmarks there is a significant improvements of up to 12$\times$ for \bm{Sift} when the optimizations are applied.
+It is important to note that, whilst often the increase in IPC correlates with the speedup, this is not always the case.
+In these situations, this is due to the fact that some of the optimisations also reduced the amount of computation required to complete the program; this is the case for \bm{Localization} and \bm{Sift}.
 
 \subsection{Summary}
 

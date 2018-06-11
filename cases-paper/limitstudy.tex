@@ -7,7 +7,7 @@ The two major obstacles to gaining performance with core fusion are branch predi
 As discussed in the background chapter, DMPs accelerate a single thread by executing instructions from the same thread speculatively across several fused cores. 
 Similarly, EDGE DMPs accelerate a single thread by speculatively executing instruction blocks~\cite{putnam2010e2}.
 Core fusion puts a strain on the branch predictor since efficiently using the fused cores depends on the misprediction rate; this is due to the standard fetching scheme deployed by the DMP.
-In a core composition, the fetching scheme dictates that a core must fetch blocks until all its lanes are full; once this requirement is met, the following block will then be sent to the next block in the composition.
+In a core composition, the fetching scheme dictates that a core must fetch blocks until its instruction window is full; once this requirement is met, the following block will then be sent to the next block in the composition.
 The branch predictor has to meet a different accuracy requirement depending on the size of both the LC and average size of a block being executed.
 Given a Logical Core \textit{LC} of size \textit{i}, denoted \textit{$LC_i$}, the minimum branch prediction requirement can be determined using Formula~\ref{form:minpred} where \textit{BlocksInFlight} represents the number of total blocks being executed on the \textit{LC}.
 \begin{equation}\label{form:minpred}
@@ -34,9 +34,8 @@ Given a certain number of cores, if the prediction accuracy is under the limits 
 \end{figure}
 \subsection{Synchronization Cost}
 
-
 For a program to execute correctly, the cores in a logical core (LC) must communicate when they have finished executing a block. 
-This ensures that the cores fetch blocks from the correct control paths and update memory consistently.
+This ensures that the cores fetch blocks from the correct control paths and update memory and registers consistently.
 A core may have to wait for other cores to commit before fetching a new block. 
 The worst-case estimate of this stall is defined as the \textbf{Synchronization Cost}.
 
@@ -59,7 +58,6 @@ SyncCost_i = \frac{\sum_{n=0}^{i-1}\left(AvBlocksInFlight \right) \times n }{i}
     \label{fig:sync_cost}
 	\vspace{1em}
 \end{figure}
-
 
 Figure~\ref{fig:sync_cost} shows how many cycles the Synchronization Cost will be for a given LC and average block size.
 The larger the block size the lower the Synchronization Cost is since cores fetch fewer blocks and wait less for other fused cores to finish committing.
