@@ -4,9 +4,10 @@ The two major obstacles to gaining performance with core fusion are branch predi
 
 \subsection{Branch Prediction}
 
-As discussed in section~\ref{sect:background}, DMPs accelerate a single thread by executing instructions from the thread speculatively across several fused cores. 
-Similarly, EDGE DMPs accelerate a single thread by speculatively executing instruction blocks~\cite{pricopi2012bahurupi, putnam2010e2}.
-Fusion puts a strain on the branch predictor since efficiently using the fused cores depends on the misprediction rate.
+As discussed in the background chapter, DMPs accelerate a single thread by executing instructions from the same thread speculatively across several fused cores. 
+Similarly, EDGE DMPs accelerate a single thread by speculatively executing instruction blocks~\cite{putnam2010e2}.
+Core fusion puts a strain on the branch predictor since efficiently using the fused cores depends on the misprediction rate; this is due to the standard fetching scheme deployed by the DMP.
+In a core composition, the fetching scheme dictates that a core must fetch blocks until all its lanes are full; once this requirement is met, the following block will then be sent to the next block in the composition.
 The branch predictor has to meet a different accuracy requirement depending on the size of both the LC and average size of a block being executed.
 Given a Logical Core \textit{LC} of size \textit{i}, denoted \textit{$LC_i$}, the minimum branch prediction requirement can be determined using Formula~\ref{form:minpred} where \textit{BlocksInFlight} represents the number of total blocks being executed on the \textit{LC}.
 \begin{equation}\label{form:minpred}
@@ -56,6 +57,7 @@ SyncCost_i = \frac{\sum_{n=0}^{i-1}\left(AvBlocksInFlight \right) \times n }{i}
 
     \caption{Synchronization Cost in cycles for a given number of cores in a composition and an average block size.} %Each core has 4 lanes and each lane can fetch a block of up to 32 instructions. Lower is better.}
     \label{fig:sync_cost}
+	\vspace{1em}
 \end{figure}
 
 

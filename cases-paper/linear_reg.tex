@@ -3,18 +3,11 @@ The main idea is to monitor at runtime some performance counters and make a deci
 For this purpose, a model is trained offline using the data collected and presented earlier in the paper.
 Once trained, the model predicts the optimal number of cores based on the performance counters from the previous time interval and reconfiguration occurs if it is different from the current number of cores.
 
-\begin{figure}[t]
-    \centering
-	\includegraphics[width=0.7\textwidth]{cases-paper/graphics/other/model2.pdf}
-    \caption{Linear Model.}
-    \label{fig:linmod}
-\end{figure}
-
 \subsection{Model}
 
 The model is linear regressor which makes predictions using a simple weighted sum of the input features, which is very lightweight and easy to integrate in hardware.
 The model is trained offline using the traces gathered from the prior analysis for the \textbf{DSpeed} scenario which maximizes energy savings while maintaining performance.
-Figure~\ref{linmod} is a graphical representation of the linear model used in this chapter.
+Figure~\ref{fig:linmod} is a graphical representation of the linear model used in this chapter.
 The dataset consists of a set of four input features (average block size, and percentage of integer, floating point and load operations) and the optimal number of cores for each time tick for each program.
 These features were chosen as they are easy to extract from the hardware.
 To speedup the learning process, a single data point is created per phase, averaging the features of all the ticks in a phase, resulting in a total of 34 pairs of optimal core number and features.
@@ -28,6 +21,14 @@ The following equation represents the trained linear model which can be used to 
   log_2(\textbf{\#cores}) = & -7.7\ +\ 0.028 \cdot \textbf{avgBlkSze}\ +\ 0.075 \cdot \textbf{\%int\_ops}\ +\\
  &0.069 \cdot \textbf{\%fp\_ops}\ +\ 0.21 \cdot \textbf{\%ld\_ops}
 \end{align*}
+
+\begin{figure}[t]
+    \centering
+	\includegraphics[width=0.7\textwidth]{cases-paper/graphics/other/model2.pdf}
+    \caption{Linear Model.}
+    \label{fig:linmod}
+	\vspace{1em}
+\end{figure}
 
 For instance, if at runtime an average block size of 6 instructions, and 77\%, 1\% and 18\% of integer, floating point and load operations, respectively, then the predicted value will be 2.092.
 Rounded up to the nearest integer value, 2, the optimal number of cores predicted will, therefore, be 4.

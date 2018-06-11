@@ -56,7 +56,7 @@ According to Figure~\ref{fig:corr} the highest correlating value is Number of Di
 There are very little variables that highly correlate beyond Number of Distinct Multiplicities.
 A high number of distinct multiplicities implies that the StreamIt application features an important amount of filters with different execution rates.
 This means that certain filters may be local bottlenecks in a Pipeline for example.
-When the number of distinct multiplicities is high this requires more threads to group filters with similar multiplicities together.
+Multithreading the pipelines with local bottlenecks will help alleviate the problem of multiple distinct multiplicities.
 For example, the benchmark \bench{ChannelVocoder} only has 66\% of its filters sharing the same average multiplicity of 50~\cite{theis2010empericalcharstreamit}, with a minimum multiplicity of 1. 
 The benchmark features a single SplitJoin yet when recalling section \ref{sec:streamit:dse}'s Figure~\ref{fig:overviewhist} \bench{ChannelVocoder}'s performance is greatly improved via multi-threading.
 The number of threads also depends on certain structural features such as Pipelines, SplitJoins and number of Filters.
