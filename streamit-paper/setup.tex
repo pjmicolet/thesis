@@ -1,5 +1,5 @@
 This section presents the design exploration of a set of streaming applications being executed on a DMP.
-The section describes how changing the thread mapping and core composition affect the benchmarks and what we can learn from this.
+The section describes how changing the thread mapping and core composition affect the benchmarks and what can be learned from this.
 In addition, the impact of loop unrolling and how it helps exploit larger fused cores is investigated.
 
 \subsection{Overview}
@@ -24,41 +24,6 @@ This model decides on the number of cores each thread will have.
 This is achieved by estimating the amount of Instruction Level Parallelism (ILP) that can be possibly extracted in each thread and by determining how many physical cores should be fused for that thread.
 Finally, the processor is reconfigured to fuse the requested resources ahead of time and execute the partitioned program.
 
-
-\subsection{Dynamic Multicore Processor}
-
-%In this chapter the Dynamic Multicore Processor used for the research is based on an Explicit Data Graph Execution (EDGE) Instruction Set Architecture that resembles~\cite{sibi2014}.
-%This differs from other DMPs such as CoreFusion, WidGET and Shared Architecture~\cite{ipek2007CoreFusion,Watanabe2010Widget,zhou2014sharingarch} which utilize a CISC/RISC instruction set.
-To evaluate the work a customizable cycle-level simulator verified against RTL is used.
-The simulator is highly configurable, allowing the modelling of a variety of parameters such as the number of cores, details of the memory hierarchy and synchronisation schemes.
-For the experiments in this chapter a 16 core dual issue configuration with 4 lanes per core, 16 KB private L1 caches and a 2 MB shared L2 is used.
-
-\begin{figure}
-    \centering
-    \includegraphics[width=1\textwidth]{streamit-paper/graphics/streamit_types.pdf}
-    \caption{Visual representation of the three different StreamIt structures.}
-    \label{fig:streamittypes}
-\end{figure}
-
-\subsection{StreamIt Programming Language}
-StreamIt~\cite{theis2002streamit} is a high-level synchronous dataflow streaming programming language that defines programs as directed graphs.
-StreamIt offers an elegant way of describing streaming applications, abstracting away how infinite data streams are managed to allow the programmer to solely focus on how the data must be treated.
-A StreamIt program is composed of functions - called \textit{Filters} - which operate on streams of data.
-Filters declare a certain amount of data which is to be consumed and produced per schedule.
-Filters can be connected via \textit{Pipelines}, \textit{SplitJoins} or \textit{Feedback Loops} to create the streaming application.
-
-Figure~\ref{fig:streamittypes} displays the different methods of connections in detail.
-Pipelines (Figure~\ref{fig:streamittypes}(a)) represent a sequence of connecting filters operating on the same stream, each filter in the stream will operate on the output of the previous filter.
-In a SplitJoin (Figure~\ref{fig:streamittypes}(c)), data from the stream is passed through a split filter and is either duplicated and passed on in parallel to the filters or distributed amongst the filters in a round-robin fashion.
-The output of all the filters in a SplitJoin are then concatenated in a round-robin fashion through a joiner filter.
-Finally a Feedback Loop (Figure~\ref{fig:streamittypes}(b)) provides a way for filters to operate on their outputs.
-The resulting program written in StreamIt represents a graph where the nodes are filters and their edges represent the incoming and outgoing data streams.
-
-This chapter explores 15 StreamIt benchmark all taken from the official StreamIt repository.
-To include a variety of situations, 10 of the StreamIt benchmarks chosen feature SplitJoins which leads to task-based multithreading whilst 5 do not.
-The 5 applications which do not feature SplitJoins can still be split into threads and will operate in a pipelined fashion.
-For each benchmark the default inputs provided in the repository~\cite{streamitrepo} are used and the default iteration count is set to 10. 
-
 \subsection{Design Space}
 
 \begin{table}
@@ -76,6 +41,11 @@ For each benchmark the default inputs provided in the repository~\cite{streamitr
   \caption{Design space considered per application.}
   \label{tab:space}
 \end{table}
+
+This chapter explores 15 StreamIt benchmark all taken from the official StreamIt repository.
+To include a variety of situations, 10 of the StreamIt benchmarks chosen feature SplitJoins which leads to task-based multithreading whilst 5 do not.
+The 5 applications which do not feature SplitJoins can still be split into threads and will operate in a pipelined fashion.
+For each benchmark the default inputs provided in the repository~\cite{streamitrepo} are used and the default iteration count is set to 10. 
 
 The parameters and size of the space are given in table~\ref{tab:space}.
 In this study all 16 cores are utilised; Core 0 is assigned to the main thread and for runtime management. 
@@ -111,7 +81,7 @@ The results demonstrate that the sample space selected is representative of the 
 
 Figure~\ref{fig:prox} shows, for each of the benchmarks, the proximity to the statistical best when increasing the sub-sample space given a maximal uncertainty of 5\%  (\ie minimum 95\% confidence).
 As can be seen by the plain line, the model shows that the best sample point is actually within 5\% (0.05 proximity) of the best for all benchmark.
-To further prove that the statistical model based on the Stopping Criterion is indeed accurate, an exhaustive exploration of five benchmarks was conducted.
+To further prove that the statistical model based on the Stopping Criterion is indeed accurate, an exhaustive exploration of five benchmarks is conducted.
 The dotted line in figure~\ref{fig:prox} shows the actual proximity to the best for \bench{Audiobeam}, \bench{Beamformer}, \bench{BitonicSort}, \bench{CFAR} and \bench{FMRadio}.
-As can be seen after 1316 samples, the performance we achieve is actually very similar to the one predicted by the statistical model, hence confirming prior work~\cite{vuduc2003AutomaticPerf}.
+As can be seen after 1316 samples, the achieved performance is actually very similar to the one predicted by the statistical model, hence confirming prior work~\cite{vuduc2003AutomaticPerf}.
 To summarize, it can be concluded that the best point found in the sample space of 1,316 points is at least within 5\% of the real best in the exhaustive space with 95\% confidence.

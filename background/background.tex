@@ -214,6 +214,28 @@ Features of streaming programming languages make them an ideal language for targ
 The explicit data communication between the different tasks in the program, the ability to estimate the amount of work performed in each task and information about data rates between tasks allows the compiler to easily generate a multi-threaded application that can run on a dynamic multicore processor.
 However, the main challenge consists of deciding how to map the different tasks onto threads and how to allocate the right amount of resources to maximize performance.
 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{streamit-paper/graphics/streamit_types.pdf}
+    \caption{Visual representation of the three different StreamIt structures.}
+    \label{fig:streamittypes}
+\end{figure}
+
+\subsection{StreamIt Programming Language}
+StreamIt~\cite{theis2002streamit} is a high-level synchronous dataflow streaming programming language that defines programs as directed graphs.
+StreamIt offers an elegant way of describing streaming applications, abstracting away how infinite data streams are managed to allow the programmer to solely focus on how the data must be treated.
+A StreamIt program is composed of functions - called \textit{Filters} - which operate on streams of data.
+Filters declare a certain amount of data which is to be consumed and produced per schedule.
+Filters can be connected via \textit{Pipelines}, \textit{SplitJoins} or \textit{Feedback Loops} to create the streaming application.
+
+Figure~\ref{fig:streamittypes} displays the different methods of connections in detail.
+Pipelines (Figure~\ref{fig:streamittypes}(a)) represent a sequence of connecting filters operating on the same stream, each filter in the stream will operate on the output of the previous filter.
+In a SplitJoin (Figure~\ref{fig:streamittypes}(c)), data from the stream is passed through a split filter and is either duplicated and passed on in parallel to the filters or distributed amongst the filters in a round-robin fashion.
+The output of all the filters in a SplitJoin are then concatenated in a round-robin fashion through a joiner filter.
+Finally a Feedback Loop (Figure~\ref{fig:streamittypes}(b)) provides a way for filters to operate on their outputs.
+The resulting program written in StreamIt represents a graph where the nodes are filters and their edges represent the incoming and outgoing data streams.
+
 \section{Machine-learning guided optimisations}
 
 Using machine learning to guide optimisations has been a popular area of research as of late~\cite{cummins2017pact,wang2018ml,dubach13dynamic}.

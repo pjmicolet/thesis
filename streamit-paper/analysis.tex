@@ -34,10 +34,10 @@ Whilst this flexibility is advantageous, choosing the right amount of cores for 
 Figure~\ref{fig:audiototal} shows how threading and core-compositions affect performance for the \bench{Audiobeam} benchmark.
 The curves represent the density distribution for different core compositions as a function of the number of threads.
 The right hand side Y-axis represents the number of threads present in the current version of the benchmark whilst the left Y-Axis represents the density normalized by the total number of points in the design space.
-For each of the threaded versions the benchmark was ran using 100 different core-compositions.
-The density curve for thread 15 is a single point as there exists only a single composition, so a line was drawn to represent where that point lies.
+For each of the threaded versions the benchmark runs using 100 different core-compositions.
+The density curve for thread 15 is a single point as there exists only a single composition, so a line is drawn to represent where that point lies.
 
-The variance of each of the curves represents the influence of composition on the \bench{Audiobeam}'s performance for a given number of threads.
+The width of each of the curves represents the influence of composition on the \bench{Audiobeam}'s performance for a given number of threads.
 For this benchmark the impact of core composition is actually very large for the best performing number of threads (1--5).
 For example, for two threads, the best configuration can lead to a 1.5x speedup compared to the worst point.
 Interestingly, as more threads are used, performance worsens, echoing the results shown in the previous section.
@@ -98,7 +98,7 @@ Figure~\ref{fig:overviewhist} characterizes how much of a performance increase i
 For each benchmark, the \textit{THREAD} bar represents the maximal speedup obtained by dividing the program into threads without fusing cores.
 The \textit{CORE} bar represents the best speedup when the benchmark is executed in a single thread and fuse cores.
 \textit{BOTH} represents the best speedup obtained for each benchmark using a combination of \textit{THREAD} and \textit{CORE}.
-Finally, for each benchmark, the results were obtained for both an unrolled and not unrolled version to compare how the compiler optimisation affects performance.
+Finally, for each benchmark, the results are obtained for both an unrolled and not unrolled version to compare how the compiler optimisation affects performance.
 Figure~\ref{fig:overviewhist} shows that when loops are not unrolled, composing cores will not greatly improve performance.
 This is due to the fact that the amount of ILP found in filters without the unrolling is too little for there to be any benefit of composing cores.
 

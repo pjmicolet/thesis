@@ -1,0 +1,10 @@
+\section{Setup}
+
+
+\subsection{Dynamic Multicore Processor Simulator}
+
+%In this chapter the Dynamic Multicore Processor used for the research is based on an Explicit Data Graph Execution (EDGE) Instruction Set Architecture that resembles~\cite{sibi2014}.
+%This differs from other DMPs such as CoreFusion, WidGET and Shared Architecture~\cite{ipek2007CoreFusion,Watanabe2010Widget,zhou2014sharingarch} which utilize a CISC/RISC instruction set.
+To evaluate the work a customizable cycle-level simulator verified against RTL is used.
+The simulator is highly configurable, allowing the modelling of a variety of parameters such as the number of cores, details of the memory hierarchy and synchronisation schemes.
+For the experiments in this chapter a 16 core dual issue configuration with 4 lanes per core, 16 KB private L1 caches and a 2 MB shared L2 is used.

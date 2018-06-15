@@ -14,7 +14,7 @@ To overcome this problem generating synthetic benchmarks can be a solution~\cite
 Thus synthetic StreamIt benchmarks are generated and statistics are gathered from them in a similar style as in~\cite{wang2013partitionstreamit}.
 To ensure that the synthetic benchmarks are representative of realistic benchmarks they are created using filters from a set of micro-kernels found in some StreamIt applications.
 30 different possible filters with different incoming and outgoing rates and different inputs and outputs types are used to increase the variety of the dataset.
-To ensure that the synthetic benchmarks were similar to real benchmarks, the total number of filters and split joins are within the average of the realistic benchmarks.
+To ensure that the synthetic benchmarks are similar to real benchmarks, the total number of filters and split joins are within the average of the realistic benchmarks.
 
 For each generated application, 15 different threaded versions are generated.
 Each of these versions is ran using a single core per thread and the cycle count is recorded.
@@ -22,8 +22,8 @@ This was repeated for 1000 unique randomly generated applications and record the
 
 Once the benchmarks have been generated, the next step consists of gathering features for each applications.
 In order to build the two machine learning models an initial set of over 50 features are extracted from StreamIt programs.
-These features were extracted using pre-existing analytical tools within StreamIt and some counters added specifically for this chapter.
-As 50 features may not necessarily contain any valuable information, the features selected for the models were determine through correlation analysis.
+These features are extracted using pre-existing analytical tools within StreamIt and some counters added specifically for this chapter.
+As 50 features may not necessarily contain any valuable information, the features selected for the models are determined through correlation analysis.
 %In this section, when discussing correlation we specifically look at which variables correlate with the optimal number of threads.
 
 \subsection{Correlation Analysis and kNN model}

@@ -11,7 +11,7 @@ This section describes the performance achieved by the model when predicting the
 Leave-one-out cross-validation is used for testing the linear model.
 This means that when testing the model on one application, this application is removed from the training set, the model is trained with the remaining application and finally the model is tested on the application; this process is repeated for each application.
 This is standard methodology in the machine-learning community ensuring that the training data is never used for testing.
-For the kNN model, the training data consists of all the generated synthetic benchmarks and it is only tested on the real StreamIt applications as they were not used for training.
+For the kNN model, the training data consists of all the generated synthetic benchmarks and it is only tested on the real StreamIt applications as they are not used for training.
 To obtain the speedup the performance of the machine learning based result are compared to the best from the sample space to running the StreamIt benchmark on a single core, single thread, using O2 compiler optimisations. 
 
 \subsection{Evaluation}

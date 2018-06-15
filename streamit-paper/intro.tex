@@ -1,16 +1,3 @@
-Multicore processors are now common in all computing systems ranging from mobile devices to data centers.
-As advances in single threaded performance have slowed, multicore processors have offered a way to use the increasing numbers of transistors available.
-However, designing processors that scale to a large number of cores is difficult and a shift towards tiled architecture seems inevitable.
-A tiled architecture such as Tilera~\cite{bell2008tile} or Raw~\cite{waingold1997raw} is composed of smaller simpler cores that are placed on a regular grid.
-This improves hardware scalability and enables multi-threaded applications to exploit the large core count.
-
-% Tiled architecture problem: cores too weak => need reconfiguration
-However, workloads that require high single threaded performance are penalized by the simple nature of each core~\cite{eyerman2010amdahl}.
-One solution to this problem is heterogeneous multicores which utilize cores with different levels of power and performance.
-Although heterogeneous multicores are common place in mobile devices, they have little reconfiguration or adaptive capabilities (\eg only two type of cores available for ARM big.LITTLE).
-Dynamic multicore processors offer a solution to this problem by allowing cores to compose (or fuse) together~\cite{ipek2007CoreFusion} into larger logical cores to accelerate single threads.
-This produces ``on-demand'' heterogeneity where cores are grouped to adapt to the workload's demand.
-
 % Software point of view: the problem
 While dynamic multicore processors sound like a promising approach, they come with their own challenges, particularly on the software side~\cite{wells2009needfordmc}.
 In most parallel programming models such as OpenMP, the user is directly responsible for mapping parallelism to the hardware; a difficult and time consuming task.
@@ -44,6 +31,6 @@ The main contributions of this chapter are:
 
 The rest of the chapter is structured as follow.
 Section~\ref{sec:motiviation} motivates this work by showing the complexity of the design space.
-Section~\ref{sec:setup} describes our methodology and section~\ref{sec:streamit:dse} presents an in-depth analysis of the design space.
-Section~\ref{sec:ml} develops a machine-learning model to predict the best thread mapping and core composition while Section~\ref{sec:results} shows the performance achieved by our model.
+Section~\ref{sec:setup} describes the methodology and section~\ref{sec:streamit:dse} presents an in-depth analysis of the design space.
+Section~\ref{sec:ml} develops a machine-learning model to predict the best thread mapping and core composition while Section~\ref{sec:results} shows the performance achieved by the model.
 Section~\ref{sec:conclusion} concludes this chapter.
