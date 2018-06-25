@@ -1,15 +1,26 @@
 % Software point of view: the problem
-While dynamic multicore processors sound like a promising approach, they come with their own challenges, particularly on the software side~\cite{wells2009needfordmc}.
+A Dynamic Multicore Processor's ability to reconfigure itself allows it to adapt to any program it executes.
+Whilst being able to reconfigure hardware sounds like a promising approach to optimising execution, DMPs come with their own challenges when attempting to finding a good configuration.
+Given a program that can be parallelised, a DMP can either be configured to run a high amount of threads on small logical cores, a small number of threads on large logical cores or a heterogeneous mix of both large and small cores.
+Without deep knowledge of the architecture, knowing how to configure the processor can be a highly time consuming task.
+This can be further complicated if the programming model does not provide any insights on how the program may be partitioned in software.
+The problem can therefore be split into two distinct tasks.
+Firt, finding a programming model that makes software partitioning into threads explicit.
+Second, using information from both the hardware and software, automate the partitioning of both the software into threads, and the hardware into logical cores.
+
 In most parallel programming models such as OpenMP, the user is directly responsible for mapping parallelism to the hardware; a difficult and time consuming task.
-This problem is further exacerbated when hardware resources can be combined since programmers have to take into account the dynamic behavior of the architecture~\cite{bower2008impactd}.
+This is due to the fact that these models extend programming languages that do not consider parallelism as a defining design factor.
+On the other-hand dataflow programming models such as StreamIt~\cite{theis2002streamit} and Lime~\cite{auerbach2012lime} make data and paralleism a first class citizen.
+In dataflow languages, applications are expressed as data oriented graphs and --- ideally --- the compiler or runtime determines the mapping of parallelism onto the available hardware and controls the grouping of hardware resources.
+Thus using such a model can be a potential solution to the first part of the problem.
 
-% Solution for the software: data flow programming
-To solve this problem, this chapter demonstrates that there is a need to raise the programming abstraction and remove the burden of mapping parallelism from programmers.
-Dataflow programming models such as StreamIt~\cite{theis2002streamit} and Lime~\cite{auerbach2012lime} offer one part of the solution.
-Applications are expressed as dataflow graphs and --- ideally --- the compiler or runtime determines the mapping of parallelism onto the available hardware and controls the grouping of hardware resources.
 However, optimally mapping parallelism and managing hardware resources remains an open problem given the sheer complexity of the resulting design space.
+Given a 16 core DMP with up to 15 threads, a single program can have over 32,000 different configurations of thread to logical-core pairings.
+Rather than exhaustively searching the space, which is a very time consuming task, finding a way to automate the partitioning decision makes the use of DMPs more attractive.
+The number of program features that may influence how to partition dataflow programs is large, for example it could depend on the number of tasks, the parallelism made explicit by the language and/or different compiler optimisations.
+Therefore manually determining a set of heuristics to create a partitioning model is not recommended as it may discard information that was ignored by the designer.
+Instead, using a machine learning model can extract all the features that correlate the most with deciding a good partition and generate an appropriate model.
 
-% What we do: 1st an analysis
 In this chapter, an analysis of the design space is performed and shows the impact of modifying resources and thread mapping.
 This analysis is conducted using a set of StreamIt programs that are ran on a verified cycle-level simulator for a tiled reconfigurable architecture with support for core composition.
 A machine learning model is developed using the information gathered from the exploration.
@@ -20,11 +31,13 @@ The model matches, and even outperforms in some cases, the performance of the be
 
 % contributions
 The main contributions of this chapter are:
-\vspace{-1mm}
 \begin{itemize}
 \item An analysis of the co-design space of thread partitioning and core composition;
+\vspace{-1em}
 \item A study on the impact of a simple loop transformation on the optimal core composition;
+\vspace{-1em}
 \item A machine-learning model to determine the optimal core composition and thread partitioning;
+\vspace{-1em}
 \item An analysis of the most important static code features used by the model.
 \end{itemize}
 
@@ -34,3 +47,14 @@ Section~\ref{sec:motiviation} motivates this work by showing the complexity of t
 Section~\ref{sec:setup} describes the methodology and section~\ref{sec:streamit:dse} presents an in-depth analysis of the design space.
 Section~\ref{sec:ml} develops a machine-learning model to predict the best thread mapping and core composition while Section~\ref{sec:results} shows the performance achieved by the model.
 Section~\ref{sec:conclusion} concludes this chapter.
+
+%In most parallel programming models such as OpenMP, the user is directly responsible for mapping parallelism to the hardware; a difficult and time consuming task.
+%This problem is further exacerbated when hardware resources can be combined since programmers have to take into account the dynamic behavior of the architecture~\cite{bower2008impactd}.
+
+% Solution for the software: data flow programming
+%To solve this problem, this chapter demonstrates that there is a need to raise the programming abstraction and remove the burden of mapping parallelism from programmers.
+%Dataflow programming models such as StreamIt~\cite{theis2002streamit} and Lime~\cite{auerbach2012lime} offer one part of the solution.
+%Applications are expressed as dataflow graphs and --- ideally --- the compiler or runtime determines the mapping of parallelism onto the available hardware and controls the grouping of hardware resources.
+%However, optimally mapping parallelism and managing hardware resources remains an open problem given the sheer complexity of the resulting design space.
+
+% What we do: 1st an analysis
