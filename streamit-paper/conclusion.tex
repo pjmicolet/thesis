@@ -1,5 +1,12 @@
-In this chapter the problem of partitioning both software and hardware for a Dynamic Multicore Processor is presented.
-The chapter analyses a set of streaming workloads based on StreamIt, extracting features which highly influence both the required number of threads and core composition.
-Using this data a machine learning model is introduced which is able to determine how many threads a StreamIt application needs and pick an appropriate chip topology.
-The model predicts configurations close to the performance of the best design points from the sampled space.
- %By automating the decision of core composition we motivate the use of DMPs for accelerating applications without any involvement from the programmer.
+This chapter introduced the problem of partitioning both software and hardware for a Dynamic Multicore Processor.
+Given the ability to execute up to 15 threads, a DMP can have up to 32767 different configurations, making exhaustive search impossible.
+Furthermore, restricting the space to scenarios such as only using multithreading or homogeneous logical cores will have an impact on performance.
+Thus it is important to look at heterogeneous core-composition with multithreading to get the best performance.
+
+In order quickly find a good configuration, machine learning is used and a set of 15 StreamIt benchmarks are explored.
+By running each benchmark under 1300 different configurations, each benchmark was analysed to understand how much performance can be obtained through the best configuration.
+This chapter showed that, on average, finding the optimal configuration and using the appropriate loop optimisations can lead to a performance increase of 3x compared to running the program on a single core.
+
+Using the data gathered from the analysis, two models are created, one that predicts the number of threads via a k Nearest Neighbors model, whilst the other predicts the number of cores to fuse per thread using a linear regression.
+The two models are able to predict configurations close to the performance of the best design points from the sampled space; on average within 16\% of the best.
+This demonstrates that by analysing features of the programs, the decision of how to configure a dynamic multicore processor can be fully automated.
