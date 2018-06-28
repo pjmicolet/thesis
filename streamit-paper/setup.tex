@@ -65,12 +65,16 @@ Whilst SplitJoins often facilitate the decision of how to partition the programs
 The 5 applications which do not feature SplitJoins can still be split into threads and will operate in a pipelined fashion.
 For each benchmark the default inputs provided in the repository~\cite{streamitrepo} are used and the default iteration count is set to 10. 
 
-The parameters and size of the space are given in table~\ref{tab:space}.
-In this study all 16 cores are utilised; Core 0 is assigned to the main thread and for runtime management. 
+The parameters and size of the space are given in Table~\ref{tab:space}.
+In this study a 16 core DMP is used.
+Having 16 cores allows for a larger variety of configurations, this also represents a processor similar to a tiled embedded system such as Tilera or Raw.
+All cores in the DMP are utilised; Core 0 is assigned to the main thread and for runtime management.
 This leaves 15 cores available for each application.
 Each core is restricted to running only a single thread, as there is no context switching supported, which leads to a possible number of threads between 1 and 15.
+The core-composition is not used on the master core, leaving 15 physical cores to be distributed to each of the worker threads.
 Cores can be fused together to form a logical core with up to 15 physical cores, making the total number of cores assigned to a thread between 1 and 15.
-This leads to a total space size of 32,767 unique combination per benchmark as previously described in Section~\ref{sec:setup}.
+Of course, not all cores have to be assigned to a thread, in this case all remaining cores that aren't in a composition or a thread are turned off.
+Overal, this leads to a total space size of 32,767 unique combination per benchmark as previously described in Section~\ref{sec:setup}.
 
 \subsection{Sample Space}
 
