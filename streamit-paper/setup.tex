@@ -15,9 +15,9 @@ In addition, the impact of loop unrolling and how it helps exploit larger fused 
 Figure~\ref{fig:overview} presents the workflow of the system used in this chapter.
 First, the source-to-source StreamIt compiler is used to unroll loops as this is often beneficial when cores are composed as will be seen later in Section~\ref{sec:streamit:dse}.
 Then, static code features such as the program's graph structure are extracted from the StreamIt code.
-These features are used as an input to the first machine-learning model that determines the Thread Level Parallelism (TLP).
+These features are used as an input to the first machine-learning model that determines how many threads will be required based on an estimate of Thread Level Parallelism (TLP) found in the program.
 This information is used to partition the program into threads which is done by the StreamIt compiler which produces a C++ program using pthreads.
-This C++ program is then compiled using the compiler for EDGE.
+This C++ program is then compiled using the compiler for EDGE described in Chapter~\ref{ch:setup}.
 
 Then, a second machine-learning model is deployed which also analyzses static code features extracted from the SteamIt code.
 This model decides on the number of cores each thread will have.
@@ -36,33 +36,51 @@ Finally, the processor is reconfigured to fuse the requested resources ahead of 
       \# cores per thread & 1 -- 15 \\ \midrule
       \# sampled core compositions & 100 \\ 
       \# our sampled space & 1316 \\
-      \# total sample space & 32762 \\ \bottomrule
+      \# total sample space & 32767 \\ \bottomrule
     \end{tabular}
   \caption{Design space considered per application.}
   \label{tab:space}
 \end{table}
 
+\begin{table}[!htb]
+% The FFT need are variable
+  \small
+ \begin{tabular} { | l | l | l | l | l | }
+ \hline
+   \cellcolor[gray]{0.7}Audiobeam&  \cellcolor[gray]{0.7} Beamformer& \cellcolor[gray]{0.7}Bitonic-Sort  &  \cellcolor[gray]{0.7} BubbleSort &  \cellcolor[gray]{0.7}  CFAR\\ \hline
+  1 & 2 & 33 & 0 & 0 \\ \hline
+   \cellcolor[gray]{0.7}ChannelVocoder &  \cellcolor[gray]{0.7} FFT&  \cellcolor[gray]{0.7}FFT3 &  \cellcolor[gray]{0.7} FFT6&  \cellcolor[gray]{0.7}FilterBank \\ \hline
+  1 & 12 & 44 & 96 & 9 \\ \hline 
+   \cellcolor[gray]{0.7}FIR &  \cellcolor[gray]{0.7} FMRadio &  \cellcolor[gray]{0.7} InsertionSort &  \cellcolor[gray]{0.7} Matmul-Block &  \cellcolor[gray]{0.7} RadixSort\\ \hline
+  0 & 7 & 0 & 7 & 0 \\ \hline
+ \end{tabular}
+  \caption{Number of split joins present in each benchmark.}\label{tab:splitjoin}
+\end{table}
+
 This chapter explores 15 StreamIt benchmark all taken from the official StreamIt repository.
-To include a variety of situations, 10 of the StreamIt benchmarks chosen feature SplitJoins which leads to task-based multithreading whilst 5 do not.
+These applications represent a variety of embedded applications, from digital signal processing to smaller kernels such as matrix-multiplication or band pass filters.
+The applications feature a different number of SplitJoins which determine the task-level parallelism.
+The number of SplitJoins can be found in Table~\ref{tab:splitjoin}, this is to include a variety of situations to test the flexibility of the dynamic multicore processor.
+Whilst SplitJoins often facilitate the decision of how to partition the programs into threads, they are not the only way to exploit thread level parallelism.
 The 5 applications which do not feature SplitJoins can still be split into threads and will operate in a pipelined fashion.
 For each benchmark the default inputs provided in the repository~\cite{streamitrepo} are used and the default iteration count is set to 10. 
 
 The parameters and size of the space are given in table~\ref{tab:space}.
 In this study all 16 cores are utilised; Core 0 is assigned to the main thread and for runtime management. 
 This leaves 15 cores available for each application.
-Each core is restricted to running only a single thread (no preemptive scheduling) which leads to a possible number of threads between 1 and 15.
+Each core is restricted to running only a single thread, as there is no context switching supported, which leads to a possible number of threads between 1 and 15.
 Cores can be fused together to form a logical core with up to 15 physical cores, making the total number of cores assigned to a thread between 1 and 15.
-This leads to a total space size of 32,767 unique combination per benchmark.
+This leads to a total space size of 32,767 unique combination per benchmark as previously described in Section~\ref{sec:setup}.
 
 \subsection{Sample Space}
 
-\begin{figure}[h]
+\begin{figure}[t]
   \centering
     \includegraphics[width=1\textwidth]{streamit-paper/graphics/ESCProx.pdf}
-    \caption{Statistical (plain line) and actual proximity (dotted line) to best performance using a subset of the sample space.}\label{fig:prox}
+    \caption{Statistical (plain line) and actual proximity (dotted line, this is only done for 5 benchmarks) to best performance using a subset of the sample space.}\label{fig:prox}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[t]
  \centering
     \includegraphics[width=1\textwidth]{streamit-paper/graphics/threadingmaybe2.pdf}
     \caption{Performance as a function of the number of threads. The performance metric is number of cycles. Each benchmark has the performance measured with cores composed and with threads mapped to a single core.}\label{fig:threadtrend}
