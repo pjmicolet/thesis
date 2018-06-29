@@ -37,18 +37,26 @@ In StreamIt the term \textit{multiplicity} defines the number of times a filter 
   \caption{The ten highest correlating features with the best number of threads for 1000 synthetic benchmarks.}\label{fig:corr}
 \end{figure}
  
-\vspace{5em}
 The 10 features can be described as followed:
 \begin{itemize}
 \item Number of Distinct Multiplicities: the variety of different execution rates of filters per time slice.
+\vspace{-1em}
 \item Number of unconditionally executed blocks: amount of operations in a filter that always execute.
+\vspace{-1em}
 \item Filters: number of filters found in the benchmark.
+\vspace{-1em}
 \item Pipelines: number of pipelines found in the benchmark.
+\vspace{-1em}
 \item Number of Loops: amount of loops present in the benchmark.
+\vspace{-1em}
 \item Number of Vector Operations: amount of potential vector operations found in the benchmark.
+\vspace{-1em}
 \item Average Work in all SplitJoins: average amount of operations per SplitJoin.
+\vspace{-1em}
 \item Smallest Multiplicity: The smallest execution rate of a single filter.
+\vspace{-1em}
 \item Accumulated Unconditional Work: Total number of operations in all filters which must be executed.
+\vspace{-1em}
 \item Total Number of filters in SplitJoins: Amount of filters that are found in SplitJoins.
 \end{itemize}
 
