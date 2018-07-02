@@ -92,7 +92,7 @@ When a loop that holds multiple conditional statements is unrolled, conditional 
 Benchmark \bench{FMRadio} sees a 3x improvement compared to the non-unrolled version, this is due to the fact that all the loops are fully unrolled, reducing the total number of instructions required to execute the task.
 For the \bench{FFT6} benchmark, unrolling loops will actually cause the single-core version to be slower than its not unrolled version.
 %I think this is due to a refreshing performance thing
-This is due to the fact that the increased size of the blocks increases the latency of fetching larger blocks.
+This is due to the fact that for \bench{FFT6}, the source to source unrolling adds intermediate variables in the loop which increase the number of loads and stores.
 Whilst it may be slower on a single core, as seen in Figure~\ref{fig:unroll_bars}, having a core-composition running the thread will still result in faster execution that without loop-unrolling.
 
 Figure~\ref{fig:unroll_size} shows the influence of loop unrolling on the average size of an EDGE block for each of the benchmarks.
@@ -128,6 +128,7 @@ This changes when taking unrolling into account as the core compositions can be 
 In this case, the speedup obtained from only composing cores is only 13\% worse than using only threads.
 For the \bench{FMRadio} benchmark, unrolling makes using only core-composition better than only using threads.
 This information corroberates with the data seen in Figure~\ref{fig:unrolling_vs_no_single_core}; it presents a unique case where the effect of core composition is important enough to change the dominant performance enhancer.
+The performance increase obtained via the source-level loop unrolling via the compiler demonstrates that some modifications to the code must be done to ensure optimal use of the dynamic multicore processor.
 %Thus loop unrolling demonstrates that the StreamIt programs must be modified to take advantage of the core composition.
 
 Overall the results demonstrate that multi-threading is the prevalent leader of performance, even with unrolling turned on.
