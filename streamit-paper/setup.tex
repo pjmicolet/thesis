@@ -107,3 +107,23 @@ To further prove that the statistical model based on the Stopping Criterion is i
 The dotted line in figure~\ref{fig:prox} shows the actual proximity to the best for \bench{Audiobeam}, \bench{Beamformer}, \bench{BitonicSort}, \bench{CFAR} and \bench{FMRadio}.
 As can be seen after 1316 samples, the achieved performance is actually very similar to the one predicted by the statistical model, hence confirming prior work~\cite{vuduc2003AutomaticPerf}.
 To summarize, it can be concluded that the best point found in the sample space of 1,316 points is at least within 5\% of the real best in the exhaustive space with 95\% confidence.
+
+\subsection{Synthetic Benchmarks}
+
+One of the difficulties of building a machine learning based model for StreamIt is the lack of benchmarks available~\cite{wang2013partitionstreamit}.
+Whilst there exists at least 30 realistic applications for StreamIt~\cite{theis2010empericalcharstreamit} this is simply not enough to create a large enough data set.
+To overcome this problem generating synthetic benchmarks can be a solution~\cite{cumminsopencl2017}.
+Thus synthetic StreamIt benchmarks are generated and statistics are gathered from them in a similar style as in~\cite{wang2013partitionstreamit}.
+To ensure that the synthetic benchmarks are representative of realistic benchmarks they are created using filters from a set of micro-kernels found in some StreamIt applications.
+30 different possible filters with different incoming and outgoing rates and different inputs and outputs types are used to increase the variety of the dataset.
+To ensure that the synthetic benchmarks are similar to real benchmarks, the total number of filters and split joins are within the average of the realistic benchmarks.
+
+For each generated application, 15 different threaded versions are generated.
+Each of these versions is ran using a single core per thread and the cycle count is recorded.
+This was repeated for 1000 unique randomly generated applications and record the best number of threads each time.
+
+Once the benchmarks have been generated, the next step consists of gathering features for each applications.
+In order to build the two machine learning models an initial set of over 50 features are extracted from StreamIt programs.
+These features are extracted using pre-existing analytical tools within StreamIt and some counters added specifically for this chapter.
+As 50 features may not necessarily contain any valuable information, the features selected for the models are determined through correlation analysis.
+%In this section, when discussing correlation we specifically look at which variables correlate with the optimal number of threads.

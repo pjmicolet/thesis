@@ -6,27 +6,7 @@ As the design space is large, it is important to automate the decision making to
 The problem of automating this decision can be decomposed into two stages; first, determining the right number of threads and second, selecting a good core composition.
 In this section, two machine-learning models that predict the best thread partitioning and core composition to maximize performance are presented.
 
-\subsection{Synthetic Benchmark Generation}
-
-One of the difficulties of building a machine learning based model for StreamIt is the lack of benchmarks available~\cite{wang2013partitionstreamit}.
-Whilst there exists at least 30 realistic applications for StreamIt~\cite{theis2010empericalcharstreamit} this is simply not enough to create a large enough data set.
-To overcome this problem generating synthetic benchmarks can be a solution~\cite{cumminsopencl2017}.
-Thus synthetic StreamIt benchmarks are generated and statistics are gathered from them in a similar style as in~\cite{wang2013partitionstreamit}.
-To ensure that the synthetic benchmarks are representative of realistic benchmarks they are created using filters from a set of micro-kernels found in some StreamIt applications.
-30 different possible filters with different incoming and outgoing rates and different inputs and outputs types are used to increase the variety of the dataset.
-To ensure that the synthetic benchmarks are similar to real benchmarks, the total number of filters and split joins are within the average of the realistic benchmarks.
-
-For each generated application, 15 different threaded versions are generated.
-Each of these versions is ran using a single core per thread and the cycle count is recorded.
-This was repeated for 1000 unique randomly generated applications and record the best number of threads each time.
-
-Once the benchmarks have been generated, the next step consists of gathering features for each applications.
-In order to build the two machine learning models an initial set of over 50 features are extracted from StreamIt programs.
-These features are extracted using pre-existing analytical tools within StreamIt and some counters added specifically for this chapter.
-As 50 features may not necessarily contain any valuable information, the features selected for the models are determined through correlation analysis.
-%In this section, when discussing correlation we specifically look at which variables correlate with the optimal number of threads.
-
-\subsection{Correlation Analysis and kNN model}
+\paragraph{Correlation Analysis and kNN model}
 In this section, variables which correlate with the optimal number of threads are explored.
 These features are used by the model to make a prediction about the number of threads to use.
 Figure~\ref{fig:corr} shows the 10 variables that correlate the most with determining the optimal thread number.
