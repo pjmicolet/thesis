@@ -29,9 +29,10 @@ For ~\bench{ChannelVocoder} the model predicts only 8 threads rather than the op
 Refering back to Figure~\ref{fig:threadtrend} and Figure~\ref{fig:overviewhist} from Section~\ref{sec:streamit:dse} \bench{ChannelVocoder} always performs better when adding more threads rather than increasing the size of a core composition.
 This is the cause of the performance penalty, for ~\bench{ChannelVocoder} it is more important to allocate a higher number of threads rather than compose cores.
 Aside from this case, the machine learning model obtains similar speedups to the best sample.
-\twocolumn
+
 \begin{table*}[t]
-\begin{minipage}{0.5\textwidth}
+\centering
+\resizebox{0.75\textwidth}{!}{\begin{minipage}{0.5\textwidth}
   \small
   \hspace{-5em}
  \begin{tabular} { | l | l | l | l | l | l | l | l | l | l |l| }
@@ -78,12 +79,12 @@ Aside from this case, the machine learning model obtains similar speedups to the
     M RadixSort & 2 & 2& \cellcolor[gray]{0.3}& \cellcolor[gray]{0.3}& \cellcolor[gray]{0.3}& \cellcolor[gray]{0.3}\\ \hline
     
  \end{tabular}
-  \end{minipage}
+  \end{minipage}}
   \caption{Number of Threads and Cores used for Best of Sample Space and Machine Learning Model.}\label{tab:summary}
 
 \end{table*}
-\onecolumn
-\subsection{Summary}
+
+ \subsection{Summary}
 
 This section has demonstrated that it is possible to build a machine-learning model that achieves high level of performance using simple source code static features.
 In many applications, the model even comes very close to the best from the sampled space, showing that the features used by the model contain enough information to inform the model about the best decision.
