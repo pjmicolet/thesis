@@ -6,14 +6,26 @@ As the design space is large, it is important to automate the decision making to
 The problem of automating this decision can be decomposed into two stages; first, determining the right number of threads and second, selecting a good core composition.
 In this section, two machine-learning models that predict the best thread partitioning and core composition to maximize performance are presented.
 
-\paragraph{Correlation Analysis and kNN model}
-In this section, variables which correlate with the optimal number of threads are explored.
+\subsection{Correlation Analysis and kNN model for predicting threads}
+
+For each generated application, 15 different threaded versions are generated.
+Each of these versions is ran using a single core per thread and the cycle count is recorded.
+This was repeated for 1000 unique randomly generated applications and record the best number of threads each time.
+
+Once the benchmarks have been generated, the next step consists of gathering features for each applications.
+In order to build the two machine learning models an initial set of over 50 features are extracted from StreamIt programs.
+These features are extracted using pre-existing analytical tools within StreamIt and some counters added specifically for this chapter.
+As 50 features may not necessarily contain any valuable information, the features selected for the models are determined through correlation analysis.
+%In this section, when discussing correlation we specifically look at which variables correlate with the optimal number of threads.
+
+In this section, features which correlate with the optimal number of threads are explored.
+These features are extracted via the StreamIt compiler, which generates information on each of the filters and the structure of the program prior to generating the C++ program.
 These features are used by the model to make a prediction about the number of threads to use.
 Figure~\ref{fig:corr} shows the 10 variables that correlate the most with determining the optimal thread number.
 In StreamIt the term \textit{multiplicity} defines the number of times a filter will have to execute in a time slice when the graph is in a steady state~\cite{gordon2002streamcomp}.
 
 \begin{figure}
-  \includegraphics[width=1\textwidth]{streamit-paper/graphics/corrGraph.pdf}
+  \includegraphics[width=0.3\textwidth]{streamit-paper/graphics/corrGraph.pdf}
   \caption{The ten highest correlating features with the best number of threads for 1000 synthetic benchmarks.}\label{fig:corr}
 \end{figure}
  
@@ -55,10 +67,10 @@ This is due to the fact that a StreamIt application with no SplitJoins will feat
 This is why the number of SplitJoins is not present in the correlating features; because the number of Pipeline already correlates with this feature.\\
 
 A k-Nearest Neighbor (kNN) model is deployed to determine the number of threads to use for an application.
-Given a new application, the kNN classifier determines the $k$ closest generated applications.
+Given a new application, the kNN classifier determines the $k$ closest synthetic applications.
 The distance between the features is measured using the Euclidean for each application.
 Once the set of $k$ nearest neighbors is identified, the model simply averages the best number of threads for each of the $k$ nearest neighbors to make a prediction.
-The parameter $k$ was determined experimentally using only the generated benchmarks.
+The parameter $k$ was determined experimentally using only the synthetic benchmarks.
 A value of $k=7$ was found to lead to the best performance.
 The features chosen are the ten variables displayed in Figure~\ref{fig:corr}.
 
