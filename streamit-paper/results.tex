@@ -6,7 +6,7 @@ This section describes the performance achieved by the model when predicting the
     \caption{Performance of the machine learning model against the best execution from random sampling. The baseline for the speedup measurement is single core, single thread execution using O2 compiler optimisations. Higher is better.}\label{fig:results}
 \end{figure}
 
-\subsection{Evaluation Methodology}
+\subsection{Machine Learning Model Evaluation Methodology}
 
 Leave-one-out cross-validation is used for testing the linear model.
 This means that when testing the model on one application, this application is removed from the training set, the model is trained with the remaining application and finally the model is tested on the application; this process is repeated for each application.
