@@ -59,7 +59,7 @@ As seen in Chapter~\ref{chp:Background}, composing cores exploits block-level pa
 As physical cores in a logical core must communicate to submit block address predictions, and commit information to each other, having a small number of blocks will reduce the communication overhead.
 In a core-composition, commit information can be a core informing another core that it has become the non-speculative core, or that registers can be read or written to.
 Since physical cores can fetch more than a single block when the blocks are made of a small number of instructions, if the program being executed is comprised of small blocks this will cause a composition to fetch a high amount of blocks.
-Thus finding methods to increase the average size of the blocks can lead to reduced overhead.
+Thus finding methods to increase the average size of the blocks can lead to reduced overhead which will improve the core-composition's ability to exploit block-level parallelism (BLP) and instruction level parallelism (ILP).
 One method of increasing the size of the blocks is through loop unrolling.
 This section therefore analyses the impact of loop unrolling on the StreamIt benchmarks.
 
@@ -111,6 +111,13 @@ That said, even a small amount of increase can help improve the scalability of c
 
 Overall, this section has shown that loop unrolling can improve performance by increasing the size of blocks for the benchmarks which helps improve the efficiency of core-compositions.
 
+%\begin{landscape}
+\begin{figure}[t]%\hspace{-1em}
+    \includegraphics[width=1\linewidth,keepaspectratio]{streamit-paper/graphics/threadcompbench.pdf}
+    \caption{Speedup obtained by choosing best core composition, best
+      thread number and the combination of both optimisations. The baseline for the speedup measurement is single core, single thread execution using O2 compiler optimisations. Higher
+      is better.}\label{fig:overviewhist}
+\end{figure}
 \subsection{Co-Design Space Best Results}
 
 
@@ -143,14 +150,7 @@ However, it is important to note that whilst finding the optimal thread mapping 
 For cases such as \bench{BeamFormer} the optimal pairing results in a 1.8x speedup compared to simply finding the best multit-threaded version.
 On average, the optimal combination leads to a 1.5x performance increase compared to only multithreading.
 
-\begin{landscape}
-\begin{figure}\hspace{-1em}
-    \includegraphics[width=1\linewidth,keepaspectratio]{streamit-paper/graphics/threadcompbench.pdf}
-    \caption{Speedup obtained by choosing best core composition, best
-      thread number and the combination of both optimisations. The baseline for the speedup measurement is single core, single thread execution using O2 compiler optimisations. Higher
-      is better.}\label{fig:overviewhist}
-\end{figure}
-\end{landscape}
+%\end{landscape}
 \subsection{Summary}
 This section demonstrated that each parameter has a large effect on the performance of the workload.
 Regardless of using core composition or not, there exists for each benchmark an optimal number of threads.
