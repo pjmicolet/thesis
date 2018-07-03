@@ -8,12 +8,14 @@
 
 \subsection{Gathering Training Data for Core-Composition}
 In section~\ref{sec:streamit:dse}, Figure~\ref{fig:threadtrend} shows the performance of each of the 15 benchmarks when partitioning them into threads with and without core-composition.
-The figure shows that in both cases, the number of threads is often similar.
-Later on in section~\ref{sec:streamit:dse} the use of loop unrolling demonstrates that when blocks are larger more cores can be composed together to improve performance.
+The information in the figure reveals that in both cases, the number of threads is often similar.
+Later on in section~\ref{sec:streamit:dse} the use of loop unrolling demonstrates that when blocks are larger more cores can be composed together to improve performance, which can modify the optimal thread count.
 With that in mind, in both cases the number of threads does not vary wildly and loop unrolling does not always modify the application to improve the amount of performance that can be extracted via core-composition.
 As Figure~\ref{fig:overviewhist} shows that multi-threading outperforms core-composition on its own, it is important to prioritise multithreading.
 
-Therefore predicting core-composition therefore comes after predicting the number of threads.
+Another consideration to take into account is that partitioning the software into threads facilitates the core estimation per thread.
+Without determining a number of threads before predicting the number of cores, the core-composition model would have no information as to the number of threads or the structure of each thread.
+Therefore predicting core-composition comes after predicting the number of threads.
 For this section only the single threaded version of a StreamIt benchmark is used to determine the optimal number of cores.
 This allows for the exploration of all possible core-compositions, as partitioning the program into threads can lead to a reduction in the search space.
 For example, if the 15 thread versions of the benchmarks were to be used, the could only have a single core allocated per thread when as this is the maximum amount of cores that may be given to each thread rather than it being the optimal solution.
