@@ -1,27 +1,36 @@
 % Small intro, re-explain that finding thread/core pairing is complicated and thus ML is a good idea.
 As seen in the previous section, selecting the right number of threads and a good combination of cores is difficult.
-This difficulty arises from trying to balance between exploiting ILP by fusing a large amount of cores and TLP by generating more threads.
+This difficulty arises from trying to balance between exploiting BLP/ILP by fusing a large amount of cores and TLP by generating more threads.
 As the design space is large, it is important to automate the decision making to alleviate the task of getting the best performance out of the streaming application at hand.
 
 The problem of automating this decision can be decomposed into two stages; first, determining the right number of threads and second, selecting a good core composition.
+Partitioning the program is done first as instinctively it is more natural to split the program up into threads before determining how many cores each thread requires.
 In this section, two machine-learning models that predict the best thread partitioning and core composition to maximize performance are presented.
 
+\begin{figure} 
+  \centering
+ \includegraphics[width=1\textwidth]{streamit-paper/graphics/thread_expl.pdf}
+  \caption{Visual representation of how data was collected for the threading model.}\label{fig:thread_expl}
+\end{figure}
 \subsection{Correlation Analysis and kNN model for predicting threads}
-
-For each generated application, 15 different threaded versions are generated.
-Each of these versions is ran using a single core per thread and the cycle count is recorded.
-This was repeated for 1000 unique randomly generated applications and record the best number of threads each time.
-
-Once the benchmarks have been generated, the next step consists of gathering features for each applications.
-In order to build the two machine learning models an initial set of over 50 features are extracted from StreamIt programs.
-These features are extracted using pre-existing analytical tools within StreamIt and some counters added specifically for this chapter.
-As 50 features may not necessarily contain any valuable information, the features selected for the models are determined through correlation analysis.
 %In this section, when discussing correlation we specifically look at which variables correlate with the optimal number of threads.
 
+To build the threading model, the synthetic benchmarks previously described in~\ref{sec:setup} are used.
+Figure~\ref{fig:thread_expl} is an overhead view of how the data for the model was collected.
+For each of these synthetic benchmark 15 different threaded versions are generated and assigned a single core per thread.
+They are then all executed on the cycle accurate simulator and their execution time, in cycles, is recorded.
+This is repeated for 1000 unique synthetic applications. 
+Once all the data has been generated, the number of threads that led to the fastest execution time is saved to a table with a set of features that define the program.
+In order to build the two machine learning models an initial set of over 50 features are extracted from StreamIt programs.
+These features are extracted using pre-existing analytical tools within StreamIt and some counters added specifically for this chapter.
+As some of the 50 features may not contain any valuable information, the features selected for the models are determined through correlation analysis.
+
+\paragraph{Correlation Analysis}
 In this section, features which correlate with the optimal number of threads are explored.
-These features are extracted via the StreamIt compiler, which generates information on each of the filters and the structure of the program prior to generating the C++ program.
-These features are used by the model to make a prediction about the number of threads to use.
+These features are extracted via the StreamIt source-to-source compiler, which generates information on each of the filters and the structure of the program prior to generating the C++ program.
+The highest correlating features are used by the model to make a prediction about the number of threads to use.
 Figure~\ref{fig:corr} shows the 10 variables that correlate the most with determining the optimal thread number.
+It is important to note that these features all correlate positively with the number of threads the program requires to get the fastest execution time.
 In StreamIt the term \textit{multiplicity} defines the number of times a filter will have to execute in a time slice when the graph is in a steady state~\cite{gordon2002streamcomp}.
 
 \begin{figure} 
@@ -67,6 +76,7 @@ It is also important to understand that a high number of Pipelines implies the u
 This is due to the fact that a StreamIt application with no SplitJoins will feature only a singe Pipeline, thus a larger number of pipelines implies at least one SplitJoin.
 This is why the number of SplitJoins is not present in the correlating features; because the number of Pipeline already correlates with this feature.\\
 
+\paragraph{kNN Model}
 A k-Nearest Neighbor (kNN) model is deployed to determine the number of threads to use for an application.
 Given a new application, the kNN classifier determines the $k$ closest synthetic applications.
 The distance between the features is measured using the Euclidean for each application.
@@ -81,5 +91,6 @@ The accuracy increases to 57\% when allowing a prediction to be 1 thread away fr
 On average, having a thread number that is +/- 1 away from the optimal thread count only incurrs a 12\% performance penalty.
 For a distance of +/- 2 this increases to 19\%.
 This penalty was measured by comparing the performances of the synethtic benchmarks using only multithreading.
-
+With this in mind, it is important to understand that accuracy is not the final metric that is used to evaluate the model.
+Instead, what does matter is the performance of the application when using the configuration predicted by both the thread and core predictor, which is discussed in section~\ref{sec:results}.
 
