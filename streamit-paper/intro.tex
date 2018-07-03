@@ -21,7 +21,8 @@ The number of program features that may influence how to partition dataflow prog
 Therefore manually determining a set of heuristics to create a partitioning model is not recommended as it may discard information that was ignored by the designer.
 Instead, using a machine learning model can extract all the features that correlate the most with deciding a good partition and generate an appropriate model.
 
-In this chapter, an analysis of the design space is performed and shows the impact of modifying resources and thread mapping.
+This chapter analyses how static ahead-of-time reconfiguration of a dynamic multicore processor can improve performance of a set of streaming applications.
+An analysis of the design space exploration is performed and shows the impact of modifying resources and thread mapping.
 This analysis is conducted using a set of StreamIt programs that are ran on a verified cycle-level simulator for a tiled reconfigurable architecture with support for core composition.
 A machine learning model is developed using the information gathered from the exploration.
 This model predicts the best number of threads for a given application and an optimal number of cores to allocate to each thread.
@@ -34,7 +35,7 @@ The main contributions of this chapter are:
 \begin{itemize}
 \item An analysis of the co-design space of thread partitioning and core composition;
 \vspace{-1em}
-\item A study on the impact of a simple loop transformation on the optimal core composition;
+\item A study on the impact of a loop transformation on the optimal core composition;
 \vspace{-1em}
 \item A machine-learning model to determine the optimal core composition and thread partitioning;
 \vspace{-1em}

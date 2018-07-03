@@ -31,7 +31,7 @@ This demonstrates that composing cores is essential to obtain the best performan
   \caption{Distribution of FilterBank performance when modifying the amount of threads and compositions.}\label{fig:fbtotal}
 \end{figure}
 
-Using core composition, the processor fuses a number of cores and associates them to a thread to increase single threaded performance.
+Using core composition, the processor fuses a number of cores and associates them to a thread to increase the thread's performance.
 Whilst this flexibility is advantageous, choosing the right amount of cores for a given thread is difficult due to the large number of possible configurations~\cite{gulati2008multitaskingdmc}.
 
 Figure~\ref{fig:fbtotal} shows how threading and core-compositions affect performance for the \bench{FilterBank} benchmark.
@@ -57,12 +57,14 @@ This signifies that for the benchmark \bench{FilterBank}, it is more important t
 \subsection{Impact of Loop Transformation}
 As seen in Chapter~\ref{chp:Background}, composing cores exploits block-level parallelism by running multiple EDGE blocks on a logical core.
 As physical cores in a logical core must communicate to submit block address predictions, and commit information to each other, having a small number of blocks will reduce the communication overhead.
-Since physical cores can fetch more than a single block when the blocks are made of a small number of instructions, finding methods to increase the average size of the blocks can lead to reduced overhead.
+In a core-composition, commit information can be a core informing another core that it has become the non-speculative core, or that registers can be read or written to.
+Since physical cores can fetch more than a single block when the blocks are made of a small number of instructions, if the program being executed is comprised of small blocks this will cause a composition to fetch a high amount of blocks.
+Thus finding methods to increase the average size of the blocks can lead to reduced overhead.
 One method of increasing the size of the blocks is through loop unrolling.
 This section therefore analyses the impact of loop unrolling on the StreamIt benchmarks.
 
 In this Chapter, unrolling is done at the source level via a flag passed to the StreamIt source-to-source compiler.
-Given a number of times the loops must be unrolled, the StreamIt source-to-source compiler will generate the multi-threaded C++ code with the loops manually unrolled.
+Given a number of times the loops must be unrolled, the StreamIt source-to-source compiler will generate the multi-threaded C++ code with the loops unrolled.
 Figure~\ref{fig:fbunroll} presents an example of how loop unrolling affects performance on the \bench{FilterBank} benchmark.
 The graph presents the same information as Figure~\ref{fig:fbtotal} but comparing .
 Figure~\ref{fig:fbunroll} shows that unrolling loops for \bench{FilterBank} can improve performance by up to 1.42x compared to the fastest non-unrolled version.
@@ -127,7 +129,7 @@ Finding the optimal number of threads gives a speedup of 1.92 compared to 1.33 w
 This changes when taking unrolling into account as the core compositions can be used more efficiently.
 In this case, the speedup obtained from only composing cores is only 13\% worse than using only threads.
 For the \bench{FMRadio} benchmark, unrolling makes using only core-composition better than only using threads.
-This information corroberates with the data seen in Figure~\ref{fig:unrolling_vs_no_single_core}; it presents a unique case where the effect of core composition is important enough to change the dominant performance enhancer.
+This information corroberates with the data seen in Figure~\ref{fig:unroll_summary}; it presents a unique case where the effect of core composition is important enough to change the dominant performance enhancer.
 The performance increase obtained via the source-level loop unrolling via the compiler demonstrates that some modifications to the code must be done to ensure optimal use of the dynamic multicore processor.
 %Thus loop unrolling demonstrates that the StreamIt programs must be modified to take advantage of the core composition.
 
@@ -152,6 +154,6 @@ On average, the optimal combination leads to a 1.5x performance increase compare
 \subsection{Summary}
 This section demonstrated that each parameter has a large effect on the performance of the workload.
 Regardless of using core composition or not, there exists for each benchmark an optimal number of threads.
-Unrolling is effective at exposing more opportunities for composition due to increased ILP but there is a balance to strike between extracting ILP and TLP.
+Unrolling is effective at exposing more opportunities for composition due to increased block sizes but there is a balance to strike between extracting large blocks and TLP.
 Figure~\ref{fig:overviewhist} shows there is a 3x benefit (overall) by automating the partitioning of both the software (threads) and hardware (cores).
 

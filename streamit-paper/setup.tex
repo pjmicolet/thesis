@@ -14,12 +14,12 @@ In addition, the impact of loop unrolling and how it helps exploit larger fused 
 
 Figure~\ref{fig:overview} presents the workflow of the system used in this chapter.
 First, the source-to-source StreamIt compiler is used to unroll loops as this is often beneficial when cores are composed as will be seen later in Section~\ref{sec:streamit:dse}.
-Then, static code features such as the program's graph structure are extracted from the StreamIt code.
+Then, static code features such as the program's graph structure are extracted from the StreamIt code through the StreamIt source-to-source compiler.
 These features are used as an input to the first machine-learning model that determines how many threads will be required based on an estimate of Thread Level Parallelism (TLP) found in the program.
 This information is used to partition the program into threads which is done by the StreamIt compiler which produces a C++ program using pthreads.
 This C++ program is then compiled using the compiler for EDGE described in Chapter~\ref{ch:setup}.
 
-Then, a second machine-learning model is deployed which also analyzses static code features extracted from the SteamIt code.
+Then, a second machine-learning model is deployed which also analyzses static code features extracted from the SteamIt code, once again provided by the source-to-source compiler.
 This model decides on the number of cores each thread will have.
 This is achieved by estimating the amount of Instruction Level Parallelism (ILP) that can be possibly extracted in each thread and by determining how many physical cores should be fused for that thread.
 Finally, the processor is reconfigured to fuse the requested resources ahead of time and execute the partitioned program.
@@ -73,9 +73,9 @@ Finally, the processor is reconfigured to fuse the requested resources ahead of 
 \end{table}
 
 This chapter explores 15 StreamIt benchmark all taken from the official StreamIt repository.
-These applications represent a variety of embedded applications, from digital signal processing to smaller kernels such as matrix-multiplication or band pass filters.
-The applications feature a different number of SplitJoins which determine the task-level parallelism.
+These applications represent a variety of embedded applications and kernels, from digital signal processing to a matrix-multiplication kernel or band pass filters.
 Table~\ref{tab:instancefilt} shows the number of filter instances for each of the benchmarks whilst Table~\ref{tab:splitjoin} shows the number of SplitJoins in each benchmark.
+The applications feature a different number of SplitJoins which determine the task-level parallelism.
 This is to include a variety of situations to test the flexibility of the dynamic multicore processor.
 Whilst SplitJoins often facilitate the decision of how to partition the programs into threads, they are not the only way to exploit thread level parallelism.
 The 5 applications which do not feature SplitJoins can still be split into threads and will operate in a pipelined fashion.
@@ -103,7 +103,8 @@ Overal, this leads to a total space size of 32,767 unique combination per benchm
 Given a partition, any benchmark that is split into 15 threads requires 32,767 executions to cover the entire space.
 Running an exhaustive exploration of the space for a single benchmark requires approximately a week of simulation on a 572+ node supercomputer.
 For this reason, a sample of 1,316 random points from the entire space is utilised.
-This roughly corresponds to 100 core compositions for each number of threads; the actual number, 1,316 is smaller than 1,500 since for low thread counts there are less than 100 possible different core composition.
+This roughly corresponds to 100 core compositions for each number of threads; the actual number, 1,316 is smaller than 1,500 since for low and high thread counts there are less than 100 possible different core composition.
+For example, a single thread can have only up to 15 different core-compositions (1 through 15) whilst 15 threads can only have a single core given to each thread.
 \bench{InsertionSort} is the only exception since it can at most only be split into 5 threads leading to 415 sample points.
 
 %Define stopping criterion?
@@ -133,7 +134,7 @@ To summarize, it can be concluded that the best point found in the sample space 
 \subsection{Synthetic Benchmarks}
 
 One of the difficulties of building a machine learning based model for StreamIt is the lack of benchmarks available~\cite{wang2013partitionstreamit}.
-Whilst there exists at least 30 realistic applications for StreamIt~\cite{theis2010empericalcharstreamit} this is simply not enough to create a large enough data set.
+Whilst there exists at least 30 realistic applications for StreamIt~\cite{thiesStreamit2010} this is simply not enough to create a large enough data set.
 To overcome this problem generating synthetic benchmarks can be a solution~\cite{cumminsopencl2017}.
 Thus synthetic StreamIt benchmarks are generated and statistics are gathered from them in a similar style as in~\cite{wang2013partitionstreamit}.
 In this chapter, the synthetic benchmarks are used to build a model for predicting the number of threads, which will be described later in section~\ref{sec:ml}
