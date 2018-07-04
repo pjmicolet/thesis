@@ -10,3 +10,15 @@ This chapter showed that, on average, finding the optimal configuration and usin
 Using the data gathered from the analysis, two models are created, one that predicts the number of threads via a k Nearest Neighbors model, whilst the other predicts the number of cores to fuse per thread using a linear regression.
 The two models are able to predict configurations close to the performance of the best design points from the sampled space; on average within 16\% of the best.
 This demonstrates that by analysing features of the programs, the decision of how to configure a dynamic multicore processor can be fully automated.
+
+%Add some more details
+To summarize, the contributions of the chapter are:
+\begin{itemize}
+\item An analysis of the co-design space of thread partitioning and core composition which shows how applications always perform best when the dynamic multicore processor has a heterogeneous configuration.
+\vspace{-1em}
+\item A study on the impact of loop unrolling on performance, allowing for core-composition to be better utilised by increasing block size.
+\vspace{-1em}
+\item An analysis of the most important static code features used by the model.
+\vspace{-1em}
+\item A machine-learning model to determine the optimal core composition and thread partitioning which results in an average performance within 16\% of the best of the space.
+\end{itemize}
