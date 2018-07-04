@@ -17,9 +17,19 @@ Without determining a number of threads before predicting the number of cores th
 In this situation, the core-composition model would either have to make its own estimates as to the thread count, or make a general prediction for a single thread.
 Therefore predicting core-composition comes after predicting the number of threads.
 
+\paragraph{Core-Composition Mechanism Refresher}
+To better understand why some features correlate with the size of a core-composition, this section contains a small refresher on the mechanisms of core-composition.
+First, when blocks are small, cores can fetch and execute multiple blocks in parallel; the number of blocks and the sizes will depend on how many lanes the DMP has.
+For this paper, a block can have a maximum size of 128 instructions, whilst each core has 4 lanes.
+%What a line.
+When cores are composed they do not fetch blocks independently; instead one of the cores in the composition will start by fetching blocks until it all its lanes are used and then submits the following predicted PC to the next core in the composition.
+When block sizes are small, this means that core-compositions will have to predict a high amount of PCs to fill up all its cores.
+Thus core-composition is dependent on accurate branch prediction and the size of blocks.
+
+
 \subsection{Gathering Training Data for Core-Composition}
 %For this section a subset of the different threaded versions of the StreamIt benchmarks are used to determine the optimal number of cores.
-For this section only the single threaded version of a StreamIt benchmark is used to determine the optimal number of cores.
+For this section the single threaded version of a StreamIt benchmark is used to determine the optimal number of cores.
 Some of the multi-threaded versions of benchmarks can be used to add extra data-points to build the model, however not all thread-counts are suitable.
 One of the difficulties of adding data-points from the highly threaded versions of an applications is that each thread will only be able to have a very small core-composition.
 For example, if the 15 threaded version of a benchmarks is added as data points to the model, then each of the feature vectors for this version would have a single core attributed to it.
@@ -86,7 +96,7 @@ This is due to the fact that large blocks reduce the amount of branches predicti
 The necessity to correctly predict blocks to ensure that all cores are fully utilised explains why a higher number of unconditionally executed blocks compared to conditional blocks correlates positively with large core compositions.
 This is once again due to reducing strain on branch prediction for higher core compositions.
 The importance of size is also apparent as the difference between the largest block size and the average block size negatively correlates with core-composition.
-StreamIt programs tend to not have a large quantity of conditional statements, thus the ratio of unconditional and conditional blocks is considered less important than the sizes of blocks.
+The ratio of unconditional and conditional blocks is considered less important than block size due to branch prediction, however having a larger number of unconditional branches is a natural fit for larger core-compositions as it reduces the dependency on high branch-prediction accuracy.
 
 Other features that are analysed included more fine-grained data such as the types of operations that are found in the blocks of code.
 This involved finding ratios of floating point, integer and memory operations.
