@@ -6,21 +6,28 @@
 \end{figure}
 
 
-\subsection{Gathering Training Data for Core-Composition}
 In section~\ref{sec:streamit:dse}, Figure~\ref{fig:threadtrend} shows the performance of each of the 15 benchmarks when partitioning them into threads with and without core-composition.
 The information in the figure reveals that in both cases, the number of threads is often similar.
 Later on in section~\ref{sec:streamit:dse} the use of loop unrolling demonstrates that when blocks are larger more cores can be composed together to improve performance, which can modify the optimal thread count.
 With that in mind, in both cases the number of threads does not vary wildly and loop unrolling does not always modify the application to improve the amount of performance that can be extracted via core-composition.
 As Figure~\ref{fig:overviewhist} shows that multi-threading outperforms core-composition on its own, it is important to prioritise multithreading.
 
-Another consideration to take into account is that partitioning the software into threads facilitates the core estimation per thread.
-Without determining a number of threads before predicting the number of cores, the core-composition model would have no information as to the number of threads or the structure of each thread.
+It is also important to take into consideration that partitioning the software into threads facilitates the core estimation per thread.
+Without determining a number of threads before predicting the number of cores the core-composition model has no information as to the number of threads or the structure of each thread.
+In this situation, the core-composition model would either have to make its own estimates as to the thread count, or make a general prediction for a single thread.
 Therefore predicting core-composition comes after predicting the number of threads.
-For this section only the single threaded version of a StreamIt benchmark is used to determine the optimal number of cores.
-This allows for the exploration of all possible core-compositions, as partitioning the program into threads can lead to a reduction in the search space.
-For example, if the 15 thread versions of the benchmarks were to be used, the could only have a single core allocated per thread when as this is the maximum amount of cores that may be given to each thread rather than it being the optimal solution.
 
-For the exploration of core-composition, only the 15 StreamIt benchmarks are used.
+\subsection{Gathering Training Data for Core-Composition}
+%For this section a subset of the different threaded versions of the StreamIt benchmarks are used to determine the optimal number of cores.
+For this section only the single threaded version of a StreamIt benchmark is used to determine the optimal number of cores.
+Some of the multi-threaded versions of benchmarks can be used to add extra data-points to build the model, however not all thread-counts are suitable.
+One of the difficulties of adding data-points from the highly threaded versions of an applications is that each thread will only be able to have a very small core-composition.
+For example, if the 15 threaded version of a benchmarks is added as data points to the model, then each of the feature vectors for this version would have a single core attributed to it.
+This is due to the fact that in the 15 threaded versions of benchmarks each thread can only have a single core due to the number of cores on the DMP.
+Yet, these threads could potentially benefit from core-composition, so adding them as data points to the model skews future predictions as the feature vector for each thread would associate the features to use only a single core.
+Thus high-threaded versions of applications must be ignored to avoid having incorrect suggestions for core-composition sizes.
+
+For the exploration of core-composition, the 15 StreamIt benchmarks are used. %explain why.
 To increase the amount of data available, multiple versions of the benchmarks using different amounts of unrolling are included in the search space.
 Four different levels of unrolling are used in this study: 0,4,16 and 64.
 To determine the optimal number of cores only the training data that has a performance within 1\% of the best is selected.
