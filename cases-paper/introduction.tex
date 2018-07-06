@@ -1,21 +1,15 @@
-Chip Multicore Processors (CMP) are now ubiquitous in embedded computing as single threaded performance improvements have slowed.
-CMPs have to be carefully designed, balancing the size of each core with the total number of cores on the chip.
-Larger cores are typically good at exploiting instruction level parallelism (ILP) but might potentially be very power hungry.
-Smaller cores on the other hand require less power but offer limited performance, forcing software developers to parallelize their code with multiple threads, which is a tedious process.
-As the size and the number of cores is fixed at design time, choosing the right balance is difficult~\cite{DubachExpl2012, TomuskHet2015}.
+The previous chapter explored how static ahead-of-time configuration of a dynamic multicore processor (DMP) can improve the performance of multi-threaded streaming applications and showed how reconfiguration leads to optimal performance.
+This chapter focuses on how a DMP can reconfigure itself at runtime to better match phases of a set of single-threaded applications.
+DMPs are designed to improve the performance of single-threaded applications by clustering cores together.
+As previously discussed the reconfiguration can happen ahead of time, especially when programs are phaseless.
+However, programs can benefit from core-composition at different phases of its execution.
+Some programs may have phases that feature high amounts of block-level parallelism whilst other phases do not perform any better on core-compositions.
+Therefore, for programs that feature many phases, runtime reconfiguration is necessary to ensure efficient use of a DMP.
 
-Asymmetric Chip Multicore Processors (ACMP) have been proposed~\cite{MittalSurv2016} to overcome this issue.
-These processors feature either different sized cores~\cite{JibajaPPerf2016} or different Instruction Set Architectures~\cite{VenkatISADiv2014} to efficiently tackle a multitude of different workloads.
-Dynamic Multicore Processors (DMP) push this further by introducing Core Fusion~\cite{ipek2007CoreFusion}.
-Similar to ACMPs, Core Fusion allows the chip to have different sized cores, but this can be changed at runtime.
-In a DMP, cores can be fused dynamically to create larger cores similar to a superscalar processor.
-Any number of cores can potentially be combined together whenever a workload exhibits a large amount of ILP.
-When a program exhibits low ILP, the DMP can decouple fused cores to conserve energy.
-
-While a large number of DMPs have been proposed in the literature~\cite{ipek2007CoreFusion,pricopi2012bahurupi,kim2007tflex,Watanabe2010Widget}, these efforts focus on the hardware and microarchitectural design.
-They evaluate the hardware using a fixed number of fused cores or provide an oracle for dynamic fusion.
-There exists little~\cite{micolet2016dmpstream} to no literature on predicting core fusion from a software perspective.
-%To the best of our knowledge, there has been no study on dynamically changing the number of cores fused to better match the phases of a workload in a homogeneous DMP compared to ahead of time fusion.
+Whilst optimising for speed is an important method of evaluating a DMP, the ability to reconfigure the processor allows the hardware to adapt to different performance profiles.
+For example, a DMP can reconfigure itself at runtime to maximise energy efficiency, instead of maximising speed.
+Yet, whilst being able to adapt to different profiles is an attractive feature, relying on programmers to determine when to reconfigure the processor is a challenging task.
+Automating the reconfiguration decisions allows the programmer to solely focus on the software rather than decide when to modify the hardware.
 
 The chapter starts with an explanation of the theoretical limitations of core fusion and what can be expected in terms of performance.
 Then the next section discusses how classical loop optimizations such as unrolling can have a large impact on performance when fusing cores.
@@ -36,3 +30,22 @@ To summarize, the contributions are:
 \item A demonstration that a simple linear-regression based model can predict the number of cores to fuse for different program phases.
 \end{itemize}
 
+
+%Chip Multicore Processors (CMP) are now ubiquitous in embedded computing as single threaded performance improvements have slowed.
+%CMPs have to be carefully designed, balancing the size of each core with the total number of cores on the chip.
+%Larger cores are typically good at exploiting instruction level parallelism (ILP) but might potentially be very power hungry.
+%Smaller cores on the other hand require less power but offer limited performance, forcing software developers to parallelize their code with multiple threads, which is a tedious process.
+%As the size and the number of cores is fixed at design time, choosing the right balance is difficult~\cite{DubachExpl2012, TomuskHet2015}.
+
+%Asymmetric Chip Multicore Processors (ACMP) have been proposed~\cite{MittalSurv2016} to overcome this issue.
+%These processors feature either different sized cores~\cite{JibajaPPerf2016} or different Instruction Set Architectures~\cite{VenkatISADiv2014} to efficiently tackle a multitude of different workloads.
+%Dynamic Multicore Processors (DMP) push this further by introducing Core Fusion~\cite{ipek2007CoreFusion}.
+%Similar to ACMPs, Core Fusion allows the chip to have different sized cores, but this can be changed at runtime.
+%In a DMP, cores can be fused dynamically to create larger cores similar to a superscalar processor.
+%Any number of cores can potentially be combined together whenever a workload exhibits a large amount of ILP.
+%When a program exhibits low ILP, the DMP can decouple fused cores to conserve energy.
+
+%While a large number of DMPs have been proposed in the literature~\cite{ipek2007CoreFusion,pricopi2012bahurupi,kim2007tflex,Watanabe2010Widget}, these efforts focus on the hardware and microarchitectural design.
+%They evaluate the hardware using a fixed number of fused cores or provide an oracle for dynamic fusion.
+%There exists little~\cite{micolet2016dmpstream} to no literature on predicting core fusion from a software perspective.
+%%To the best of our knowledge, there has been no study on dynamically changing the number of cores fused to better match the phases of a workload in a homogeneous DMP compared to ahead of time fusion.
