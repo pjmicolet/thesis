@@ -68,6 +68,19 @@ Figure~\ref{fig:compmotiv} shows that the optimisations allow the core-compositi
 However, it also demonstrates that not all of the code in a program can be optimised, as the low-IPC phases do not change.
 More details about the loop transformations are given in section~\ref{sec:opt} but this example illustrates the need for careful tuning of the compiler to achieve high performance on such an architecture.
 
+%Find some citation for this
+\subsection{Automating runtime reconfiguration}
+
+Figure~\ref{fig:disp_ex} motivates the use of runtime reconfiguration to ensure that DMP can improve the performance of single threaded applications efficiently by minimising energy consumption.
+Figure~\ref{fig:compmotiv} shows how modifying loops affects the performance in terms of IPC for a core-composition.
+Using an API, a programmer could inform the hardware when to reconfigure by using specific functions or pragmas similar to OpenMP or OpenCL.
+Whilst this may be considered a viable approach to applying runtime reconfiguration, automating the decision process is a better option.
+
+Automating the process of reconfiguring the processor enables two advantages compared to manually determining when to reconfigure the processor.
+The first advantage is that it removes the responsibility from the programmer: an automated runtime reconfiguration system can detect phases and adapt to them accordingly, using information gathered from previous traces.
+Second, if ever the program is modified, this may require new profiling information to be generated to ensure that manual reconfiguration calls are correct.
+If the reconfiguration is automated, then it can adapt automatically to any changes made to the source code.
+
 \subsection{Summary}
 This section has shown that programs exhibit phases with various amount of ILP available.
 A dynamic multicore processor can take advantage of this property to fuse a large number of cores for the high-ILP phases and fuse a smaller number of cores when ILP drops to conserve energy.
