@@ -14,7 +14,7 @@ Given a Logical Core \textit{LC} of size \textit{i}, denoted \textit{$LC_i$}, th
 min_{PredLC_i }= \frac{BlocksInFlight - 1}{BlocksInFlight}
 \end{equation}
 
-\textit{BlocksInFlight} will vary depending on the average size of the blocks, the maximum block size the architecture can execute (\textit{MaxBlockSize}), and the number of blocks 
+\textit{BlocksInFlight} varies depending on the average size of the blocks, the maximum block size the architecture can execute (\textit{MaxBlockSize}), and the number of blocks 
 that are allowed to execute in parallel on a physical core (\textit{NumOfBlocksPerCore}). 
 The size of the instruction window is equivalent to \textit{MaxBlockSize} multiplied by \textit{NumOfBlocksPerCore}.
 When a program is running on a LC, one of the blocks will always be unconditionally executed, which is why it requires one less block to be predicted.
@@ -66,7 +66,7 @@ This indicates that large LCs should be avoided when dealing with smaller blocks
 
 \subsection{Summary}
 
-This section estimated the worst-case IPC for a logical processor using Average Block Size, Average Branch Prediction, and Synchonization Cost.
+This section estimates the worst-case IPC for a logical processor using Average Block Size, Average Branch Prediction, and Synchonization Cost.
 Figure~\ref{fig:lm_summ} presented a worst-case estimate of IPC performance assuming each core can sustain an IPC of 2.
 From what was previously explained, Figure~\ref{fig:lm_summ} shows us that to obtain optimal performance requires a high branch prediction accuracy and large blocks.
 It shows that larger logical processors can easily under-perform; for example it can be seen that 16 fused cores often have IPCs under 15, meaning that each core has an IPC under~1.

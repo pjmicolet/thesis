@@ -9,7 +9,7 @@
 
 This section explores how core fusion affects the performance of the SD-VBS benchmarks.
 First a phase analysis is performed, followed by a study of the IPC variation for static core fusion.
-Then the use of dynamic core fusion is motived by using the information gathered.
+Then the use of dynamic core fusion is motivated by using the information gathered.
 
 
 \begin{figure}[t]
@@ -52,7 +52,7 @@ Since each phase is a cluster of similar IPC values, having two or more clusters
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{cases-paper/graphics/Exploration/SizeBuckets.pdf}
-    \caption{Distribution of block sizes for each benchmark. The sizes were clustered in buckets equivalent to number of lanes occupied.}
+    \caption{Distribution of block sizes for each benchmark. The sizes are clustered in buckets equivalent to number of lanes occupied.}
     \label{fig:block_sizes}
 	\vspace{5mm}
 \end{figure}
@@ -66,7 +66,7 @@ However increasing the size of a LC is not always beneficial as can be seen in b
 For benchmarks \bm{Localization} and \bm{Stitch} the performance increases when fusing up to 8 cores, where-as \bm{MSER} and \bm{Multi\_NCut} never benefit from core fusion. 
 Referring back to Figures~\ref{fig:sxt} and~\ref{fig:clust}, \bm{MSER} and \bm{Multi\_NCut} feature one dominating long phase, both performing poorly.
 Figure~\ref{fig:block_sizes} shows the distribution of block-sizes for each of the benchmarks.
-As fine-grained sizes do not matter as much as overall number of lanes being occupied, the block sizes were clustered into groups which represent how ever many number of lanes will be occupied (one lane may execute a block of up to 32 instructions).
+As fine-grained sizes do not matter as much as overall number of lanes being occupied, the block sizes are clustered into groups which represent how ever many number of lanes will be occupied (one lane may execute a block of up to 32 instructions).
 
 Figure~\ref{fig:block_sizes} helps explain why benchmarks \bm{MSER} and \bm{Multi\_NCut} do not perform any better with core-fusion.
 For both cases, not only do they have a single detected phase, but both are predominantly formed of blocks that will occupy a single lane.
@@ -82,7 +82,7 @@ Figure~\ref{fig:stddev} also shows the standard deviation of the IPC for each gi
 For example, running the \bm{Disparity} benchmark on a LC of 16 cores, it can be observed that an average IPC of 8.3 with a standard deviation of 5.2.
 The standard deviation for 16 cores shows that the performance can drop down to 2.5.
 An IPC of 2.5 when using 16 cores is very inefficient as this represents 0.1 of an instruction per cycle for each core.
-Using a LC of size 4 for the \bm{Disparity} benchmark we achieve an average of 4.1 with a standard deviation of 1.2.
+Using a LC of size 4 for the \bm{Disparity} benchmark an average of 4.1 with a standard deviation of 1.2 is achieved.
 Thus, if the logical-core could change size, there is a possibility that this could reduce the overall energy consumption of the system by switching from 16 to 4.
 
 Overall, most benchmarks that benefit from large logical-cores will also be met with important standard deviations of IPC performance.
