@@ -42,7 +42,7 @@ In this situation, runtime reconfiguration allows to maximise speed whilst being
 
 \subsection{Code Optimizations}
 When cores are fused they execute blocks of instructions in parallel on each physical core in the logical core (LC).
-In order to obtain the best results, large blocks must be generated as this leads to a higher IPC on the LC~\cite{micolet2016dmpstream}.
+In order to obtain the best results, large blocks must be generated as this leads to a higher IPC on the LC as seen in Chapter~\ref{chp:streamit}.
 The applied optimizations include aggressive loop unrolling, inlining and replacing conditional statements with either software predication or architecture-level predication.
 These optimizations are well known and do not require any structural modifications of the program.
 
