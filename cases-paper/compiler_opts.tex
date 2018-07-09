@@ -13,28 +13,36 @@ Another issue is that unrolling loops with conditional statements may not help i
 So these loops should not be unrolled.
 
 \begin{figure}[t]
-\lstset{language=C,numbersep=4pt,basicstyle=\small}
+\lstset{language=C,numbersep=4pt,basicstyle=\small,xleftmargin=.2\textwidth}
+\begin{center}
 \begin{lstlisting}
+
 for(int i = 0; i < 1000; i++)
   for(int j = 0; j < 1000; j++)
      for(int k = 0;k < 5; k++)
          a[i][j] = a[i][j] * b[k][j];
 \end{lstlisting}
+\end{center}
+\vspace{-1em}
 \caption{Example of an inner-most loop which should be completely unrolled.}
 \label{lst:small}
+\vspace{-3em}
 \end{figure}
 
 \begin{figure}[t]
-
-\lstset{language=C,numbersep=4pt,basicstyle=\small}
+\lstset{language=C,numbersep=4pt,basicstyle=\small,xleftmargin=.2\textwidth}
+\begin{center}
 \begin{lstlisting}
+
 for(int i = 0; i < 1000; i++)
   for(int j = 0; j < 1000; j++)
-      a[i][j] = a[i][j-1] 
-                       * b[i][j];
+      a[i][j] = a[i][j-1] * b[i][j];
 \end{lstlisting}
+\end{center}
+\vspace{-1em}
 \caption{Example of a data dependency which can be removed by interchanging the loops.}
 \label{lst:dep}
+\vspace{1em}
 \end{figure}
 
 
