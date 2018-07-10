@@ -1,14 +1,14 @@
 This section describes optimizations focused on reducing control flow and expanding block sizes which is necessary for high performance as seen in section~\ref{sec:lim_study}.
 
 \subsection{Loop Unrolling}
-Loop unrolling is a common optimization used to reduce the overhead of the loop header and to better expose Instruction Level Parallelism (ILP).
-When dealing with tightly-knit loops, logical cores may perform poorly due to the fact that they execute many small blocks, thus increasing the Synchronization Cost.
+As seen in Chapter~\ref{chp:streamit}, loop unrolling can be used to reduce the overhead of the loop header and to better expose Instruction Level Parallelism (ILP).
+When dealing with tightly-knit loops, logical cores may perform poorly due to the fact that they execute many small blocks, thus increasing the Synchronization Cost and increasing the branch prediction requirements.
 Unrolling loops will both reduce the number of blocks required to execute the loop and increase the size of the blocks, thus reducing the Synchronization Cost and increasing ILP.
 For example, the innermost loop in Figure~\ref{lst:small} should be completely unrolled and its outer loop unrolled partially to increase the block size.
-There are certain factors which can limit the usefulness of loop unrolling which will be examined later on.
-In the evaluated architecture, it may not have more than 32 load or store instructions per block.
-Therefore, unrolled memory intensive loops must ensure that they do not go above this threshold.
-Going above this threshold leads to creating a new block which will put a strain on the branch predictor.
+There are certain factors limit the usefulness of loop unrolling.
+In the evaluated EDGE architecture, blocks may not have more than 32 load or store instructions.
+This is due to the fact that block headers contain a 32 bit flag informing how many stores are in a block~\ref{putnam2010e2,smith2006edge}.
+Therefore unrolling memory intensive loops will not necessarily increase the size of blocks drastically, however it will reduce the strain on branch prediction as it will generate multiple blocks with fixed branches.
 Another issue is that unrolling loops with conditional statements may not help improve the size of the block as the conditional branches might still segment the new blocks.
 So these loops should not be unrolled.
 
@@ -26,7 +26,6 @@ for(int i = 0; i < 1000; i++)
 \vspace{-1em}
 \caption{Example of an inner-most loop which should be completely unrolled.}
 \label{lst:small}
-\vspace{-3em}
 \end{figure}
 
 \begin{figure}[t]
