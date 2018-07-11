@@ -11,7 +11,6 @@ This section explores how core composition affects the performance of the SD-VBS
 First a phase analysis is performed, followed by a study of the IPC variation for static core fusion.
 Then the use of dynamic core composition is motivated by using the gathered information.
 
-
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{cases-paper/graphics/Exploration/clusters3.pdf}
@@ -21,10 +20,26 @@ Then the use of dynamic core composition is motivated by using the gathered info
 \end{figure}
 
 
+\begin{table}[t]
+  \small
+  \centering
+ \begin{tabular} { | l | l | l | l | l | }
+ \hline
+   \cellcolor[gray]{0.7}Disparity & \cellcolor[gray]{0.7} Localization& \cellcolor[gray]{0.7} MSER& \cellcolor[gray]{0.7} Multi\_NCut& \cellcolor[gray]{0.7} Sift\\ \hline
+	98\%  & 95\% & 85\%  & 100\%& 99\%\\ \hline
+	 \cellcolor[gray]{0.7} Stitch & \cellcolor[gray]{0.7} SVM & \cellcolor[gray]{0.7} Text. Synth & \cellcolor[gray]{0.7} Tracking&\\ \hline
+	  95\%& 93\%& 98\%& 98 \%&\\ \hline
+	\end{tabular}
+  \caption{Branch prediction accuracy in percentage for each of the benchmarks.}\label{tab:sd-vbsbpred}
+\end{table}
+
 \subsection{Phase Detection}
 Figure~\ref{fig:sxt} presents the IPC performance through time for all the benchmarks when using a logical core (LC) composed of 16 cores.
 The IPC is calculated for each time tick, which is set at interval of 640 blocks committed.
-The IPC varies a lot for some of the benchmarks such as \bm{Disparity} or \bm{Localization} where dynamic fusion is expected to be especially good.
+%make this way clearer
+The interval of 640 blocks was chosen as the largest core composition of size 16 can potentially commit up to 64 blocks at a time.
+Thus measuring performance every 640 blocks allows to fully capture the performance of large compositions without sacrificing loss of information.
+As seen in Figure~\ref{fig:sxt} the IPC varies a lot for some of the benchmarks such as \bm{Disparity} or \bm{Localization} where dynamic fusion is expected to be especially good.
 For other, such as \bm{Multi\_NCut}, the execution is dominated by a single long phase with constant IPC, which will clearly show no benefit from using dynamic fusion.
 
 To better understand how dynamic core fusion improves performance, either by improving speedup or reducing energy, this section begins with a study of how each benchmark features different phases during their execution.
@@ -56,6 +71,7 @@ Since each phase is a cluster of similar IPC values, having two or more clusters
     \label{fig:block_sizes}
 	\vspace{5mm}
 \end{figure}
+
 \subsection{Static Core Fusion Exploration}
 
 Figure~\ref{fig:stddev} shows how the average Instructions Per Cycle (IPC) changes as the size of a LC is increased, going in powers of 2 from 1 to 16 fused cores.
@@ -87,3 +103,28 @@ Thus, if the logical-core could change size, there is a possibility that this co
 
 Overall, most benchmarks that benefit from large logical-cores will also be met with important standard deviations of IPC performance.
 The high standard deviation is evidence of performance phases found in each application which are likely to benefit from dynamic adaptation.
+
+%Need a better name for this
+\subsection{Analysis of loops}
+
+As previously mentioned, both \bm{MSER} and \bm{Multi\_NCut} do not benefit from core-composition during their predominant phases'.
+This subsection focuses on understanding why this is the case and explores the code that represent the main phases of both of these applications to underline where the problems arise.
+Other code snipets from other SD-VBS benchmarks are also explored to demonstrate examples of code that perform well on core-compositions.
+
+\paragraph{MSER}
+
+MSER has two distinct IPC phases according to Figure~\ref{fig:clust}, in the code the first phase, which is the domminant phase, represents the computation of the extremal regions tree.
+As seen in Figure~\ref{fig:block_sizes}, the majority of the blocks in MSER are less than 32 instructions long, meaning that core-compositions will have to load the maximum amount of blocks to fill each core.
+The source code of this phase can be found in the Appendix with Listing~\ref{lsting:mser}.
+The listing shows how this phase is made out of small tight knit loops.
+The while loops found at lines 27-30, 31-33, 36-39, 40-42 and 71-75 never run for more than a few iterations.
+This entire section of code is full of control-flow causing the blocks to remain very small.
+
+It's also important to note that Table~\ref{tab:sd-vbsbpred} shows that the average branch-prediction accuracy of \bm{MSER} is of 85\%.
+Recalling Figure~\ref{fig:req_pred} and the fact that the average block size of \bm{MSER} is under 32 instructions, this means that no composition can be fully efficiently used.
+Some speedup can still be obtained, as cores in a composition do not need to have all the instruction window full to be able to obtain performance improvements.
+However these improvements are minor, and come at a high energy cost.
+
+To get performance out of \bm{MSER}, this major phase would have to be re-written to be less control-flow heavily so that larger blocks can be extracted.
+
+\paragraph{Multi-NCut}

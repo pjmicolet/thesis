@@ -11,12 +11,33 @@ This is due to the fact that block headers contain a 32 bit flag informing how m
 Therefore unrolling memory intensive loops will not necessarily increase the size of blocks drastically, however it will reduce the strain on branch prediction as it will generate multiple blocks with fixed branches.
 Another issue is that unrolling loops with conditional statements may not help improve the size of the block as the conditional branches might still segment the new blocks.
 So these loops should not be unrolled.
-
+\lstset{
+	backgroundcolor=\color{lbcolor},
+	tabsize=2,
+	rulecolor=,
+	language=matlab,
+        basicstyle=\small,
+        upquote=true,
+        aboveskip={1\baselineskip},
+        columns=fixed,
+        showstringspaces=false,
+        extendedchars=true,
+        breaklines=true,
+        prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+        frame=single,
+        showtabs=false,
+        showspaces=false,
+        showstringspaces=false,
+        identifierstyle=\ttfamily,
+        keywordstyle=\color[rgb]{0,0,1},
+        commentstyle=\color[rgb]{0.133,0.545,0.133},
+        stringstyle=\color[rgb]{0.627,0.126,0.941},
+		numbers=left,
+}
 \begin{figure}[t]
-\lstset{language=C,numbersep=4pt,basicstyle=\small,xleftmargin=.2\textwidth}
+\lstset{language=C,numbersep=4pt}
 \begin{center}
 \begin{lstlisting}
-
 for(int i = 0; i < 1000; i++)
   for(int j = 0; j < 1000; j++)
      for(int k = 0;k < 5; k++)
@@ -29,10 +50,9 @@ for(int i = 0; i < 1000; i++)
 \end{figure}
 
 \begin{figure}[t]
-\lstset{language=C,numbersep=4pt,basicstyle=\small,xleftmargin=.2\textwidth}
+\lstset{language=C,numbersep=4pt}
 \begin{center}
 \begin{lstlisting}
-
 for(int i = 0; i < 1000; i++)
   for(int j = 0; j < 1000; j++)
       a[i][j] = a[i][j-1] * b[i][j];
