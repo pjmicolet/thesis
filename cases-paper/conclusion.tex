@@ -1,10 +1,40 @@
-In this paper we have shown that whilst static core fusion already demonstrates promising results, it becomes harder to be efficient when increasing the size of logical cores.
-We explained theoretical limitations of static core fusion; without high branch prediction and large blocks, it under-performs.
-This was followed by a study of a suite of benchmarks, showing how performance varies greatly depending on the size of logical cores. 
+This chapter tackled the problem of dynamic reconfiguration of a Dynamic Multicore Processor at runtime.
+Due to the fact that adding cores in a core-composition does not result in linear improvements, obtaining the fastest performance comes at the cost of energy.
+Therefore, static core compositions are not an efficient method to speed up programs with phases.
+Runtime dynamic reconfiguration of DMPs is therefore necessary to ensure that core compositions are used appropriately.
 
-We then created two dynamic schemes: \textbf{DSpeed} that matches the speed of the fastest static core fusion and \textbf{DEff} that maximizes efficiency.
-Using these schemes we saw that \textbf{DSpeed} saves on average 42\% energy compared to the optimal static logical core for a given benchmark.
-We also showed that \textbf{DEff} can improve performance by up to 1.30x and reduce energy consumption by 1.20x on some benchmarks.
-Finally, we developed a simple linear regression model to decide on the number of cores to fuse at runtime to optimize for performance, leading to a 37\% reduction in energy while maintaining the same level of performance as a static scheme.
+To better understand how core-composition is sensitive to branch prediction and block size, a limit study is conducted.
+It shows that larger core-compositions favour large blocks as this reduces the strain on the branch predictor and also reduces the communication cost between cores.
+To improve the size of blocks and block level parallelism, a set of compiler optisations such as loop inversion, loop unrolling and predication are discussed.
+
+These optimistions are then applied on a set of vision benchmarks, and the performance of static core-compositions help show that these programs have phases of IPC patterns.
+Using this information, two dynamic runtime reconfiguration schemes are created:  \textbf{DSpeed} that matches the speed of the fastest static core fusion and \textbf{DEff} that maximizes efficiency.
+The chapter shows that \textbf{DSpeed} saves on average 42\% energy compared to the optimal static logical core whilst \textbf{DEff} can improve performance by up to 1.30x and reduce energy consumption by 1.20x on some benchmarks.
+
+Finally a linear regression model is proposed to decide the number of cores to fuse at runtime for \textbf{DSpeed}.
+This  model leads to a 37\% reduction in energy whilst maintaining the same level of performance as the optimal static scheme.
+
+Overall, the contributions of this chapter are:
+
+\begin{itemize}
+\item Analysis of the limits of core fusion using an analytical model.
+\vspace{-1em}
+\item A study of the loop optimizations required to ensure efficient use of core fusion.
+\vspace{-2.5em}
+\item An in-depth comparison of static and dynamic core fusion schemes on the San Diego Vision Benchmark Suite.
+\vspace{-1em}
+\item A demonstration that core fusion has the potential to offer a large reduction in energy savings.
+\vspace{-1em}
+\item A demonstration that a simple linear-regression based model can predict the number of cores to fuse for different program phases.
+\end{itemize}
+
+%In this paper we have shown that whilst static core fusion already demonstrates promising results, it becomes harder to be efficient when increasing the size of logical cores.
+%We explained theoretical limitations of static core fusion; without high branch prediction and large blocks, it under-performs.
+%This was followed by a study of a suite of benchmarks, showing how performance varies greatly depending on the size of logical cores. 
+
+%We then created two dynamic schemes: \textbf{DSpeed} that matches the speed of the fastest static core fusion and \textbf{DEff} that maximizes efficiency.
+%Using these schemes we saw that \textbf{DSpeed} saves on average 42\% energy compared to the optimal static logical core for a given benchmark.
+%We also showed that \textbf{DEff} can improve performance by up to 1.30x and reduce energy consumption by 1.20x on some benchmarks.
+%Finally, we developed a simple linear regression model to decide on the number of cores to fuse at runtime to optimize for performance, leading to a 37\% reduction in energy while maintaining the same level of performance as a static scheme.
 
 

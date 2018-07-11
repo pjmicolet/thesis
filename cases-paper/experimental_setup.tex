@@ -3,13 +3,56 @@ This section now presents the experimental setup used for the remaining parts of
 
 \subsection{Benchmarks}
 
+\begin{table}[t]
+% The FFT need are variable
+  \small
+  \centering
+ \begin{tabular} { | l | l | }
+ \hline
+   \cellcolor[gray]{0.7}Characteristic & \cellcolor[gray]{0.7} Benchmark\\ \hline
+    Memory Intensive & Disparity, Tracking\\ \hline
+	Computation Intensive & MSER, SVM, SIFT, Localization,Multi NCut\\\hline
+	Memory and Computation Intensive & Stitch\\ \hline
+   \end{tabular}
+  \caption{Characteristics of the benchmarks.}\label{tab:sd-vbschar}
+\end{table}
+
 For this chapter the performance of the Dynamic Multicore Processor (DMP) is studied on a set of Vision Benchmarks designed for hardware and compiler research~\cite{sdvbs}.
 The San Diego Vision Benchmark suite (SD-VBS) is composed of nine single-threaded C benchmarks ranging from image analysis to motion tracking.
 These benchmarks represent state-of-the-art applications in image and vision recognition which are prevalent in embedded systems.
 
 Vision applications typically have regular and simple control flow which enables the formation of large blocks of instructions.
-The processor relies on the ability to form large blocks to exploit ILP which makes these applications particularly well suited.
+The processor relies on the ability to form large blocks to exploit block level parallelism (BLP) which makes these applications particularly well suited.
 As the results will show, the phase length has minimal impact on energy savings when the reconfiguration overhead is low.
+
+The 9 benchmarks are described here as follows:
+
+\begin{itemize}
+\item \textbf{Disparity} Computes depth information for a given pair of images.
+\vspace{-1em}
+\item \textbf{Localization} Estimates position of robot based on its surroundings.
+\vspace{-1em}
+\item \textbf{MSER} Maximally Stable Extremal Regions, a method used for blob detection in images.
+\vspace{-1em}
+\item \textbf{Multi NCut} Partitions images into conceptual regions.
+\vspace{-1em}
+\item \textbf{Sift} Scale invariant feature transform is used to extract and describe items found in an image.
+\vspace{-1em}
+\item \textbf{Stitch} Combines multiple photographs into a single image.
+\vspace{-1em}
+\item \textbf{SVM} Support Vector Machine.
+\vspace{-1em}
+\item \textbf{Texture Synthesis} Creates larger image out of a small sample.
+\vspace{-1em}
+\item \textbf{Tracking} Extracts motion information from a set of images.
+\end{itemize}
+
+and their characteristics in terms of memory/computation intensity are shown in Table~\ref{tab:sd-vbschar}.
+
+\paragraph{Input Size}
+
+The SD-VBS benchmark suite comes with a different set of input sizes.
+Due to executing these benchmarks on a cycle accurate simulator, it takes a lot of time to execute benchmarks.
 
 %\subsection{Architecture and Simulator}
 
