@@ -109,11 +109,10 @@ The high standard deviation is evidence of performance phases found in each appl
 
 As previously mentioned, both \bm{MSER} and \bm{Multi\_NCut} do not benefit from core-composition during their predominant phases'.
 This subsection focuses on understanding why this is the case and explores the code that represent the main phases of both of these applications to underline where the problems arise.
-Other code snipets from other SD-VBS benchmarks are also explored to demonstrate examples of code that perform well on core-compositions.
+%Other code snipets from other SD-VBS benchmarks are also explored to demonstrate examples of code that perform well on core-compositions.
 
 \paragraph{MSER}
-
-MSER has two distinct IPC phases according to Figure~\ref{fig:clust}, in the code the first phase, which is the domminant phase, represents the computation of the extremal regions tree.
+\bm{MSER} has two distinct IPC phases according to Figure~\ref{fig:clust}, in the code the first phase, which is the domminant phase, represents the computation of the extremal regions tree.
 As seen in Figure~\ref{fig:block_sizes}, the majority of the blocks in MSER are less than 32 instructions long, meaning that core-compositions will have to load the maximum amount of blocks to fill each core.
 The source code of this phase can be found in the Appendix with Listing~\ref{lsting:mser}.
 The listing shows how this phase is made out of small tight knit loops.
@@ -128,3 +127,16 @@ However these improvements are minor, and come at a high energy cost.
 To get performance out of \bm{MSER}, this major phase would have to be re-written to be less control-flow heavily so that larger blocks can be extracted.
 
 \paragraph{Multi-NCut}
+\bm{Multi\_NCut} is faced with a similar situation to \bm{MSER}.
+Figure~\ref{fig:block_sizes} shows that once again, the majority of the blocks are less than 32 instructions long, in fact, over 50\% of the blocks are of 12 instructions or less.
+Table~\ref{tab:sd-vbspred} shows that the branch prediction is always correct, yet, with blocks this small, the synchronization cost of executing the blocks on large compositions outdoes any benefit that can be obtained via core-composition.
+Listing~\ref{lsting:multi} shows the source code of the main phase of \bm{Multi\_NCut}, the main loop found at lines 49 to 58.
+Once again, this loop cannot be efficiently unrolled as the \textit{find} and \textit{join} functions are comprised of small control heavy while loops.
+Even by inlining those function calls, the while loops will cause the blocks to be small, and unrolling the while loops will generate more checks which wont help increase the size of the blocks.
+Overall, for \bm{Multi\_NCut} the problem is that the blocks are too small which will cause the overhead of dispatching multiple blocks across a core-composition inefficient.
+This is why the benchmark does not perform significantly better with core-composition without a high increase in energy consumption.
+
+
+Overall, both benchmarks demonstrate that some loops cannot be adapted to benefit from core-composition.
+This is especially true of while loops that cannot be converted into more traditional for loops.
+Due to the size of these loops, the overhead of dispatching multiple blocks over multiple cores simply outweighs the performance benefits.
