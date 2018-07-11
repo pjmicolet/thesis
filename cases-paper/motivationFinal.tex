@@ -1,7 +1,7 @@
 This section motivates the use of dynamic core fusion and its impact on performance and energy.
 It also shows that loop optimizations have a significant performance impact when fusing cores.
 
-\subsection{Dynamic Core Fusion}
+\paragraph{Dynamic Core Fusion}
 \begin{figure}[t]
     \centering
     \includegraphics[width=\textwidth]{cases-paper/graphics/motivation/disp_opt_4_16_3.pdf}
@@ -41,7 +41,7 @@ On the other hand, if the DMP is reconfigured at runtime, the core-composition c
 In this situation, runtime reconfiguration allows to maximise speed whilst being energy efficient; a goal that cannot be achieved via static ahead of time configurations.
 
 %Maybe, just maybe, add a graph showing how the size of the blocks change (need data on this).
-\subsection{Code Optimizations}
+\paragraph{Code Optimizations}
 
 When cores are fused they execute blocks of instructions in parallel on each physical core in the core composition, also known as a logical core (LC).
 Having multiple cores in a composition can increase the amount of block level parallelism (BLP) that can be extracted out of a program.
@@ -69,7 +69,7 @@ However, it also demonstrates that not all of the code in a program can be optim
 More details about the loop transformations are given in section~\ref{sec:opt} but this example illustrates the need for careful tuning of the compiler to achieve high performance on such an architecture.
 
 %Find some citation for this
-\subsection{Automating runtime reconfiguration}
+\paragraph{Automating runtime reconfiguration}
 
 Figure~\ref{fig:disp_ex} motivates the use of runtime reconfiguration to ensure that DMP can improve the performance of single threaded applications efficiently by minimising energy consumption.
 Figure~\ref{fig:compmotiv} shows how modifying loops affects the performance in terms of IPC for a core-composition.
@@ -81,7 +81,7 @@ The first advantage is that it removes the responsibility from the programmer: a
 Second, if ever the program is modified, this may require new profiling information to be generated to ensure that manual reconfiguration calls are correct.
 If the reconfiguration is automated, then it can adapt automatically to any changes made to the source code.
 
-\subsection{Summary}
+\paragraph{Summary}
 This section has shown that programs exhibit phases with various amount of ILP available.
 A dynamic multicore processor can take advantage of this property to fuse a large number of cores for the high-ILP phases and fuse a smaller number of cores when ILP drops to conserve energy.
 The section also illustrated the importance of fine-tuned code transformations to achieve sustained performance and increase the potential for fusing cores.

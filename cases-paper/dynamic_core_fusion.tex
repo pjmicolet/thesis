@@ -21,13 +21,20 @@
 
 \end{figure}
 
-Having studied the behavior of the program under a fix number of cores, the impact of varying the number of fused cores throughout program execution is studied.
+Having studied the behavior of the program under a static number of cores, the impact of varying the number of composed cores throughout program execution is now studied.
 The section first describe how the traces are generated for the dynamic core fusion schemes.
 Before the analysis two types of static core fusion are defined:
 \begin{itemize}
 	\item \textbf{Static Benchmark}: A fixed fused-core which is optimal for the benchmark at hand (SB).
-	\item \textbf{Static Suite}: A fixed fused-core which represents the average best for the entire suite of benchmarks. This represents the baseline for the paper (SS).
+\vspace{-1.2em}
+	\item \textbf{Static Suite}: A fixed fused-core which represents the average best for the entire suite of benchmarks. This represents the baseline for the chapter (SS).
 \end{itemize}
+
+The reason \textbf{Static Suite} is used as a baseline is due to the fact that it represents a core configured at design time.
+It is the equivalent of hardware designers analysing the requirements of a processor based on the type of applications it will be executing.
+This is better than using a single core as a baseline, as a single core will always represent the slowest execution time whilst also consuming the least amount of energy.
+\textbf{Static Benchmark} on the other hand represents the ability to compose cores ahead of time; which is an extra step of flexibility compared to \textbf{Static Suite}.
+
 The static fused-core scheme is then compared to the results obtained for the dynamic one for the SD-VBS benchmarks.
 This is followed by a closer analysis for two dynamic core fusion objectives: one that optimizes speed and another that optimizes for efficiency.
 
@@ -145,7 +152,7 @@ This data shows that even if the reconfiguration overhead is 1,000 cycles, avera
 \vspace{5mm}
 \end{figure}
 
-\subsection{Summary}
+\paragraph{Summary}
 
 Overall, wether the program is optimize for speed or efficiency, dynamic core fusion will always lead to higher speedup or lower energy consumption than a fixed configuration.
 This is due to the presence of phases in applications that the dynamic scheme can exploit to reduce wasting energy in low ILP phases.
