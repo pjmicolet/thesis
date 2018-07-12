@@ -1,5 +1,5 @@
 
-\begin{figure}
+\begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{cases-paper/graphics/Exploration/ipcs_16_2.pdf}
     \caption{IPC as a function of time for each benchmark when run on 16 fused cores.}
@@ -16,22 +16,9 @@ Then the use of dynamic core composition is motivated by using the gathered info
     \includegraphics[width=1\textwidth]{cases-paper/graphics/Exploration/clusters3.pdf}
     \caption{Number of phases determined for each benchmark using kMeans clustering and their distribution.}
     \label{fig:clust}
-		\vspace{5mm}
+		\vspace{1em}
 \end{figure}
 
-
-\begin{table}[t]
-  \small
-  \centering
- \begin{tabular} { | l | l | l | l | l | }
- \hline
-   \cellcolor[gray]{0.7}Disparity & \cellcolor[gray]{0.7} Localization& \cellcolor[gray]{0.7} MSER& \cellcolor[gray]{0.7} Multi\_NCut& \cellcolor[gray]{0.7} Sift\\ \hline
-	98\%  & 95\% & 85\%  & 100\%& 99\%\\ \hline
-	 \cellcolor[gray]{0.7} Stitch & \cellcolor[gray]{0.7} SVM & \cellcolor[gray]{0.7} Text. Synth & \cellcolor[gray]{0.7} Tracking&\\ \hline
-	  95\%& 93\%& 98\%& 98 \%&\\ \hline
-	\end{tabular}
-  \caption{Branch prediction accuracy in percentage for each of the benchmarks.}\label{tab:sd-vbsbpred}
-\end{table}
 
 \subsection{Phase Detection}
 Figure~\ref{fig:sxt} presents the IPC performance through time for all the benchmarks when using a logical core (LC) composed of 16 cores.
@@ -39,24 +26,27 @@ The IPC is calculated for each time tick, which is set at interval of 640 blocks
 %make this way clearer
 The interval of 640 blocks was chosen as the largest core composition of size 16 can potentially commit up to 64 blocks at a time.
 Thus measuring performance every 640 blocks allows to fully capture the performance of large compositions without sacrificing loss of information.
+Displaying the performance of the LC of size 16 gives a performance ceiling for all the benchmarks as it is the maximum number of cores which can be fused at any point.
 As seen in Figure~\ref{fig:sxt} the IPC varies a lot for some of the benchmarks such as \bm{Disparity} or \bm{Localization} where dynamic fusion is expected to be especially good.
 For other, such as \bm{Multi\_NCut}, the execution is dominated by a single long phase with constant IPC, which will clearly show no benefit from using dynamic fusion.
 
 To better understand how dynamic core fusion improves performance, either by improving speedup or reducing energy, this section begins with a study of how each benchmark features different phases during their execution.
 For every benchmark the IPC results of 16,8,4,2,1 fused cores are regrouped and kMeans clustering is applied to determine phases.
-This process is only done for the purpose of exploring this set of benchmarks.
 Intervals that exhibit similar IPC values when run on different core counts are classified in the same cluster.
 In order to find the correct number of clusters the Sum of Square Errors (SSE) is plotted for a given cluster size from 1 to 15 and determine the optimal cluster to be in the elbow in the plot~\cite{everitCluster2001}.
+Applying a kMeans clustering to the IPCs of each application to determine phases is preferred to determining phases of an application by reading the source code phases.
+For example, the benchmark \bm{MSER}'s source code has 7 distinct steps, yet the kMeans clustering shows that most of these steps result in the same performance, which can be visualised in Figure~\ref{fig:sxt}.
+This kMeans clustering process is only done for the purpose of exploring this set of benchmarks.
 
-Figure~\ref{fig:clust} shows us the optimal number of clusters for each benchmark and the frequency of each cluster.
+Figure~\ref{fig:clust} shows the number of clusters for each benchmark and the frequency of each cluster.
+The frequency of a cluster is counted by how many ticks in the program are part of that specific phase.
 The data can be corroborated with the information found in Figure~\ref{fig:sxt}.
-For example, benchmarks \bm{MSER} and \bm{Multi\_NCut} feature two phases, with one dominating phase.
-This means that it will be impossible to obtain any kind of performance improvements through dynamic reconfiguration.
+For example, benchmarks \bm{MSER} and \bm{Multi\_NCut} feature two phases, with one of those phases comprising over 80\% of the total execution.
+This means that it will be impossible to obtain any kind of performance improvements through dynamic reconfiguration due to the fact that there is little opportunity to switch the size of the LC.
 For all the other benchmarks, they each have at least two dominant phases.
 Since each phase is a cluster of similar IPC values, having two or more clusters will result in a higher chance of benefiting from dynamic core fusion.
 
-
-\begin{figure}
+\begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{cases-paper/graphics/Exploration/stddev2.pdf}
     \caption{Comparing average, smallest and greatest IPC for each SD-VBS benchmark using logical-core size of 16.}
@@ -79,11 +69,19 @@ It can be seen that, for most benchmarks, fusing more cores provides an increase
 Benchmarks \bm{Disparity}, \bm{Localization}, \bm{Sift}, \bm{Stitch}, \bm{Texture Synthesis} and \bm{Tracking} all at least observe a speedup of 2x when using core fusion.
 
 However increasing the size of a LC is not always beneficial as can be seen in benchmarks \bm{Localization}, \bm{MSER}, \bm{Multi\_NCut}, \bm{Stich}, and \bm{SVM}.
-For benchmarks \bm{Localization} and \bm{Stitch} the performance increases when fusing up to 8 cores, where-as \bm{MSER} and \bm{Multi\_NCut} never benefit from core fusion. 
+For benchmarks \bm{Localization} and \bm{Stitch} the performance increases when fusing up to 8 cores, where-as \bm{MSER} and \bm{Multi\_NCut} never benefit from core fusion.
+These benchmarks may not see a reduction in performance on 16 cores due to the increase in network traffic, which will make the highest LC size slower than 8 cores.
 Referring back to Figures~\ref{fig:sxt} and~\ref{fig:clust}, \bm{MSER} and \bm{Multi\_NCut} feature one dominating long phase, both performing poorly.
-Figure~\ref{fig:block_sizes} shows the distribution of block-sizes for each of the benchmarks.
-As fine-grained sizes do not matter as much as overall number of lanes being occupied, the block sizes are clustered into groups which represent how ever many number of lanes will be occupied (one lane may execute a block of up to 32 instructions).
 
+Figure~\ref{fig:stddev} also shows the standard deviation of the IPC for each given LC size represented by the grayed out areas.
+For example, running the \bm{Disparity} benchmark on a LC of 16 cores, it can be observed that an average IPC of 8.3 with a standard deviation of 5.2.
+The standard deviation for 16 cores shows that the performance can drop down to 2.5.
+An IPC of 2.5 when using 16 cores is very inefficient as this represents 0.1 of an instruction per cycle for each core.
+Using a LC of size 4 for the \bm{Disparity} benchmark an average of 4.1 with a standard deviation of 1.2 is achieved.
+Thus, if the logical-core could change size, there is a possibility that this could reduce the overall energy consumption of the system by switching from 16 to 4.
+
+Figure~\ref{fig:block_sizes} shows the distribution of block-sizes for each of the benchmarks.
+As two blocks cannot occupy the same lane, the block sizes are clustered into groups which represent how ever many number of lanes will be occupied (one lane may execute a block of up to 32 instructions).
 Figure~\ref{fig:block_sizes} helps explain why benchmarks \bm{MSER} and \bm{Multi\_NCut} do not perform any better with core-fusion.
 For both cases, not only do they have a single detected phase, but both are predominantly formed of blocks that will occupy a single lane.
 In fact, the most frequent block in \bm{MSER}, comprising 21\% the total executed blocks are comprised of only 8 instructions, whilst 31\% of \bm{Multi\_NCut}'s blocks are of 28 instructions.
@@ -93,19 +91,27 @@ The reason there is no degredation of performance is due to the fact that when f
 For example, fusing 16 cores and executing \bm{MSER} may in fact result in a single core being used due to it executing blocks faster than it being able to dispatch the blocks to a next core.
 Hence, in this case, \bm{MSER} would be wasting a lot of energy trying to use 16 cores in a composition, whilst effectively only executing on a single core. 
 This explains the lack of scaling for these two benchmarks.
-
-Figure~\ref{fig:stddev} also shows the standard deviation of the IPC for each given LC size represented by the grayed out areas.
-For example, running the \bm{Disparity} benchmark on a LC of 16 cores, it can be observed that an average IPC of 8.3 with a standard deviation of 5.2.
-The standard deviation for 16 cores shows that the performance can drop down to 2.5.
-An IPC of 2.5 when using 16 cores is very inefficient as this represents 0.1 of an instruction per cycle for each core.
-Using a LC of size 4 for the \bm{Disparity} benchmark an average of 4.1 with a standard deviation of 1.2 is achieved.
-Thus, if the logical-core could change size, there is a possibility that this could reduce the overall energy consumption of the system by switching from 16 to 4.
+The source-code of \bm{MSER} and \bm{Multi\_NCut} is explored later on, to demonstrate how such small blocks are generated and why it cannot be improved.
 
 Overall, most benchmarks that benefit from large logical-cores will also be met with important standard deviations of IPC performance.
 The high standard deviation is evidence of performance phases found in each application which are likely to benefit from dynamic adaptation.
 
 %Need a better name for this
 \subsection{Analysis of loops}
+
+\begin{table}[t]
+  \small
+  \centering
+ \begin{tabular} { | l | l | l | l | l | }
+ \hline
+   \cellcolor[gray]{0.7}Disparity & \cellcolor[gray]{0.7} Localization& \cellcolor[gray]{0.7} MSER& \cellcolor[gray]{0.7} Multi\_NCut& \cellcolor[gray]{0.7} Sift\\ \hline
+	98\%  & 95\% & 85\%  & 100\%& 99\%\\ \hline
+	 \cellcolor[gray]{0.7} Stitch & \cellcolor[gray]{0.7} SVM & \cellcolor[gray]{0.7} Text. Synth & \cellcolor[gray]{0.7} Tracking&\\ \hline
+	  95\%& 93\%& 98\%& 98 \%&\\ \hline
+	\end{tabular}
+  \caption{Branch prediction accuracy in percentage for each of the benchmarks.}\label{tab:sd-vbsbpred}
+  \vspace{1em}
+\end{table}
 
 As previously mentioned, both \bm{MSER} and \bm{Multi\_NCut} do not benefit from core-composition during their predominant phases'.
 This subsection focuses on understanding why this is the case and explores the code that represent the main phases of both of these applications to underline where the problems arise.
