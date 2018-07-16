@@ -1,17 +1,19 @@
-Having shown the potential that a DMP has to offer, this section now presents a simple scheme that is used to exploit the large energy savings available.
+Having shown the potential that a DMP has to offer, this section now presents a learning scheme that is used to exploit the large energy savings available.
 The main idea is to monitor at runtime some performance counters and make a decision at a regular interval on how to reconfigure the cores.
-For this purpose, a model is trained offline using the data collected and presented earlier in the paper.
+For this purpose, a model is trained offline using the data collected and presented earlier in the chapter.
 Once trained, the model predicts the optimal number of cores based on the performance counters from the previous time interval and reconfiguration occurs if it is different from the current number of cores.
 
 \subsection{Model}
 
-The model is linear regressor which makes predictions using a simple weighted sum of the input features, which is very lightweight and easy to integrate in hardware.
-The model is trained offline using the traces gathered from the prior analysis for the \textbf{DSpeed} scenario which maximizes energy savings while maintaining performance.
-Figure~\ref{fig:linmod} is a graphical representation of the linear model used in this chapter.
+As the decisions are made at runtime, a lightweight model that is able to predict the correct configuration that can be integreated in hardware is necesseray.
+Therefore a linear regression which makes predictions using a weighted sum of the input feature is chosen.The model is trained offline using the traces gathered from the prior analysis for the \textbf{DSpeed} scenario which maximizes energy savings while maintaining performance.
+Figure~\ref{fig:linmod} is a graphical representation of how the linear model is trained.
 The dataset consists of a set of four input features (average block size, and percentage of integer, floating point and load operations) and the optimal number of cores for each time tick for each program.
-These features were chosen as they are easy to extract from the hardware.
-To speedup the learning process, a single data point is created per phase, averaging the features of all the ticks in a phase, resulting in a total of 34 pairs of optimal core number and features.
+These features are chosen as they are easy to extract from the hardware.
+The reason stores are not in the feature vector is due to the fact that a block is comprised only of integer, floating point, load and store operations.
+Therefore, when building the model, the linear regression considers that stores correlate with other features and selects to remove it as a variable.
 
+To speedup the learning process, a single data point is created per phase, averaging the features of all the ticks in a phase, resulting in a total of 34 pairs of optimal core number and features.
 The training consists of finding the weights that minimize the error when predicting the optimal number of cores to use across all time ticks and benchmarks.
 Since only core configurations which use a power of two number of cores are considered, the linear model is built to predict the logarithm (base 2) of the number of cores.
 The prediction is rounded up to the nearest integer in the interval $[0,4]$.
@@ -51,6 +53,8 @@ By increasing the core count on load heavy blocks this will improve performance 
     \label{fig:speedlr}
 \end{figure}
 
+%explain why MSER here is bad. Most likely because it over-estimates because some features in the vector don't describe the performance in the application.
+%This is most likely due to the branch prediction/.
 \subsection{Results}
 
 To evaluate the performance of the model leave-one-out cross-validation  is used; it is a standard machine-learning methodology which tests the model using not seen during training.
