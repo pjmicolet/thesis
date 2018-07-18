@@ -196,6 +196,12 @@ In case of a memory violation caused by undetected dependencies a flush of all b
 %The actual time varies based on the time it takes the cache coherence protocol to move the data around the memory system.
 %Section~\ref{sec:reconfoverhead} discusses in more details how latency affects energy efficiency and shows that dynamic core fusion is still highly beneficial even when considering overheads of 1,000 cycles.
 
+\section{Value Predictors}
+%This will go in the background most likely
+Value Prediction's aim is to provide a hardware solution to reducing latencies caused by memory dependencies in out of order superscalar processors~\cite{gabbayVPOrig}.
+Until recently the benefits of using value predictors have been overshadowed by the potential power consumption and design complexity requried to implement them~\cite{peraisVTAGE2014}.
+However, recent work by Perais et al.~\cite{peraisVTAGE2014,peraisBeBop2015} shows that by adopting a similar prediction scheme such as the ITTAGE predictor~\cite{SeznecITTAGE}, value predictors can be efficiently implemented to predict data for blocks of instructions.
+
 \section{Streaming Programming Languages}
 
 % % This section should explain what steaming programming is (remove all the details about each language)
