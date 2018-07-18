@@ -14,7 +14,8 @@ This section now presents the experimental setup used for the remaining parts of
 	Memory and Computation Intensive & Stitch\\ \hline
    \end{tabular}
   \caption{Characteristics of the benchmarks.}\label{tab:sd-vbschar}
-\end{table}
+\vspace{1em}
+  \end{table}
 
 For this chapter the performance of the Dynamic Multicore Processor (DMP) is studied on a set of Vision Benchmarks designed for hardware and compiler research~\cite{sdvbs}.
 The San Diego Vision Benchmark suite (SD-VBS) is composed of nine single-threaded C benchmarks ranging from image analysis to motion tracking.
@@ -25,7 +26,6 @@ The processor relies on the ability to form large blocks to exploit block level 
 As the results will show, the phase length has minimal impact on energy savings when the reconfiguration overhead is low.
 
 The 9 benchmarks are described here as follows:
-
 \begin{itemize}
 \item \textbf{Disparity} Computes depth information for a given pair of images.
 \vspace{-1em}
@@ -48,10 +48,29 @@ The 9 benchmarks are described here as follows:
 
 and their characteristics in terms of memory/computation intensity are shown in Table~\ref{tab:sd-vbschar}.
 
-\paragraph{Input Size}
 
+\begin{table}[t]
+  \small
+  \centering
+ \begin{tabular} { | l | l | l | l | l | }
+ \hline
+   \cellcolor[gray]{0.7}Disparity & \cellcolor[gray]{0.7} Localization& \cellcolor[gray]{0.7} MSER& \cellcolor[gray]{0.7} Multi\_NCut& \cellcolor[gray]{0.7} Sift\\ \hline
+	VGA  & VGA & CIF  & SIM\_FAST& CIF\\ \hline
+	 \cellcolor[gray]{0.7} Stitch & \cellcolor[gray]{0.7} SVM & \cellcolor[gray]{0.7} Text. Synth & \cellcolor[gray]{0.7} Tracking&\\ \hline
+	  CIF& CIF& FULLHD& CIF &\\ \hline
+	\end{tabular}
+  \caption{Datasets used for each of the benchmarks in SD-VBS.}\label{tab:sd-data}
+  \vspace{1em}
+\end{table}
+
+\paragraph{Input Size}
+%Maybe find a way of explaining how long it takes
 The SD-VBS benchmark suite comes with a different set of input sizes.
-Due to executing these benchmarks on a cycle accurate simulator, it takes a lot of time to execute benchmarks.
+Due to executing these benchmarks on a cycle accurate simulator, executing on large datasets can take a prohobitive amount of time.
+In the paper describing each of the applications in the SD-VBS suite~\cite{sdvbs}, Venkata et al. show how increasing the size of the input does not drastically change the phases of each benchmark.
+Table~\ref{tab:sd-data} shows the datasets used for the benchmarks in this chapter.
+%Multi_NCut would take 10x time longer on anything else
+
 
 %\subsection{Architecture and Simulator}
 
