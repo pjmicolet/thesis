@@ -1,0 +1,12 @@
+In EDGE, block dependencies are expressed through register reads and writes.
+To ensure that blocks in flight do not execute a register read before an older block has executed a write to the same register, register writes are encoded in the header.
+This informs the register-file which can then effectively push back speculative reads from younger blocks.
+Whilst this ensures correct execution of speculative blocks, it effectively reduces the potential for block level parallelism (BLP).
+This is further exacerbated when composing cores is considered, as this increases the amount of blocks that may potentially have to wait on register reads and writes.
+For example, tightly knit loops that write most values out to registers cannot be optimised using core composition due to register dependencies.
+
+In situations where register dependencies are a bottleneck and cannot be optimised via a compiler, core composition cannot be considered an effective method of improving performance.
+The problem of trying to reduce register and memory dependencies to improve instruction level parallelism is not new, and is an issue for more traditional superscalar processors.
+
+
+In these cases value prediction can be used to attempt to ensure that these blocks can run in parallel even if there are dependencies.

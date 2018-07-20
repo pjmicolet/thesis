@@ -1,6 +1,20 @@
-This chapter is currently a dump of all information that I've gathered which doesn't fit in the other two chapters.
-Subjects I want to cover in this chapter are:
-\begin{itemize}
-\item A more in-depth analysis on how we can automatically determine sections of code that are good for core-fusion.
-\item How sequential fetching in core-fusion is a detriment to performance.
-\end{itemize}
+%replace the ref with actual latex ref
+The previous chapter shows how dynamic reconfiguration of a dynamic multicore processor can improve the efficiency of core composition.
+Chapter 7 also demonstrates that there are certain limiting factors to core composition performance, mainly branch prediction and the size of blocks.
+To improve performance, Chapters 6 and 7 show that source level modifications are a method of improving the performance of core composition.
+Whilst this does in fact improve the efficacy of the mechanism, these source level optimisations may not always be applicable.
+In situations where source or compiler level optimisations cannot increase the size of a block, core composition cannot be considered a viable form of improving single threaded performance.
+Instead of solely focusing on improving the source code, analysing how core composition functions at a hardware level can help determine other potential bottlenecks in the system.
+
+This chapter considers hardware modifications of the processor in order to facilitate the use of core composition.
+There are two features of the processor that are explored: first how blocks are fetched in a composition, and second how register dependencies can be handled.
+The current fetching model focuses on ensuring that a single core fills its instruction window, which reduces the opportunities for quickly occupying all the cores in the composition.
+Without modifications, this fetching model requires large blocks to reduce the time required to activate multiple cores in a composition.
+Thus, exploring how the fetching model can be modified to prioritise using all the cores in the composition over filling a single core can lead to better utilisation of the composition.
+Second, register dependencies can reduce block level paralellism which in turn makes core composition less useful.
+Reduced block level parallelism due to memory dependencies is similar to an issue found in trying to increase instruction level parallelism in superscalar processors.
+This chapter explores how a value predictor, which predicts register values to reduce the memory dependencies, can be used to improve performance in core composition.
+
+This chapter is organised as follows: first the current mechanisms of core composition are stated, with an analysis of how they can be a bottleneck for performance.
+Then, the first hardware modification is introduced: a fetching mechanism that reduces core communication by allowing cores to fetch independently.
+The effectiveness of this new fetching model is then explored on a set of microbenchmarks to demonstrate when it improves on performance.
