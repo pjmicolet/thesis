@@ -7,6 +7,20 @@ For example, tightly knit loops that write most values out to registers cannot b
 
 In situations where register dependencies are a bottleneck and cannot be optimised via a compiler, core composition cannot be considered an effective method of improving performance.
 The problem of trying to reduce register and memory dependencies to improve instruction level parallelism is not new, and is an issue for more traditional superscalar processors.
-
-
 In these cases value prediction can be used to attempt to ensure that these blocks can run in parallel even if there are dependencies.
+
+\subsection{Implementation}
+%Explain TAGE either here or in the background
+In this chapter, a Differential Value Tagged Geometric (D-VTAGE) data predictor is implemented.
+The D-VTAGE is a computational based data predictor which stores the last value of a register in a Last Value Table (LVT) and also a stride for that value.
+When a data prediction is requested, the D-VTAGE predictor simply adds the value from the LVT to the stride.
+
+In the work of Perais et al.~\cite{peraisBeBop2015} they present a D-VTAGE predictor that operates on blocks of instructions rather than single instructions.
+This minimizes network pressure on the predictor whilst enabling it to service multiple requests at once.
+As EDGE is a block-based ISA by nature, this is a natural fit.
+Another consideration is that multiple blocks of the same PC may be speculatively executing at the same time, which could cause data mis-predictions if the predictor is not updated.
+This requires current live predictions to be in a speculative window so that new predictions may use the last predicted data and stride.
+
+When a misprediction is detected this is treated in the same way as a load-store dependency miss: the block is only partially flushed by resetting the operands.
+This means that blocks do not have to be refetched, simply re-executed with the correct data.
+

@@ -1,0 +1,23 @@
+\subsection{Fetching mechanism}
+Chapter~\ref{chp:cases} demonstrated how block size affects the performance of core composition, due to the fact that it increases the cost of synchronization and puts a strain on branch prediction.
+Whilst the chapter focused on the size of blocks, it is not the sole determining factor of whether or not a set of blocks may be executed efficiently on a core composition.
+Indeed, small blocks that take a long time to execute can benefit from core composition as long as the branch prediction is accurate.
+This is due to the fact that blocks that take a long time to execute will mask the overhead of having to send these blocks accross multiple cores.
+Therefore, another feature to take into account is block execution time.
+%Put numbers
+For example, small blocks that cause multiple cache misses can be executed on a very large core composition as the cache misses can be executed in parallel and take longer than the fetch and commit overhead.
+
+However, this means that large blocks that have a small execution time, due to the abundant instruction level parallelism found in the block, may in fact not execute efficiently on a large core composition.
+This is due to the fact that the current fetching mechanism serialises fetches.
+
+Insert what I mean here in a graph.
+Then show how this can be made better.
+
+We need to find a way of not serialising fetches.
+
+
+\subsection{Register dependencies}
+Another issue with core composition is inter dependencies between blocks that force serialisation.
+For example: [show code here] may not benefit from core composition as the register dependencies will cause the blocks to serialise.
+In this situation we need a way to be able to speculatively execute register reads so that blocks can actually be executed in parallel.
+If there's a mispeculation then that won't actually cause bad performance, since it's a refresh flush and it can't be slower than a core ( bad for energy tho).
