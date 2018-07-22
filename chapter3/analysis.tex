@@ -1,0 +1,8 @@
+Overall, this chapter demonstrates that improving core composition from a hardware level requires the implementation of complex techniques.
+Whilst a data predictor improves performance by allowing blocks to execute independently via data speculation, implementing a data predictor in hardware is considered difficult~\cite{peraisBeBop2015}.
+Even so, without adding extra features to the hardware to support core composition, performance can be stunted when the software does not generate the ideal block.
+This is a similar problem to early VLIW and superscalar machines (cite).
+
+With this in mind, the results shown in Section~\ref{sec:chp3:res} do demonstrate that if these techniques are implemented in hardware, it can lead to important performance improvements.
+These performance improvements are due to the reduced overhead of populating the core composition with blocks and the register dependencies being resolved via speculation.
+The section even shows that small data predictors can make a difference and that only targetting register reads is a viable solution.

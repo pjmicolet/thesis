@@ -24,3 +24,16 @@ This requires current live predictions to be in a speculative window so that new
 When a misprediction is detected this is treated in the same way as a load-store dependency miss: the block is only partially flushed by resetting the operands.
 This means that blocks do not have to be refetched, simply re-executed with the correct data.
 
+\subsection{Determining block size}
+
+One of the defining factors of the block based D-VTAGE predictor is that a single prediction fetches a fix set of data values rather than requiring one request per instruction.
+Due to the fact that the block size is fixed, determining the correct size is important.
+Having a large block size means that the D-VTAGE predictor can predict all values in a block, however this comes at the sacrifice of having less blocks in memory.
+On the other hand, small block size allows to have multiple blocks stored at a time but means we cannot capture all the data values in an EDGE block.
+In this chapter, the data predictor is focused on register reads rather than memory operations.
+This is due to the fact that, unless the dependence predictor detects a data dependency between two blocks, memory operations operate in parallel.
+Focussing only on register reads will reduce the the block size requirements as reads tend to be a minor component of an EDGE block.
+
+To determine the block size, all the EDGE blocks of the SD-VBS benchmarks are anaylsed to find out the what the average register read count is per block.
+To avoid overfitting the data predictor to the set of benchmarks explored in this chapter, different setups of the data predictor are explored to understand how the block size influences performance.
+More details are provided in the experimental setup.
