@@ -1,8 +1,8 @@
-The previous chapter explored how static ahead-of-time configuration of a dynamic multicore processor (DMP) can improve the performance of multi-threaded streaming applications and showed how reconfiguration leads to optimal performance.
+The previous chapter explored how static ahead-of-time configuration of a dynamic multicore processor (DMP) can improve the performance of multi-threaded streaming applications and showed how a mix of core and thread partitioning leads to optimal performance.
 This chapter focuses on how a DMP can reconfigure itself at runtime to better match phases of a set of single-threaded applications.
 DMPs are designed to improve the performance of single-threaded applications by clustering cores together.
 As previously discussed the reconfiguration can happen ahead of time, especially when programs are phaseless.
-However, programs can benefit from core-composition at different phases of its execution.
+However, programs can benefit from different core-composition sizes at different phases of its execution.
 Some programs may have phases that feature high amounts of block-level parallelism whilst other phases do not perform any better on core-compositions.
 Therefore, for programs that feature many phases, runtime reconfiguration is necessary to ensure efficient use of a DMP.
 
@@ -12,11 +12,11 @@ Yet, whilst being able to adapt to different profiles is an attractive feature, 
 Automating the reconfiguration decisions allows the programmer to solely focus on the software rather than decide when to modify the hardware.
 
 The chapter starts with an explanation of the theoretical limitations of core fusion and what can be expected in terms of performance.
-Then the next section discusses how classical loop optimizations such as unrolling can have a large impact on performance when fusing cores.
-Using the San Diego Vision Benchmark Suite~\cite{sdvbs} (SD-VBS) as a use case, the chapter demonstrates that programs exhibit various phases with different amounts of ILP.
+Then the next section discusses how classical loop optimizations such as unrolling and loop interchange can have a large impact on performance when fusing cores.
+Using the San Diego Vision Benchmark Suite~\cite{sdvbs} (SD-VBS) as a use case, the chapter demonstrates that programs exhibit various phases with different amounts of BLP.
 This is followed by a limit study on the potential for decreasing energy consumption while maintaining performance when adapting the number of cores for each program phase.
 The results show that using dynamic core fusion can save up to 42\% on average while maintaining the same level of performance as a fixed number of cores.
-The issue of latency introduced by reconfiguring the system can influence the impact of core fusion is then covered.
+The issue of latency introduced by reconfiguring the system is then discussed and its influence on the impact of core composition is explored.
 Finally, a simple online model is built using linear regression that predicts the optimal number of cores per phase for reducing energy consumption while maintaining performance.
 This practical model leads to an average of 37\% saving in energy with no performance loss.
 
@@ -31,7 +31,7 @@ To summarize, the contributions are:
 \vspace{-1em}
 \item A demonstration that core fusion has the potential to offer a large reduction in energy savings.
 \vspace{-1em}
-\item A demonstration that a simple linear-regression based model can predict the number of cores to fuse for different program phases.
+\item A demonstration that a linear-regression based model can predict the number of cores to fuse for different program phases.
 \end{itemize}
 
 

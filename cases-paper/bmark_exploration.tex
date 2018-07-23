@@ -24,7 +24,7 @@ Then the use of dynamic core composition is motivated by using the gathered info
 Figure~\ref{fig:sxt} presents the IPC performance through time for all the benchmarks when using a logical core (LC) composed of 16 cores.
 The IPC is calculated for each time tick, which is set at interval of 640 blocks committed.
 %make this way clearer
-The interval of 640 blocks was chosen as the largest core composition of size 16 can potentially commit up to 64 blocks at a time.
+To re-iterate, the interval of 640 blocks was chosen as the largest core composition of size 16 can potentially commit up to 64 blocks at a time.
 Thus measuring performance every 640 blocks allows to fully capture the performance of large compositions without sacrificing loss of information.
 Displaying the performance of the LC of size 16 gives a performance ceiling for all the benchmarks as it is the maximum number of cores which can be fused at any point.
 As seen in Figure~\ref{fig:sxt} the IPC varies a lot for some of the benchmarks such as \bm{Disparity} or \bm{Localization} where dynamic fusion is expected to be especially good.
@@ -33,9 +33,9 @@ For other, such as \bm{Multi\_NCut}, the execution is dominated by a single long
 To better understand how dynamic core fusion improves performance, either by improving speedup or reducing energy, this section begins with a study of how each benchmark features different phases during their execution.
 For every benchmark the IPC results of 16,8,4,2,1 fused cores are regrouped and kMeans clustering is applied to determine phases.
 Intervals that exhibit similar IPC values when run on different core counts are classified in the same cluster.
-In order to find the correct number of clusters the Sum of Square Errors (SSE) is plotted for a given cluster size from 1 to 15 and determine the optimal cluster to be in the elbow in the plot~\cite{everitCluster2001}.
+In order to find the correct number of clusters the Sum of Square Errors (SSE) is plotted for a given cluster size from 1 to 15 and the optimal cluster is defined as the elbow in the plot~\cite{everitCluster2001}.
 Applying a kMeans clustering to the IPCs of each application to determine phases is preferred to determining phases of an application by reading the source code phases.
-For example, the benchmark \bm{MSER}'s source code has 7 distinct steps, yet the kMeans clustering shows that most of these steps result in the same performance, which can be visualised in Figure~\ref{fig:sxt}.
+For example, the benchmark \bm{MSER}'s source code has 7 distinct passes, yet the kMeans clustering shows that most of these passes result in the same performance, which can be visualised in Figure~\ref{fig:sxt}.
 This kMeans clustering process is only done for the purpose of exploring this set of benchmarks.
 
 Figure~\ref{fig:clust} shows the number of clusters for each benchmark and the frequency of each cluster.
@@ -76,7 +76,7 @@ Referring back to Figures~\ref{fig:sxt} and~\ref{fig:clust}, \bm{MSER} and \bm{M
 Figure~\ref{fig:stddev} also shows the standard deviation of the IPC for each given LC size represented by the grayed out areas.
 For example, running the \bm{Disparity} benchmark on a LC of 16 cores, it can be observed that an average IPC of 8.3 with a standard deviation of 5.2.
 The standard deviation for 16 cores shows that the performance can drop down to 2.5.
-An IPC of 2.5 when using 16 cores is very inefficient as this represents 0.1 of an instruction per cycle for each core.
+An IPC of 2.5 when using 16 cores is very inefficient as this represents 0.1 of an instruction per cycle for each core and this performance can be achieved by using smaller core compositions.
 Using a LC of size 4 for the \bm{Disparity} benchmark an average of 4.1 with a standard deviation of 1.2 is achieved.
 Thus, if the logical-core could change size, there is a possibility that this could reduce the overall energy consumption of the system by switching from 16 to 4.
 
@@ -87,7 +87,8 @@ For both cases, not only do they have a single detected phase, but both are pred
 In fact, the most frequent block in \bm{MSER}, comprising 21\% the total executed blocks are comprised of only 8 instructions, whilst 31\% of \bm{Multi\_NCut}'s blocks are of 28 instructions.
 Having such small blocks will always increase both the \textit{SynchronizationCost} and the branch-prediction requirements.
 For \bm{MSER}, the fact that an important percentage of blocks are only 8 instructions long signifies that the overhead of fetching enough blocks for a large core-composition and the synchronization cost for committing them outweighs executing the blocks on a single core.
-The reason there is no degredation of performance is due to the fact that when fusing a high amount of cores, if the overhead of fetching the blocks outweighs the time required to execute them, cores will simply not execute blocks.
+The reason there is no degredation of performance is due to the fact that when fusing a high amount of cores, if the overhead of fetching the blocks outweighs the time required to execute then a core will not submit a PC to another core in the composition.
+In this case, multiple cores may be composed, but only a single one is executing any code.
 For example, fusing 16 cores and executing \bm{MSER} may in fact result in a single core being used due to it executing blocks faster than it being able to dispatch the blocks to a next core.
 Hence, in this case, \bm{MSER} would be wasting a lot of energy trying to use 16 cores in a composition, whilst effectively only executing on a single core. 
 This explains the lack of scaling for these two benchmarks.
@@ -97,7 +98,7 @@ Overall, most benchmarks that benefit from large logical-cores will also be met 
 The high standard deviation is evidence of performance phases found in each application which are likely to benefit from dynamic adaptation.
 
 %Need a better name for this
-\subsection{Analysis of loops}
+\subsection{Analysis of code}
 
 \begin{table}[t]
   \small
@@ -119,7 +120,7 @@ This subsection focuses on understanding why this is the case and explores the c
 
 \paragraph{MSER}
 \bm{MSER} has two distinct IPC phases according to Figure~\ref{fig:clust}, in the code the first phase, which is the domminant phase, represents the computation of the extremal regions tree.
-As seen in Figure~\ref{fig:block_sizes}, the majority of the blocks in MSER are less than 32 instructions long, meaning that core-compositions will have to load the maximum amount of blocks to fill each core.
+As seen in Figure~\ref{fig:block_sizes}, the majority of the blocks in MSER are 8 instructions long, meaning that core-compositions will have to load the maximum amount of blocks to fill each core.
 The source code of this phase can be found in the Appendix with Listing~\ref{lsting:mser}.
 The listing shows how this phase is made out of small tight knit loops.
 The while loops found at lines 27-30, 31-33, 36-39, 40-42 and 71-75 never run for more than a few iterations.
@@ -139,7 +140,7 @@ Table~\ref{tab:sd-vbspred} shows that the branch prediction is always correct, y
 Listing~\ref{lsting:multi} shows the source code of the main phase of \bm{Multi\_NCut}, the main loop found at lines 49 to 58.
 Once again, this loop cannot be efficiently unrolled as the \textit{find} and \textit{join} functions are comprised of small control heavy while loops.
 Even by inlining those function calls, the while loops will cause the blocks to be small, and unrolling the while loops will generate more checks which wont help increase the size of the blocks.
-Overall, for \bm{Multi\_NCut} the problem is that the blocks are too small which will cause the overhead of dispatching multiple blocks across a core-composition inefficient.
+For \bm{Multi\_NCut} the problem is that the blocks are too small which will cause the overhead of dispatching multiple blocks across a core-composition inefficient.
 This is why the benchmark does not perform significantly better with core-composition without a high increase in energy consumption.
 
 

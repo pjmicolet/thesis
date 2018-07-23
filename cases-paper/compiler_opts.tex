@@ -10,7 +10,8 @@ In the evaluated EDGE architecture, blocks may not have more than 32 load or sto
 This is due to the fact that block headers contain a 32 bit flag informing how many stores are in a block~\ref{putnam2010e2,smith2006edge}.
 Therefore unrolling memory intensive loops will not necessarily increase the size of blocks drastically, however it will reduce the strain on branch prediction as it will generate multiple blocks with fixed branches.
 Another issue is that unrolling loops with conditional statements may not help improve the size of the block as the conditional branches might still segment the new blocks.
-So these loops should not be unrolled.
+So these loops should not be unrolled as they will only increase code size.
+
 \lstset{
 	backgroundcolor=\color{lbcolor},
 	tabsize=2,
@@ -115,7 +116,8 @@ As can be seen, benchmarks \bm{MSER} and \bm{Multi-NCut} do not perform any diff
 This is due to the fact that none of these optimizations can be successfully applied on these benchmarks.
 For the other benchmarks there is a significant improvements of up to 12$\times$ for \bm{Sift} when the optimizations are applied.
 It is important to note that, whilst often the increase in IPC correlates with the speedup, this is not always the case.
-In these situations, this is due to the fact that some of the optimisations also reduced the amount of computation required to complete the program; this is the case for \bm{Localization} and \bm{Sift}.
+In these situations, this is due to the fact that some of the optimisations also reduced the amount of computation required to complete the program; this is the case for \bm{Localization}, \bm{Sift} and \bm{TextureSynthesis}.]
+These benchmarks benefit from other source code modifications such as forced inlining for \bm{Localization} and \bm{TextureSynthesis} and loop invariant code motion for \bm{Sift}.
 
 \paragraph{Summary}
 

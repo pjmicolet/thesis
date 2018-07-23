@@ -37,7 +37,7 @@ To simplify the exploration process, time ticks that are attributed to the same 
 This is done to reduce the search space as on average there are 48494 ticks which results in an average of $5^{48,494}$ different possible executions.
 Since the maximum number of clusters found is 6 (for SVM), a maximum of $5^{6} = 15625$ different dynamic execution traces can be built.
 This is why creating dynamic core-composition out of traces is prefered to running all potential dynamic configurations via the simulator.
-Most applications run for a couple hundred million cycles, which often takes a couple of hours to execute.
+All applications run for a couple hundred million cycles, which often takes a couple of hours to execute.
 As the amount of dynamic reconfigurations is high for some benchmarks, using traces to simulate dynamic reconfiguration is a very large time-save.
 When the size of the logical core (LC) is switched, the performance of that LC from its respective trace file is used and an extra 100 cycle penalty is added for switching the size of a LC.
 With all these different dynamic core fusion traces, the optimal schemes for maximizing speed or maximizing efficiency can be found.
@@ -68,11 +68,11 @@ Figure~\ref{fig:paretos} shows the trade off between time (represented in cycles
 The dotted line represents the static core fusion scheme whilst the solid line represents the Pareto Front of all the dynamic core fusion traces.
 The vertical line represents the amount of energy that can be saved from using a dynamic core fusion scheme that matches the same speed as the best static scheme.
 The Pareto Front is constructed by assigning different LC sizes to a phase and recording the execution time in cycles and energy consumption.
-For a given cycle count, the reconfiguration scheme that led to the smallest energy consumption is then chosen to be a point in the Pareto Front.
+For a given cycle count, the reconfiguration scheme that leads to the smallest energy consumption is chosen to be a point in the Pareto Front.
 
 Figure~\ref{fig:paretos} demonstrates how static core-composition fails to maintain good energy efficiency as speed is improved.
 For example, \bm{Disparity} (Figure~\ref{subfig:disp}) is fastest on 16 fused cores, but has an 1.63x increase in energy consumption for a 1.22x improvement in speed.
-This is due to the fact that larger core-compositions do not result in linear speedups, and thus they will consume more energy than a smaller core-composition.
+This is due to the fact that larger core-compositions do not result in linear speedups, and thus consume more energy than a smaller core-composition.
 When using the dynamic scheme, it is clear that energy consumption increases at a slower rate when increasing speed.
 In this case the number of cores is adapted to the current program phase, using just enough cores to maintain high performance without wasting energy.
 
@@ -99,7 +99,7 @@ This scheme is used to demonstrate how dynamic reconfiguration can outperform st
 
 Figure~\ref{fig:speedres} shows the speedup of \textbf{DSpeed} and Static Best (SB) and the respective energy consumption.
 The results are normalized against the performance of Static Suite (SS), which is 8 cores fused.
-The SS core count is obtained by averaging the number of cores that led to the fastest execution time for each benchmark.
+The SS core count is obtained by averaging the number of cores that leads to the fastest execution time for each benchmark.
 The execution times for \textbf{DSpeed} and SB are the same as the dynamic scheme is designed to match the static best's execution time.
 As can be seen some benchmark perform better when using benchmark specific core fusions rather than SS.
 Both \bm{Disparity} and \bm{Sift} obtain a 1.25x speedup when using the SB scheme whilst \bm{Tracking} benefits from a 1.10x speedup.
@@ -121,7 +121,7 @@ This shows the limitations of static configurations overall, whether it be at de
 In the case of optimising for speed, the compromise comes at the cost of energy consumption.
 
 %More here
-The dynamic reconfiguration \textbf{DSpeed} scheme always performs better than the SB scheme and can even match the SS scheme on energy consumption whilst improving speed such as in the \bm{Sift} benchmark.
+The dynamic reconfiguration \textbf{DSpeed} scheme always performs better than the SB scheme in terms of energy consumption and can even match the SS scheme on energy consumption whilst improving speed such as in the \bm{Sift} benchmark.
 For the \bm{Localization} benchmark, the \textbf{DSpeed} matches the performance of both the SB and SS whilst reducing energy consumption by 65\%.
 Overall, by using \textbf{DSpeed}, the energy consumption can be reduced by 42\% compared to both SB and SS without impacting performance.
 This illustrates the greatest advantage of using a DMP since the number of fused core can be adapted continuously depending on the amount of ILP available for each phase.
@@ -139,7 +139,8 @@ This illustrates the greatest advantage of using a DMP since the number of fused
 
 %Cite how to get it, maybe put this in background as well.
 This section defines a dynamic scheme that maximizes the efficiency metric EDD, which is defined as $Energy \times Delay \times Delay$ where Delay is the execution time (in cycles).
-This metric attempts to optimize speed whilst remaining energy efficient; this scheme is called \textbf{DEff}.
+This metric attempts to optimize speed whilst remaining energy efficient.
+In this section, the dynamic scheme that is optimised for EDD is called \textbf{DEff}.
 The aim of generating a second dynamic scheme is to demonstrate that dynamic reconfiguration can be used to target different requirements.
 Figure~\ref{fig:effres} shows the speedup performance of \textbf{DEff} and SB and their respective energy consumption.
 The results are normalized against SS which is a fixed-composition of 4 fused cores.
@@ -171,7 +172,7 @@ First, figure~\ref{fig:avlen} shows the average phase length for each benchmarks
 As can be seen, the majority of the benchmarks run for long period of several ten of thousands cycles before any switching occurs.
 Therefore, even if the reconfiguration latency would be increased to larger value (\eg 1,000 cycles), its impact might be minimal.
 %Free line, will need to give more info in the input section
-It is also important to note that these are vision benchmarks, and that working on larger inputs will increase the length of the average phase time.
+For these benchmarks, the phase length is also tied to the size of the input, thus the phases will increase when working on larger inputs such as high definition images.
 
 Furthermore, there is always the option to reconfigure less often, in the case where a change in configuration only brings marginal reduction in energy.
 In such case it might be more beneficial to keep running on the slightly less optimal configuration than paying a cost for reconfiguration.
