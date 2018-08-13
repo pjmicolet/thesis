@@ -7,17 +7,18 @@ Unrolling loops will both reduce the number of blocks required to execute the lo
 For example, the innermost loop in Figure~\ref{lst:small} should be completely unrolled and its outer loop unrolled partially to increase the block size.
 There are certain factors limit the usefulness of loop unrolling.
 In the evaluated EDGE architecture, blocks may not have more than 32 load or store instructions.
-This is due to the fact that block headers contain a 32 bit flag informing how many stores are in a block~\ref{putnam2010e2,smith2006edge}.
-Therefore unrolling memory intensive loops will not necessarily increase the size of blocks drastically, however it will reduce the strain on branch prediction as it will generate multiple blocks with fixed branches.
+This is due to the fact that the EDGE architecture restricts each block to have only 32 load store instructions~\cite{putnam2010e2,smith2006edge}.
+Therefore unrolling memory intensive loops will not always drastically increase the size of a block if the block is composed mainly of load and store instructions.
+However as it will generate blocks with fixed branches it reduces the strain on branch prediction as it will generate multiple blocks with fixed branches.
 Another issue is that unrolling loops with conditional statements may not help improve the size of the block as the conditional branches might still segment the new blocks.
-So these loops should not be unrolled as they will only increase code size.
+So these loops should not be unrolled as they will lead to an increase in code size.
 
 \lstset{
 	backgroundcolor=\color{lbcolor},
 	tabsize=2,
 	rulecolor=,
 	language=matlab,
-        basicstyle=\small,
+        basicstyle=\tiny,
         upquote=true,
         aboveskip={1\baselineskip},
         columns=fixed,
@@ -69,9 +70,17 @@ for(int i = 0; i < 1000; i++)
 \subsection{Loop Interchange}
 When dealing with nested loops there is one reason for interchanging the loops.
 The case arises when interchanging the loop removes dependencies in the inner-most loop.
-The dependency in Figure~\ref{lst:dep} can be removed by interchanging the loops. 
-This allows us to unroll the inner loop efficiently, but also remove any kind of dependency between blocks.
-Since two blocks from the same loop may execute on different cores, reducing any kind of data dependency is important as to minimize core communication.
+For instance, the dependency in Figure~\ref{lst:dep} can be removed by interchanging the loops. 
+This allows the compiler to unroll the inner loop efficiently, but also remove any kind of dependency between blocks.
+Since two blocks from the same loop may execute on different cores, reducing any kind of data dependency is important to minimize core communication.
+
+
+\subsection{Predication and Hyperblock Formation}
+EDGE compilers must split blocks whenever control-flow is present~\cite{smith2006edge}.
+If a loop contains a conditional statement, the loop body has to be split in two unless if-conversion is applied.
+Hyperblock formation aims to reduce branching and increase block size by combining two or more blocks into a single predicated block~\cite{smith2006edge}.
+Hyperblocks reduce both synchronization cost and branch prediction requirements as discussed previously.
+This is especially important in control-flow intensive loops where unrolling increases the number of conditional statements.
 
 \begin{figure}[t]
      \centering
@@ -88,25 +97,16 @@ Since two blocks from the same loop may execute on different cores, reducing any
     \label{fig:speedcomp}
 \vspace{5mm}
 \end{figure}
-
-\subsection{Predication and Hyperblock Formation}
-EDGE compilers must split blocks whenever control-flow is present~\cite{smith2006edge}.
-If a loop contains a conditional statement, the loop body has to be split in two unless if-conversion is applied.
-Hyperblock formation aims to reduce branching and increase block size by combining two or more blocks into a single predicated block~\cite{smith2006edge}.
-Hyperblocks reduce both synchronization cost and branch prediction requirements as discussed previously.
-This is especially important in control-flow intensive loops where unrolling increases the number of conditional statements.
-
-\vspace{5mm}
 \subsection{Results}
 
 While the optimizations described above and their tuning would be easy to implement in a compiler, this thesis did not have access to the compiler's source code.
 Therefore the source code of the benchmarks is modified by manually interchanging or unrolling loops.
 In the case of predication and hyperblock formation, simple if-then-else statements are converted into ternary operators whenever possible.
 Statements are also re-ordered within the body of a loop to avoid having control flow in the middle of the body.
-The source code modifications are then verified to have the intended effect by dissembling the binary produced by the compiler.
+The source code modifications are then verified to have the intended effect by disassembling the binary file produced by the compiler.
 On average there are between 0 and 12 loops modifications depending on the benchmark.
 
-The best static core fusion using the optimized code is compared with the unmodified code, both version compiled with \texttt{-O2}.
+The best static core fusion using the optimized code is compared with the unmodified code, both version compiled with \texttt{-O2} which is the highest optimisation setting for the EDGE compiler.
 Figure~\ref{fig:ipccom} shows the resulting IPC for the baseline case and the optimized benchmarks when run on a core with the optimal number of fused core to maximize performance.
 The IPC of the baseline is very low for the majority of the benchmarks which might give the impression that core fusion is rather inefficient.
 However, after applying the simple optimizations described above, the average IPC is significantly increased in many cases.

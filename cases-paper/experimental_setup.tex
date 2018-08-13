@@ -1,5 +1,5 @@
 The previous section studied the performance potential for core fusion using an analytical model.
-This section now presents the experimental setup used for the remaining parts of the chapter where a thorough evaluation of core fusion is conducted with a cycle-level simulator.
+This section now presents the experimental setup used for the remaining parts of the chapter where a thorough evaluation of core fusion is conducted with a cycle-level simulator described in Chapter~\ref{}.
 
 \subsection{Benchmarks}
 
@@ -25,7 +25,7 @@ Vision applications typically have regular and simple control flow which enables
 The processor relies on the ability to form large blocks to exploit block level parallelism (BLP) which makes these applications particularly well suited.
 As the results will show, the phase length has minimal impact on energy savings when the reconfiguration overhead is low.
 
-The 9 benchmarks are described here as follows:
+The 9 benchmarks are described here:
 \begin{itemize}
 \item \textbf{Disparity} Computes depth information for a given pair of images.
 \vspace{-1em}
@@ -66,10 +66,11 @@ and their characteristics in terms of memory/computation intensity are shown in 
 \paragraph{Input Size}
 %Maybe find a way of explaining how long it takes
 The SD-VBS benchmark suite comes with a different set of input sizes.
-Due to executing these benchmarks on a cycle accurate simulator, executing on large datasets can take a prohobitive amount of time.
+Due to executing these benchmarks on a cycle accurate simulator, executing on large datasets can take a large amount of time.
+A single experiment can take up to 6 hours on a single machine (ref), and the average Million instructions per second (MIPS) of the simulator is around 0.1.
 In the paper describing each of the applications in the SD-VBS suite~\cite{sdvbs}, Venkata et al. show how increasing the size of the input does not drastically change the phases of each benchmark.
 Table~\ref{tab:sd-data} shows the datasets used for the benchmarks in this chapter.
-For this chapter, the aim is to have a dataset that leads to executing at least 100 million cycles.
+For this chapter, the aim is to have a dataset that leads to executing at least 100 million cycles as this ensures that the caches and branch predictor are warmed up~\cite{dubach13dynamic}.
 %Multi_NCut would take 10x time longer on anything else
 
 
@@ -93,5 +94,5 @@ For each LC the IPC of the LC at an interval of 640 committed blocks is recorede
 This is due to the fact that the highest LC of 16 cores can execute up to 64 blocks at a time, thus recording performance after 640 blocks allows each core to have executed at least 10 blocks.
 Using committed blocks as an interval allows us to easily compare each simulation as the total number of committed blocks does not change even if the LCs are different.
 
-Due to the fact that an EDGE ISA~\cite{smith2006edge} is used, McPAT cannot be used to model power consumption as it differs from traditional CISC/RISC cores modeled in McPAT.
-Instead a coarse grained power model is applied where either a core is turned on or or it is off. 
+The EDGE architecture is fundamentally different from the traditional CISC/RISC paradigm and thus, McPAT cannot be used to model power consumption as it differs from traditional CISC/RISC cores modeled in McPAT.
+Instead a coarse grained power model is applied where either a core is turned on or or it is off.  (we assume power gating yada).
