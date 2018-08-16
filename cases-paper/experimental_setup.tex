@@ -94,5 +94,5 @@ For each LC the IPC of the LC at an interval of 640 committed blocks is recorede
 This is due to the fact that the highest LC of 16 cores can execute up to 64 blocks at a time, thus recording performance after 640 blocks allows each core to have executed at least 10 blocks.
 Using committed blocks as an interval allows us to easily compare each simulation as the total number of committed blocks does not change even if the LCs are different.
 
-The EDGE architecture is fundamentally different from the traditional CISC/RISC paradigm and thus, McPAT cannot be used to model power consumption as it differs from traditional CISC/RISC cores modeled in McPAT.
+The EDGE architecture is fundamentally different from the traditional CISC/RISC paradigm and thus, McPAT~\cite{mcpat} cannot be used to model power consumption as it differs from traditional CISC/RISC cores modeled in McPAT.
 Instead a coarse grained power model is applied where either a core is turned on or or it is off.  (we assume power gating yada).

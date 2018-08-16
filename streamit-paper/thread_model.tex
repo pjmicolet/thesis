@@ -1,6 +1,6 @@
 % Small intro, re-explain that finding thread/core pairing is complicated and thus ML is a good idea.
 As seen in the previous section, selecting the right number of threads and a good combination of cores is difficult.
-This difficulty arises from trying to balance between exploiting BLP/ILP by fusing a large amount of cores and TLP by generating more threads.
+This difficulty arises from trying to balance between exploiting block level parallelism (BLP) by fusing a large amount of cores and TLP by generating more threads.
 As the design space is large, it is important to automate the decision making to alleviate the task of getting the best performance out of the streaming application at hand.
 
 The problem of automating this decision can be decomposed into two stages; first, determining the right number of threads and second, selecting a good core composition.

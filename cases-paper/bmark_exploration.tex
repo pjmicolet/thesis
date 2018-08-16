@@ -20,6 +20,27 @@ Then the use of dynamic core composition is motivated by using the gathered info
 \end{figure}
 
 
+\begin{figure}[t]
+     \centering	
+	 \vspace{-1em}
+     \subfloat[][Disparity]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Exploration/disparity-sse.pdf}\vspace*{-4mm}\label{subfig:disp}}
+     \subfloat[][Localization]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Exploration/localization-sse.pdf}\vspace*{-4mm}\label{subfig:loc}}
+     \subfloat[][MSER]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Exploration/mser-sse.pdf}\label{subfig:mser}}\
+	 	 	 \vspace{-0.5em}
+
+     \subfloat[][Multi\_Ncut]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Exploration/multi-sse.pdf}\label{subfig:mult}}
+     \subfloat[][Sift]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Exploration/sift-sse.pdf}\label{subfig:sift}}
+     \subfloat[][Stitch]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Exploration/stitch-sse.pdf}\label{subfig:stitch}}\
+	 	 	 \vspace{-0.5em}
+
+     \subfloat[][SVM]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Exploration/svm-sse.pdf}\label{subfig:svm}}
+     \subfloat[][Texture\_Synthesis]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Exploration/texture-sse.pdf}\label{subfig:text}}
+     \subfloat[][Tracking]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Exploration/tracking-sse.pdf}\label{subfig:track}}
+     \caption{Time (x-axis) vs. Energy (y-axis) tradeoffs using Static and Dynamic Composition Schemes.}
+     \label{fig:elbows}
+	 	 	 	 \vspace{1em}
+\end{figure}
+
 \subsection{Phase Detection}
 Figure~\ref{fig:sxt} presents the IPC performance through time for all the benchmarks when using a logical core (LC) composed of 16 cores.
 The IPC is calculated for each time tick, which is set at interval of 640 blocks committed.
@@ -27,21 +48,22 @@ The IPC is calculated for each time tick, which is set at interval of 640 blocks
 To re-iterate, the interval of 640 blocks was chosen as the largest core composition of size 16 can potentially commit up to 64 blocks at a time.
 Thus measuring performance every 640 blocks allows to fully capture the performance of large compositions without sacrificing loss of information.
 Displaying the performance of the LC of size 16 gives a performance ceiling for all the benchmarks as it is the maximum number of cores which can be fused at any point.
-As seen in Figure~\ref{fig:sxt} the IPC varies a lot for some of the benchmarks such as \bm{Disparity} or \bm{Localization} where dynamic fusion is expected to be especially good.
+Figure~\ref{fig:sxt} shows that the IPC varies a lot for some of the benchmarks such as \bm{Disparity} or \bm{Localization} where dynamic fusion is expected to be especially good.
 For other, such as \bm{Multi\_NCut}, the execution is dominated by a single long phase with constant IPC, which will clearly show no benefit from using dynamic fusion.
 
-To better understand how dynamic core fusion improves performance, either by improving speedup or reducing energy, this section begins with a study of how each benchmark features different phases during their execution.
+To better understand how dynamic core fusion improves performance, either by improving speedup or reducing energy, this section studies how each benchmark features different phases during their execution.
 For every benchmark the IPC results of 16,8,4,2,1 fused cores are regrouped and kMeans clustering is applied to determine phases.
 Intervals that exhibit similar IPC values when run on different core counts are classified in the same cluster.
 In order to find the correct number of clusters the Sum of Square Errors (SSE) is plotted for a given cluster size from 1 to 15 and the optimal cluster is defined as the elbow in the plot~\cite{everitCluster2001}.
 Applying a kMeans clustering to the IPCs of each application to determine phases is preferred to determining phases of an application by reading the source code phases.
+This is because IPC is the determining metric for the phases used throughout this chapter.
 For example, the benchmark \bm{MSER}'s source code has 7 distinct passes, yet the kMeans clustering shows that most of these passes result in the same performance, which can be visualised in Figure~\ref{fig:sxt}.
 This kMeans clustering process is only done for the purpose of exploring this set of benchmarks.
 
-Figure~\ref{fig:clust} shows the number of clusters for each benchmark and the frequency of each cluster.
+Figure~\ref{fig:clust} shows the number of clusters for each benchmark and the number of times a tick in each cluster occurs throughout the execution of the program.
 The frequency of a cluster is counted by how many ticks in the program are part of that specific phase.
 The data can be corroborated with the information found in Figure~\ref{fig:sxt}.
-For example, benchmarks \bm{MSER} and \bm{Multi\_NCut} feature two phases, with one of those phases comprising over 80\% of the total execution.
+For example, benchmarks \bm{MSER} and \bm{Multi\_NCut} feature two phases, with one of those phases covering over 80\% of the total execution.
 This means that it will be impossible to obtain any kind of performance improvements through dynamic reconfiguration due to the fact that there is little opportunity to switch the size of the LC.
 For all the other benchmarks, they each have at least two dominant phases.
 Since each phase is a cluster of similar IPC values, having two or more clusters will result in a higher chance of benefiting from dynamic core fusion.
@@ -64,6 +86,7 @@ Since each phase is a cluster of similar IPC values, having two or more clusters
 
 \subsection{Static Core Fusion Exploration}
 
+In this chapter, Static Core Fusion defines a processor configuration that is determined ahead of time and does not change once it has been set.
 Figure~\ref{fig:stddev} shows how the average Instructions Per Cycle (IPC) changes as the size of a LC is increased, going in powers of 2 from 1 to 16 fused cores.
 It can be seen that, for most benchmarks, fusing more cores provides an increase in IPC performance.
 Benchmarks \bm{Disparity}, \bm{Localization}, \bm{Sift}, \bm{Stitch}, \bm{Texture Synthesis} and \bm{Tracking} all at least observe a speedup of 2x when using core fusion.
@@ -118,26 +141,96 @@ As previously mentioned, both \bm{MSER} and \bm{Multi\_NCut} do not benefit from
 This subsection focuses on understanding why this is the case and explores the code that represent the main phases of both of these applications to underline where the problems arise.
 %Other code snipets from other SD-VBS benchmarks are also explored to demonstrate examples of code that perform well on core-compositions.
 
+\lstset{
+	backgroundcolor=\color{lbcolor},
+	tabsize=2,
+	rulecolor=,
+	language=matlab,
+        basicstyle=\tiny,
+        upquote=true,
+        aboveskip={1\baselineskip},
+        columns=fixed,
+        showstringspaces=false,
+        extendedchars=true,
+        breaklines=true,
+        prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+        frame=single,
+        showtabs=false,
+        showspaces=false,
+        showstringspaces=false,
+        identifierstyle=\ttfamily,
+        keywordstyle=\color[rgb]{0,0,1},
+        commentstyle=\color[rgb]{0.133,0.545,0.133},
+        stringstyle=\color[rgb]{0.627,0.126,0.941},
+		numbers=left,
+}
+\begin{figure}[t]
+\lstset{language=C,numbersep=4pt}
+\begin{center}
+\begin{lstlisting}
+while( forest_pt[nrindex].shortcut != nrindex ) 
+{          
+	sref(visited_pt, nvisited++) = nrindex ;
+	nrindex = forest_pt[nrindex].shortcut ;
+}      
+while( nvisited-- ) 
+{
+	forest_pt [ sref(visited_pt,nvisited) ] .shortcut = nrindex ;
+}
+\end{lstlisting}
+\end{center}
+\vspace{-1em}
+\caption{Example of MSER loops (lines 27-30, 31-33).}
+\label{lst:mser-ex}
+\end{figure}
+
+
 \paragraph{MSER}
 \bm{MSER} has two distinct IPC phases according to Figure~\ref{fig:clust}, in the code the first phase, which is the domminant phase, represents the computation of the extremal regions tree.
 As seen in Figure~\ref{fig:block_sizes}, the majority of the blocks in MSER are 8 instructions long, meaning that core-compositions will have to load the maximum amount of blocks to fill each core.
 The source code of this phase can be found in the Appendix with Listing~\ref{lsting:mser}.
 The listing shows how this phase is made out of small tight knit loops.
-The while loops found at lines 27-30, 31-33, 36-39, 40-42 and 71-75 never run for more than a few iterations.
+The while loops found at lines 27-30, 31-33 (both seen in Listing~\ref{lst:mser-ex}, 36-39, 40-42 and 71-75 never run for more than a few iterations.
 This entire section of code is full of control-flow causing the blocks to remain very small.
 
-It's also important to note that Table~\ref{tab:sd-vbsbpred} shows that the average branch-prediction accuracy of \bm{MSER} is of 85\%.
+It's also important to note that the average branch-prediction accuracy of \bm{MSER} is of 85\%, as shown in Table~\ref{tab:sd-vbsbpred}.
 Recalling Figure~\ref{fig:req_pred} and the fact that the average block size of \bm{MSER} is under 32 instructions, this means that no composition can be fully efficiently used.
 Some speedup can still be obtained, as cores in a composition do not need to have all the instruction window full to be able to obtain performance improvements.
 However these improvements are minor, and come at a high energy cost.
 
 To get performance out of \bm{MSER}, this major phase would have to be re-written to be less control-flow heavily so that larger blocks can be extracted.
 
+\begin{figure}[t]
+\lstset{language=C,numbersep=4pt}
+\begin{center}
+\begin{lstlisting}
+ for (i = 0; i < num_edges; i++) 
+ {
+        edge *pedge = &edges[ asubsref(indices,i) ];
+		a = find(u, pedge->a);
+        b = find(u, pedge->b);
+        if (a != b) 
+		{
+            if ((pedge->w <= arrayref(threshold,a)) && (pedge->w <= arrayref(threshold,b))) 
+			{
+	            join(u, a, b);
+	            a = find(u, a);
+	            arrayref(threshold,a) = pedge->w + THRESHOLD(u->elts[a].size, c);
+            }
+        }
+    }
+\end{lstlisting}
+\end{center}
+\vspace{-1em}
+\caption{Main loop of Multi\_NCut.}
+\label{lst:multi_loop}
+\end{figure}
+
 \paragraph{Multi-NCut}
 \bm{Multi\_NCut} is faced with a similar situation to \bm{MSER}.
 Figure~\ref{fig:block_sizes} shows that once again, the majority of the blocks are less than 32 instructions long, in fact, over 50\% of the blocks are of 12 instructions or less.
-Table~\ref{tab:sd-vbspred} shows that the branch prediction is always correct, yet, with blocks this small, the synchronization cost of executing the blocks on large compositions outdoes any benefit that can be obtained via core-composition.
-Listing~\ref{lsting:multi} shows the source code of the main phase of \bm{Multi\_NCut}, the main loop found at lines 49 to 58.
+Table~\ref{tab:sd-vbsbpred} shows that the branch prediction is always correct, yet, with blocks this small, the synchronization cost of executing the blocks on large compositions outdoes any benefit that can be obtained via core-composition.
+Listing~\ref{lsting:multi} shows the source code of the main phase of \bm{Multi\_NCut}, the main loop found at lines 49 to 58, also found in Listing~\ref{lst:multi_loop}.
 Once again, this loop cannot be efficiently unrolled as the \textit{find} and \textit{join} functions are comprised of small control heavy while loops.
 Even by inlining those function calls, the while loops will cause the blocks to be small, and unrolling the while loops will generate more checks which wont help increase the size of the blocks.
 For \bm{Multi\_NCut} the problem is that the blocks are too small which will cause the overhead of dispatching multiple blocks across a core-composition inefficient.
@@ -146,4 +239,4 @@ This is why the benchmark does not perform significantly better with core-compos
 
 Overall, both benchmarks demonstrate that some loops cannot be adapted to benefit from core-composition.
 This is especially true of while loops that cannot be converted into more traditional for loops.
-Due to the size of these loops, the overhead of dispatching multiple blocks over multiple cores simply outweighs the performance benefits.
+Due to the small size of these loops, the overhead of dispatching multiple blocks over multiple cores simply outweighs the performance benefits.

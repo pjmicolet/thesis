@@ -19,6 +19,7 @@ As Figure~\ref{fig:threadtrend} shows that the performance trends for both with 
 The system can therefore proceed in two stages: first determine the optimal number of threads and then decide on a core composition.
 
 Figure~\ref{fig:threadtrend} also shows that the performance of most benchmarks starts to deteriorate passed a certain number of threads making it critical to not over-allocate threads.
+Also, over-allocating threads reduces the number of cores that can be composed as they will be used to run seperate threads.
 This number of threads varies between benchmarks, thus it motivates the use of machine learning to decide the optimal number of threads to use.
 Finally it is important to observe that executions without compositions always perform worse.
 This demonstrates that composing cores is essential to obtain the best performance from a workload.
@@ -72,7 +73,7 @@ Another observation is that the best execution times for each of the threaded ve
 The leftmost curve performance peaks at two threads whereas the rightmost peaks at 3 compared to 4 in the non-unrolled version.
 
 \begin{figure}[t]
-  \includegraphics[width=1\textwidth]{streamit-paper/graphics/unrolling_vs_no_single_core.pdf}
+  \includegraphics[width=1\textwidth]{streamit-paper/graphics/unroll_speed_bars2.pdf}
   \caption{How unrolling affects how much performance can be obtained via core-composition on the single-threaded versions of each benchmarks.}\label{fig:unroll_summary}
 \end{figure}
 
@@ -85,7 +86,7 @@ These benchmarks are \bench{Beamformer}, \bench{ChannelVocoder}, \bench{FFT6}, \
 
 \begin{figure}[t]
   \includegraphics[width=1\textwidth]{streamit-paper/graphics/unroll_speed_bars.pdf}
-  \caption{Speedup obtained .}\label{fig:unroll_bars}
+  \caption{Speedup obtained when executing on a single core with and without loop unrolling. Higher is better.}\label{fig:unroll_bars}
 \end{figure}
 Figure~\ref{fig:unroll_bars} complements Figure~\ref{fig:unroll_summary} by showing the speedup obtained by unrolling loops when executing the benchmark on a single core.
 On average, the information shown in Figure~\ref{fig:unroll_bars} coincides with the data shown in Figure~\ref{fig:unroll_summary}: benchmarks that don't scale also see no difference in performance when loop unrolling is called.

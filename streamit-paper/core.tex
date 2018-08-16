@@ -1,11 +1,4 @@
 
-\begin{figure}[t]
-\centering
-  \includegraphics[width=1\textwidth]{streamit-paper/graphics/corrGraph_remix.pdf}
-  \caption{The ten highest correlating features with the optimal number of cores.}\label{fig:corrCore}
-\end{figure}
-
-
 In section~\ref{sec:streamit:dse}, Figure~\ref{fig:threadtrend} shows the performance of each of the 15 benchmarks when partitioning them into threads with and without core-composition.
 The information in the figure reveals that in both cases, the number of threads is often similar.
 Later on in section~\ref{sec:streamit:dse} the use of loop unrolling demonstrates that when blocks are larger more cores can be composed together to improve performance, which can modify the optimal thread count.
@@ -42,6 +35,13 @@ To increase the amount of data available, multiple versions of the benchmarks us
 Four different levels of unrolling are used in this study: 0,4,16 and 64.
 To determine the optimal number of cores only the training data that has a performance within 1\% of the best is selected.
 
+\begin{figure}[t]
+\centering
+  \includegraphics[width=1\textwidth]{streamit-paper/graphics/corrGraph_remix.pdf}
+  \caption{The ten highest correlating features with the optimal number of cores.}\label{fig:corrCore}
+\end{figure}
+
+
 \subsection{Analyzing Features}
 
 Figure~\ref{fig:corrCore} shows the highest correlating features with the optimal number of cores.
@@ -69,11 +69,6 @@ The ten features can be described as follows
 \item Number of filters that have a multiplicity of 1.
 \end{itemize}
 
-\begin{figure}[h]
-  \center
-  \includegraphics[width=1\textwidth]{streamit-paper/graphics/lineargraphs.pdf}
-  \caption{Optimal number of cores in relation to the three highest correlating features. The maximum number of cores plateaus on the right hand side as this is the maximum possible amount.}\label{fig:maxav}
-\end{figure}
 
 The features are very different from the ones presented in Figure~\ref{fig:corr} and overall there are features which correlate higher with core-compositions than number of threads.
 The highest correlating value has a correlation factor of 0.88.
@@ -108,6 +103,11 @@ However, according to the correlation graph in Figure~\ref{fig:corrCore}, the co
 %This statement is reinforced by the correlation between the average number of conditional blocks with the optimal number of cores, which is only 0.2, compared to 0.809 for the average size of unconditional blocks.
 %Thus there is no focus on using any speculative features from the StreamIt graph.
 
+\begin{figure}[t]
+  \center
+  \includegraphics[width=1\textwidth]{streamit-paper/graphics/lineargraphs.pdf}
+  \caption{Optimal number of cores in relation to the three highest correlating features. The maximum number of cores plateaus on the right hand side as this is the maximum possible amount.}\label{fig:maxav}
+\end{figure}
 \subsection{Linear Regression Model}
 Given that the optimal number of cores highly correlates with a few features, a linear regressor is a natural choice to predict the best number of threads.
 Figures~\ref{fig:maxav} represent how the first three highest correlating values affect the optimal number of cores for a single thread.

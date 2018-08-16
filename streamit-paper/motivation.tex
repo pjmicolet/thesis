@@ -21,11 +21,11 @@ Since one of the thread is a master thread which creates and joins all worker th
 As each thread must have at least one core assigned to, and not all cores have to be composed, the total number of configurations are:
 
 \begin{equation}
-15 + \sum_{threads=2}^{15} \sum_{cores=threads}^{15} \frac{(cores-1)!}{(threads-1)!((cores-1)-(threads-1))!}
+15 + \sum_{threads=2}^{15} \bigg( \sum_{cores=threads}^{15} \frac{(cores-1)!}{(threads-1)!((cores-1)-(threads-1))!}\bigg)
 \label{eq:comb}
 \end{equation}
 
-In Equation~\ref{eq:comb}, the 15 represents the 15 different number of cores that can be composed for the single threaded version.
+In Equation~\ref{eq:comb}, the constant 15 represents the 15 different number of cores that can be composed for the single threaded version.
 Thus there are 32767 combinations (exhaustive space) of thread mappings and core compositions pairings that can be generated.
 For this chapter design points are executed on the dynamic multicore simulator, the exact details about the experimental setup are presented later in section~\ref{sec:setup}.
 

@@ -76,7 +76,9 @@
 \usepackage{algpseudocode}
 \usepackage{rotating}
 \usepackage{booktabs} % For formal tables
-
+\usepackage{textcomp}
+\definecolor{listinggray}{gray}{0.9}
+\definecolor{lbcolor}{rgb}{0.9,0.9,0.9}
 \usepackage{subfig}
 
 \usepackage[normalem]{ulem}
@@ -89,14 +91,14 @@
 \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
 \usepackage{todonotes}
 
-
+\renewcommand{\theparagraph}{\arabic{paragraph}}
 \newcommand{\ie}{i.\,e.\xspace}
 \newcommand{\eg}{e.\,g.\xspace}
 \newcommand{\bench}[1]{\textit{#1}\xspace}
 \usepackage[labelfont=bf]{caption}
 
 %% Information about the title, etc.
-\title{How I Did It}
+\title{From software to hardware: dynamic multicore processors a holistic approach (fake title)}
 \author{Paul-Jules Micolet}
 
 %% If the year of submission is not the current year, uncomment this line and 
@@ -147,12 +149,13 @@ Igor, my faithful lab assistant.
 %% Include your chapter files here. See the sample chapter file for the basic
 %% format.
 \include{./introduction/introduction}
-\include{./background/background}
-\include{./relatedwork/relatedwork}
+\include{./background/background}\label{chp:bg}
+%\include{./relatedwork/relatedwork}
 \include{./setup/thesis-setup}
 \include{./streamit-paper/streamit-chapter}
 \include{./cases-paper/cases-chapter}
 \include{./chapter3/chapter3}\label{chp3}
+\include{./appendix/appendix1}
 
 %% ... etc ...
 
