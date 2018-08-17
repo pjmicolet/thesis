@@ -36,6 +36,7 @@ So these loops should not be unrolled as they will lead to an increase in code s
         stringstyle=\color[rgb]{0.627,0.126,0.941},
 		numbers=left,
 }
+
 \begin{figure}[t]
 \lstset{language=C,numbersep=4pt}
 \begin{center}
@@ -49,6 +50,7 @@ for(int i = 0; i < 1000; i++)
 \vspace{-1em}
 \caption{Example of an inner-most loop which should be completely unrolled.}
 \label{lst:small}
+\vspace{1em}
 \end{figure}
 
 \begin{figure}[t]
@@ -72,15 +74,17 @@ When dealing with nested loops there is one reason for interchanging the loops.
 The case arises when interchanging the loop removes dependencies in the inner-most loop.
 For instance, the dependency in Figure~\ref{lst:dep} can be removed by interchanging the loops. 
 This allows the compiler to unroll the inner loop efficiently, but also remove any kind of dependency between blocks.
-Since two blocks from the same loop may execute on different cores, reducing any kind of data dependency is important to minimize core communication.
-
+Even if memory dependencies can be detected using a dependence predictor~\cite{chrysos1998storesets}, it can potentially serialise memory operations when multiple iterations of a loop are live.
+Thus using loop interchange will reduce any potential data dependency and minimize core communication in a composition.
 
 \subsection{Predication and Hyperblock Formation}
-EDGE compilers must split blocks whenever control-flow is present~\cite{smith2006edge}.
+EDGE compilers must split blocks whenever control-flow is present~\cite{smith2006edge} as seen in Section~\ref{chp:bg:sec:edge} of Chapter~\ref{chp:Background}.
 If a loop contains a conditional statement, the loop body has to be split in two unless if-conversion is applied.
 Hyperblock formation aims to reduce branching and increase block size by combining two or more blocks into a single predicated block~\cite{smith2006edge}.
 Hyperblocks reduce both synchronization cost and branch prediction requirements as discussed previously.
 This is especially important in control-flow intensive loops where unrolling increases the number of conditional statements.
+Hyperblock formation can be done automatically~\cite{smith2006edge} via a compiler flag provided by the EDGE compiler.
+However, as of the writing of this thesis, a block can only support a single predicated path, thus hyperblock formation cannot be paired with loop unrolling for example.
 
 \begin{figure}[t]
      \centering

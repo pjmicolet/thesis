@@ -1,5 +1,5 @@
 The previous section studied the performance potential for core fusion using an analytical model.
-This section now presents the experimental setup used for the remaining parts of the chapter where a thorough evaluation of core fusion is conducted with a cycle-level simulator described in Chapter~\ref{}.
+This section now presents the experimental setup used for the remaining parts of the chapter where a thorough evaluation of core fusion is conducted with a cycle-level simulator described in Chapter~\ref{chp:setup}.
 
 \subsection{Benchmarks}
 
@@ -95,4 +95,4 @@ This is due to the fact that the highest LC of 16 cores can execute up to 64 blo
 Using committed blocks as an interval allows us to easily compare each simulation as the total number of committed blocks does not change even if the LCs are different.
 
 The EDGE architecture is fundamentally different from the traditional CISC/RISC paradigm and thus, McPAT~\cite{mcpat} cannot be used to model power consumption as it differs from traditional CISC/RISC cores modeled in McPAT.
-Instead a coarse grained power model is applied where either a core is turned on or or it is off.  (we assume power gating yada).
+Instead a coarse grained power model is applied where power gating is applied either a core is in used and turned on or or it is off.

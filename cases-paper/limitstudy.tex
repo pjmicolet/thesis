@@ -1,8 +1,8 @@
 This section studies how block size and branch prediction limit the performance of core composition.
 This enables a better understanding of what leads to good performance and how to determine regions of code that benefit from core composition.
 
-
 \subsection{Branch Prediction}
+
 
 As discussed in Chapter~\ref{chp:Background}, an EDGE based DMP accelerates a single thread by executing blocks of instructions from the same thread speculatively across several fused cores. 
 In a core composition, the fetching scheme dictates that a core must fetch blocks until its instruction window is either full or cannot accomodate the newest block.
@@ -12,18 +12,28 @@ Thus core composition puts a strain on the branch predictor since efficiently us
 
 Depending on the sizes of the blocks and the number of cores in the composition, the branch predictor has to meet a different accuracy requirement to ensure all cores are being used efficiently.
 In this case, efficiency is defined by cores in a composition successfully fetching correctly predicted blocks.
-Given a Logical Core \textit{LC} of size \textit{i}, denoted \textit{$LC_i$}, the minimum branch prediction requirement can be determined using Formula~\ref{form:minpred} where \textit{BlocksInFlight} represents the total number of blocks being executed on the \textit{LC}.
+Given a core-composition of size \textit{CompSize}, the minimum branch prediction accuracy required to ensure efficient use of the composition can be determined using Formula~\ref{form:minpred} where \textit{BlocksInFlight} can be calculated using the equation~\ref{form:blocks}.
 
-\begin{equation}\label{form:minpred}
-min_{PredLC_i }= \frac{BlocksInFlight - 1}{BlocksInFlight}
+\begin{equation}\label{form:blocks}
+BlocksInFlight(AverageBlockSize) = \begin{cases}
+4, &\text{if } AverageBlockSize \le 32 \\
+3, &\text{if } 32 < AverageBlockSize \le 64 \\
+2, &\text{if } 64 < AverageBlockSize \le 96\\
+1, &\text{if } 96 < AverageBlockSize\\
+\end{cases}
 \end{equation}
 
-\textit{BlocksInFlight} varies depending on the average size of the blocks, the maximum block size the architecture can execute (\textit{MaxBlockSize}), and the number of blocks 
-that are allowed to execute in parallel on a physical core (\textit{NumOfBlocksPerCore}). 
-The size of the instruction window is equivalent to \textit{MaxBlockSize} multiplied by \textit{NumOfBlocksPerCore}.
-When a program is running on a LC, one of the blocks will always be unconditionally executed, which is why it requires one less block to be predicted.
+\begin{equation}\label{form:minpred}
+PredAcc(ABS,CompSize)= \frac{BlocksInFlight(ABS) \times CompSize- 1}{BlocksInFlight(ABS) \times CompSize}
+\vspace{1em}
+\end{equation}
 
-Figure~\ref{fig:req_pred} shows the expected prediction accuracy required to fully utilize a LC given the average block size in flight.
+\textit{BlocksInFlight} represents the number of blocks that can execute on a single core in parallel.
+There can be multiple blocks on a single core as the instruction window has four lanes per core.
+In this thesis, the instruction window is 128 instructions wide, thus each lane can support a block of up to 32 instructions.
+In Equation~\ref{form:minpred}, the -1 is due to the fact that when a program is executing the first block does not depend on a branch prediction, thus at any point during the execution of a program, there is a non-speculative block that does not need to predicted.
+
+Figure~\ref{fig:req_pred} shows the expected prediction accuracy required to fully utilize a core composition given the average block size in flight.
 In this figure, \textit{NumOfBlocksPerCore} is equal to four and \textit{MaxBlockSize} is 32.
 Adding extra physical cores to a LC requires an increasingly accurate branch predictor, especially when the size of a block is under 50 instructions.
 This provides two insights; first of all large LCs will need to run on code sections with less control flow as they are more sensitive to branch misspredictions.
@@ -37,6 +47,7 @@ Given a certain number of cores, if the prediction accuracy is under the limits 
     \label{fig:req_pred}
 	\vspace{1em}
 \end{figure}
+
 \subsection{Synchronization Cost}
 
 For a program to execute correctly, the cores in a logical core (LC) must communicate when they have finished executing a block.
@@ -51,7 +62,7 @@ The Synchronization Cost, in cycles, is defined in equation~\ref{form:synccost} 
 This is a worst-case estimate as block sizes will fluctuate during the execution of a program.
 
 \begin{equation}\label{form:synccost}
-SyncCost_{CompositionSize} = \frac{\sum_{CoreNumber=0}^{CompositionSize-1}\left(AvBlocksInFlight \right) \times CoreNumber }{CompositionSize}
+SyncCos(ABS,CompSize) = \frac{\sum_{CoreNumber=0}^{CompSize-1}\left(BlocksInFlight(ABS)\right) \times CoreNumber }{CompSize}
 \end{equation}
 
 
@@ -77,11 +88,18 @@ This indicates that large LCs should be avoided when dealing with smaller blocks
 \vspace{5mm}
 \end{figure}
 
+
+\begin{align}\label{form:wcetMath}
+IPC(ASB,CS,BPredAcc) &= \bigg(\frac{ABS}{SyncCost(ASB,CS) + {\frac{ASB}{2}}}\bigg) \times BPredAcc \times CS
+\end{align}
+
+
 \paragraph{Summary}
 
 This section estimates the worst-case IPC for a logical processor using Average Block Size, Average Branch Prediction, and Synchonization Cost.
 Figure~\ref{fig:lm_summ} presented a worst-case estimate of IPC performance assuming each core can sustain an IPC of 2.
 The figure is generated by assuming that cores can execute 2 instructions per block, and using the two previous formulas with different block sizes, accuracies and core composition sizes to generate estimated IPC values.
+The formula used is defined in equation~\ref{form:wcetMath} where \textit{ASB} represents the average size of a block, \textit{CS} is the size of the composition and \textit{BPredAcc} is branch prediction accuracy that ranges from 0 to 1.
 From what was previously explained, Figure~\ref{fig:lm_summ} shows us that to obtain optimal performance requires a high branch prediction accuracy and large blocks.
 It shows that larger logical processors can easily under-perform; for example it can be seen that 16 fused cores often have IPCs under 15, meaning that each core has an IPC under~1.
 
