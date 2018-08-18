@@ -4,7 +4,7 @@ The hardware side is about finding out the best core composition that maximizes 
 
 \subsection{Thread Partitioning}
 
-This section first starts with analyzing the impact of thread partitioning on performance.
+This section first starts by analyzing the impact of thread partitioning on performance.
 In this section, the term optimal number of threads defines the number of threads which results in the best performance for any given benchmark.
 Thread partitioning is about deciding how many threads to create and how to partition StreamIt filters into these threads.
 
@@ -56,8 +56,8 @@ This signifies that for the benchmark \bench{FilterBank}, it is more important t
 
 
 \subsection{Impact of Loop Transformation}
-As seen in Chapter~\ref{chp:Background}, composing cores exploits block-level parallelism by running multiple EDGE blocks on a logical core.
-As physical cores in a logical core must communicate to submit block address predictions, and commit information to each other, having a small number of blocks will reduce the communication overhead.
+As seen in Chapter~\ref{chp:Background}, composing cores exploits block-level parallelism by running multiple EDGE blocks on a core composition.
+As physical cores in a core composition must communicate to submit block address predictions, and commit information to each other, having a small number of blocks will reduce the communication overhead.
 In a core-composition, commit information can be a core informing another core that it has become the non-speculative core, or that registers can be read or written to.
 Since physical cores can fetch more than a single block when the blocks are made of a small number of instructions, if the program being executed is comprised of small blocks this will cause a composition to fetch a high amount of blocks.
 Thus finding methods to increase the average size of the blocks can lead to reduced overhead which will improve the core-composition's ability to exploit block-level parallelism (BLP) and instruction level parallelism (ILP).
@@ -142,7 +142,7 @@ The performance increase obtained via the source-level loop unrolling via the co
 %Thus loop unrolling demonstrates that the StreamIt programs must be modified to take advantage of the core composition.
 
 Overall the results demonstrate that multi-threading is the prevalent leader of performance, even with unrolling turned on.
-This is natural as StreamIt applications are naturally geared towards TLP as most programs have at least one SplitJoin as seen in the Table~\ref{tab:splitjoin} which gives the number of split-joins per benchmark.
+This is natural as StreamIt applications are naturally geared towards TLP as most programs have at least one SplitJoin as seen in the Table~\ref{tab:instancefilt} which gives the number of split-joins per benchmark.
 Benchmarks with SplitJoins will naturally benefit from splitting the program into threads~\cite{thiesStreamit2010}.
 %Make sure this is 100% true but as far as I remember this is the case
 Those that do not feature SplitJoins can still be parallelised by splitting a Pipeline into multiple parts.

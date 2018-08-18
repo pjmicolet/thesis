@@ -86,6 +86,7 @@ A value of $k=7$ was found to lead to the best performance.
 The features chosen are the ten variables displayed in Figure~\ref{fig:corr}.
 
 Cross validation is used to determine the efficiency of the model by observing how close a classification is to the measured best thread number.
+It involves validating all the points in the training data by removing them from the model, more details can be found in Chapter~\ref{chp:Background}.
 Using cross validation the model generated in this chapter has a 33\% accuracy of getting the exact best thread number.
 The accuracy increases to 57\% when allowing a prediction to be 1 thread away from the best and 67\% when 2 threads away.
 On average, having a thread number that is +/- 1 away from the optimal thread count only incurrs a 12\% performance penalty.

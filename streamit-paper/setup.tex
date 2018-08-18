@@ -13,21 +13,6 @@ In addition, the impact of loop unrolling and how it helps exploit larger fused 
 \end{figure}
 
 
-
-Figure~\ref{fig:overview} presents the workflow of the system used in this chapter and Figure~\ref{fig:examplestream} illustrates the workflow on a graph.
-First, the source-to-source StreamIt compiler is used to unroll loops as this is often beneficial when cores are composed as will be seen later in Section~\ref{sec:streamit:dse}.
-Then, static code features such as the program's graph structure are extracted from the StreamIt code through the StreamIt source-to-source compiler.
-These features are used as an input to the first machine-learning model that determines how many threads will be required based on an estimate of Thread Level Parallelism (TLP) found in the program.
-This information is used to partition the program into threads which is done by the StreamIt compiler which produces a C++ program using pthreads.
-This is exemplified in Figure~\ref{fig:examplestream}, the colours filling in the nodes represent the threads each node has been assign to.
-This C++ program is then compiled using the compiler for EDGE described in Chapter~\ref{ch:setup}.
-
-Then, a second machine-learning model is deployed which also analyzses static code features extracted from the SteamIt code, once again provided by the source-to-source compiler.
-This model decides on the number of cores each thread will have.
-This is achieved by estimating the amount of Instruction Level Parallelism (ILP) that can be possibly extracted in each thread and by determining how many physical cores should be fused for that thread.
-Finally, the processor is reconfigured to fuse the requested resources ahead of time and execute the partitioned program.
-For example in Figure~\ref{fig:examplestream}, once the graph is coloured, the machine learning model will estimate the potential ILP in each group of coloured nodes and then assign a number of cores each thread will execute on.
-
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{streamit-paper/graphics/examplestrem.pdf}
@@ -35,16 +20,30 @@ For example in Figure~\ref{fig:examplestream}, once the graph is coloured, the m
     \label{fig:examplestream}
 \end{figure}
 
+Figure~\ref{fig:overview} presents the workflow of the system used in this chapter and Figure~\ref{fig:examplestream} illustrates the workflow on a synthetic StreamIt graph.
+First, the source-to-source StreamIt compiler is used to unroll loops as this is often beneficial when cores are composed as will be seen later in Section~\ref{sec:streamit:dse}.
+Then, static code features such as the program's graph structure are extracted from the StreamIt code through the StreamIt source-to-source compiler.
+These features are used as an input to the first machine-learning model that determines how many threads will be required based on an estimate of Thread Level Parallelism (TLP) found in the program.
+This information is used to partition the program into threads which is done by the StreamIt compiler which produces a C++ program using pthreads.
+This is exemplified in Figure~\ref{fig:examplestream}, the colours filling in the nodes represent the threads each node has been assign to.
+This C++ program is then compiled using the compiler for EDGE described in Chapter~\ref{chp:setup}.
+
+Then, a second machine-learning model is deployed which also analyzses static code features extracted from the SteamIt code, once again provided by the source-to-source compiler.
+This model decides on the number of cores each thread will have.
+This is achieved by estimating the amount of Instruction Level Parallelism (ILP) that can be possibly extracted in each thread and by determining how many physical cores should be fused for that thread.
+Finally, the processor is reconfigured to fuse the requested resources ahead of time and execute the partitioned program.
+For example in Figure~\ref{fig:examplestream}, once the graph is coloured, the machine learning model will estimate the potential ILP in each group of coloured nodes and then assign a number of cores each thread will execute on.
+
 \subsection{Design Space}
 
-
-This chapter explores 15 StreamIt benchmark all taken from the official StreamIt repository.
+This chapter explores 15 StreamIt benchmark all taken from the official StreamIt repository~\cite{streamitrepo}.
 These applications represent a variety of embedded applications and kernels, from digital signal processing to a matrix-multiplication kernel or band pass filters.
 Table~\ref{tab:instancefilt} shows the number of filter instances and SplitJoins for each of the benchmarks.
+As a refresher from Chapter~\ref{chp:Background}, SplitJoin filters are functions which distribute and collect data from parallel filters.
 The applications feature a different number of SplitJoins which determine the task-level parallelism.
 This is to include a variety of situations to test the flexibility of the dynamic multicore processor.
 Whilst SplitJoins often facilitate the decision of how to partition the programs into threads, they are not the only way to exploit thread level parallelism.
-The 5 applications which do not feature SplitJoins can still be split into threads and will operate in a pipelined fashion.
+The applications which do not feature SplitJoins can still be split into threads and will operate in a pipelined fashion~\cite{theis2002streamit}.
 For each benchmark the default inputs provided in the repository~\cite{streamitrepo} are used and the default iteration count is set to 10. 
 
 \begin{table}[t]
@@ -98,16 +97,17 @@ For each benchmark the default inputs provided in the repository~\cite{streamitr
   \caption{Design space considered per application.}
   \label{tab:space}
 \end{table}
+
 The parameters and size of the space are given in Table~\ref{tab:space}.
 In this study a 16 core DMP is used.
 Having 16 cores allows for a larger variety of configurations, this also represents a processor similar to a tiled embedded system such as Tilera or Raw.
 All cores in the DMP are utilised; Core 0 is assigned to the main thread and for runtime management.
 This leaves 15 cores available for each application.
-Each core is restricted to running only a single thread, as there is no context switching supported, which leads to a possible number of threads between 1 and 15.
+Each core is restricted to running only a single thread, as no context switching is supported, which leads to a possible number of threads between 1 and 15.
 The core-composition is not used on the master core, leaving 15 physical cores to be distributed to each of the worker threads.
 Cores can be fused together to form a logical core with up to 15 physical cores, making the total number of cores assigned to a thread between 1 and 15.
 Of course, not all cores have to be assigned to a thread, in this case all remaining cores that aren't in a composition or a thread are turned off.
-Overal, this leads to a total space size of 32,767 unique combination per benchmark as previously described in Section~\ref{sec:setup}.
+Overal, this leads to a total space size of 32,767 unique combination per benchmark as previously described in Section~\ref{sec:motivation}.
 
 \subsection{Sample Space}
 
@@ -127,7 +127,7 @@ For example, a single thread can have only up to 15 different core-compositions 
 
 %Define stopping criterion?
 To gain confidence that the best configuration from the sample space is indeed close to the real best in the entire space, a statistical model based on the Early Stopping Criterion defined in~\cite{vuduc2003AutomaticPerf} is deployed.
-This model estimates, given a sample of the total space, if the best observed performance of that sample space is within a percentage of the statistical best performance, a more detailed explanation can be found in Chapter~\ref{chp:bg}.
+This statistical model estimates, given a sample of the total space, if the best observed performance of that sample space is within a percentage of the statistical best performance, a more detailed explanation can be found in Chapter~\ref{chp:bg}.
 The results demonstrate that the sample space selected is representative of the whole space.
 
 Figure~\ref{fig:prox} shows, for each of the benchmarks, the proximity to the statistical best when increasing the sub-sample space given a maximal uncertainty of 5\%  (\ie minimum 95\% confidence).

@@ -6,19 +6,11 @@
 %     \label{fig:beamformermotiv}
 %\end{figure}
 
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=1\textwidth]{streamit-paper/graphics/filterbank_motivation_2.pdf}
-    \caption{Distribution of the runtime for FilterBank with different core composition and thread pairings. The dots on the X-axis represent specific configurations and their cycle counts.}
-     \label{fig:threadcoremotiv}
-\end{figure}
-
-This section motivates the difficulty of finding a good mixture of thread partitioning and core allocation ahead of execution.
-First, a simple experiment is conducted where the \bench{FilterBank} StreamIt benchmark is analysed.
-The benchmark's tasks are partitioned into threads and a various number of cores are allocated to each thread.
-The program is executed on a 16 core system.
-Since one of the thread is a master thread which creates and joins all worker threads, this means that the benchmark can be partitioned in up to 15 threads.
-As each thread must have at least one core assigned to, and not all cores have to be composed, the total number of configurations are:
+This section motivates the difficulty of finding a good combination of number of threads and cores allocated per thread ahead of time.
+First, a simple experiment is conducted where the \bench{FilterBank} StreamIt benchmark is analysed using a 16 core dynamic multicore processor.
+The program's tasks are partitioned into threads and a various number of cores are allocated to each of the threads.
+Since one of the threads is the master thread which creates and joins all worker threads, this means that the application can be partitioned in up to 15 threads, and 15 cores can be utilised.
+As each thread must have at least one core assigned to it, and not all cores have to be grouped together, the total number of configurations are:
 
 \begin{equation}
 15 + \sum_{threads=2}^{15} \bigg( \sum_{cores=threads}^{15} \frac{(cores-1)!}{(threads-1)!((cores-1)-(threads-1))!}\bigg)
@@ -26,11 +18,19 @@ As each thread must have at least one core assigned to, and not all cores have t
 \end{equation}
 
 In Equation~\ref{eq:comb}, the constant 15 represents the 15 different number of cores that can be composed for the single threaded version.
-Thus there are 32767 combinations (exhaustive space) of thread mappings and core compositions pairings that can be generated.
-For this chapter design points are executed on the dynamic multicore simulator, the exact details about the experimental setup are presented later in section~\ref{sec:setup}.
+There are 32767 combinations (exhaustive space) of thread mappings and core compositions pairings that can be generated.
+In this chapter, a design point represents one of these 32767 different configurations.
+Design points are executed on the dynamic multicore simulator, the exact details about the experimental setup are presented later in section~\ref{sec:setup}.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{streamit-paper/graphics/filterbank_motivation_2.pdf}
+    \caption{Distribution of the runtime for FilterBank with different core composition and thread pairings. The dots on the X-axis represent specific configurations and their cycle counts.}
+     \label{fig:threadcoremotiv}
+\end{figure}
 
 Figure~\ref{fig:threadcoremotiv} presents the distribution of execution time, displayed as a cycle count, from a subset of the co-design space of \bench{FilterBank} as a density graph.
-For this Figure, 1316 different thread/core combinations were explored, the reason this number was chosen will be explained later on in section~\ref{sec:setup}.
+For this Figure, 1316 different thread/core combinations were explored, the reason this number was chosen will be explained later on in section~\ref{chp:stream:sec:setup}.
 For the sake of clarity, the execution time of running a single core with a single thread is marked by the rightmost bar with the title "1 thread".
 First, as can be seen in Figure~\ref{fig:threadcoremotiv}, the majority of the different combinations are found at around 250K cycles.
 The worst point for \bench{FilterBank} can be found at the single core execution, which is a single core, single thread, resulting in an execution time of about 700K cycles, which is over 2x slower than the average case.
@@ -48,9 +48,10 @@ For example, choosing to only do multithreading reduces the search space to 15 p
 \sum_{threads=1}^{15} \lfloor\frac{15}{threads}\rfloor
 \end{equation}
 
-which is 45 possible solutions.
+where the constant 15 represents the number of cores available.
+Using only homogeneous core compositions would therefore lead to 45 possible solutions.
 However, reducing the search space will limit the potential obtainable speedup.
-Figure~\ref{fig:threadcoremotiv} also shows the performance distribution of different core-thread pairings.
+Figure~\ref{fig:threadcoremotiv} also shows the performance distribution of these design choices.
 Their location on the X-axis represents the execution time for that specific configuration.
 The points represent a set of different design choices such as only using multithreading, using homogeneous core-compositions with threads and using heterogeneous core-compositions with threads.
 
@@ -59,14 +60,14 @@ For the \bench{FilterBank} benchmark, 4 threads leads to the fastest execution t
 This performance is in the highest peak of the density curve, which means that finding the best number of threads for the benchmark will only lead to an average performance in this case.
 However, using too many threads, for example 15 threads, can lead to a degredaded performance compared to the average.
 In this case, 15 threads is not much faster than using a single thread.
-This is due to the fact that the communication overhead between threads will be too high compared to the actual computation of the benchmark.
+This is due to the fact that the communication overhead between threads will be too high.
 
 Using the optimal number of threads, which is the number of threads that leads to the fastest execution time without core-composition as a baseline, homogeneous core-composition can then be explored.
 In this case only 2 homogeneous pairings exist: 2 cores fused for each of the 4 threads or 3 cores fused for each of the 4 threads.
 Figure~\ref{fig:threadcoremotiv} shows that homogeneous core-composition will outperform only using multithreading by 1.3x, however it is not the optimal solution.
 In the end, using a heterogeneous configuration leads to a 1.5x speedup compared to the fastest homomgeneous configuration.
-It's also important to note that the best heterogeneous core-composition required a different number of threads than the optimal number of threads previously describe.
-Whilst this is the case in this example, section~\ref{sec:streamit:dse} will show that the optimal number of threads with and without core-composition are often the same +/- 1.
+%It's also important to note that the best heterogeneous core-composition requires a different number of threads than the optimal number of threads previously describe.
+%Whilst this is the case in this example, section~\ref{sec:streamit:dse} will show that the optimal number of threads with and without core-composition are often the same +/- 1.
 Therefore, it is important to consider all possible configurations to ensure the possibility of obtaining the best performance.
 
 Figure~\ref{fig:threadcoremotiv} demonstrates that of the three scenarios that are explored, the heterogeneous core-composition with multiple threads is the optimal solution.

@@ -1,9 +1,10 @@
 This chapter introduced the problem of partitioning both software and hardware for a Dynamic Multicore Processor.
-Given the ability to execute up to 15 threads, a DMP can have up to 32767 different configurations, making exhaustive search impossible.
-Furthermore, restricting the space to scenarios such as only using multithreading or homogeneous logical cores will have an impact on performance.
+Given the ability to execute up to 15 threads, a DMP can have up to 32767 different configurations, making exhaustive search a prohibitive task.
+Whilst certain design choices, such as restricting the space to scenarios such as only using multithreading or homogeneous core composition may appear as a solution, it may reduce performance by up to 1.5x.
 Thus it is important to look at heterogeneous core-composition with multithreading to get the best performance.
 
-In order quickly find a good configuration, machine learning is used and a set of 15 StreamIt benchmarks are explored.
+In order quickly find a good configuration, the chapter uses machine learning and a set of 15 StreamIt benchmarks are explored.
+Using the early-stopping critereon, it is determined that exploring 1300 different configurations of the processor is able to represent the performance space for each of the applications.
 By running each benchmark under 1300 different configurations, each benchmark was analysed to understand how much performance can be obtained through the best configuration.
 This chapter showed that, on average, finding the optimal configuration and using the appropriate loop optimisations can lead to a performance increase of 3x compared to running the program on a single core.
 
@@ -15,10 +16,10 @@ This demonstrates that by analysing features of the programs, the decision of ho
 To summarize, the contributions of the chapter are:
 \begin{itemize}
 \item An analysis of the co-design space of thread partitioning and core composition which shows how applications always perform best when the dynamic multicore processor has a heterogeneous configuration, leading to a 1.50x speedup compared to only multithreading.
-\vspace{-1em}
+\vspace{-0.5em}
 \item A study on the impact of loop unrolling on performance, allowing for core-composition to be better utilised by increasing block size and reduced branching, resulting in up to 3x performance increases compared to no unrolling.
-\vspace{-1em}
+\vspace{-0.5em}
 \item An analysis of which static code features in StreamIt can be used to determine a good configuration of a dynamic multicore processor.
-\vspace{-1em}
+\vspace{-0.5em}
 \item A machine-learning model to determine the optimal core composition and thread partitioning which results in an average performance within 16\% of the best of the space.
 \end{itemize}
