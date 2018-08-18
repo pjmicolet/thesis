@@ -7,7 +7,6 @@ It also shows that loop optimizations have a significant performance impact when
     \includegraphics[width=\textwidth]{cases-paper/graphics/motivation/disp_opt_4_16_3.pdf}
     \caption{IPC of a typical benchmark (Disparity from SD-VBS) when executing on a fused 4 or 16 core processor.} 
     \label{fig:disp_ex}
-	\vspace{1em}
 \end{figure}
 %\begin{figure}[t]
 %    \centering
@@ -16,6 +15,88 @@ It also shows that loop optimizations have a significant performance impact when
 %    \label{fig:ideal_switch}
 %\vspace{2em}
 %\end{figure}
+
+
+\lstset{
+	backgroundcolor=\color{lbcolor},
+	tabsize=2,
+	rulecolor=,
+	language=matlab,
+        basicstyle=\tiny,
+        upquote=true,
+        aboveskip={1\baselineskip},
+        columns=fixed,
+        showstringspaces=false,
+        extendedchars=true,
+        breaklines=true,
+        prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+        frame=single,
+        showtabs=false,
+        showspaces=false,
+        showstringspaces=false,
+        identifierstyle=\ttfamily,
+        keywordstyle=\color[rgb]{0,0,1},
+        commentstyle=\color[rgb]{0.133,0.545,0.133},
+        stringstyle=\color[rgb]{0.627,0.126,0.941},
+		numbers=left,
+}
+
+\begin{figure}[t]
+\lstset{language=C,numbersep=4pt}
+\begin{center}
+\begin{lstlisting}
+void findDisparity(F2D* retSAD, F2D* minSAD, I2D* retDisp, int level, int nr, int nc) {
+    int i, j, a, b;    
+    for(i=0; i<nr; i++) {
+        for(j=0; j<nc; j++) {
+            a = retSAD->data[i*retSAD->width+j];
+            b = minSAD->data[i*minSAD->width+j];
+            if(a<b) {
+                minSAD->data[i*minSAD->width+j] = a;
+                retDisp->data[i*retDisp->width+j] = level;
+            }
+        }
+    }
+    return;
+}
+\end{lstlisting}
+\end{center}
+\vspace{-1em}
+\caption{Disparity code that causes low IPC.}
+\label{lst:low_ipc}
+\end{figure}
+
+\begin{figure}[t]
+\lstset{language=C,numbersep=4pt}
+\begin{center}
+\begin{lstlisting}
+void integralImage2D2D(F2D* SAD, F2D* integralImg) {
+    int nr, nc, i, j;
+    
+    nr = SAD->height;
+    nc = SAD->width;
+	
+    for(i=0; i<nc; i++)
+        subsref(integralImg,0,i) = subsref(SAD,0,i);
+    
+    for(i=1; i<nr; i++)
+        for(j=0; j<nc; j++) 
+            subsref(integralImg,i,j) = subsref(integralImg, (i-1), j) + subsref(SAD,i,j);
+	
+    for (j = 1; j < nc; j++)
+        for (i = 0; i < nr; i++)
+            subsref(integralImg, i, j) = subsref(integralImg, i, (j - 1)) + subsref(integralImg, i, j);
+    return;
+}
+
+\end{lstlisting}
+\end{center}
+\vspace{-1em}
+\caption{Disparity code that leads to high IPC.}
+\label{lst:high_ipc}
+\end{figure}
+
+
 
 Previous work in core fusion focuses on delivering performance improvements~\cite{ipek2007CoreFusion,kim2007tflex} and demonstrates how to predict static core fusion~\cite{micolet2016dmpstream}.
 A static ahead of time fusion fuses cores into a single logical core (LC) and executes a thread on this new core.
