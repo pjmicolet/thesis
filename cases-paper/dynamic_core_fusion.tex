@@ -1,11 +1,12 @@
 The previous section covered the behavior of the program under a static number of cores, now the impact of varying the number of composed cores throughout program execution is now studied.
+This section discusses dynamic core composition schemes that were created by generating traces the ahead-of-time static compositions.
 The section first describe how the traces are generated for the dynamic core fusion schemes.
 Before the analysis two types of static core fusion are defined:
 
 \begin{itemize}
-	\item \textbf{Static Benchmark}: A fixed fused-core which is optimal for a unique benchmark (SB).
+	\item \textbf{Static Benchmark} (SB): A fixed fused-core which is optimal for a unique benchmark.
 \vspace{-1.2em}
-	\item \textbf{Static Suite}: A fixed fused-core which represents the average best for the entire suite of benchmarks. This represents the baseline for the chapter (SS).
+	\item \textbf{Static Suite} (SS): A fixed fused-core which represents the average best for the entire suite of benchmarks. This represents the baseline for the chapter.
 \end{itemize}
 
 The reason \textbf{Static Suite} is used as a baseline is due to the fact that it represents a configuration choice at design time.
@@ -85,7 +86,7 @@ Dynamic reconfiguration is therefore mainly used to limit the energy consumption
 
 \begin{figure}[t]
     \centering
-	\includegraphics[width=1\textwidth]{cases-paper/graphics/results/speed_bars2.pdf}
+	\includegraphics[width=1\textwidth]{cases-paper/graphics/results/speed_bars3.pdf}
     \caption{Maximizing speed for all the SD-VBS benchmarks. For Speedup, higher means better, for Energy, lower is better.}
     \label{fig:speedres}
 	\vspace{1em}
@@ -129,7 +130,7 @@ This illustrates the greatest advantage of using a DMP since the number of fused
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=1\textwidth]{cases-paper/graphics/results/edd_bars2.pdf}
+    \includegraphics[width=1\textwidth]{cases-paper/graphics/results/edd_bars3.pdf}
     \caption{Maximizing efficiency for all the SD-VBS benchmarks. For Speedup, higher means better, for Energy, lower is better.}
     \label{fig:effres}
 	\vspace{1em}
@@ -184,13 +185,13 @@ For latency values over 1,000 cycles, the energy savings drop considerably, with
 This data shows that even if the reconfiguration overhead is 1,000 cycles, average energy savings of 38\% are possible compared to 42\% when the overhead is 100 cycles.
 
 \begin{figure}[t]
-    \centering
 	\begin{minipage}{.5\textwidth}
 	\includegraphics[width=.9\linewidth]{cases-paper/graphics/Exploration/phase_len2.pdf}
     \caption{Average number of cycles without switching.}
     \label{fig:avlen}
 	\end{minipage}%
 	\begin{minipage}{.5\textwidth}
+	\hfill
 	\includegraphics[width=.9\linewidth]{cases-paper/graphics/Exploration/latency_en_sp_sw2.pdf}
     \caption{Energy savings and number of switches as a function of the switching latency in cycles.}
     \label{fig:enlatency}

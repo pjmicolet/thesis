@@ -1,4 +1,6 @@
-Having shown the potential that a DMP has to offer, this section now presents a learning scheme that is used to exploit the large energy savings available.
+The previous section showed that dynamically reconfiguring the processor can help reduce energy consumption whilst still achieving the same execution time as the fastest ahead of time configuration.
+In order to benefit fully from dynamic core-composition two solutions are possible; either the programmer must go through the code and manually determine when to change the composition or an automatic scheme can be deployed.
+This section now presents a learning scheme that is used to exploit the large energy savings available.
 The main idea is to monitor at runtime some performance counters and make a decision at a regular interval on how to reconfigure the cores.
 For this purpose, a model is trained offline using the data collected and presented earlier in the chapter.
 Once trained, the model predicts the optimal number of cores based on the performance counters from the previous time interval and reconfiguration occurs if it is different from the current number of cores.
@@ -14,16 +16,16 @@ Once trained, the model predicts the optimal number of cores based on the perfor
 
 As the decisions are made at runtime, a lightweight model that is able to predict the correct configuration that can be integreated in hardware is necessery.
 Linear regression, which makes predictions using a weighted sum of the input feature, has been demonstrated to be useful for predicting processor performance~\cite{Joseph2006LinReg}.
-It is chosen as it has been as it can easily be implemented in hardware~\cite{lee2006linreg,Lukefahr2012Composite}.
+It is chosen as it has been as it can easily be implemented in hardware~\cite{lee2006linreg,Lukefahr2012Composite} and has a low overhead when computing the sum.
 The model is trained offline using the traces gathered from the prior analysis for the \textbf{DSpeed} scenario which maximizes energy savings while maintaining performance.
-Figure~\ref{fig:linmod} is a graphical representation of how the linear model is trained.
+Figure~\ref{fig:linmod} is a shows how the linear model is trained.
 The dataset consists of a set of four input features (average block size, and percentage of integer, floating point and load operations) and the optimal number of cores for each time tick for each program.
 These features are chosen as they are easy to extract from the hardware.
 The reason stores are not in the feature vector is due to the fact that a block is comprised only of integer, floating point, load and store operations.
-Therefore, when building the model, the linear regression considers that stores correlate with other features and selects to remove it as a variable.
+Therefore, when building the model, a correlation analysis determined that stores correlate with other features and selects to remove it as a variable.
 
 To speedup the learning process, a single data point is created per phase, averaging the features of all the ticks in a phase, resulting in a total of 34 pairs of optimal core number and features.
-The training consists of finding the weights that minimize the error when predicting the optimal number of cores to use across all time ticks and benchmarks.
+The training consists of finding the weights that minimise the error when predicting the optimal number of cores to use across all time ticks and benchmarks.
 Since only core configurations which use a power of two number of cores are considered, the linear model is built to predict the logarithm (base 2) of the number of cores.
 The prediction is rounded up to the nearest integer in the interval $[0,4]$.
 The following equation represents the trained linear model which can be used to make prediction:
@@ -33,7 +35,8 @@ The following equation represents the trained linear model which can be used to 
  &0.069 \cdot \textbf{\%fp\_ops}\ +\ 0.21 \cdot \textbf{\%ld\_ops}
 \end{align*}
 
-
+It is important to note that this model was not used during the validation, as cross-validation (see Chapter~\ref{chp:Background}) was used to evaluate it.
+Instead, this represents a model where the data from all programs is used.
 For instance, if at runtime an average block size of 6 instructions, and 77\%, 1\% and 18\% of integer, floating point and load operations, respectively, then the predicted value will be 2.092.
 Rounded up to the nearest integer value, 2, the optimal number of cores predicted will, therefore, be 4.
 
@@ -50,7 +53,7 @@ By increasing the core count on load heavy blocks this will improve performance 
 
 \begin{figure}[t]
     \centering
-	\includegraphics[width=1\textwidth]{cases-paper/graphics/results/lr_speed2.pdf}
+	\includegraphics[width=1\textwidth]{cases-paper/graphics/results/lr_speed3.pdf}
     \caption{Performance results for maximizing speed for the SD-VBS benchmarks using the linear regressor (LR) model.}% For Speedup, higher means better, for energy lower is better.}
     \label{fig:speedlr}
 	\vspace{1em}

@@ -10,36 +10,22 @@
 This section explores how core composition affects the performance of the SD-VBS benchmarks.
 First a phase analysis is performed, followed by a study of the IPC variation for static core fusion.
 Then the use of dynamic core composition is motivated by using the gathered information.
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{cases-paper/graphics/Exploration/SSE_final.pdf}
+    \caption{Sum of Square Errors given a number of kNN clusters for each of the benchmarks. The vertical line represents the number of clusters chosen for phase analysis.}
+    \label{fig:sse}
+		\vspace{1em}
+\end{figure}
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=1\textwidth]{cases-paper/graphics/Exploration/clusters3.pdf}
-    \caption{Number of phases determined for each benchmark using kMeans clustering and their distribution.}
+    \includegraphics[width=1\textwidth]{cases-paper/graphics/Exploration/clusters4.pdf}
+    \caption{Number of phases determined for each benchmark using kMeans clustering and their distribution. The number above each phase represents the average observed IPC.}
     \label{fig:clust}
 		\vspace{1em}
 \end{figure}
 
-
-\begin{figure}[t]
-     \centering	
-	 \vspace{-1em}
-     \subfloat[][Disparity]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Exploration/disparity-sse.pdf}\vspace*{-4mm}\label{subfig:disp}}
-     \subfloat[][Localization]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Exploration/localization-sse.pdf}\vspace*{-4mm}\label{subfig:loc}}
-     \subfloat[][MSER]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Exploration/mser-sse.pdf}\label{subfig:mser}}\
-	 	 	 \vspace{-0.5em}
-
-     \subfloat[][Multi\_Ncut]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Exploration/multi-sse.pdf}\label{subfig:mult}}
-     \subfloat[][Sift]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Exploration/sift-sse.pdf}\label{subfig:sift}}
-     \subfloat[][Stitch]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Exploration/stitch-sse.pdf}\label{subfig:stitch}}\
-	 	 	 \vspace{-0.5em}
-
-     \subfloat[][SVM]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Exploration/svm-sse.pdf}\label{subfig:svm}}
-     \subfloat[][Texture\_Synthesis]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Exploration/texture-sse.pdf}\label{subfig:text}}
-     \subfloat[][Tracking]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Exploration/tracking-sse.pdf}\label{subfig:track}}
-     \caption{Time (x-axis) vs. Energy (y-axis) tradeoffs using Static and Dynamic Composition Schemes.}
-     \label{fig:elbows}
-	 	 	 	 \vspace{1em}
-\end{figure}
 
 \subsection{Phase Detection}
 Figure~\ref{fig:sxt} presents the IPC performance through time for all the benchmarks when using a logical core (LC) composed of 16 cores.
@@ -54,16 +40,16 @@ For other, such as \bm{Multi\_NCut}, the execution is dominated by a single long
 To better understand how dynamic core fusion improves performance, either by improving speedup or reducing energy, this section studies how each benchmark features different phases during their execution.
 For every benchmark the IPC results of 16,8,4,2,1 fused cores are regrouped and kMeans clustering is applied to determine phases.
 Intervals that exhibit similar IPC values when run on different core counts are classified in the same cluster.
-In order to find the correct number of clusters the Sum of Square Errors (SSE) is plotted for a given cluster size from 1 to 15 and the optimal cluster is defined as the elbow in the plot~\cite{everitCluster2001}.
+In order to find the correct number of clusters the Sum of Square Errors (SSE) is plotted for a given cluster size from 1 to 15 (seen in Figure~\ref{fig:sse} and the optimal cluster is defined as the elbow in the plot~\cite{everitCluster2001}.
 Applying a kMeans clustering to the IPCs of each application to determine phases is preferred to determining phases of an application by reading the source code phases.
 This is because IPC is the determining metric for the phases used throughout this chapter.
 For example, the benchmark \bm{MSER}'s source code has 7 distinct passes, yet the kMeans clustering shows that most of these passes result in the same performance, which can be visualised in Figure~\ref{fig:sxt}.
 This kMeans clustering process is only done for the purpose of exploring this set of benchmarks.
 
-Figure~\ref{fig:clust} shows the number of clusters for each benchmark and the number of times a tick in each cluster occurs throughout the execution of the program.
+Figure~\ref{fig:clust} shows the number of clusters for each benchmark and the number of times a tick in each cluster occurs throughout the execution of the program and the average IPC observed for each cluster.
 The frequency of a cluster is counted by how many ticks in the program are part of that specific phase.
 The data can be corroborated with the information found in Figure~\ref{fig:sxt}.
-For example, benchmarks \bm{MSER} and \bm{Multi\_NCut} feature two phases, with one of those phases covering over 80\% of the total execution.
+For example, benchmark \bm{Multi\_NCut} features one phase covering over 80\% of the total execution, whereas for \bm{MSER}, the two dominant phases have very similar IPC values.
 This means that it will be impossible to obtain any kind of performance improvements through dynamic reconfiguration due to the fact that there is little opportunity to switch the size of the LC.
 For all the other benchmarks, they each have at least two dominant phases.
 Since each phase is a cluster of similar IPC values, having two or more clusters will result in a higher chance of benefiting from dynamic core fusion.
@@ -96,9 +82,9 @@ For benchmarks \bm{Localization} and \bm{Stitch} the performance increases when 
 These benchmarks may not see a reduction in performance on 16 cores due to the increase in network traffic, which will make the highest LC size slower than 8 cores.
 Referring back to Figures~\ref{fig:sxt} and~\ref{fig:clust}, \bm{MSER} and \bm{Multi\_NCut} feature one dominating long phase, both performing poorly.
 
-Figure~\ref{fig:stddev} also shows the standard deviation of the IPC for each given LC size represented by the grayed out areas.
+Figure~\ref{fig:stddev} also shows the variation of the IPC for each given LC size represented by the grayed out areas.
 For example, running the \bm{Disparity} benchmark on a LC of 16 cores, it can be observed that an average IPC of 8.3 with a standard deviation of 5.2.
-The standard deviation for 16 cores shows that the performance can drop down to 2.5.
+The variation for 16 cores shows that the performance can drop down to 2.5.
 An IPC of 2.5 when using 16 cores is very inefficient as this represents 0.1 of an instruction per cycle for each core and this performance can be achieved by using smaller core compositions.
 Using a LC of size 4 for the \bm{Disparity} benchmark an average of 4.1 with a standard deviation of 1.2 is achieved.
 Thus, if the logical-core could change size, there is a possibility that this could reduce the overall energy consumption of the system by switching from 16 to 4.
