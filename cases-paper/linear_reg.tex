@@ -23,8 +23,9 @@ The dataset consists of a set of four input features (average block size, and pe
 These features are chosen as they are easy to extract from the hardware.
 The reason stores are not in the feature vector is due to the fact that a block is comprised only of integer, floating point, load and store operations.
 Therefore, when building the model, a correlation analysis determined that stores correlate with other features and selects to remove it as a variable.
-
-To speedup the learning process, a single data point is created per phase, averaging the features of all the ticks in a phase, resulting in a total of 34 pairs of optimal core number and features.
+ % a single data point is created per phase, averaging the features of all the ticks in a phase, resulting in a total of 34 pairs of optimal core number and features.
+To speedup the learning process, for each benchmark the features of all the ticks in a phase were averaged out to create a single data point, which is comprised of an IPC value, and the features described in Figure~\ref{fig:linmod}.
+This averaging out leads to 34 data points for all the benchmarks.
 The training consists of finding the weights that minimise the error when predicting the optimal number of cores to use across all time ticks and benchmarks.
 Since only core configurations which use a power of two number of cores are considered, the linear model is built to predict the logarithm (base 2) of the number of cores.
 The prediction is rounded up to the nearest integer in the interval $[0,4]$.
@@ -46,7 +47,7 @@ When it comes to execution time, loads may take from 3 to 128 cycles depending o
 Whether it is a cache hit or miss, a block that takes longer to execute will often minimize the \textit{SynchronizationCost} penalty.
 A block composed mainly of integer or floating point operations will often result in shorter execution rates; thus may execute faster, making it harder for large logical cores to improve performance.
 More discussion on how the time it takes to execute a block influences the performance of LCs is discussed in Chapter~\ref{chp3}.
-The other reason loads are prefered is due to the fact that loads can be fired independently to the Load-Store Queue.
+The other reason loads have the largest weight is due to the fact that loads can be fired independently to the Load-Store Queue.
 Unlike stores that depend on previous memory instructions blocks being committed, loads can be fired with less overhead.
 As data can be speculatively fetched, loads instructions can receive data from other cores before the data is stored, speeding up the load instruction.
 By increasing the core count on load heavy blocks this will improve performance more reliably due to cores being able to issue loads in parallel.

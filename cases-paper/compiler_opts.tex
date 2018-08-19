@@ -7,8 +7,8 @@ Unrolling loops will both reduce the number of blocks required to execute the lo
 For example, the innermost loop in Figure~\ref{lst:small} should be completely unrolled and its outer loop unrolled partially to increase the block size.
 There are certain factors limit the usefulness of loop unrolling.
 In the evaluated EDGE architecture, blocks may not have more than 32 load or store instructions.
-This is due to the fact that the EDGE architecture restricts each block to have only 32 load store instructions~\cite{putnam2010e2,smith2006edge}.
-Therefore unrolling memory intensive loops will not always drastically increase the size of a block if the block is composed mainly of load and store instructions.
+This is due to the fact that the EDGE architecture restricts each block to have only up to 32 load/store instructions~\cite{putnam2010e2,smith2006edge}.
+Therefore unrolling memory intensive loops will not always drastically increase the size of a block if the block is composed mainly of load and store instructions, as the EDGE compiler will have to split blocks if they contain more than 32 load/store instructions.
 However as it will generate blocks with fixed branches it reduces the strain on branch prediction as it will generate multiple blocks with fixed branches.
 Another issue is that unrolling loops with conditional statements may not help improve the size of the block as the conditional branches might still segment the new blocks.
 So these loops should not be unrolled as they will lead to an increase in code size.
@@ -84,7 +84,7 @@ Hyperblock formation aims to reduce branching and increase block size by combini
 Hyperblocks reduce both synchronization cost and branch prediction requirements as discussed previously.
 This is especially important in control-flow intensive loops where unrolling increases the number of conditional statements.
 Hyperblock formation can be done automatically~\cite{smith2006edge} via a compiler flag provided by the EDGE compiler.
-However, as of the writing of this thesis, a block can only support a single predicated path, thus hyperblock formation cannot be paired with loop unrolling for example.
+However, as of the writing of this thesis, a block can only support a single predication, thus hyperblock formation cannot be paired with loop unrolling for example.
 
 \begin{figure}[t]
      \centering
@@ -107,6 +107,7 @@ While the optimizations described above and their tuning would be easy to implem
 Therefore the source code of the benchmarks is modified by manually interchanging or unrolling loops.
 In the case of predication and hyperblock formation, simple if-then-else statements are converted into ternary operators whenever possible.
 Statements are also re-ordered within the body of a loop to avoid having control flow in the middle of the body.
+For loop unrolling, the loops were unrolled to fit a single block.
 The source code modifications are then verified to have the intended effect by disassembling the binary file produced by the compiler.
 On average there are between 0 and 12 loops modifications depending on the benchmark.
 
@@ -117,11 +118,11 @@ However, after applying the simple optimizations described above, the average IP
 
 Since optimizations change the total number of instructions, the actual speedup obtained using cycle count is also shown in Figure~\ref{fig:speedcomp}.
 As can be seen, benchmarks \bm{MSER} and \bm{Multi-NCut} do not perform any differently.
-This is due to the fact that none of these optimizations can be successfully applied on these benchmarks.
+This is due to the fact that none of these optimizations can be successfully applied on these benchmarks, as the loops cannot be interchanged or unrolled effectively, these applications are discussed in greater detail in Section~\ref{sec:expl}.
 For the other benchmarks there is a significant improvements of up to 12$\times$ for \bm{Sift} when the optimizations are applied.
 It is important to note that, whilst often the increase in IPC correlates with the speedup, this is not always the case.
-In these situations, this is due to the fact that some of the optimisations also reduced the amount of computation required to complete the program; this is the case for \bm{Localization}, \bm{Sift} and \bm{TextureSynthesis}.]
-These benchmarks benefit from other source code modifications such as forced inlining for \bm{Localization} and \bm{TextureSynthesis} and loop invariant code motion for \bm{Sift}.
+In these situations, this is due to the fact that some of the optimisations also reduced the amount of computation required to complete the program; this is the case for \bm{Localization}, \bm{Sift} and \bm{TextureSynthesis}.
+These benchmarks benefit from other source code modifications such as forced inlining for \bm{Localization} and \bm{TextureSynthesis} and loop invariant code motion for \bm{Sift} which were also applied manually.
 
 \paragraph{Summary}
 

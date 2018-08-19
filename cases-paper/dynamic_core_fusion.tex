@@ -30,43 +30,51 @@ This is followed by a closer analysis for two dynamic core fusion objectives: on
 Dynamic core composition enables the ability to change the number of cores for each time tick (an interval of 640 committed blocks) during the execution of a program.
 In order to explore the different performance and energy trade-offs that are possible to achieve with this technique, traces of execution for the application are collected.
 Figure~\ref{fig:tracegraph} is a visual overview of how dynamic traces are collected.
-First application is run on 1,2,4,8 and 16 fused cores and the performance is recorded for each time tick of 640 committed blocks.
+First the application is run on 1,2,4,8 and 16 fused cores and the performance is recorded for each time tick of 640 committed blocks.
 Using these 5 traces, any dynamic execution can be constructed to generate dynamic traces.
 For this chapter, the dynamic trace will be generated base on one of two requirements; that it maximise speed or maximise efficiency.
 
 To simplify the exploration process, time ticks that are attributed to the same phase are always given the same number of cores.
 This is done to reduce the search space as on average there are 48494 ticks which results in an average of $5^{48,494}$ different possible executions.
-Since the maximum number of clusters found is 6 (for SVM), a maximum of $5^{6} = 15625$ different dynamic execution traces can be built.
+Since the maximum number of clusters found is 7 (for SVM), a maximum of $5^{7} = 78125$ different dynamic execution traces can be built.
 This is why creating dynamic core-composition out of traces is prefered to running all potential dynamic configurations via the simulator.
 All applications run for a couple hundred million cycles, which often takes a couple of hours to execute.
 As the amount of dynamic reconfigurations is high for some benchmarks, using traces to simulate dynamic reconfiguration is a very large time-save.
 When the size of the logical core (LC) is switched, the performance of that LC from its respective trace file is used and an extra 100 cycle penalty is added for switching the size of a LC.
-With all these different dynamic core fusion traces, the optimal schemes for maximizing speed or maximizing efficiency can be found.
+This 100 cycles is the overhead of reconfiguring the processor at runtime, the effect of the reconfiguration latency is discussed in further detail later on in this section.
+With all these different dynamic core fusion traces, the optimal schemes for maximising speed or maximizing efficiency can be found.
 
 \begin{figure}[t]
-     \centering	
-	 \vspace{-1em}
-     \subfloat[][Disparity]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Pareto/DispN3.pdf}\vspace*{-4mm}\label{subfig:disp}}
-     \subfloat[][Localization]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Pareto/LocN3.pdf}\vspace*{-4mm}\label{subfig:loc}}
-     \subfloat[][MSER]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Pareto/MSERN3.pdf}\label{subfig:mser}}\
-	 	 	 \vspace{-0.5em}
-
-     \subfloat[][Multi\_Ncut]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Pareto/MultiN3.pdf}\label{subfig:mult}}
-     \subfloat[][Sift]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Pareto/SiftN3.pdf}\label{subfig:sift}}
-     \subfloat[][Stitch]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Pareto/StitchN3.pdf}\label{subfig:stitch}}\
-	 	 	 \vspace{-0.5em}
-
-     \subfloat[][SVM]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Pareto/SVMN3.pdf}\label{subfig:svm}}
-     \subfloat[][Texture\_Synthesis]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Pareto/TextN3.pdf}\label{subfig:text}}
-     \subfloat[][Tracking]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Pareto/TrackingN3.pdf}\label{subfig:track}}
-     \caption{Time (x-axis) vs. Energy (y-axis) tradeoffs using Static and Dynamic Composition Schemes.}
-     \label{fig:paretos}
-	 	 	 	 \vspace{1em}
+    \centering
+	\includegraphics[width=1\textwidth]{cases-paper/graphics/pareto/pareto_best.pdf}
+    \caption{Time (x-axis) vs. Energy (y-axis) tradeoffs using Static and Dynamic Composition Schemes.}
+    \label{fig:paretos}
+	\vspace{1em}
 \end{figure}
+%\begin{figure}[t]
+%     \centering	%
+%	 \vspace{-1em}
+%     \subfloat[][Disparity]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Pareto/DispN3.pdf}\vspace*{-4mm}\label{subfig:disp}}
+%     \subfloat[][Localization]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Pareto/LocN3.pdf}\vspace*{-4mm}\label{subfig:loc}}
+%     \subfloat[][MSER]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Pareto/MSERN3.pdf}\label{subfig:mser}}\
+%	 	 	 \vspace{-0.5em}
+%
+%     \subfloat[][Multi\_Ncut]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Pareto/MultiN3.pdf}\label{subfig:mult}}
+%     \subfloat[][Sift]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Pareto/SiftN3.pdf}\label{subfig:sift}}
+%     \subfloat[][Stitch]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Pareto/StitchN3.pdf}\label{subfig:stitch}}\
+%	 	 	 \vspace{-0.5em}
+%
+%     \subfloat[][SVM]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Pareto/SVMN3.pdf}\label{subfig:svm}}
+%     \subfloat[][Texture\_Synthesis]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Pareto/TextN3.pdf}\label{subfig:text}}
+%     \subfloat[][Tracking]{\includegraphics[width=0.33\textwidth]{cases-paper/graphics/Pareto/TrackingN3.pdf}\label{subfig:track}}
+%     \caption{Time (x-axis) vs. Energy (y-axis) tradeoffs using Static and Dynamic Composition Schemes.}
+%     \label{fig:paretos}
+%	 	 	 	 \vspace{1em}
+%\end{figure}
 
 \subsection{Dynamic Core Fusion}
 Figure~\ref{fig:paretos} shows the trade off between time (represented in cycles) and energy using either a static ahead of time configuration or a dynamic reconfiguration.
-The dotted line represents the static core fusion scheme whilst the solid line represents the Pareto Front of all the dynamic core fusion traces.
+The dotted line represents the static core fusion scheme for the benchmark whilst the solid line represents the Pareto Front of all the dynamic core fusion traces.
 The vertical line represents the amount of energy that can be saved from using a dynamic core fusion scheme that matches the same speed as the best static scheme.
 The Pareto Front is constructed by assigning different LC sizes to a phase and recording the execution time in cycles and energy consumption.
 For a given cycle count, the reconfiguration scheme that leads to the smallest energy consumption is chosen to be a point in the Pareto Front.
@@ -96,7 +104,7 @@ Dynamic reconfiguration is therefore mainly used to limit the energy consumption
 
 In this section the dynamic scheme is defined to be one that matches the same speed performance as the fastest static core composition for the benchmark: \textbf{DSpeed}.
 This is equivalent to the vertical line found in Figure~\ref{fig:paretos}.
-This scheme is used to demonstrate how dynamic reconfiguration can outperform static configuration on a baseline of execution time.
+This scheme is used to demonstrate how dynamic reconfiguration can outperform static configuration when only concerned with the speed of execution.
 
 Figure~\ref{fig:speedres} shows the speedup of \textbf{DSpeed} and Static Best (SB) and the respective energy consumption.
 The results are normalized against the performance of Static Suite (SS), which is 8 cores fused.
@@ -119,7 +127,7 @@ For the benchmarks \bm{Disparity}, \bm{Sift}, \bm{Texture\_Synthesis} the energy
 This is due to the fact that these benchmarks perform best on a 16-core system, however as seen in Figure~\ref{fig:stddev}, the variation in performance always increases when fusing this many cores.
 In this situation, whilst 16 cores does result in the fastest execution times, the energy consumption is higher than SS.
 This shows the limitations of static configurations overall, whether it be at design time or ahead of time: the lack of flexibility means that compromises have to be made.
-In the case of optimising for speed, the compromise comes at the cost of energy consumption.
+In the case of aiming for the fastest execution times energy consumption may increase .
 
 %More here
 The dynamic reconfiguration \textbf{DSpeed} scheme always performs better than the SB scheme in terms of energy consumption and can even match the SS scheme on energy consumption whilst improving speed such as in the \bm{Sift} benchmark.
@@ -167,7 +175,7 @@ This shows how dynamic core fusion's flexibility allows us to get better speedup
 \subsection{Reconfiguration Latency} \label{sec:reconfoverhead}
 
 %Check if th
-Up until now, the chapter has assumed a reconfiguration latency of 100 cycles whenever dynamic reconfiguration occurs as explained in the background chapter, Chapter~\ref{chp:Background}.
+Up until now, the chapter has assumed a reconfiguration latency of 100 cycles whenever dynamic reconfiguration occurs, similar to~\cite{pricopi2012bahurupi} as explained in the background chapter, Chapter~\ref{chp:Background}.
 This section studies the impact of a larger reconfiguration overhead on energy savings.
 First, figure~\ref{fig:avlen} shows the average phase length for each benchmarks when maximizing energy savings while maintaining performance (\textbf{DSpeed}).
 As can be seen, the majority of the benchmarks run for long period of several ten of thousands cycles before any switching occurs.
@@ -201,7 +209,7 @@ This data shows that even if the reconfiguration overhead is 1,000 cycles, avera
 
 \paragraph{Summary}
 
-Overall, whether the program is optimize for speed or efficiency, dynamic core fusion will always lead to higher speedup or lower energy consumption than a fixed configuration.
+Overall, whether the program is optimised for speed or efficiency, dynamic core fusion will always lead to higher speedup or lower energy consumption than a fixed configuration.
 This is due to the presence of phases in applications that the dynamic scheme can exploit to reduce wasting energy in low ILP phases.
 This section has shown that maximizing speed can be highly energy inefficient when using a static LC and that a dynamic scheme can help reduce energy consumption by 42\% on average.
 When optimizing for efficiency, the section demonstrates that a dynamic scheme can help improve both speed and energy consumption, for example in the case of \bm{Tracking}, and overall speed can be improved by 1.25x whilst saving 25\% energy.

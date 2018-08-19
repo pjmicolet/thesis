@@ -41,6 +41,12 @@ It also shows that loop optimizations have a significant performance impact when
 		numbers=left,
 }
 
+
+Previous work in core composition focuses on delivering performance improvements~\cite{ipek2007CoreFusion,kim2007tflex} and demonstrates how to predict static core fusion~\cite{micolet2016dmpstream}.
+A static ahead of time composition fuses cores into a single logical core (LC) and executes a thread on this new core.
+As evident from this prior work, fusion improves the performance of the program by maximizing speed.
+However, as will be shown a static ahead of time core compositions may not be the perfect match for all situations.
+
 \begin{figure}[t]
 \lstset{language=C,numbersep=4pt}
 \begin{center}
@@ -82,9 +88,8 @@ void integralImage2D2D(F2D* SAD, F2D* integralImg) {
     for(i=1; i<nr; i++)
         for(j=0; j<nc; j++) 
             subsref(integralImg,i,j) = subsref(integralImg, (i-1), j) + subsref(SAD,i,j);
-	
-    for (j = 1; j < nc; j++)
-        for (i = 0; i < nr; i++)
+	for (i = 0; i < nr; i++)
+		for (j = 1; j < nc; j++)
             subsref(integralImg, i, j) = subsref(integralImg, i, (j - 1)) + subsref(integralImg, i, j);
     return;
 }
@@ -96,23 +101,20 @@ void integralImage2D2D(F2D* SAD, F2D* integralImg) {
 \label{lst:high_ipc}
 \end{figure}
 
-
-
-Previous work in core fusion focuses on delivering performance improvements~\cite{ipek2007CoreFusion,kim2007tflex} and demonstrates how to predict static core fusion~\cite{micolet2016dmpstream}.
-A static ahead of time fusion fuses cores into a single logical core (LC) and executes a thread on this new core.
-As evident from this prior work, fusion improves the performance of the program by maximizing speed.
-However, as will be shown a static ahead of time core compositions may not be the perfect match for all situations.
-
 Applications often feature different phases of Instruction Per Cycle (IPC) due to varying loop patterns.
 To illustrate this Figure~\ref{fig:disp_ex} plots the IPC performance variation over the execution of the \bm{Disparity} Benchmark from the San-Diego Vision Benchmark Suite (SD-VBS)~\cite{sdvbs} on core compositions of sizes 4 and 16 respectively.
-IPC is a natural method of evaluating the performance of a core-composition as increasing the size of the composition leads to a higher amount of instructions executing per cycle.
-In this Figure, the x-axis Tick represents a certain number of blocks (Chapter ~\ref{}) that have been committed rather than being a measure of time in cycles.
+IPC is a natural method of evaluating the performance of a core-composition as increasing the size of the composition can lead to a higher amount of instructions executing per cycle.
+In this Figure, the x-axis Tick represents a certain number of blocks (see Chapter~\ref{chp:Background}) that are committed rather than being a measure of time in cycles.
 This is why the high IPC phases for both core-compositions appear to last the same length of time even though the 16 core-composition executes the blocks faster.
 In EDGE, a block is committed when it is no longer a speculative block, all its instructions have executed and its memory and register operations have been committed back to memory or the register files.
 The reason why number the of blocks committed is used as a measurement of time is due to the fact that the number of blocks necessary to execute a program are independent of the size of a core-composition.
 On 4 cores, the performance oscillates between an IPC of 2 and 6 depending on the phase while on 16 cores the IPC can be as high as 16.
 
 As can be seen in Figure~\ref{fig:disp_ex}, both the 4 and 16 core-compositions share the same IPC when it comes to the low IPC phase.
+Listings~\ref{lst:low_ipc,lst:high_ipc} represent parts of the source code that lead to the low IPC behaviour and high IPC behaviour respectively.
+In listing~\ref{lst:low_ipc}, the compiler will generate smaller blocks due to the control flow, which often leads to low IPC performance as will be explained later on in Section~\ref{sec:lim_study}.
+In these situations, using a large core composition will not improve performance, which is why both the 4 and 16 core-composition share the same IPC.
+However the code in listing~\ref{lst:high_ipc} can be unrolled and thus a high amount of IPC can be extracted.
 In a situation where the objective of the programmer is to maximise speed, without dynamic reconfiguration of the DMP, a static 16 core-composition will have to be used.
 %Get actual energy estimations ot make this more clear
 If the static 16 core composition is used, the DMP consumes 4 times as much energy to execute the low IPC phases compared to the 4 core-composition.
@@ -146,6 +148,7 @@ These optimizations are well known and do not require any structural modificatio
 Figure~\ref{fig:compmotiv} illustrates the impact of applying loop transformations on the \bm{Disparity} benchmark compared to a standard compiler not specifically tuned for the EDGE architecture.
 In this case, the two main transformations are loop unrolling and loop interchanging.
 The Figure shows the IPC performance of a 16 core composition with and without optimisations.
+For example, in Listing~\ref{lst:high_ipc}, the nested loop at lines 14 to 16 has a data dependency between iterations; switching the for loop headers can get rid of the dependency.
 As can be seen, the impact of these transformations can be large, leading to an 12x improvement on IPC.
 Figure~\ref{fig:compmotiv} shows that the optimisations allow the core-composition to sustain a high IPC phase longer than without the optimisations.
 Longer high IPC phases also means that the DMP will require less switching between core compositions, thus encurring less of a reconfiguration penalty.
@@ -153,7 +156,7 @@ However, it also demonstrates that not all of the code in a program can be optim
 More details about the loop transformations are given in section~\ref{sec:opt} but this example illustrates the need for careful tuning of the compiler to achieve high performance on such an architecture.
 
 %Find some citation for this
-\paragraph{Automating runtime reconfiguration}
+\paragraph{Challenge of knowing when and how to reconfigure the processor}
 
 Figure~\ref{fig:disp_ex} motivates the use of runtime reconfiguration to ensure that DMP can improve the performance of single threaded applications efficiently by minimising energy consumption.
 Figure~\ref{fig:compmotiv} shows how modifying loops affects the performance in terms of IPC for a core-composition.

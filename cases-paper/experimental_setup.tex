@@ -20,8 +20,10 @@ This section now presents the experimental setup used for the remaining parts of
 For this chapter the performance of the Dynamic Multicore Processor (DMP) is studied on a set of Vision Benchmarks designed for hardware and compiler research~\cite{sdvbs}.
 The San Diego Vision Benchmark suite (SD-VBS) is composed of nine single-threaded C benchmarks ranging from image analysis to motion tracking.
 These benchmarks represent state-of-the-art applications in image and vision recognition which are prevalent in embedded systems.
+The domain of image analysis and vision recognition is prevalent in multiple commerical and research fields, such as robotics, self-driving cars and even facial recognition in smartphones.
 
-Vision applications typically have regular and simple control flow which enables the formation of large blocks of instructions.
+Vision applications are usually designed as software pipelines featuring different passes which will naturally form phases throughout the execution of the program.
+The programs typically have regular and simple control flow which enables the formation of large blocks of instructions.
 The processor relies on the ability to form large blocks to exploit block level parallelism (BLP) which makes these applications particularly well suited.
 As the results will show, the phase length has minimal impact on energy savings when the reconfiguration overhead is low.
 
@@ -67,8 +69,8 @@ and their characteristics in terms of memory/computation intensity are shown in 
 %Maybe find a way of explaining how long it takes
 The SD-VBS benchmark suite comes with a different set of input sizes.
 Due to executing these benchmarks on a cycle accurate simulator, executing on large datasets can take a large amount of time.
-A single experiment can take up to 6 hours on a single machine (ref), and the average Million instructions per second (MIPS) of the simulator is of 0.1 when only simulating a single core.
-In the paper describing each of the applications in the SD-VBS suite~\cite{sdvbs}, Venkata et al. show how increasing the size of the input does not drastically change the phases of each benchmark.
+A single experiment can take up to 6 hours on a single machine (Intel i5 3570k 3GHz, 16 GB of DDR3 RAM), and the average Million instructions per second (MIPS) of the simulator is of 0.1 when only simulating a single core.
+In the paper describing each of the applications in the SD-VBS suite~\cite{sdvbs}, Venkata et al. show that increasing the size of the input does not drastically change the phases of each benchmark.
 Table~\ref{tab:sd-data} shows the datasets used for the benchmarks in this chapter.
 For this chapter, the aim is to have a dataset that leads to executing at least 100 million cycles as this ensures that the caches and branch predictor are warmed up~\cite{dubach13dynamic}.
 %Multi_NCut would take 10x time longer on anything else
@@ -88,11 +90,11 @@ For this chapter, the aim is to have a dataset that leads to executing at least 
 
 \subsection{Measuring Performance and Power}
 
-Five simulations per benchmark are ran, one for each LC size: 1, 2, 4, 8 and 16.
-For each LC the IPC of the LC at an interval of 640 committed blocks is recoreded.
-640 committed blocks is chosen as it allows each core in a LC to execute enough blocks before taking the measurement.
-This is due to the fact that the highest LC of 16 cores can execute up to 64 blocks at a time, thus recording performance after 640 blocks allows each core to have executed at least 10 blocks.
-Using committed blocks as an interval allows us to easily compare each simulation as the total number of committed blocks does not change even if the LCs are different.
+Five simulations per benchmark are ran, one for each core composition size: 1, 2, 4, 8 and 16.
+For each core composition the IPC of the core composition at an interval of 640 committed blocks is recoreded.
+640 committed blocks is chosen as it allows each core in a core composition to execute enough blocks before taking the measurement.
+This is due to the fact that the highest core composition of 16 cores can execute up to 64 blocks at a time, thus recording performance after 640 blocks allows each core to have executed at least 10 blocks.
+Using committed blocks as an interval allows us to easily compare each simulation as the total number of committed blocks does not change even if the core compositions are different.
 
 The EDGE architecture is fundamentally different from the traditional CISC/RISC paradigm and thus, McPAT~\cite{mcpat} cannot be used to model power consumption as it differs from traditional CISC/RISC cores modeled in McPAT.
-Instead a coarse grained power model is applied where power gating is applied either a core is in used and turned on or or it is off.
+Instead a coarse grained power model is used where power gating is applied; when a core is not currently being used, it is assumed to be turned off and therefore does not consume energy.
