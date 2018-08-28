@@ -1,16 +1,9 @@
+
 This section presents the design exploration of a set of streaming applications being executed on a DMP.
 The section describes how changing the thread mapping and core composition affect the benchmarks and what can be learned from this.
 In addition, the impact of loop unrolling and how it helps exploit larger fused cores is investigated.
 
 \subsection{Overview}
-
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=1\textwidth]{streamit-paper/graphics/explanation3.pdf}
-    \caption{Description of the workflow.
-    Two distinct machine-learning models are used to predict the optimal thread partitioning and core composition based on static code features.}
-    \label{fig:overview}
-\end{figure}
 
 
 \begin{figure}[t]

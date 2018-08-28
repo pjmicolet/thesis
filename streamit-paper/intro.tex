@@ -1,5 +1,5 @@
 % Software point of view: the problem
-A Dynamic Multicore Processor's ability to reconfigure itself allows it to adapt to any program it executes.
+A Dynamic Multicore Processor's (DMP) ability to reconfigure itself allows it to adapt to any program it executes.
 Whilst being able to reconfigure hardware is a promising approach to optimising execution, DMPs come with their own set of challenges when attempting to finding a good configuration for the program at hand.
 Given a program that can be parallelised, a DMP can either be configured to run a high amount of threads on small groups of cores, a small number of threads on large groups of cores or a heterogeneous mix of both large and small cores.
 Without deep knowledge of the architecture, knowing how to configure the processor can be a highly time consuming task.
@@ -18,8 +18,8 @@ However, optimally mapping parallelism and managing hardware resources remains a
 For example, given a 16 core DMP with up to 15 threads, a single program can have over 32,000 different configurations of thread to logical-core pairings.
 Rather than exhaustively searching the space, which is a very time consuming task, finding a way to automate the configuration of the processor makes the use of DMPs more attractive.
 The number of program features that may influence how to partition dataflow programs is large, for example it could depend on the number of tasks, the parallelism made explicit by the language and/or different compiler optimisations.
-Therefore manually determining a set of heuristics to create a model that selects thread count and core configurations is not recommended as it may discard information that was ignored by the designer.
-Instead, using a machine learning model can extract all the features that correlate the most with deciding a good partition and generate an appropriate model.
+Therefore manually determining a set of heuristics to create a model that selects thread count and core configurations is not recommended as important information may be disregarded.
+Instead, a machine learning model paired with correlation analysis, can extract all the features that correlate the most with deciding a good partition and generate an appropriate model.
 
 This chapter analyses how static ahead-of-time reconfiguration of a dynamic multicore processor can improve performance of a set of streaming applications.
 An analysis of the design space exploration is performed and shows the impact of modifying resources and thread mapping.

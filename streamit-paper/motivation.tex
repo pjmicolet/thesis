@@ -6,10 +6,12 @@
 %     \label{fig:beamformermotiv}
 %\end{figure}
 
-This section motivates the difficulty of finding a good combination of number of threads and cores allocated per thread ahead of time.
+This section motivates the difficulty of finding a good combination of thread and core partitionings.
 First, a simple experiment is conducted where the \bench{FilterBank} StreamIt benchmark is analysed using a 16 core dynamic multicore processor.
+%Maybe reform this sentence
+\bench{FilterBank} has an array of discrete fourier transform filters that take a signal as an input, and their outputs are downsampled, upsampled and then recombined to form a processed signal~\cite{streamitrepo}.
 The program's tasks are partitioned into threads and a various number of cores are allocated to each of the threads.
-Since one of the threads is the master thread which creates and joins all worker threads, this means that the application can be partitioned in up to 15 threads, and 15 cores can be utilised.
+Since one of the threads is the master thread which creates and joins all worker threads, this means that the application can be partitioned in up to 15 threads, and 15 cores can be used for those threads.
 As each thread must have at least one core assigned to it, and not all cores have to be grouped together, the total number of configurations are:
 
 \begin{equation}
@@ -18,9 +20,9 @@ As each thread must have at least one core assigned to it, and not all cores hav
 \end{equation}
 
 In Equation~\ref{eq:comb}, the constant 15 represents the 15 different number of cores that can be composed for the single threaded version.
-There are 32767 combinations (exhaustive space) of thread mappings and core compositions pairings that can be generated.
-In this chapter, a design point represents one of these 32767 different configurations.
-Design points are executed on the dynamic multicore simulator, the exact details about the experimental setup are presented later in section~\ref{sec:setup}.
+There are 32,767 combinations (exhaustive space) of thread mappings and core compositions pairings that can be generated.
+In this chapter, a design point represents one of these 32,767 different configurations.
+Design points are executed on the dynamic multicore simulator, the exact details about the experimental setup are presented later in section~\ref{chp:stream:sec:setup}.
 
 \begin{figure}[t]
     \centering
@@ -29,8 +31,8 @@ Design points are executed on the dynamic multicore simulator, the exact details
      \label{fig:threadcoremotiv}
 \end{figure}
 
-Figure~\ref{fig:threadcoremotiv} presents the distribution of execution time, displayed as a cycle count, from a subset of the co-design space of \bench{FilterBank} as a density graph.
-For this Figure, 1316 different thread/core combinations were explored, the reason this number was chosen will be explained later on in section~\ref{chp:stream:sec:setup}.
+Figure~\ref{fig:threadcoremotiv} presents the execution time distribution, displayed as a cycle count, from a subset of the co-design space of \bench{FilterBank} as a density graph.
+For this Figure, 1316 different thread/core combinations are explored, the reason this number is chosen will be explained later on in section~\ref{chp:stream:sec:setup}.
 For the sake of clarity, the execution time of running a single core with a single thread is marked by the rightmost bar with the title "1 thread".
 First, as can be seen in Figure~\ref{fig:threadcoremotiv}, the majority of the different combinations are found at around 250K cycles.
 The worst point for \bench{FilterBank} can be found at the single core execution, which is a single core, single thread, resulting in an execution time of about 700K cycles, which is over 2x slower than the average case.
@@ -41,15 +43,15 @@ However, the number of good configurations is low, this underlines the notion th
 Indeed, whilst the average case is 2x faster than a single core, Figure~\ref{fig:threadcoremotiv} shows that there exists a good number of configurations that can lead to execution times that are slower than average case.
 
 %Insert an example to show that it's a mix of threads and cores that matters.
-Whilst there exists a large variety of thread-core combinations, certain design choices can be used to try and minimize the space.
+Whilst there exists a large variety of thread-core combinations, certain design choices can be used to try and minimise the space.
 For example, choosing to only do multithreading reduces the search space to 15 possible solutions whilst only combinations that lead to homogeneous core compositions reduces the search space to:
 
 \begin{equation}
-\sum_{threads=1}^{15} \lfloor\frac{15}{threads}\rfloor
+\sum_{threads=1}^{15} \lfloor\frac{15}{threads}\rfloor= 45
 \end{equation}
 
 where the constant 15 represents the number of cores available.
-Using only homogeneous core compositions would therefore lead to 45 possible solutions.
+Using only homogeneous core compositions, which reduces the search space, would therefore lead to 45 possible solutions.
 However, reducing the search space will limit the potential obtainable speedup.
 Figure~\ref{fig:threadcoremotiv} also shows the performance distribution of these design choices.
 Their location on the X-axis represents the execution time for that specific configuration.
@@ -57,7 +59,7 @@ The points represent a set of different design choices such as only using multit
 
 As can be seen, using only multithreading can lead to some performance improvements, however it will not result in the optimal performance.
 For the \bench{FilterBank} benchmark, 4 threads leads to the fastest execution time when only using multithreading.
-This performance is in the highest peak of the density curve, which means that finding the best number of threads for the benchmark will only lead to an average performance in this case.
+This performance is in the highest peak of the density curve, which means that finding the best number of threads for the benchmark will only lead to average performance in this case.
 However, using too many threads, for example 15 threads, can lead to a degredaded performance compared to the average.
 In this case, 15 threads is not much faster than using a single thread.
 This is due to the fact that the communication overhead between threads will be too high.
@@ -72,9 +74,17 @@ Therefore, it is important to consider all possible configurations to ensure the
 
 Figure~\ref{fig:threadcoremotiv} demonstrates that of the three scenarios that are explored, the heterogeneous core-composition with multiple threads is the optimal solution.
 This means that the total space has to be explored in order to ensure that the fastest execution time can be found.
-Due to the size of the space and the fact that there can be no apriori about good configurations, machine learning can be used to predict good configurations.
+Due to the size of the space and the fact that there can be no apriori about good configurations, using machine learning to predict configurations is a promising approach. % be used to predict good configurations.
 By exploring the space with a set of StreamIt benchmarks using different configurations for the processor, a machine learning model can learn what features correlate with the correct configuration.
 
 These two examples illustrates the necessity for designing the technique to predict both the optimal number of threads and core composition to use.
 The next section will present a more in-depth analysis of the design space before presenting our machine-learning predictive model.
 
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{streamit-paper/graphics/explanation3.pdf}
+    \caption{Description of the workflow.
+    Two distinct machine-learning models are used to predict the optimal thread partitioning and core composition based on static code features.}
+    \label{fig:overview}
+\end{figure}

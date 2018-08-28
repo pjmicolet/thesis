@@ -7,7 +7,7 @@ The problem of automating this decision can be decomposed into two stages; first
 Partitioning the program is done first as instinctively it is more natural to split the program up into threads before determining how many cores each thread requires.
 In this section, two machine-learning models that predict the best thread partitioning and core composition to maximize performance are presented.
 
-\begin{figure} 
+\begin{figure}[t]
   \centering
  \includegraphics[width=1\textwidth]{streamit-paper/graphics/thread_expl.pdf}
   \caption{Visual representation of how data was collected for the threading model.}\label{fig:thread_expl}
@@ -33,7 +33,7 @@ Figure~\ref{fig:corr} shows the 10 variables that correlate the most with determ
 It is important to note that these features all correlate positively with the number of threads the program requires to get the fastest execution time.
 In StreamIt the term \textit{multiplicity} defines the number of times a filter will have to execute in a time slice when the graph is in a steady state~\cite{gordon2002streamcomp}.
 
-\begin{figure} 
+\begin{figure}[t]
   \centering
  \includegraphics[width=1\textwidth]{streamit-paper/graphics/corrThreadRemix.pdf}
   \caption{The ten highest correlating features with the best number of threads for 1000 synthetic benchmarks.}\label{fig:corr}
