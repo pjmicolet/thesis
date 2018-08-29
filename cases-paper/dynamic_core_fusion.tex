@@ -51,6 +51,7 @@ With all these different dynamic core fusion traces, the optimal schemes for max
     \label{fig:paretos}
 	\vspace{1em}
 \end{figure}
+
 %\begin{figure}[t]
 %     \centering	%
 %	 \vspace{-1em}
@@ -100,7 +101,7 @@ Dynamic reconfiguration is therefore mainly used to limit the energy consumption
 	\vspace{1em}
 \end{figure}
 
-\subsection{Optimizing for Speed} \label{sec:dyn:speed}
+\subsection{Optimising for Speed} \label{sec:dyn:speed}
 
 In this section the dynamic scheme is defined to be one that matches the same speed performance as the fastest static core composition for the benchmark: \textbf{DSpeed}.
 This is equivalent to the vertical line found in Figure~\ref{fig:paretos}.
@@ -147,7 +148,7 @@ This illustrates the greatest advantage of using a DMP since the number of fused
 \subsection{Optimizing for Efficiency}
 
 %Cite how to get it, maybe put this in background as well.
-This section defines a dynamic scheme that maximizes the efficiency metric EDD, which is defined as $Energy \times Delay \times Delay$ where Delay is the execution time (in cycles).
+This section defines a dynamic scheme that maximizes the efficiency metric EDD~\cite{lee2006linreg}, which is defined as $Energy \times Delay \times Delay$ where Delay is the execution time (in cycles).
 This metric attempts to optimize speed whilst remaining energy efficient.
 In this section, the dynamic scheme that is optimised for EDD is called \textbf{DEff}.
 The aim of generating a second dynamic scheme is to demonstrate that dynamic reconfiguration can be used to target different requirements.

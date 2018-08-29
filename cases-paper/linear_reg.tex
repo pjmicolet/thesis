@@ -18,12 +18,14 @@ As the decisions are made at runtime, a lightweight model that is able to predic
 Linear regression, which makes predictions using a weighted sum of the input feature, has been demonstrated to be useful for predicting processor performance~\cite{Joseph2006LinReg}.
 It is chosen as it has been as it can easily be implemented in hardware~\cite{lee2006linreg,Lukefahr2012Composite} and has a low overhead when computing the sum.
 The model is trained offline using the traces gathered from the prior analysis for the \textbf{DSpeed} scenario which maximizes energy savings while maintaining performance.
+
 Figure~\ref{fig:linmod} is a shows how the linear model is trained.
 The dataset consists of a set of four input features (average block size, and percentage of integer, floating point and load operations) and the optimal number of cores for each time tick for each program.
 These features are chosen as they are easy to extract from the hardware.
 The reason stores are not in the feature vector is due to the fact that a block is comprised only of integer, floating point, load and store operations.
 Therefore, when building the model, a correlation analysis determined that stores correlate with other features and selects to remove it as a variable.
  % a single data point is created per phase, averaging the features of all the ticks in a phase, resulting in a total of 34 pairs of optimal core number and features.
+
 To speedup the learning process, for each benchmark the features of all the ticks in a phase were averaged out to create a single data point, which is comprised of an IPC value, and the features described in Figure~\ref{fig:linmod}.
 This averaging out leads to 34 data points for all the benchmarks.
 The training consists of finding the weights that minimise the error when predicting the optimal number of cores to use across all time ticks and benchmarks.
@@ -46,6 +48,7 @@ This is due to different reasons, mainly execution time and the fact that Load-S
 When it comes to execution time, loads may take from 3 to 128 cycles depending on whether or not it is a cache miss or hit.
 Whether it is a cache hit or miss, a block that takes longer to execute will often minimize the \textit{SynchronizationCost} penalty.
 A block composed mainly of integer or floating point operations will often result in shorter execution rates; thus may execute faster, making it harder for large logical cores to improve performance.
+
 More discussion on how the time it takes to execute a block influences the performance of LCs is discussed in Chapter~\ref{chp3}.
 The other reason loads have the largest weight is due to the fact that loads can be fired independently to the Load-Store Queue.
 Unlike stores that depend on previous memory instructions blocks being committed, loads can be fired with less overhead.

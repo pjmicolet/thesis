@@ -30,7 +30,6 @@ Then the use of dynamic core composition is motivated by using the gathered info
 \subsection{Phase Detection}
 Figure~\ref{fig:sxt} presents the IPC performance through time for all the benchmarks when using a logical core (LC) composed of 16 cores.
 The IPC is calculated for each time tick, which is set at interval of 640 blocks committed.
-%make this way clearer
 To re-iterate, the interval of 640 blocks was chosen as the largest core composition of size 16 can potentially commit up to 64 blocks at a time.
 Thus measuring performance every 640 blocks allows to fully capture the performance of large compositions without sacrificing loss of information.
 Displaying the performance of the LC of size 16 gives a performance ceiling for all the benchmarks as it is the maximum number of cores which can be fused at any point.
@@ -38,9 +37,15 @@ Figure~\ref{fig:sxt} shows that the IPC varies a lot for some of the benchmarks 
 For other, such as \bm{Multi\_NCut}, the execution is dominated by a single long phase with constant IPC, which will clearly show no benefit from using dynamic fusion.
 
 To better understand how dynamic core fusion improves performance, either by improving speedup or reducing energy, this section studies how each benchmark features different phases during their execution.
+Determining phases in a program requires profiling applications and analysing the profile data.
+This can be done by using tools such as SimPoint~\cite{simpoint} which tracks basic blocks to generate basic block vectors.
+These basic block vectors are then analysed using a clustering technique to determine phases.
+
+Due to the fact that the programs are already being traced for their IPC, SimPoint does not have to be applied here. 
 For every application the IPC results of 16,8,4,2,1 fused cores are regrouped by tick and kMeans clustering is applied to detect how many IPC values can be clustered into similar groups.
-More details on how kMeans clustering works can be found in Chapter~\ref{chp:Background}.
+kMeans clustering is also used in SimPoint and more details on how it works can be found in Chapter~\ref{chp:Background}.
 Intervals that exhibit similar IPC values when run on different core counts are classified in the same cluster.
+
 In order to find the correct number of clusters the Sum of Square Errors (SSE) is plotted for a given cluster size from 1 to 15 seen in Figure~\ref{fig:sse} and the optimal cluster is defined as the elbow in the plot~\cite{everitCluster2001}.
 Applying a kMeans clustering to the IPCs of each application to determine phases is preferred to determining phases of an application by reading the source code phases.
 This is because different source code passes may have the same IPC performance, and thus will ultimately belong to the same phase when considering core composition.
@@ -86,19 +91,21 @@ Thus, having a higher number of cores composed will put pressure on the network.
 Referring back to Figures~\ref{fig:sxt} and~\ref{fig:clust}, \bm{MSER} and \bm{Multi\_NCut} feature one dominating long phase with a very low IPC, and thus fusing cores cannot improve performance.
 
 Figure~\ref{fig:stddev} also shows the variation of the IPC for each given LC size represented by the grayed out areas.
-For example, running the \bm{Disparity} benchmark on a LC of 16 cores, it can be observed that an average IPC of 8.3 with a standard deviation of 5.2.
+For example, running the \bm{Disparity} benchmark on a LC of 16 cores, it can be observed that an average IPC of 8.3.
 The variation for 16 cores shows that the performance can drop down to 2.5.
 An IPC of 2.5 when using 16 cores is very inefficient as this represents 0.1 of an instruction per cycle for each core and this performance can be achieved by using smaller core compositions.
 Using a LC of size 4 for the \bm{Disparity} benchmark an average of 4.1 with a standard deviation of 1.2 is achieved.
 Thus, if the logical-core could change size, there is a possibility that this could reduce the overall energy consumption of the system by switching from 16 to 4.
 
 Figure~\ref{fig:block_sizes} shows the distribution of block-sizes for each of the benchmarks.
-Using the information previously discussed in Section~\ref{lim_study}, the size of blocks is a determining factor of whether or not a program may benefit from core fusion.
 As two blocks cannot occupy the same lane, which is a segment of the instruction window (see Chapter~\ref{chp:Background}), the block sizes are clustered into groups which represent how ever many number of lanes will be occupied (one lane may execute a block of up to 32 instructions).
+Using the information previously discussed in Section~\ref{lim_study}, the size of blocks is a determining factor of whether or not a program may benefit from core fusion.
+
 Figure~\ref{fig:block_sizes} helps explain why benchmarks \bm{MSER} and \bm{Multi\_NCut} do not perform any better with core-fusion.
 For both cases, not only do they have a single detected phase, but both are predominantly formed of blocks that will occupy a single lane.
 In fact, the most frequent block in \bm{MSER}, comprising 21\% the total executed blocks are comprised of only 8 instructions, whilst 31\% of \bm{Multi\_NCut}'s blocks are of 28 instructions.
 Having such small blocks will always increase both the \textit{SynchronizationCost} and the branch-prediction requirements.
+
 For \bm{MSER}, the fact that an important percentage of blocks are only 8 instructions long signifies that the overhead of fetching enough blocks for a large core-composition and the synchronization cost for committing them outweighs executing the blocks on a single core.
 The reason there is no degredation of performance is due to the fact that when fusing a high amount of cores, if the overhead of fetching the blocks outweighs the time required to execute then a core will not submit a block address to be fetched by another core in the composition.
 In this case, multiple cores may be composed, but only a single one is executing any code.
@@ -175,7 +182,7 @@ while( nvisited-- )
 \end{figure}
 
 
-\paragraph{MSER}
+\paragraph*{MSER}
 \bm{MSER} has two distinct IPC phases according to Figure~\ref{fig:clust}, in the code the first phase, which is the domminant phase, represents the computation of the extremal regions tree.
 As seen in Figure~\ref{fig:block_sizes}, the majority of the blocks in MSER are 8 instructions long, meaning that core-compositions will have to load the maximum amount of blocks to fill each core.
 The source code of this phase can be found in the Appendix with Listing~\ref{lsting:mser}.
@@ -189,7 +196,7 @@ Some speedup can still be obtained, as cores in a composition do not need to hav
 However these improvements are minor, and come at a high energy cost.
 
 To get performance out of \bm{MSER}, this major phase would have to be re-written to be less control-flow heavily so that larger blocks can be extracted.
-Even with compiler optimisations, due to the fact that the loops are never executing for a long time, the amount of control flow would render the use of core composition difficult.
+Even with compiler optimisations, due to the fact that the loops are never executing for a long time, and their bodies are small and hard to unroll, it will be difficult to get performance improvements using core composition.
 
 \begin{figure}[t]
 \lstset{language=C,numbersep=4pt}
@@ -218,7 +225,7 @@ Even with compiler optimisations, due to the fact that the loops are never execu
 \vspace{1em}
 \end{figure}
 
-\paragraph{Multi-NCut}
+\paragraph*{Multi-NCut}
 \bm{Multi\_NCut} is faced with a similar situation to \bm{MSER}.
 Figure~\ref{fig:block_sizes} shows that once again, the majority of the blocks are less than 32 instructions long, in fact, over 50\% of the blocks are of 12 instructions or less.
 Table~\ref{tab:sd-vbsbpred} shows that the branch prediction is always correct, yet, with blocks this small, the synchronization cost of executing the blocks on large compositions outdoes any benefit that can be obtained via core-composition.

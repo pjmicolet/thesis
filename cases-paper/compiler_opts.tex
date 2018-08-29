@@ -1,10 +1,11 @@
-This section describes optimizations focused on reducing control flow and expanding block sizes which is necessary for high performance as seen in section~\ref{sec:lim_study}.
+This section describes optimisations focused on reducing control flow and expanding block sizes which is necessary for high performance as seen in section~\ref{sec:lim_study}.
 
 \subsection{Loop Unrolling}
 As seen in Chapter~\ref{chp:streamit}, loop unrolling can be used to reduce the overhead of the loop header and to better expose Instruction Level Parallelism (ILP).
 When dealing with tightly-knit loops, logical cores may perform poorly due to the fact that they execute many small blocks, thus increasing the Synchronization Cost and increasing the branch prediction requirements.
 Unrolling loops will both reduce the number of blocks required to execute the loop and increase the size of the blocks, thus reducing the Synchronization Cost and increasing ILP.
 For example, the innermost loop in Figure~\ref{lst:small} should be completely unrolled and its outer loop unrolled partially to increase the block size.
+
 There are certain factors limit the usefulness of loop unrolling.
 In the evaluated EDGE architecture, blocks may not have more than 32 load or store instructions.
 This is due to the fact that the EDGE architecture restricts each block to have only up to 32 load/store instructions~\cite{putnam2010e2,smith2006edge}.
@@ -90,20 +91,20 @@ However, as of the writing of this thesis, a block can only support a single pre
      \centering
      \includegraphics[width=\textwidth]{cases-paper/graphics/Exploration/ipc_comp.pdf}
 \vspace*{-8mm}
-     \caption{Average IPC using the optimal sized logical-core, with and without optimizations. Higher is better.}
+     \caption{Average IPC using the optimal sized logical-core, with and without optimisations. Higher is better.}
      \label{fig:ipccom}
      \vspace{0.5em}
 \vspace{5mm}
     \centering
     \includegraphics[width=\textwidth]{cases-paper/graphics/Exploration/comp_speed.pdf}
 \vspace*{-8mm}
-    \caption{Speedup from using code-optimizations over baseline source code using the same optimal sized logical-core.}
+    \caption{Speedup from using code-optimisations over baseline source code using the same optimal sized logical-core.}
     \label{fig:speedcomp}
 \vspace{5mm}
 \end{figure}
-\subsection{Results}
 
-While the optimizations described above and their tuning would be easy to implement in a compiler, this thesis did not have access to the compiler's source code.
+\subsection{Optimisation Methodology}
+While the optimisations described above and their tuning would be easy to implement in a compiler, this thesis did not have access to the compiler's source code.
 Therefore the source code of the benchmarks is modified by manually interchanging or unrolling loops.
 In the case of predication and hyperblock formation, simple if-then-else statements are converted into ternary operators whenever possible.
 Statements are also re-ordered within the body of a loop to avoid having control flow in the middle of the body.
@@ -111,20 +112,21 @@ For loop unrolling, the loops were unrolled to fit a single block.
 The source code modifications are then verified to have the intended effect by disassembling the binary file produced by the compiler.
 On average there are between 0 and 12 loops modifications depending on the benchmark.
 
-The best static core fusion using the optimized code is compared with the unmodified code, both version compiled with \texttt{-O2} which is the highest optimisation setting for the EDGE compiler.
+\subsection{Results}
+First the best static core fusion using the optimized code is compared with the unmodified code, both version compiled with \texttt{-O2} which is the highest optimisation setting for the EDGE compiler.
 Figure~\ref{fig:ipccom} shows the resulting IPC for the baseline case and the optimized benchmarks when run on a core with the optimal number of fused core to maximize performance.
 The IPC of the baseline is very low for the majority of the benchmarks which might give the impression that core fusion is rather inefficient.
-However, after applying the simple optimizations described above, the average IPC is significantly increased in many cases.
+However, after applying the simple optimisations described above, the average IPC is significantly increased in many cases.
 
-Since optimizations change the total number of instructions, the actual speedup obtained using cycle count is also shown in Figure~\ref{fig:speedcomp}.
+Since optimisations change the total number of instructions, the actual speedup obtained using cycle count is also shown in Figure~\ref{fig:speedcomp}.
 As can be seen, benchmarks \bm{MSER} and \bm{Multi-NCut} do not perform any differently.
-This is due to the fact that none of these optimizations can be successfully applied on these benchmarks, as the loops cannot be interchanged or unrolled effectively, these applications are discussed in greater detail in Section~\ref{sec:expl}.
-For the other benchmarks there is a significant improvements of up to 12$\times$ for \bm{Sift} when the optimizations are applied.
+This is due to the fact that none of these optimisations can be successfully applied on these benchmarks, as the loops cannot be interchanged or unrolled effectively, these applications are discussed in greater detail in Section~\ref{sec:expl}.
+For the other benchmarks there is a significant improvements of up to 12$\times$ for \bm{Sift} when the optimisations are applied.
 It is important to note that, whilst often the increase in IPC correlates with the speedup, this is not always the case.
 In these situations, this is due to the fact that some of the optimisations also reduced the amount of computation required to complete the program; this is the case for \bm{Localization}, \bm{Sift} and \bm{TextureSynthesis}.
 These benchmarks benefit from other source code modifications such as forced inlining for \bm{Localization} and \bm{TextureSynthesis} and loop invariant code motion for \bm{Sift} which were also applied manually.
 
-\paragraph{Summary}
+\paragraph*{Summary}
 
 Overall, this section shows that classical loop transformations can have a large impact on the performance of fused cores.
-Without these optimizations, it would be more difficult to motivate the use of core fusion even at a static-level as the IPC does not deviate enough from a single core.
+Without these optimisations, it would be more difficult to motivate the use of core fusion even at a static-level as the IPC does not deviate enough from a single core.

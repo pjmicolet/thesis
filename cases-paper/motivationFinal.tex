@@ -1,7 +1,8 @@
 This section motivates the use of dynamic core fusion and its impact on performance and energy.
 It also shows that loop optimizations have a significant performance impact when fusing cores.
+As IPC is a commonly used method of measuring performance, it is used throughout this chapter.
 
-\paragraph{Dynamic Core Fusion}
+\subsection{Dynamic Core Fusion}
 \begin{figure}[t]
     \centering
     \includegraphics[width=\textwidth]{cases-paper/graphics/motivation/disp_opt_4_16_3.pdf}
@@ -107,11 +108,11 @@ IPC is a natural method of evaluating the performance of a core-composition as i
 In this Figure, the x-axis Tick represents a certain number of blocks (see Chapter~\ref{chp:Background}) that are committed rather than being a measure of time in cycles.
 This is why the high IPC phases for both core-compositions appear to last the same length of time even though the 16 core-composition executes the blocks faster.
 In EDGE, a block is committed when it is no longer a speculative block, all its instructions have executed and its memory and register operations have been committed back to memory or the register files.
-The reason why number the of blocks committed is used as a measurement of time is due to the fact that the number of blocks necessary to execute a program are independent of the size of a core-composition.
+The reason why the number of blocks committed is used as a measurement of time is due to the fact that the number of blocks necessary to execute a program are independent of the size of a core-composition.
 On 4 cores, the performance oscillates between an IPC of 2 and 6 depending on the phase while on 16 cores the IPC can be as high as 16.
 
 As can be seen in Figure~\ref{fig:disp_ex}, both the 4 and 16 core-compositions share the same IPC when it comes to the low IPC phase.
-Listings~\ref{lst:low_ipc,lst:high_ipc} represent parts of the source code that lead to the low IPC behaviour and high IPC behaviour respectively.
+Listings~\ref{lst:low_ipc} and~\ref{lst:high_ipc} represent parts of the source code that lead to the low IPC behaviour and high IPC behaviour respectively.
 In listing~\ref{lst:low_ipc}, the compiler will generate smaller blocks due to the control flow, which often leads to low IPC performance as will be explained later on in Section~\ref{sec:lim_study}.
 In these situations, using a large core composition will not improve performance, which is why both the 4 and 16 core-composition share the same IPC.
 However the code in listing~\ref{lst:high_ipc} can be unrolled and thus a high amount of IPC can be extracted.
@@ -125,14 +126,13 @@ On the other hand, if the DMP is reconfigured at runtime, the core-composition c
 In this situation, runtime reconfiguration allows to maximise speed whilst being energy efficient; a goal that cannot be achieved via static ahead of time configurations.
 
 %Maybe, just maybe, add a graph showing how the size of the blocks change (need data on this).
-\paragraph{Code Optimizations}
+\subsection{Code Optimizations}
 
 When cores are fused they execute blocks of instructions in parallel on each physical core in the core composition, also known as a logical core (LC).
-Having multiple cores in a composition can increase the amount of block level parallelism (BLP) that can be extracted out of a program.
-A high amount of BLP leads to high IPC as each core in the LC executes their block in parallel.
-As IPC is a more commonly used method of measuring performance, it is used throughout this chapter.
+%Having multiple cores in a composition can increase the amount of block level parallelism (BLP) that can be extracted out of a program.
+%A high amount of BLP leads to high IPC as each core in the LC executes their block in parallel.
 In order to obtain the best performance from an application, large blocks must be generated as this leads to a higher IPC on the LC as described in Chapter~\ref{chp:streamit}.
-In a nutshell, larger blocks reduce the latency caused by having to fetch blocks for all the physical cores in the LC, thus improving performance.
+In a nutshell, larger blocks reduce the amount of time taken to fetch blocks for all the physical cores in the LC, thus improving performance.
 
 Thus, optimisations that maximise block size will positively affect the performance of compositions.
 This includes optimisations such as aggressive loop unrolling, inlining and replacing conditional statements with either software predication or architecture-level predication.
@@ -156,7 +156,7 @@ However, it also demonstrates that not all of the code in a program can be optim
 More details about the loop transformations are given in section~\ref{sec:opt} but this example illustrates the need for careful tuning of the compiler to achieve high performance on such an architecture.
 
 %Find some citation for this
-\paragraph{Challenge of knowing when and how to reconfigure the processor}
+\subsection{Challenge of knowing when and how to reconfigure the processor}
 
 Figure~\ref{fig:disp_ex} motivates the use of runtime reconfiguration to ensure that DMP can improve the performance of single threaded applications efficiently by minimising energy consumption.
 Figure~\ref{fig:compmotiv} shows how modifying loops affects the performance in terms of IPC for a core-composition.
@@ -168,7 +168,7 @@ The first advantage is that it removes the responsibility from the programmer: a
 Second, if ever the program is modified, this may require new profiling information to be generated to ensure that manual reconfiguration calls are correct.
 If the reconfiguration is automated, then it can adapt automatically to any changes made to the source code.
 
-\paragraph{Summary}
+\paragraph*{Summary}
 This section has shown that programs exhibit phases with various amount of ILP available.
 A dynamic multicore processor can take advantage of this property to fuse a large number of cores for the high-ILP phases and fuse a smaller number of cores when ILP drops to conserve energy.
 The section also illustrated the importance of fine-tuned code transformations to achieve sustained performance and increase the potential for fusing cores.

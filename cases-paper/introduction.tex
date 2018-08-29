@@ -1,8 +1,9 @@
 The previous chapter explored how static ahead-of-time configuration of a dynamic multicore processor (DMP) can improve the performance of multi-threaded streaming applications and showed how a mix of core and thread partitioning leads to optimal performance.
-Whilst static ahead-of-time configurations can improve the overall performance of programs, it cannot adapt itselt to phases a program may have.
+Whilst static ahead-of-time configurations can improve the overall performance of programs, it cannot adapt itselt to exploit the different phases a program may have.
 A program phase can be used to describe multiple concepts, for example regions of code that exhibit different Instruction per cycle (IPC) performances, or variations of instruction mixes.
 When programs exhibit different phases of IPC, this can result in situations where fusing multiple cores may be an inefficient solution, thus wasting resources.
 This chapter therefore focuses on how a DMP can reconfigure itself at runtime to better match phases of a set of single-threaded applications.
+
 Core composition is a technique that allows multiple cores to work on a single thread, allowing a DMP to improve the performance of single threaded applications.
 As previously discussed the reconfiguration can happen ahead of time, especially when programs do not have a high variation in IPC.
 However, programs can benefit from different adaptations of the hardware at different phases of its execution.
@@ -16,7 +17,7 @@ It is also difficult for compilers to determine when to compose cores without pr
 Automating the decision of when to compose cores allows the programmer to solely focus on the software rather than decide when to modify the hardware.
 
 The chapter starts with an explanation of the theoretical limitations of core fusion and what can be expected in terms of performance.
-Then the next section discusses the necessity of loop optimizations such as unrolling and loop interchange as they have a large impact on performance when fusing cores.
+Then the next section discusses the necessity of fine grained loop optimizations as they have a large impact on performance when fusing cores.
 Using the San Diego Vision Benchmark Suite~\cite{sdvbs} (SD-VBS) as a use case, the chapter demonstrates that programs exhibit various phases with different amounts of BLP.
 This is followed by a limit study on the potential for decreasing energy consumption while maintaining performance when adapting the number of cores for each program phase.
 The results show that using dynamic core fusion can save up to 42\% on average while maintaining the same level of performance as a fixed number of cores.
@@ -29,8 +30,8 @@ To summarise, the contributions are:
 \begin{itemize}
 \item Analysis of the limits of core fusion using an analytical model.
 \vspace{-1em}
-\item A study of the loop optimizations required to ensure efficient use of core fusion.
-\vspace{-2.5em}
+%\item A study of the loop optimizations required to ensure efficient use of core fusion.
+%\vspace{-2.5em}
 \item An in-depth comparison of static and dynamic core fusion schemes on the San Diego Vision Benchmark Suite.
 \vspace{-1em}
 \item A demonstration that core fusion has the potential to offer a large reduction in energy savings.

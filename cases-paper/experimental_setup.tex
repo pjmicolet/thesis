@@ -8,7 +8,7 @@ This section now presents the experimental setup used for the remaining parts of
   \centering
  \begin{tabular} { | l | l | }
  \hline
-   \cellcolor[gray]{0.7}Characteristic & \cellcolor[gray]{0.7} Benchmark\\ \hline
+   \cellcolor[gray]{0.7}Characteristic & \cellcolor[gray]{0.7} Benchmarks\\ \hline
     Memory Intensive & Disparity, Tracking\\ \hline
 	Computation Intensive & MSER, SVM, SIFT, Localization,Multi NCut\\\hline
 	Memory and Computation Intensive & Stitch\\ \hline
@@ -50,20 +50,24 @@ The 9 benchmarks are described here:
 
 and their characteristics in terms of memory/computation intensity are shown in Table~\ref{tab:sd-vbschar}.
 
-
 \begin{table}[t]
   \small
   \centering
- \begin{tabular} { | l | l | l | l | l | }
+ \begin{tabular} {| l | l | l | l | l | l | }
  \hline
-   \cellcolor[gray]{0.7}Disparity & \cellcolor[gray]{0.7} Localization& \cellcolor[gray]{0.7} MSER& \cellcolor[gray]{0.7} Multi\_NCut& \cellcolor[gray]{0.7} Sift\\ \hline
-	VGA  & VGA & CIF  & SIM\_FAST& CIF\\ \hline
-	 \cellcolor[gray]{0.7} Stitch & \cellcolor[gray]{0.7} SVM & \cellcolor[gray]{0.7} Text. Synth & \cellcolor[gray]{0.7} Tracking&\\ \hline
-	  CIF& CIF& FULLHD& CIF &\\ \hline
+   & \cellcolor[gray]{0.7}Disparity & \cellcolor[gray]{0.7} Localization& \cellcolor[gray]{0.7} MSER& \cellcolor[gray]{0.7} Multi\_NCut& \cellcolor[gray]{0.7} Sift\\ \hline
+Input&	VGA  & VGA & CIF  & SIM\_FAST& CIF\\ \hline
+Cycle Count	&682M  & 526M & 175M  & 180M& 1445M\\ \hline
+	
+	 & \cellcolor[gray]{0.7} Stitch & \cellcolor[gray]{0.7} SVM & \cellcolor[gray]{0.7} Text. Synth & \cellcolor[gray]{0.7} Tracking&\\ \hline
+	  Input & CIF& CIF& FULLHD& CIF &\\ \hline
+Cycle count &	  	  571M& 577M& 516M& 374M &\\ \hline
+
 	\end{tabular}
-  \caption{Datasets used for each of the benchmarks in SD-VBS.}\label{tab:sd-data}
-  \vspace{1em}
+  \caption{Datasets used for each of the benchmarks and the execution time (in cycles) for each of the benchmarks.}\label{tab:sd-data}
+  \vspace{2em}
 \end{table}
+
 
 \paragraph{Input Size}
 %Maybe find a way of explaining how long it takes
@@ -73,6 +77,7 @@ A single experiment can take up to 6 hours on a single machine (Intel i5 3570k 3
 In the paper describing each of the applications in the SD-VBS suite~\cite{sdvbs}, Venkata et al. show that increasing the size of the input does not drastically change the phases of each benchmark.
 Table~\ref{tab:sd-data} shows the datasets used for the benchmarks in this chapter.
 For this chapter, the aim is to have a dataset that leads to executing at least 100 million cycles as this ensures that the caches and branch predictor are warmed up~\cite{dubach13dynamic}.
+The execution time for each of the programs, using a single core, can be found in Table~\ref{tab:sd-data}.
 %Multi_NCut would take 10x time longer on anything else
 
 
@@ -89,6 +94,9 @@ For this chapter, the aim is to have a dataset that leads to executing at least 
 %Each benchmark is compiled with the Microsoft C++ compiler for EDGE~\cite{e2}, with -O2 optimisations and using instruction predication for hyperblock formation~\cite{smith2006edge}.
 
 \subsection{Measuring Performance and Power}
+
+The objective of the chapter is to explore how adapting the DMP to the phases of an application can affect performance.
+To evaluate dynamic adaptation, it is compared to different static ahead of time configurations.
 
 Five simulations per benchmark are ran, one for each core composition size: 1, 2, 4, 8 and 16.
 For each core composition the IPC of the core composition at an interval of 640 committed blocks is recoreded.
