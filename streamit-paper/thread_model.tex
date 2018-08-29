@@ -12,20 +12,20 @@ In this section, two machine-learning models that predict the best thread partit
  \includegraphics[width=1\textwidth]{streamit-paper/graphics/thread_expl.pdf}
   \caption{Visual representation of how data was collected for the threading model.}\label{fig:thread_expl}
 \end{figure}
-\subsection{Correlation Analysis and kNN model for predicting threads}
+\subsection{Predicting the number of threads}
+\subsubsection{Correlation Analysis}
 %In this section, when discussing correlation we specifically look at which variables correlate with the optimal number of threads.
 
-To build the threading model, the synthetic benchmarks previously described in~\ref{sec:setup} are used.
-Figure~\ref{fig:thread_expl} is an overhead view of how the data for the model was collected.
+To build the threading model, the synthetic benchmarks previously described in~\ref{chp:stream:sec:setup} are used.
+Figure~\ref{fig:thread_expl} is an overview of how the data for the model is collected.
 For each of these synthetic benchmark 15 different threaded versions are generated and assigned a single core per thread.
 They are then all executed on the cycle accurate simulator and their execution time, in cycles, is recorded.
 This is repeated for 1000 unique synthetic applications. 
-Once all the data has been generated, the number of threads that led to the fastest execution time is saved to a table with a set of features that define the program.
+Once all the data has been generated, the number of threads that leads to the fastest execution time is saved to a table with a set of features that define the program.
 In order to build the two machine learning models an initial set of over 50 features are extracted from StreamIt programs.
 These features are extracted using pre-existing analytical tools within StreamIt and some counters added specifically for this chapter.
 As some of the 50 features may not contain any valuable information, the features selected for the models are determined through correlation analysis.
 
-\paragraph{Correlation Analysis}
 In this section, features which correlate with the optimal number of threads are explored.
 These features are extracted via the StreamIt source-to-source compiler, which generates information on each of the filters and the structure of the program prior to generating the C++ program.
 The highest correlating features are used by the model to make a prediction about the number of threads to use.
@@ -35,7 +35,7 @@ In StreamIt the term \textit{multiplicity} defines the number of times a filter 
 
 \begin{figure}[t]
   \centering
- \includegraphics[width=1\textwidth]{streamit-paper/graphics/corrThreadRemix.pdf}
+ \includegraphics[width=1\textwidth]{streamit-paper/graphics/corrThreadRemix2.pdf}
   \caption{The ten highest correlating features with the best number of threads for 1000 synthetic benchmarks.}\label{fig:corr}
 \end{figure}
  
@@ -67,31 +67,53 @@ There are very little variables that highly correlate beyond Number of Distinct 
 A high number of distinct multiplicities implies that the StreamIt application features an important amount of filters with different execution rates.
 This means that certain filters may be local bottlenecks in a Pipeline for example.
 Multithreading the pipelines with local bottlenecks will help alleviate the problem of multiple distinct multiplicities.
+
 For example, the benchmark \bench{ChannelVocoder} only has 66\% of its filters sharing the same average multiplicity of 50~\cite{thiesStreamit2010}, with a minimum multiplicity of 1. 
 The benchmark features a single SplitJoin yet when recalling section \ref{sec:streamit:dse}'s Figure~\ref{fig:overviewhist} \bench{ChannelVocoder}'s performance is greatly improved via multi-threading.
 The number of threads also depends on certain structural features such as Pipelines, SplitJoins and number of Filters.
 Yet, these variables seem to hold less influence on the number of threads a program needs than the different multiplicities found in the graph.
 This is most certainly due to the fact that whilst SplitJoins make parallelizable areas more visible, the amount of work contained in each stream of the SplitJoin, especially when this size is small, may actually make parallelizing the program worse due to ratio of communication to computation.
+
 It is also important to understand that a high number of Pipelines implies the use of SplitJoins.
 This is due to the fact that a StreamIt application with no SplitJoins will feature only a singe Pipeline, thus a larger number of pipelines implies at least one SplitJoin.
 This is why the number of SplitJoins is not present in the correlating features; because the number of Pipeline already correlates with this feature.\\
 
-\paragraph{kNN Model}
-A k-Nearest Neighbor (kNN) model is deployed to determine the number of threads to use for an application.
+%\begin{table}[t]
+% The FFT need are variable
+%  \small
+% \begin{tabular} { | l | l | l | }
+% \hline
+% \cellcolor[gray]{0.7}Distance from best thread count  & \cellcolor[gray]{0.7} Accuracy of kNN &  \cellcolor[gray]{0.7} Performance Penanlty\\ \hline
+%  0 & 33\% & 0\\ \hline
+%+/- 1 & 57\% & 12\\ \hline
+%+/- 2 & 67\% & 19\\\hline
+
+ %\end{tabular}
+ % \caption{Performance of kNN model.}\label{tab:instancefilt}
+%\end{table}
+%\subsubsection{kNN Model}
+A method of determining how many threads an application requires is to build a database of programs.
+Each entry in the database contains a feature vector for a program and the number of threads that leads to the best performance.
+When a new program is encountered, the database can be searched to find applications that have similar features to determine the number of threads needed.
+
+To implement such a model, k-Nearest Neighbor (kNN) is deployed.
+As programs will most likely not have the same features, using kNN allows to estimate the thread count by comparing the feature vector of an unknown program with a group of known programs.
 Given a new application, the kNN classifier determines the $k$ closest synthetic applications.
 The distance between the features is measured using the Euclidean for each application.
-Once the set of $k$ nearest neighbors is identified, the model simply averages the best number of threads for each of the $k$ nearest neighbors to make a prediction.
+Once the set of $k$ nearest neighbors is identified, the model simply averages the best number of threads for each of the $k$ nearest neighbors to make a prediction. 
+
 The parameter $k$ was determined experimentally using only the synthetic benchmarks.
 A value of $k=7$ was found to lead to the best performance.
 The features chosen are the ten variables displayed in Figure~\ref{fig:corr}.
 
-Cross validation is used to determine the efficiency of the model by observing how close a classification is to the measured best thread number.
-It involves validating all the points in the training data by removing them from the model, more details can be found in Chapter~\ref{chp:Background}.
-Using cross validation the model generated in this chapter has a 33\% accuracy of getting the exact best thread number.
-The accuracy increases to 57\% when allowing a prediction to be 1 thread away from the best and 67\% when 2 threads away.
-On average, having a thread number that is +/- 1 away from the optimal thread count only incurrs a 12\% performance penalty.
-For a distance of +/- 2 this increases to 19\%.
-This penalty was measured by comparing the performances of the synethtic benchmarks using only multithreading.
-With this in mind, it is important to understand that accuracy is not the final metric that is used to evaluate the model.
-Instead, what does matter is the performance of the application when using the configuration predicted by both the thread and core predictor, which is discussed in section~\ref{sec:results}.
+%\paragraph*{Validating the model.}
+%Cross validation is used to determine the efficiency of the model by observing how close a classification is to the measured best thread number.
+%It involves validating all the points in the training data by removing them from the model, more details can be found in Chapter~\ref{chp:Background}.
+%Using cross validation the model generated in this chapter has a 33\% accuracy of getting the exact best thread number.
+%The accuracy increases to 57\% when allowing a prediction to be 1 thread away from the best and 67\% when 2 threads away.
+%On average, having a thread number that is +/- 1 away from the optimal thread count only incurrs a 12\% performance penalty.
+%For a distance of +/- 2 this increases to 19\%.
+%This penalty was measured by comparing the performances of the synethtic benchmarks using only multithreading.
+%With this in mind, it is important to understand that accuracy is not the final metric that is used to evaluate the model.
+%Instead, what does matter is the performance of the application when using the configuration predicted by both the thread and core predictor, which is discussed in section~\ref{sec:results}.
 

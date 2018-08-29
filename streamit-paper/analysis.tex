@@ -2,9 +2,15 @@ This section describes the exploration of the software/hardware co-design space.
 The software side includes partitioning the program, determining the number of threads and the specific source-level optimisations.
 The hardware side is about finding out the best core composition that maximizes performance for a given partitioning.
 
+\begin{figure}[t]
+ \centering
+    \includegraphics[width=1\textwidth]{streamit-paper/graphics/threadingmaybe4.pdf}
+    \caption{Performance as a function of the number of threads. The performance metric is number of cycles. Each benchmark has the performance measured with cores composed and with threads mapped to a single core.}\label{fig:threadtrend}
+\end{figure}
+
 \subsection{Thread Partitioning}
 
-This section first starts by analyzing the impact of thread partitioning on performance.
+This section first starts by analysing the impact of thread partitioning on performance.
 In this section, the term optimal number of threads defines the number of threads which results in the best performance for any given benchmark.
 Thread partitioning is about deciding how many threads to create and how to partition StreamIt filters into these threads.
 
@@ -15,7 +21,10 @@ In this figure, the ``with composition scenario`` uses points from the sample sp
 Regardless of how cores are composed it can be observed that curves for a benchmark follow the same trend.
 As can be seen in Figure~\ref{fig:threadtrend}, the optimal number of threads using core composition is very similar to the scenario without composition as both curves follow the same performance trends.
 This is due to the fact that StreamIt is oriented towards task-level parallelism and thus, multithreading will be a natural fit for performance improvements whilst core-composition may have less of an effect overall.
-As Figure~\ref{fig:threadtrend} shows that the performance trends for both with and without composition are similar when it comes to thread counts, this  means that the optimal number of threads for a benchmark can be estimated independently from the hardware composition.
+
+Figure~\ref{fig:threadtrend} shows that the performance trends for both with and without composition are similar when it comes to thread counts, this  means that the optimal number of threads for a benchmark can be estimated independently from the hardware composition.
+As will be explained in Section~\ref{chp:streamit:sec:core}, the number of cores in a composition is decided based on the amount of instruction level parallelism estimated in a thread.
+This means that a thread count must be chosen before deciding on the number of cores that will be allocated to each thread.
 The system can therefore proceed in two stages: first determine the optimal number of threads and then decide on a core composition.
 
 Figure~\ref{fig:threadtrend} also shows that the performance of most benchmarks starts to deteriorate passed a certain number of threads making it critical to not over-allocate threads.
@@ -40,6 +49,7 @@ The curves represent the density distribution for different core compositions as
 The right hand side Y-axis represents the number of threads present in the current version of the benchmark whilst the left Y-Axis represents the density normalized by the total number of points in the design space.
 For each of the threaded versions the benchmark runs using 100 different core-compositions.
 The density curve for thread 15 is a single point as there exists only a single composition, so a line is drawn to represent where that point lies.
+Whilst only \bench{FilterBank} is shown here, a figure for each of the benchmarks was generated and can be found in the Appendix Figures \ref{chp:stream:at} through \ref{chp:stream:rt}
 
 The width of each of the curves represents the influence of composition on the \bench{FilterBank}'s performance for a given number of threads.
 For this benchmark, the impact of having core-composition enabled often leads to a 1.5x speedup compared to running only in multi-threaded mode; this can be seen for 1 to 4 threads.
@@ -74,10 +84,10 @@ The leftmost curve performance peaks at two threads whereas the rightmost peaks 
 
 \begin{figure}[t]
   \includegraphics[width=1\textwidth]{streamit-paper/graphics/unroll_speed_bars2.pdf}
-  \caption{How unrolling affects how much performance can be obtained via core-composition on the single-threaded versions of each benchmarks.}\label{fig:unroll_summary}
+  \caption{Effect of unrolling on performance can be obtained via core-composition on the single-threaded versions of each benchmarks. The baseline is single core single thread.}\label{fig:unroll_summary}
 \end{figure}
 
-Figure~\ref{fig:unroll_summary} goes into more details on how unrolling affects the amount of speedup obtained by running each of the StreamIt benchmarks on a single thread using different number of cores in the composition.
+Figure~\ref{fig:unroll_summary} shows how unrolling affects the amount of speedup obtained by running each of the StreamIt benchmarks on a single thread using different number of cores in the composition.
 In this figure, the X axis represents the number of cores in the composition, ranging from single core to 15.
 The Y axis compares the execution time in number of cycles for the benchmark using a single core vs a given core-composition.
 The colours of the lines represent with and without unrolling.
@@ -88,10 +98,17 @@ These benchmarks are \bench{Beamformer}, \bench{ChannelVocoder}, \bench{FFT6}, \
   \includegraphics[width=1\textwidth]{streamit-paper/graphics/unroll_speed_bars.pdf}
   \caption{Speedup obtained when executing on a single core with and without loop unrolling. Higher is better.}\label{fig:unroll_bars}
 \end{figure}
+\begin{figure}[t]
+  \includegraphics[width=1\textwidth]{streamit-paper/graphics/unrolling_size.pdf}
+  \caption{Average size (in instructions) of blocks executed with and without unrolling for each benchmark .}\label{fig:unroll_size}
+\end{figure}
+
+
 Figure~\ref{fig:unroll_bars} complements Figure~\ref{fig:unroll_summary} by showing the speedup obtained by unrolling loops when executing the benchmark on a single core.
 On average, the information shown in Figure~\ref{fig:unroll_bars} coincides with the data shown in Figure~\ref{fig:unroll_summary}: benchmarks that don't scale also see no difference in performance when loop unrolling is called.
 For the benchmarks that do not scale with unrolling; this is most certainly due to the for loops containing conditional statements which may keep the blocks size small.
 When a loop that holds multiple conditional statements is unrolled, conditional statements may not be fused into a single block; thus the block size does not change.
+This is due to the fact that the compiler cannot generate multiple instruction predicates per block.
 Benchmark \bench{FMRadio} sees a 3x improvement compared to the non-unrolled version, this is due to the fact that all the loops are fully unrolled, reducing the total number of instructions required to execute the task.
 For the \bench{FFT6} benchmark, unrolling loops will actually cause the single-core version to be slower than its not unrolled version.
 %I think this is due to a refreshing performance thing
@@ -100,15 +117,11 @@ Whilst it may be slower on a single core, as seen in Figure~\ref{fig:unroll_bars
 
 Figure~\ref{fig:unroll_size} shows the influence of loop unrolling on the average size of an EDGE block for each of the benchmarks.
 The size represents the number of instructions exected in each of the EDGE blocks.
-As can be seen, the data for \bench{Beamformer} and \bench{FFT6} in Figure~\ref{fig:unroll_size} corroborate with the idea that larger block sizes will result in better performance when fusing cores.
+As can be seen, the data for \bench{Beamformer} and \bench{FFT6} in Figure~\ref{fig:unroll_size} corroborate the idea that larger block sizes will result in better performance when fusing cores.
+For these benchmarks, unrolling increases the average size of the block by at least 3x, which in turn improves the performance of large core compositions as seen in Figure~\ref{fig:unroll_summary}.
 However whilst benchmarks \bench{ChannelVocoder}, \bench{FilterBank} and \bench{FMRadio} also see an increase in blocksize, it is not as important and averages out at a 1.22x increase.
 %Be clearer here.
-That said, even a small amount of increase can help improve the scalability of core-composition.
-
-\begin{figure}[t]
-  \includegraphics[width=1\textwidth]{streamit-paper/graphics/unrolling_size.pdf}
-  \caption{Average size (in instructions) of blocks executed with and without unrolling for each benchmark .}\label{fig:unroll_size}
-\end{figure}
+That said, even a small amount of increase can help improve the ability of using core composition more efficiently.
 
 Overall, this section has shown that loop unrolling can improve performance by increasing the size of blocks for the benchmarks which helps improve the efficiency of core-compositions.
 
@@ -119,41 +132,41 @@ Overall, this section has shown that loop unrolling can improve performance by i
       thread number and the combination of both optimisations. The baseline for the speedup measurement is single core, single thread execution using O2 compiler optimisations. Higher
       is better.}\label{fig:overviewhist}
 \end{figure}
-\subsection{Co-Design Space Best Results}
+\subsection{Co-Design Space Analysis}
 
 
 This section  presents the results of the entire co-design space exploration.
 Figure~\ref{fig:overviewhist} characterizes how much of a performance increase, over a baseline of a single-core single-thread with O2 optimisations, can be obtained with and without unrolling.
-For each benchmark, the \textit{THREAD} bar represents the maximal speedup obtained by dividing the program into threads without fusing cores.
-The \textit{CORE} bar represents the best speedup when the benchmark is executed in a single thread and fuse cores.
+For each benchmark, the \textit{THREAD} bar represents the maximal speedup obtained by dividing the program into threads and assigning one core per thread.
+The \textit{CORE} bar represents the best speedup when the benchmark is executed in a single thread and fuse all cores.
 \textit{BOTH} represents the best speedup obtained for each benchmark using a combination of \textit{THREAD} and \textit{CORE}.
 Finally, for each benchmark, the results are obtained for both an unrolled and not unrolled version to compare how the compiler optimisation affects performance.
 Figure~\ref{fig:overviewhist} shows that when loops are not unrolled, composing cores will not greatly improve performance.
 This is due to the fact that the amount of ILP found in filters without the unrolling is too little for there to be any benefit of composing cores.
 
 In the scenario where there are no specific optimisations for composition, multithreading will be the main source of performance.
-This can be seen when studying the geometric mean,without unrolling.
+This can be seen when studying the average (geometric mean),without unrolling.
 Finding the optimal number of threads gives a speedup of 1.92 compared to 1.33 when using only core composition, which is an improvement of 44\%.
 This changes when taking unrolling into account as the core compositions can be used more efficiently.
-In this case, the speedup obtained from only composing cores is only 13\% worse than using only threads.
-For the \bench{FMRadio} benchmark, unrolling makes using only core-composition better than only using threads.
+In this case, the speedup obtained from composing cores without multithreading is only 13\% worse than using only threads.
+For the \bench{FMRadio} benchmark, unrolling makes using only core-composition better than using multi-threads without core composition.
 This information corroberates with the data seen in Figure~\ref{fig:unroll_summary}; it presents a unique case where the effect of core composition is important enough to change the dominant performance enhancer.
 The performance increase obtained via the source-level loop unrolling via the compiler demonstrates that some modifications to the code must be done to ensure optimal use of the dynamic multicore processor.
 %Thus loop unrolling demonstrates that the StreamIt programs must be modified to take advantage of the core composition.
 
-Overall the results demonstrate that multi-threading is the prevalent leader of performance, even with unrolling turned on.
-This is natural as StreamIt applications are naturally geared towards TLP as most programs have at least one SplitJoin as seen in the Table~\ref{tab:instancefilt} which gives the number of split-joins per benchmark.
+Overall the results show that for these applications, multithreading leads to more performance gains than using core composition.
+This is natural as StreamIt applications are naturally geared towards thread level parallelism (TLP) as most programs have at least one SplitJoin as seen in the Table~\ref{tab:instancefilt} which gives the number of split-joins per benchmark.
 Benchmarks with SplitJoins will naturally benefit from splitting the program into threads~\cite{thiesStreamit2010}.
 %Make sure this is 100% true but as far as I remember this is the case
 Those that do not feature SplitJoins can still be parallelised by splitting a Pipeline into multiple parts.
 For example, benchmark \bench{FIR} features no SplitJoins, yet splitting the Pipeline in 2 will result in a 1.40x speedup.
-However, it is important to note that whilst finding the optimal thread mapping may result in higher performance improvements than finding the optimal composition for a single thread, the best performance is always obtained through a combination of both optimizations.
+However, it is important to note that whilst finding the optimal thread mapping may result in higher performance improvements than finding the optimal composition for a single thread, the best performance is always obtained through a combination of both techniques.
 For cases such as \bench{BeamFormer} the optimal pairing results in a 1.8x speedup compared to simply finding the best multit-threaded version.
 On average, the optimal combination leads to a 1.5x performance increase compared to only multithreading.
 
 %\end{landscape}
 \subsection{Summary}
-This section demonstrated that each parameter has a large effect on the performance of the workload.
+This section has demonstrated that each parameter has a large effect on the performance of the workload.
 Regardless of using core composition or not, there exists for each benchmark an optimal number of threads.
 Unrolling is effective at exposing more opportunities for composition due to increased block sizes but there is a balance to strike between extracting large blocks and TLP.
 Figure~\ref{fig:overviewhist} shows there is a 3x benefit (overall) by automating the partitioning of both the software (threads) and hardware (cores).

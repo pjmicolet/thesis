@@ -5,11 +5,11 @@
 %     The application has been partitioned into different number of threads and core compositions.}
 %     \label{fig:beamformermotiv}
 %\end{figure}
-
+\subsection{Finding an optimal configuration}
 This section motivates the difficulty of finding a good combination of thread and core partitionings.
 First, a simple experiment is conducted where the \bench{FilterBank} StreamIt benchmark is analysed using a 16 core dynamic multicore processor.
 %Maybe reform this sentence
-\bench{FilterBank} has an array of discrete fourier transform filters that take a signal as an input, and their outputs are downsampled, upsampled and then recombined to form a processed signal~\cite{streamitrepo}.
+\bench{FilterBank} distributes its inputs amongst an array of discrete fourier transform (DFT) filters, the outputs of the DFT filters are downsampled, upsampled and then recombined to form a processed signal~\cite{streamitrepo}.
 The program's tasks are partitioned into threads and a various number of cores are allocated to each of the threads.
 Since one of the threads is the master thread which creates and joins all worker threads, this means that the application can be partitioned in up to 15 threads, and 15 cores can be used for those threads.
 As each thread must have at least one core assigned to it, and not all cores have to be grouped together, the total number of configurations are:
@@ -26,7 +26,7 @@ Design points are executed on the dynamic multicore simulator, the exact details
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=1\textwidth]{streamit-paper/graphics/filterbank_motivation_2.pdf}
+    \includegraphics[width=1\textwidth]{streamit-paper/graphics/filterbank_motivation_3.pdf}
     \caption{Distribution of the runtime for FilterBank with different core composition and thread pairings. The dots on the X-axis represent specific configurations and their cycle counts.}
      \label{fig:threadcoremotiv}
 \end{figure}
@@ -42,6 +42,8 @@ Thus, if a good configuration is found, this can yield an important speedup comp
 However, the number of good configurations is low, this underlines the notion that finding a combination of threads and cores is a non-trivial endeavour, as randomly choosing a configuration will result in a suboptimal performance.
 Indeed, whilst the average case is 2x faster than a single core, Figure~\ref{fig:threadcoremotiv} shows that there exists a good number of configurations that can lead to execution times that are slower than average case.
 
+
+\subsection{Minimizing the search space}
 %Insert an example to show that it's a mix of threads and cores that matters.
 Whilst there exists a large variety of thread-core combinations, certain design choices can be used to try and minimise the space.
 For example, choosing to only do multithreading reduces the search space to 15 possible solutions whilst only combinations that lead to homogeneous core compositions reduces the search space to:
@@ -51,7 +53,7 @@ For example, choosing to only do multithreading reduces the search space to 15 p
 \end{equation}
 
 where the constant 15 represents the number of cores available.
-Using only homogeneous core compositions, which reduces the search space, would therefore lead to 45 possible solutions.
+Using only homogeneous core compositions, which facilitates the core partitioning decision, would therefore lead to 45 possible solutions.
 However, reducing the search space will limit the potential obtainable speedup.
 Figure~\ref{fig:threadcoremotiv} also shows the performance distribution of these design choices.
 Their location on the X-axis represents the execution time for that specific configuration.
@@ -72,6 +74,7 @@ In the end, using a heterogeneous configuration leads to a 1.5x speedup compared
 %Whilst this is the case in this example, section~\ref{sec:streamit:dse} will show that the optimal number of threads with and without core-composition are often the same +/- 1.
 Therefore, it is important to consider all possible configurations to ensure the possibility of obtaining the best performance.
 
+\subsection{Summary}
 Figure~\ref{fig:threadcoremotiv} demonstrates that of the three scenarios that are explored, the heterogeneous core-composition with multiple threads is the optimal solution.
 This means that the total space has to be explored in order to ensure that the fastest execution time can be found.
 Due to the size of the space and the fact that there can be no apriori about good configurations, using machine learning to predict configurations is a promising approach. % be used to predict good configurations.
@@ -79,12 +82,3 @@ By exploring the space with a set of StreamIt benchmarks using different configu
 
 These two examples illustrates the necessity for designing the technique to predict both the optimal number of threads and core composition to use.
 The next section will present a more in-depth analysis of the design space before presenting our machine-learning predictive model.
-
-
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=1\textwidth]{streamit-paper/graphics/explanation3.pdf}
-    \caption{Description of the workflow.
-    Two distinct machine-learning models are used to predict the optimal thread partitioning and core composition based on static code features.}
-    \label{fig:overview}
-\end{figure}

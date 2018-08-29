@@ -3,8 +3,16 @@ This section presents the design exploration of a set of streaming applications 
 The section describes how changing the thread mapping and core composition affect the benchmarks and what can be learned from this.
 In addition, the impact of loop unrolling and how it helps exploit larger fused cores is investigated.
 
-\subsection{Overview}
 
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{streamit-paper/graphics/explanation3.pdf}
+    \caption{Description of the workflow.
+    Two distinct machine-learning models are used to predict the optimal thread partitioning and core composition based on static code features.}
+    \label{fig:overview}
+\end{figure}
+
+\subsection{Overview}
 
 \begin{figure}[t]
     \centering
@@ -31,6 +39,8 @@ For example in Figure~\ref{fig:examplestream}, once the graph is coloured, the m
 
 This chapter explores 15 StreamIt benchmark all taken from the official StreamIt repository~\cite{streamitrepo}.
 These applications represent a variety of embedded applications and kernels, from digital signal processing to a matrix-multiplication kernel or band pass filters.
+There exist other benchmarks in the repository, however at the time of writing these benchmarks did not execute correclty on the provided simulator.
+
 Table~\ref{tab:instancefilt} shows the number of filter instances and SplitJoins for each of the benchmarks.
 As a refresher from Chapter~\ref{chp:Background}, SplitJoin filters are functions which distribute and collect data from parallel filters.
 The applications feature a different number of SplitJoins which determine the task-level parallelism.
@@ -111,6 +121,7 @@ For this reason, a sample of 1,316 random points from the entire space is utilis
 This roughly corresponds to 100 core compositions for each number of threads; the actual number, 1,316 is smaller than 1,500 since for low and high thread counts there are less than 100 possible different core composition.
 For example, a single thread can have only up to 15 different core-compositions (1 through 15) whilst 15 threads can only have a single core given to each thread.
 \bench{InsertionSort} is the only exception since it can at most only be split into 5 threads leading to 415 sample points.
+Overall, the space exploration required one week of simulation on the supercomputer~\cite{ecdf}.
 
 \begin{figure}[t]
   \centering
@@ -146,21 +157,16 @@ To summarize, it can be concluded that the best point found in the sample space 
  \end{table}
 
 One of the difficulties of building a machine learning based model for StreamIt is the lack of benchmarks available~\cite{wang2013partitionstreamit}.
-Whilst there exists at least 30 realistic applications for StreamIt~\cite{thiesStreamit2010} this is simply not enough to create a large enough data set.
 To overcome this problem generating synthetic benchmarks can be a solution~\cite{cumminsopencl2017}.
 Thus synthetic StreamIt benchmarks are generated and statistics are gathered from them in a similar style as in~\cite{wang2013partitionstreamit}.
 In this chapter, the synthetic benchmarks are used to build a model for predicting the number of threads, which will be described later in section~\ref{sec:ml}
+
 %Cite repository
 To ensure that the synthetic benchmarks are representative of realistic benchmarks they are created using filters from a set of example StreamIt programs found in the example directory in the repository.
 30 different possible filters with different incoming and outgoing rates and different inputs and outputs types are used to increase the variety of the dataset.
 To ensure that the synthetic benchmarks are similar to real benchmarks, the total number of filters and split joins are within the average of the realistic benchmarks.
+
 Table~\ref{tab:synthvsreal} gives the average number of SplitJoins and filter instances for the synthetic benchmarks vs the real benchmarks used in this chapter.
 As can be seen, the synthetic benchmarks, on average, have more SplitJoins than the real benchmarks; this is due to the fact that a few of the benchmarks presented in the chapter don't have SplitJoins at all which can quickly reduce the average.
 %Maybe say a bit more here.
 Since these benchmarks are built to be used for predicting the number of threads an application should use, and SplitJoins are explicit declarations of task-level parallelism, having a higher average number of SplitJoins is not detrimental to building the model.
-
-\begin{figure}[t]
- \centering
-    \includegraphics[width=1\textwidth]{streamit-paper/graphics/threadingmaybe4.pdf}
-    \caption{Performance as a function of the number of threads. The performance metric is number of cycles. Each benchmark has the performance measured with cores composed and with threads mapped to a single core.}\label{fig:threadtrend}
-\end{figure}

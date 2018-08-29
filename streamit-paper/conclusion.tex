@@ -1,4 +1,4 @@
-This chapter introduced the problem of partitioning both software and hardware for a Dynamic Multicore Processor.
+This chapter has introduced the problem of partitioning both software and hardware for a Dynamic Multicore Processor.
 Given the ability to execute up to 15 threads, a DMP can have up to 32767 different configurations, making exhaustive search a prohibitive task.
 Whilst certain design choices, such as restricting the space to scenarios such as only using multithreading or homogeneous core composition may appear as a solution, it may reduce performance by up to 1.5x.
 Thus it is important to look at heterogeneous core-composition with multithreading to get the best performance.
@@ -21,5 +21,5 @@ To summarize, the contributions of the chapter are:
 \vspace{-0.5em}
 \item An analysis of which static code features in StreamIt can be used to determine a good configuration of a dynamic multicore processor.
 \vspace{-0.5em}
-\item A machine-learning model to determine the optimal core composition and thread partitioning which results in an average performance within 16\% of the best of the space.
+\item A demonstration that the space can be learned, and thus machine learning can be used to determine the optimal core composition and thread partitioning which results in an average performance within 16\% of the best of the space.
 \end{itemize}

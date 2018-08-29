@@ -1,27 +1,28 @@
+\subsection{Predicting the size of a core composition}
 In section~\ref{sec:streamit:dse}, Figure~\ref{fig:threadtrend} shows the performance of each of the 15 benchmarks when partitioning them into threads with and without core-composition.
-The information in the figure reveals that in both cases, the number of threads is often similar.
-Later on in section~\ref{sec:streamit:dse} the use of loop unrolling demonstrates that when blocks are larger more cores can be composed together to improve performance, which can modify the optimal thread count.
+In both cases, the number of threads is often similar as seen in the figure.
+In section~\ref{sec:streamit:dse} the use of loop unrolling demonstrates that when blocks are larger more cores can be composed together to improve performance, which can modify the optimal thread count.
 With that in mind, in both cases the number of threads does not vary wildly and loop unrolling does not always modify the application to improve the amount of performance that can be extracted via core-composition.
-As Figure~\ref{fig:overviewhist} shows that multi-threading outperforms core-composition on its own, it is important to prioritise multithreading.
+Figure~\ref{fig:overviewhist} shows that using only multi-threading results in higher performance increases than using core-composition on its own.
+Thus it is important to prioritise multithreading.
 
 It is also important to take into consideration that partitioning the software into threads facilitates the core estimation per thread.
 Without determining a number of threads before predicting the number of cores the core-composition model has no information as to the number of threads or the structure of each thread.
 In this situation, the core-composition model would either have to make its own estimates as to the thread count, or make a general prediction for a single thread.
 Therefore predicting core-composition comes after predicting the number of threads.
 
-\paragraph{Core-Composition Mechanism Refresher}
-To better understand why some features correlate with the size of a core-composition, this section contains a small refresher on the mechanisms of core-composition.
-First, when blocks are small, cores can fetch and execute multiple blocks in parallel; the number of blocks and the sizes will depend on how many lanes the DMP has.
-For this paper, a block can have a maximum size of 128 instructions, whilst each core has 4 lanes.
-%What a line.
-When cores are composed they do not fetch blocks independently; instead one of the cores in the composition will start by fetching blocks until it all its lanes are used and then submits the following predicted PC to the next core in the composition.
-When block sizes are small, this means that core-compositions will have to predict a high amount of PCs to fill up all its cores.
-Thus core-composition is dependent on accurate branch prediction and the size of blocks.
+%\paragraph*{Core-Composition Mechanism Refresher}
+%To better understand why some features correlate with the size of a core-composition, this section contains a small refresher on the mechanisms of core-composition.
+%First, when blocks are small, cores can fetch and execute multiple blocks in parallel; the number of blocks and the sizes will depend on how many lanes the DMP has.
+%In this thesis a block can have a maximum size of 128 instructions, whilst each core has 4 lanes.
+%When cores are composed they do not fetch blocks independently; instead one of the cores in the composition will start by fetching blocks until it all its lanes are used and then submits the following predicted PC to the next core in the composition.
+%When block sizes are small, this means that core-compositions will have to predict a high amount of PCs to fill up all its cores.
+%Thus core-composition is dependent on accurate branch prediction and the size of blocks.
 
 
-\subsection{Gathering Training Data for Core-Composition}
+\subsubsection{Gathering Training Data for Core-Composition}
 %For this section a subset of the different threaded versions of the StreamIt benchmarks are used to determine the optimal number of cores.
-For this section the single threaded version of a StreamIt benchmark is used to determine the optimal number of cores.
+For this section the single threaded version of a StreamIt benchmark is used to determine the optimal number of cores in order to explore all possible core composition sizes.
 Some of the multi-threaded versions of benchmarks can be used to add extra data-points to build the model, however not all thread-counts are suitable.
 One of the difficulties of adding data-points from the highly threaded versions of an applications is that each thread will only be able to have a very small core-composition.
 For example, if the 15 threaded version of a benchmarks is added as data points to the model, then each of the feature vectors for this version would have a single core attributed to it.
@@ -36,12 +37,12 @@ To determine the optimal number of cores only the training data that has a perfo
 
 \begin{figure}[t]
 \centering
-  \includegraphics[width=1\textwidth]{streamit-paper/graphics/corrGraph_remix.pdf}
+  \includegraphics[width=1\textwidth]{streamit-paper/graphics/corrGraph_remix2.pdf}
   \caption{The ten highest correlating features with the optimal number of cores.}\label{fig:corrCore}
 \end{figure}
 
 
-\subsection{Analyzing Features}
+\subsubsection{Correlation Analysis}
 
 Figure~\ref{fig:corrCore} shows the highest correlating features with the optimal number of cores.
 
@@ -72,7 +73,7 @@ The ten features can be described as follows
 The features are very different from the ones presented in Figure~\ref{fig:corr} and overall there are features which correlate higher with core-compositions than number of threads.
 The highest correlating value has a correlation factor of 0.88.
 It is important to note that the concept of an operation here is at the StreamIt level and not the architectural level.
-This is due to the fact that the machine learning model will get information from the source-level StreamIt translation.
+This is because the machine learning model will get information from the source-level StreamIt translation.
 With that in mind, the number of operations will correlate with number of instructions found at the instruction level.
 The second feature is similar to the first but only takes into account blocks that will be executed unconditionally.
 Blocks found in loops are excluded for this metric as there is still some form of condition for those blocks to be executed, they are counted as conditional.
@@ -86,9 +87,12 @@ It can thus be infered that the optimal number of cores is independent of the st
 Instead determining the correct core-composition is more dependent on the amount of computation found in each program.
 
 From Figure~\ref{fig:corrCore} the highest correlating features fit naturally under the assumptions that higher core compositions will perform better with larger blocks of operations and thus blocks of instructions.
-This is due to the fact that large blocks reduce the amount of branches predictions required to populate all the cores with EDGE blocks which, in turn, reduces the latency of fetching blocks for all cores.
+When blocks are small, a single core can fetch and execute multiple blocks in parallel; up to 4 blocks per core when blocks are smaller than 32 instructions.
+Cores in a composition do not fetch blocks independently; instead one of the cores in the composition will start by fetching blocks until it all its lanes are used and then submits the following predicted PC to the next core in the composition.
+If blocks are small this means that core-compositions will have to predict a high amount of blocks to fill up all its cores.
+Thus large blocks reduce the amount of branches predictions required to populate all the cores with EDGE blocks this reduces the latency of fetching blocks for all cores.
 The necessity to correctly predict blocks to ensure that all cores are fully utilised explains why a higher number of unconditionally executed blocks compared to conditional blocks correlates positively with large core compositions.
-This is once again due to reducing strain on branch prediction for higher core compositions.
+
 The importance of size is also apparent as the difference between the largest block size and the average block size negatively correlates with core-composition.
 The ratio of unconditional and conditional blocks is considered less important than block size due to branch prediction, however having a larger number of unconditional branches is a natural fit for larger core-compositions as it reduces the dependency on high branch-prediction accuracy.
 
@@ -107,11 +111,12 @@ However, according to the correlation graph in Figure~\ref{fig:corrCore}, the co
   \includegraphics[width=1\textwidth]{streamit-paper/graphics/lineargraphs.pdf}
   \caption{Optimal number of cores in relation to the three highest correlating features. The maximum number of cores plateaus on the right hand side as this is the maximum possible amount.}\label{fig:maxav}
 \end{figure}
-\subsection{Linear Regression Model}
+
+\subsubsection{Linear Regression Model}
 Given that the optimal number of cores highly correlates with a few features, a linear regressor is a natural choice to predict the best number of threads.
 Figures~\ref{fig:maxav} represent how the first three highest correlating values affect the optimal number of cores for a single thread.
 This figure is obtained by finding the best number of cores for the single threaded version of each of the StreamIt benchmarks whilst varying the amount of loop unrolling.
-It is important to note that the top right corner points will always be flat as only a maximum number of 15 cores can be allocated.
+It is important to note that the reason the points in the top right corner appear to converge at 15 cores is due to the fact that no more than 15 cores can be fused.
 Overall, Figure~\ref{fig:maxav} shows that StreamIt applications with large unconditionally executed blocks will require large compositions.
 
 
