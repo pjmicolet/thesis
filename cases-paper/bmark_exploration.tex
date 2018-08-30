@@ -164,6 +164,17 @@ This subsection focuses on understanding why this is the case and explores the c
         stringstyle=\color[rgb]{0.627,0.126,0.941},
 		numbers=left,
 }
+
+\paragraph*{MSER}
+\bm{MSER} has five IPC phases according to Figure~\ref{fig:clust}; the two dominant phases represent the computation of the extremal regions tree.
+As seen in Figure~\ref{fig:block_sizes}, the majority of the blocks in MSER are 8 instructions long, meaning that core-compositions will have to load the maximum amount of blocks (4 in this thesis) to fill each core.
+%The listing shows how this phase is made out of small tight knit loops.
+The majority of \bm{MSER} is composed of tightly knit loops.
+For example Listing~\ref{lst:mser-ex} shows two loops found in \bm{MSER's} main phase.
+The rest of the source code of this phase can be found in the Appendix with Listing~\ref{lsting:mser}.
+The while loops from the listing, alongside other while loops found in the phase (lines 36-39, 40-42 and 71-75) never run for more than a few iterations.
+Due to the fact that these loops have small bodies, the fact that they do not run for many iterations would not make them likely candidates for unrolling.
+
 \begin{figure}[t]
 \lstset{language=C,numbersep=4pt}
 \begin{center}
@@ -177,27 +188,20 @@ while( nvisited-- ) {
 }
 \end{lstlisting}
 \end{center}
-\vspace{-1em}
-\caption{Example of MSER loops (lines 27-30, 31-33).}
-\label{lst:mser-ex}
+\captionof{lstlisting}{Example of MSER loops (lines 27-30, 31-33).}
+\label{lst:mser-ex}\vspace{1em}
+
 \end{figure}
-
-
-\paragraph*{MSER}
-\bm{MSER} has two distinct IPC phases according to Figure~\ref{fig:clust}, in the code the first phase, which is the domminant phase, represents the computation of the extremal regions tree.
-As seen in Figure~\ref{fig:block_sizes}, the majority of the blocks in MSER are 8 instructions long, meaning that core-compositions will have to load the maximum amount of blocks to fill each core.
-The source code of this phase can be found in the Appendix with Listing~\ref{lsting:mser}.
-The listing shows how this phase is made out of small tight knit loops.
-The while loops found at lines 27-30, 31-33 (both seen in Listing~\ref{lst:mser-ex}, 36-39, 40-42 and 71-75 never run for more than a few iterations.
-This entire section of code is full of control-flow causing the blocks to remain very small.
 
 It's also important to note that the average branch-prediction accuracy of \bm{MSER} is of 85\%, as shown in Table~\ref{tab:sd-vbsbpred}.
 Recalling Figure~\ref{fig:req_pred} and the fact that the average block size of \bm{MSER} is under 32 instructions, this means that no composition can be fully efficiently used.
 Some speedup can still be obtained, as cores in a composition do not need to have all the instruction window full to be able to obtain performance improvements.
 However these improvements are minor, and come at a high energy cost.
 
-To get performance out of \bm{MSER}, this major phase would have to be re-written to be less control-flow heavily so that larger blocks can be extracted.
+To get performance out of \bm{MSER}, this major phase would have to be re-written to use less while loops with complex termination conditions so that larger blocks can be extracted.
 Even with compiler optimisations, due to the fact that the loops are never executing for a long time, and their bodies are small and hard to unroll, it will be difficult to get performance improvements using core composition.
+
+\paragraph*{Multi-NCut}
 
 \begin{figure}[t]
 \lstset{language=C,numbersep=4pt}
@@ -218,20 +222,21 @@ Even with compiler optimisations, due to the fact that the loops are never execu
 \end{lstlisting}
 \end{center}
 \vspace{-1em}
-\caption{Main loop of Multi\_NCut.}
+\captionof{lstlisting}{Main loop of Multi\_NCut.}
 \label{lst:multi_loop}
 \vspace{1em}
 \end{figure}
 
-\paragraph*{Multi-NCut}
 \bm{Multi\_NCut} is faced with a similar situation to \bm{MSER}.
 Figure~\ref{fig:block_sizes} shows that once again, the majority of the blocks are less than 32 instructions long, in fact, over 50\% of the blocks are of 12 instructions or less.
 Table~\ref{tab:sd-vbsbpred} shows that the branch prediction is always correct, yet, with blocks this small, the synchronization cost of executing the blocks on large compositions outdoes any benefit that can be obtained via core-composition.
-Listing~\ref{lsting:multi} in the Apendix shows the source code of the main phase of \bm{Multi\_NCut}, the main loop found at lines 49 to 58, also found in Listing~\ref{lst:multi_loop}.
+Listing~\ref{lst:multi_loop} shows the main loop of \bm{Multi\_NCut}; the rest of the source code can be found in Listing~\ref{lsting:multi}.%Listing~\ref{lsting:multi} in the Apendix shows the source code of the main phase of \bm{Multi\_NCut}, the main loop found at lines 49 to 58, also found in Listing~\ref{lst:multi_loop}.
+
 Once again, this loop cannot be efficiently unrolled as the \textit{find} and \textit{join} functions are comprised of small control heavy while loops.
 Even by inlining those function calls, the while loops will cause the blocks to be small, and unrolling the while loops will generate more checks which wont help increase the size of the blocks.
 For \bm{Multi\_NCut} the problem is that the blocks are too small which will cause the overhead of dispatching multiple blocks across a core-composition inefficient.
 This is why the benchmark does not perform significantly better with core-composition without a high increase in energy consumption.
+
 
 Overall, both benchmarks demonstrate that some loops cannot be adapted to benefit from core-composition.
 This is especially true of while loops that cannot be converted into more traditional for loops.

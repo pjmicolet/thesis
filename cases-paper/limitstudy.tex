@@ -63,7 +63,7 @@ A core may have to wait for other cores to commit before fetching a new block.
 The worst-case estimate of this stall is defined as the \textbf{Synchronization Cost}.
 
 \begin{equation}\label{form:synccost}
-SyncCos(ABS,CompSize) = \frac{\sum_{CoreNumber=0}^{CompSize-1}\left(BlocksInFlight(ABS)\right) \times CoreNumber }{CompSize}
+SyncCos(ABS,CompSize) = \frac{\sum_{CoreID=0}^{CompSize-1}\left(BlocksInFlight(ABS)\right) \times CoreID }{CompSize}
 \end{equation}
 
 

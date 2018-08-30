@@ -3,7 +3,8 @@ The previous chapter showed how reconfiguring a dynamic multicore processor at r
 It also demonstrated that there are certain limiting factors to core composition performance, mainly branch prediction requirements and cost of synchronizing cores at commit time.
 To improve the performance of core composition, Chapters~\ref{chp:streamit} and ~\ref{chp:cases} showed that source level modifications are a method of improving the performance of core composition performance.
 These source-level modifications are often used to increase the size of the block which enables better utility of large core composition sizes.
-Whilst this does in fact improve the efficacy of the core composition, these source level optimisations may not always be applicable.
+
+Whilst source-level modifications do in fact improve the efficacy of the core composition, these source level optimisations may not always be applicable.
 In situations where source or compiler level optimisations cannot increase the size of a block, core composition cannot be considered a viable form of improving single threaded performance.
 Instead of solely focusing on improving the source code, analysing how a core composition functions at a hardware level can help determine other potential bottlenecks in the system.
 
@@ -17,9 +18,11 @@ There are two features of the processor that are explored: first how blocks are 
 The current fetching model focuses on filling the instruction window of a single core before activating another core in the composition.
 Without modifications, this fetching model requires either large blocks to reduce the time required to activate multiple cores in a composition and a fast issue and dispatch width on the core.
 Thus, exploring how the fetching model can be modified to prioritise using all the cores in the composition over filling a single core can lead to better utilisation of the composition.
+
 As for the commit mechanism, it requires that blocks be committed in order, and that cores may not fetch new blocks until one lane of the instruction window has been freed after a commit.
 This means that cores may have blocks in their instruction windows that are only waiting on their turn to commit; for large core compositions with small blocks this can be an issue.
 Adding a way of buffering commits can allow cores to continue fetching blocks as they wait to commit, enabling better utilisation of the composition. 
+
 Finally, register dependencies can reduce block level paralellism which in turn makes core composition less useful.
 Reduced block level parallelism due to register dependencies is similar to an issue found in trying to increase instruction level parallelism in superscalar processors~\cite{peraisBeBop2015}.
 This chapter explores how a value predictor, which predicts register values to reduce the memory dependencies, can be used to improve performance in core composition.

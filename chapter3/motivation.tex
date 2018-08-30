@@ -29,6 +29,7 @@ The synthetic block is only four instructions long using a custom instruction wh
 The reason a four instruction block was chosen is due to the fact that it allows for four blocks to be fetched on each core.
 Recalling Chapter~\ref{chp:cases}, on average block-sizes were under 32 instructions long, thus each core needs to fetch four blocks before submitting a fetch request to another core.
 The colours represent the different fetching schemes, "Old" being the fetching scheme described in more detail in Chapter~\ref{chp:Background} and used in Chapters~\ref{chp:streamit} and ~\ref{chp:cases}, whilst new defines the fetching mechanism which will be described in more detail later on.
+
 In essence, the new fetching scheme aims to reduce the amount of communication between cores by allowing cores to fetch independently.
 The results in the figure show that unless a block is at least 80 cycles long, it is difficult to efficiently use 16 core compositions using the normal fetching scheme.
 To give a point of reference -- using data gathered from the SD-VBS benchmarks from Chapter~\ref{chp:cases} -- the average execution time of a block in SD-VBS is 20 cycles long.
