@@ -4,12 +4,35 @@
     \includegraphics[width=1\textwidth]{cases-paper/graphics/Exploration/ipcs_16_3.pdf}
     \caption{IPC as a function of time for each benchmark when run on 16 fused cores.}
     \label{fig:sxt}
-	\vspace{1em}
+	\vspace{2em}
 \end{figure}
 
 This section explores how core composition affects the performance of the SD-VBS benchmarks.
 First a phase analysis is performed, followed by a study of the IPC variation for static core fusion.
 Then the use of dynamic core composition is motivated by using the gathered information.
+
+
+\subsection{Phase Detection}
+Figure~\ref{fig:sxt} presents the IPC performance through time for all the benchmarks when using a core composition of 16 cores.
+The IPC is calculated for each time tick, which is set at interval of 640 blocks committed.
+To re-iterate, the interval of 640 blocks was chosen as the largest core composition of size 16 can potentially commit up to 64 blocks at a time.
+Thus measuring performance every 640 blocks allows to fully capture the performance of large compositions without sacrificing loss of information.
+
+Displaying the performance of the core composition of size 16 gives a performance ceiling for all the benchmarks as it is the maximum number of cores which can be fused at any point.
+Figure~\ref{fig:sxt} shows that the IPC varies a lot for some of the benchmarks such as \bm{Disparity} or \bm{Localization} where dynamic fusion is expected to be especially good.
+For other, such as \bm{Multi\_NCut}, the execution is dominated by a single long phase with constant IPC, which will clearly show no benefit from using dynamic fusion.
+
+To better understand how dynamic core fusion improves performance, either by improving speedup or reducing energy, this section studies how each benchmark features different phases during their execution.
+Determining phases in a program requires profiling applications and analysing the profile data.
+This can be done by using tools such as SimPoint~\cite{simpoint} which tracks basic blocks to generate basic block vectors.
+These basic block vectors are then analysed using a clustering technique to determine phases.
+
+In this chapter the objective is to reconfigure the DMP to match the different IPC phases of a program.
+Due to the fact that the application are already being traced for their IPC, SimPoint does not have to be applied here.
+For every application the IPC results of 16,8,4,2,1 fused cores are regrouped by tick and kMeans clustering~\cite{kanungoKMeans02} is applied to detect how many IPC values can be clustered into similar groups.
+kMeans clustering is also used in SimPoint and more details on how it works can be found in Chapter~\ref{chp:Background}.
+Intervals that exhibit similar IPC values when run on different core counts are classified in the same cluster.
+
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{cases-paper/graphics/Exploration/SSE_final.pdf}
@@ -17,6 +40,12 @@ Then the use of dynamic core composition is motivated by using the gathered info
     \label{fig:sse}
 		\vspace{1em}
 \end{figure}
+
+In order to find the correct number of clusters the Sum of Square Errors (SSE) is plotted for a given cluster size from 1 to 15 seen in Figure~\ref{fig:sse} and the optimal cluster is defined as the elbow in the plot~\cite{everitCluster2001}.
+Applying a kMeans clustering to the IPCs of each application to determine phases is preferred to determining phases of an application by reading the source code phases.
+This is because different source code passes may have the same IPC performance, and thus will ultimately belong to the same phase when considering core composition.
+For example, the benchmark \bm{MSER}'s source code has 7 distinct passes, yet the kMeans clustering shows some of these passes result in the same performance, which can be visualised in Figure~\ref{fig:sxt}.
+This kMeans clustering process is only done for the purpose of exploring this set of benchmarks.
 
 \begin{figure}[t]
     \centering
@@ -26,44 +55,18 @@ Then the use of dynamic core composition is motivated by using the gathered info
 		\vspace{1em}
 \end{figure}
 
-
-\subsection{Phase Detection}
-Figure~\ref{fig:sxt} presents the IPC performance through time for all the benchmarks when using a logical core (LC) composed of 16 cores.
-The IPC is calculated for each time tick, which is set at interval of 640 blocks committed.
-To re-iterate, the interval of 640 blocks was chosen as the largest core composition of size 16 can potentially commit up to 64 blocks at a time.
-Thus measuring performance every 640 blocks allows to fully capture the performance of large compositions without sacrificing loss of information.
-Displaying the performance of the LC of size 16 gives a performance ceiling for all the benchmarks as it is the maximum number of cores which can be fused at any point.
-Figure~\ref{fig:sxt} shows that the IPC varies a lot for some of the benchmarks such as \bm{Disparity} or \bm{Localization} where dynamic fusion is expected to be especially good.
-For other, such as \bm{Multi\_NCut}, the execution is dominated by a single long phase with constant IPC, which will clearly show no benefit from using dynamic fusion.
-
-To better understand how dynamic core fusion improves performance, either by improving speedup or reducing energy, this section studies how each benchmark features different phases during their execution.
-Determining phases in a program requires profiling applications and analysing the profile data.
-This can be done by using tools such as SimPoint~\cite{simpoint} which tracks basic blocks to generate basic block vectors.
-These basic block vectors are then analysed using a clustering technique to determine phases.
-
-Due to the fact that the programs are already being traced for their IPC, SimPoint does not have to be applied here. 
-For every application the IPC results of 16,8,4,2,1 fused cores are regrouped by tick and kMeans clustering is applied to detect how many IPC values can be clustered into similar groups.
-kMeans clustering is also used in SimPoint and more details on how it works can be found in Chapter~\ref{chp:Background}.
-Intervals that exhibit similar IPC values when run on different core counts are classified in the same cluster.
-
-In order to find the correct number of clusters the Sum of Square Errors (SSE) is plotted for a given cluster size from 1 to 15 seen in Figure~\ref{fig:sse} and the optimal cluster is defined as the elbow in the plot~\cite{everitCluster2001}.
-Applying a kMeans clustering to the IPCs of each application to determine phases is preferred to determining phases of an application by reading the source code phases.
-This is because different source code passes may have the same IPC performance, and thus will ultimately belong to the same phase when considering core composition.
-For example, the benchmark \bm{MSER}'s source code has 7 distinct passes, yet the kMeans clustering shows some of these passes result in the same performance, which can be visualised in Figure~\ref{fig:sxt}.
-This kMeans clustering process is only done for the purpose of exploring this set of benchmarks.
-
 Figure~\ref{fig:clust} shows the number of clusters for each benchmark and the number of times a tick in each cluster occurs throughout the execution of the program and the average IPC observed for each cluster.
 The frequency of a cluster is counted by how many ticks in the program are part of that specific phase.
 The data can be corroborated with the information found in Figure~\ref{fig:sxt}.
 For example, benchmark \bm{Multi\_NCut} features one phase covering over 80\% of the total execution, whereas for \bm{MSER}, the two dominant phases have very similar IPC values.
-This means that it will be impossible to obtain any kind of performance improvements through dynamic reconfiguration due to the fact that there is little opportunity to switch the size of the LC.
+This means that it will be impossible to obtain any kind of performance improvements through dynamic reconfiguration due to the fact that there is little opportunity to switch the size of the composition.
 For all the other benchmarks, they each have at least two dominant phases.
 Since each phase is a cluster of similar IPC values, having two or more clusters will result in a higher chance of benefiting from dynamic core fusion.
 
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{cases-paper/graphics/Exploration/stddev3.pdf}
-    \caption{Comparing average, smallest and greatest IPC for each SD-VBS benchmark using logical-core size of 16.}
+    \caption{Comparing average, minimum and maximum IPC for each SD-VBS benchmark using logical-core size of 16.}
     \label{fig:stddev}
 		\vspace{5mm}
 \end{figure}
@@ -79,27 +82,27 @@ Since each phase is a cluster of similar IPC values, having two or more clusters
 \subsection{Static Ahead-of-Time Core Fusion Exploration}
 
 In this chapter, Static Core Fusion defines a processor configuration that is determined ahead of time and does not change once it has been set.
-Figure~\ref{fig:stddev} shows how the average Instructions Per Cycle (IPC) changes as the size of a LC is increased, going in powers of 2 from 1 to 16 fused cores.
+Figure~\ref{fig:stddev} shows how the average Instructions Per Cycle (IPC) changes as the size of a core composition is increased, going in powers of 2 from 1 to 16 fused cores.
 It can be seen that, for most benchmarks, fusing more cores provides an increase in IPC performance.
 Benchmarks \bm{Disparity}, \bm{Localization}, \bm{Sift}, \bm{Stitch}, \bm{Texture Synthesis} and \bm{Tracking} all at least observe a speedup of 2x when using core fusion.
 
-However increasing the size of a LC is not always beneficial as can be seen in benchmarks \bm{Localization}, \bm{MSER}, \bm{Multi\_NCut}, \bm{Stich}, and \bm{SVM}.
+However increasing the size of a composition is not always beneficial as can be seen in benchmarks \bm{Localization}, \bm{MSER}, \bm{Multi\_NCut}, \bm{Stich}, and \bm{SVM}.
 For benchmarks \bm{Localization} and \bm{Stitch} the performance increases when fusing up to 8 cores, where-as \bm{MSER} and \bm{Multi\_NCut} never benefit from core fusion.
-These benchmarks may not see a reduction in performance on 16 cores due to the increase in network traffic, which will make the highest LC size slower than 8 cores.
+These benchmarks may not see a reduction in performance on 16 cores due to the increase in network traffic, which will make the largest core composition size slower than 8 cores.
 To summarise, when cores are fused, register files, caches and LSQs are shared, which means that cores must communicate via the network to send register or memory requests to other cores when the data they required is not stored locally.
 Thus, having a higher number of cores composed will put pressure on the network.
 Referring back to Figures~\ref{fig:sxt} and~\ref{fig:clust}, \bm{MSER} and \bm{Multi\_NCut} feature one dominating long phase with a very low IPC, and thus fusing cores cannot improve performance.
 
-Figure~\ref{fig:stddev} also shows the variation of the IPC for each given LC size represented by the grayed out areas.
-For example, running the \bm{Disparity} benchmark on a LC of 16 cores, it can be observed that an average IPC of 8.3.
+Figure~\ref{fig:stddev} also shows the variation of the IPC for each given composition size represented by the grayed out areas.
+For example, running the \bm{Disparity} benchmark on a composition of 16 cores, it can be observed that an average IPC of 8.3.
 The variation for 16 cores shows that the performance can drop down to 2.5.
 An IPC of 2.5 when using 16 cores is very inefficient as this represents 0.1 of an instruction per cycle for each core and this performance can be achieved by using smaller core compositions.
-Using a LC of size 4 for the \bm{Disparity} benchmark an average of 4.1 with a standard deviation of 1.2 is achieved.
+Using a composition of size 4 for the \bm{Disparity} benchmark an average of 4.1 with a standard deviation of 1.2 is achieved.
 Thus, if the logical-core could change size, there is a possibility that this could reduce the overall energy consumption of the system by switching from 16 to 4.
 
 Figure~\ref{fig:block_sizes} shows the distribution of block-sizes for each of the benchmarks.
 As two blocks cannot occupy the same lane, which is a segment of the instruction window (see Chapter~\ref{chp:Background}), the block sizes are clustered into groups which represent how ever many number of lanes will be occupied (one lane may execute a block of up to 32 instructions).
-Using the information previously discussed in Section~\ref{lim_study}, the size of blocks is a determining factor of whether or not a program may benefit from core fusion.
+Using the information previously discussed in Section~\ref{sec:lim_study}, the size of blocks is a determining factor of whether or not a program may benefit from core fusion.
 
 Figure~\ref{fig:block_sizes} helps explain why benchmarks \bm{MSER} and \bm{Multi\_NCut} do not perform any better with core-fusion.
 For both cases, not only do they have a single detected phase, but both are predominantly formed of blocks that will occupy a single lane.
@@ -164,14 +167,12 @@ This subsection focuses on understanding why this is the case and explores the c
 \begin{figure}[t]
 \lstset{language=C,numbersep=4pt}
 \begin{center}
-\begin{lstlisting}
-while( forest_pt[nrindex].shortcut != nrindex ) 
-{          
+\begin{lstlisting}[firstnumber=27]
+while( forest_pt[nrindex].shortcut != nrindex ) {          
 	sref(visited_pt, nvisited++) = nrindex ;
 	nrindex = forest_pt[nrindex].shortcut ;
 }      
-while( nvisited-- ) 
-{
+while( nvisited-- ) {
 	forest_pt [ sref(visited_pt,nvisited) ] .shortcut = nrindex ;
 }
 \end{lstlisting}
@@ -201,16 +202,13 @@ Even with compiler optimisations, due to the fact that the loops are never execu
 \begin{figure}[t]
 \lstset{language=C,numbersep=4pt}
 \begin{center}
-\begin{lstlisting}
- for (i = 0; i < num_edges; i++) 
- {
+\begin{lstlisting}[firstnumber=49]
+ for (i = 0; i < num_edges; i++) {
         edge *pedge = &edges[ asubsref(indices,i) ];
 		a = find(u, pedge->a);
         b = find(u, pedge->b);
-        if (a != b) 
-		{
-            if ((pedge->w <= arrayref(threshold,a)) && (pedge->w <= arrayref(threshold,b))) 
-			{
+        if (a != b) {
+            if ((pedge->w <= arrayref(threshold,a)) && (pedge->w <= arrayref(threshold,b))) {
 	            join(u, a, b);
 	            a = find(u, a);
 	            arrayref(threshold,a) = pedge->w + THRESHOLD(u->elts[a].size, c);

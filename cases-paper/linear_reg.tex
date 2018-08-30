@@ -49,7 +49,7 @@ When it comes to execution time, loads may take from 3 to 128 cycles depending o
 Whether it is a cache hit or miss, a block that takes longer to execute will often minimize the \textit{SynchronizationCost} penalty.
 A block composed mainly of integer or floating point operations will often result in shorter execution rates; thus may execute faster, making it harder for large logical cores to improve performance.
 
-More discussion on how the time it takes to execute a block influences the performance of LCs is discussed in Chapter~\ref{chp3}.
+More discussion on how the time it takes to execute a block influences the performance of core compositions is discussed in Chapter~\ref{chp3}.
 The other reason loads have the largest weight is due to the fact that loads can be fired independently to the Load-Store Queue.
 Unlike stores that depend on previous memory instructions blocks being committed, loads can be fired with less overhead.
 As data can be speculatively fetched, loads instructions can receive data from other cores before the data is stored, speeding up the load instruction.
@@ -58,7 +58,7 @@ By increasing the core count on load heavy blocks this will improve performance 
 \begin{figure}[t]
     \centering
 	\includegraphics[width=1\textwidth]{cases-paper/graphics/results/lr_speed3.pdf}
-    \caption{Performance results for maximizing speed for the SD-VBS benchmarks using the linear regressor (LR) model.}% For Speedup, higher means better, for energy lower is better.}
+    \caption{Performance results for maximizing speed for the SD-VBS benchmarks using the linear regressor (LR) model. The results are normalized against the Static Suite core composition.}% For Speedup, higher means better, for energy lower is better.}
     \label{fig:speedlr}
 	\vspace{1em}
 \end{figure}

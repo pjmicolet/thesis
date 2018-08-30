@@ -35,13 +35,15 @@ Using these 5 traces, any dynamic execution can be constructed to generate dynam
 For this chapter, the dynamic trace will be generated base on one of two requirements; that it maximise speed or maximise efficiency.
 
 To simplify the exploration process, time ticks that are attributed to the same phase are always given the same number of cores.
-This is done to reduce the search space as on average there are 48494 ticks which results in an average of $5^{48,494}$ different possible executions.
-Since the maximum number of clusters found is 7 (for SVM), a maximum of $5^{7} = 78125$ different dynamic execution traces can be built.
+This is done to reduce the search space as on average there are 48,494 ticks which results in an average of $5^{48,494}$ different possible executions.
+Since the maximum number of clusters found is 7 (for SVM), a maximum of $5^{7} = 78,125$ different dynamic execution traces can be built.
 This is why creating dynamic core-composition out of traces is prefered to running all potential dynamic configurations via the simulator.
 All applications run for a couple hundred million cycles, which often takes a couple of hours to execute.
 As the amount of dynamic reconfigurations is high for some benchmarks, using traces to simulate dynamic reconfiguration is a very large time-save.
-When the size of the logical core (LC) is switched, the performance of that LC from its respective trace file is used and an extra 100 cycle penalty is added for switching the size of a LC.
+When the size of the core composition is switched, the performance of that composition from its respective trace file is used and an extra 100 cycle penalty is added for switching the size.
 This 100 cycles is the overhead of reconfiguring the processor at runtime, the effect of the reconfiguration latency is discussed in further detail later on in this section.
+The reconfiguration is a lightweight process that involves informing the cores that they belong to a composition, which requires a write to a system register and potentially flushing pipelines if the cores are executing other threads.
+As in this chapter, cores will never be executing other threads, flushing is not necessary, thus the l00 cycles to inform cores is an appropriate penalty and has been used in previous studies on DMPs~\cite{pricopi2012bahurupi}.
 With all these different dynamic core fusion traces, the optimal schemes for maximising speed or maximizing efficiency can be found.
 
 \begin{figure}[t]
@@ -77,11 +79,11 @@ With all these different dynamic core fusion traces, the optimal schemes for max
 Figure~\ref{fig:paretos} shows the trade off between time (represented in cycles) and energy using either a static ahead of time configuration or a dynamic reconfiguration.
 The dotted line represents the static core fusion scheme for the benchmark whilst the solid line represents the Pareto Front of all the dynamic core fusion traces.
 The vertical line represents the amount of energy that can be saved from using a dynamic core fusion scheme that matches the same speed as the best static scheme.
-The Pareto Front is constructed by assigning different LC sizes to a phase and recording the execution time in cycles and energy consumption.
+The Pareto Front is constructed by assigning different core composition sizes to a phase and recording the execution time in cycles and energy consumption.
 For a given cycle count, the reconfiguration scheme that leads to the smallest energy consumption is chosen to be a point in the Pareto Front.
 
 Figure~\ref{fig:paretos} demonstrates how static core-composition fails to maintain good energy efficiency as speed is improved.
-For example, \bm{Disparity} (Figure~\ref{subfig:disp}) is fastest on 16 fused cores, but has an 1.63x increase in energy consumption for a 1.22x improvement in speed.
+For example, \bm{Disparity} is fastest on 16 fused cores, but has an 1.63x increase in energy consumption for a 1.22x improvement in speed.
 This is due to the fact that larger core-compositions do not result in linear speedups, and thus consume more energy than a smaller core-composition.
 When using the dynamic scheme, it is clear that energy consumption increases at a slower rate when increasing speed.
 In this case the number of cores is adapted to the current program phase, using just enough cores to maintain high performance without wasting energy.
@@ -105,7 +107,7 @@ Dynamic reconfiguration is therefore mainly used to limit the energy consumption
 
 In this section the dynamic scheme is defined to be one that matches the same speed performance as the fastest static core composition for the benchmark: \textbf{DSpeed}.
 This is equivalent to the vertical line found in Figure~\ref{fig:paretos}.
-This scheme is used to demonstrate how dynamic reconfiguration can outperform static configuration when only concerned with the speed of execution.
+This scheme is used to demonstrate how dynamic reconfiguration can achieve the same speed as the static configuration whilst reducing energy consumption.
 
 Figure~\ref{fig:speedres} shows the speedup of \textbf{DSpeed} and Static Best (SB) and the respective energy consumption.
 The results are normalized against the performance of Static Suite (SS), which is 8 cores fused.
@@ -145,7 +147,7 @@ This illustrates the greatest advantage of using a DMP since the number of fused
 	\vspace{1em}
 \end{figure}
 
-\subsection{Optimizing for Efficiency}
+\subsection{Optimising for Efficiency}
 
 %Cite how to get it, maybe put this in background as well.
 This section defines a dynamic scheme that maximizes the efficiency metric EDD~\cite{lee2006linreg}, which is defined as $Energy \times Delay \times Delay$ where Delay is the execution time (in cycles).
@@ -158,7 +160,7 @@ The results are normalized against SS which is a fixed-composition of 4 fused co
 %Once again start with SS/SB then introduce DEff
 
 First, when comparing the SS and SB, the SB scheme is able to extract more speed whilst still being able to minimize energy consumption.
-Once again, when it comes to energy the flexibility of SB over SS is mostly seen in \bm{MSER} \bm{Multi\_NCut} as both applications don't benefit from core composition.
+Once again, when it comes to energy the flexibility of SB over SS is mostly seen in \bm{MSER} and \bm{Multi\_NCut} as both applications don't benefit from core composition.
 In fact, optimising for EDD shows that the SB scheme can save energy for even more benchmarks, such as \bm{Localization} and \bm{SVM} without slowing down execution time.
 Unlike the scenario where the processor is optimising for speed, SB can be faster than SS in this situation.
 This is because for applications such as \bm{Disparity} and \bm{Sift}, the number of cores required to maximise \textbf{DEff} is larger than the SS scheme's: 8 cores vs 4 cores.
@@ -174,6 +176,21 @@ Overall, \textbf{DEff} results in a 1.25x speed increase compared to SB and SS w
 This shows how dynamic core fusion's flexibility allows us to get better speedups whilst not drastically increasing the energy consumption.
 
 \subsection{Reconfiguration Latency} \label{sec:reconfoverhead}
+
+\begin{figure}[t]
+	\begin{minipage}{.5\textwidth}
+	\includegraphics[width=.9\linewidth]{cases-paper/graphics/Exploration/condensed_clust.pdf}
+    \caption{Average number of cycles without switching.}
+    \label{fig:avlen}
+	\end{minipage}%
+	\begin{minipage}{.5\textwidth}
+	\hfill
+	\includegraphics[width=.9\linewidth]{cases-paper/graphics/Exploration/latency_2.pdf}
+    \caption{Energy savings and number of switches as a function of the switching latency in cycles.}
+    \label{fig:enlatency}
+\end{minipage}
+\vspace{5mm}
+\end{figure}
 
 %Check if th
 Up until now, the chapter has assumed a reconfiguration latency of 100 cycles whenever dynamic reconfiguration occurs, similar to~\cite{pricopi2012bahurupi} as explained in the background chapter, Chapter~\ref{chp:Background}.
@@ -193,25 +210,10 @@ The energy savings remains high up to a latency of 1,000 cycles, with a noticeab
 For latency values over 1,000 cycles, the energy savings drop considerably, with very few switching occurring.
 This data shows that even if the reconfiguration overhead is 1,000 cycles, average energy savings of 38\% are possible compared to 42\% when the overhead is 100 cycles.
 
-\begin{figure}[t]
-	\begin{minipage}{.5\textwidth}
-	\includegraphics[width=.9\linewidth]{cases-paper/graphics/Exploration/phase_len2.pdf}
-    \caption{Average number of cycles without switching.}
-    \label{fig:avlen}
-	\end{minipage}%
-	\begin{minipage}{.5\textwidth}
-	\hfill
-	\includegraphics[width=.9\linewidth]{cases-paper/graphics/Exploration/latency_en_sp_sw2.pdf}
-    \caption{Energy savings and number of switches as a function of the switching latency in cycles.}
-    \label{fig:enlatency}
-\end{minipage}
-\vspace{5mm}
-\end{figure}
-
-\paragraph{Summary}
+\paragraph*{Summary}
 
 Overall, whether the program is optimised for speed or efficiency, dynamic core fusion will always lead to higher speedup or lower energy consumption than a fixed configuration.
 This is due to the presence of phases in applications that the dynamic scheme can exploit to reduce wasting energy in low ILP phases.
-This section has shown that maximizing speed can be highly energy inefficient when using a static LC and that a dynamic scheme can help reduce energy consumption by 42\% on average.
+This section has shown that maximizing speed can be highly energy inefficient when using a static composition and that a dynamic scheme can help reduce energy consumption by 42\% on average.
 When optimizing for efficiency, the section demonstrates that a dynamic scheme can help improve both speed and energy consumption, for example in the case of \bm{Tracking}, and overall speed can be improved by 1.25x whilst saving 25\% energy.
 

@@ -1,50 +1,58 @@
 \relax 
-\@writefile{toc}{\contentsline {chapter}{\numberline {6}Characterizing the limits of core-fusion}{83}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {7}Characterizing the limits of core-fusion}{91}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{loa}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {6.1}Introduction}{83}}
-\newlabel{sect:introduction-chapter3}{{6.1}{83}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.2}Motivation}{84}}
-\newlabel{sect:ch3-motivation}{{6.2}{84}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.1}Fetching mechanism}{84}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.2}Register dependencies}{85}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.3}Limit Study Part 2}{85}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.3.1}Block Fetching as a Bottleneck}{85}}
-\newlabel{ch3:sec:bfn}{{6.3.1}{85}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.1}{\ignorespaces Speedup of the synthetic benchmark when modifying the cycle length of the block (facets), over number of cores fused on the X axis. Higher is better.\relax }}{85}}
-\newlabel{fig:block_graph}{{6.1}{85}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.1}Introduction}{91}}
+\newlabel{sect:introduction-chapter3}{{7.1}{91}}
+\citation{peraisBeBop2015}
+\citation{sdvbs}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.1}{\ignorespaces Speedup obtained through the old fetching technique and new fetching technique on a synthetic block with varying execution times (facet). Higher is better.\relax }}{93}}
+\newlabel{fig:motivation_fetch}{{7.1}{93}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.2}Motivation}{93}}
+\newlabel{sect:ch3-motivation}{{7.2}{93}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2.1}Fetching mechanism}{93}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2.2}Register dependencies}{94}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.2}{\ignorespaces Basic loop.\relax }}{95}}
+\newlabel{lst:bloop}{{7.2}{95}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.3}{\ignorespaces Speedup of executing code in Listing\nobreakspace  {}7.2\hbox {} using the new fetching mechanism, with and without value prediction. Higher is better.\relax }}{95}}
+\newlabel{fig:motivation_reg}{{7.3}{95}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.3}Limit Study Part 2}{96}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.3.1}Block Fetching as a Bottleneck}{96}}
+\newlabel{ch3:sec:bfn}{{7.3.1}{96}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.4}{\ignorespaces Speedup of the synthetic benchmark when modifying the cycle length of the block (facets), over number of cores fused on the X axis. Higher is better.\relax }}{96}}
+\newlabel{fig:block_graph}{{7.4}{96}}
 \citation{smith2006compilingedge}
 \citation{chrysos1998storesets}
 \citation{smith2006compilingedge}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.2}{\ignorespaces Example of new fetching model on a 2 core composition. Each core has 4 segments, the arrows represent the block generating the predictions. This figure shows the first 3 steps of a new core composition fetching blocks.\relax }}{87}}
-\newlabel{fig:new_fetch_ex}{{6.2}{87}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.3.2}Inter-block communication}{87}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.4}New block scheme}{87}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.3.2}Inter-block communication}{98}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.4}New block scheme}{98}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.4.1}Example using a two core composition}{98}}
 \citation{SeznecITTAGE}
 \citation{SeseznecMultipleBlock}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.4.1}Example using a two core composition}{88}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.3}{\ignorespaces Comparing the new fetching model to the current fetching model on the synethtic benchmark defined in Section\nobreakspace  {}6.3.1\hbox {}.\relax }}{89}}
-\newlabel{fig:synthetic_ex}{{6.3}{89}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.4.2}Generalised form}{89}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.4.3}Synthetic Results}{89}}
-\@writefile{loa}{\contentsline {algocf}{\numberline {1}{\ignorespaces Overview of fetching algorithm for \textit  {n} cores fused\relax }}{90}}
-\newlabel{alg:fetch}{{1}{90}}
-\@writefile{loa}{\contentsline {algocf}{\numberline {2}{\ignorespaces Overview of commit stage for \textit  {n} cores fused\relax }}{90}}
-\newlabel{alg:commit}{{2}{90}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.5}Value Predictor}{91}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.5}{\ignorespaces Example of new fetching model on a 2 core composition. Each core has 4 segments, the arrows represent the block generating the predictions. This figure shows the first 3 steps of a new core composition fetching blocks.\relax }}{99}}
+\newlabel{fig:new_fetch_ex}{{7.5}{99}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.6}{\ignorespaces Comparing the new fetching model to the current fetching model on the synethtic benchmark defined in Section\nobreakspace  {}7.3.1\hbox {}.\relax }}{100}}
+\newlabel{fig:synthetic_ex}{{7.6}{100}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.4.2}Generalised form}{100}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.4.3}Synthetic Results}{100}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {1}{\ignorespaces Overview of fetching algorithm for \textit  {n} cores fused\relax }}{101}}
+\newlabel{alg:fetch}{{1}{101}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {2}{\ignorespaces Overview of commit stage for \textit  {n} cores fused\relax }}{101}}
+\newlabel{alg:commit}{{2}{101}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.5}Value Predictor}{102}}
 \citation{peraisBeBop2015}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.5.1}Implementation}{92}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.5.2}Determining block size}{92}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.5.1}Implementation}{103}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.5.2}Determining block size}{103}}
 \citation{peraisBeBop2015}
-\@writefile{toc}{\contentsline {section}{\numberline {6.6}Experimental Setup}{93}}
-\@writefile{toc}{\contentsline {paragraph}{\numberline {1}Data Predictor}{93}}
-\@writefile{toc}{\contentsline {paragraph}{\numberline {2}Speculative Window}{93}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.7}Results}{93}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.8}Analysis}{93}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.9}Conclusion}{93}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.6}Experimental Setup}{104}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {1}Data Predictor}{104}}
+\@writefile{toc}{\contentsline {paragraph}{\numberline {2}Speculative Window}{104}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.7}Results}{104}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.8}Analysis}{104}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.9}Conclusion}{104}}
 \@setckpt{./chapter3/chapter3}{
-\setcounter{page}{94}
+\setcounter{page}{105}
 \setcounter{equation}{1}
 \setcounter{enumi}{0}
 \setcounter{enumii}{0}
@@ -53,25 +61,25 @@
 \setcounter{footnote}{0}
 \setcounter{mpfootnote}{0}
 \setcounter{part}{0}
-\setcounter{chapter}{6}
+\setcounter{chapter}{7}
 \setcounter{section}{9}
 \setcounter{subsection}{0}
 \setcounter{subsubsection}{0}
 \setcounter{paragraph}{0}
 \setcounter{subparagraph}{0}
-\setcounter{figure}{3}
+\setcounter{figure}{6}
 \setcounter{table}{0}
 \setcounter{ContinuedFloat}{0}
 \setcounter{parentequation}{0}
 \setcounter{KVtest}{0}
 \setcounter{subfigure}{0}
-\setcounter{subfigure@save}{9}
+\setcounter{subfigure@save}{0}
 \setcounter{lofdepth}{1}
 \setcounter{subtable}{0}
 \setcounter{subtable@save}{0}
 \setcounter{lotdepth}{1}
 \setcounter{lips@count}{0}
-\setcounter{lstnumber}{16}
+\setcounter{lstnumber}{4}
 \setcounter{AlgoLine}{0}
 \setcounter{algocfline}{2}
 \setcounter{algocfproc}{2}

@@ -10,7 +10,7 @@ There are certain factors limit the usefulness of loop unrolling.
 In the evaluated EDGE architecture, blocks may not have more than 32 load or store instructions.
 This is due to the fact that the EDGE architecture restricts each block to have only up to 32 load/store instructions~\cite{putnam2010e2,smith2006edge}.
 Therefore unrolling memory intensive loops will not always drastically increase the size of a block if the block is composed mainly of load and store instructions, as the EDGE compiler will have to split blocks if they contain more than 32 load/store instructions.
-However as it will generate blocks with fixed branches it reduces the strain on branch prediction as it will generate multiple blocks with fixed branches.
+However as it will generate blocks with fixed branches it reduces the strain on branch prediction.
 Another issue is that unrolling loops with conditional statements may not help improve the size of the block as the conditional branches might still segment the new blocks.
 So these loops should not be unrolled as they will lead to an increase in code size.
 
@@ -76,7 +76,7 @@ The case arises when interchanging the loop removes dependencies in the inner-mo
 For instance, the dependency in Figure~\ref{lst:dep} can be removed by interchanging the loops. 
 This allows the compiler to unroll the inner loop efficiently, but also remove any kind of dependency between blocks.
 Even if memory dependencies can be detected using a dependence predictor~\cite{chrysos1998storesets}, it can potentially serialise memory operations when multiple iterations of a loop are live.
-Thus using loop interchange will reduce any potential data dependency and minimize core communication in a composition.
+Thus using loop interchange will reduce any potential data dependency and minimise core communication in a composition.
 
 \subsection{Predication and Hyperblock Formation}
 EDGE compilers must split blocks whenever control-flow is present~\cite{smith2006edge} as seen in Section~\ref{chp:bg:sec:edge} of Chapter~\ref{chp:Background}.
@@ -113,8 +113,8 @@ The source code modifications are then verified to have the intended effect by d
 On average there are between 0 and 12 loops modifications depending on the benchmark.
 
 \subsection{Results}
-First the best static core fusion using the optimized code is compared with the unmodified code, both version compiled with \texttt{-O2} which is the highest optimisation setting for the EDGE compiler.
-Figure~\ref{fig:ipccom} shows the resulting IPC for the baseline case and the optimized benchmarks when run on a core with the optimal number of fused core to maximize performance.
+First the best static core fusion using the optimised code is compared with the unmodified code, both version compiled with \texttt{-O2} which is the highest optimisation setting for the EDGE compiler.
+Figure~\ref{fig:ipccom} shows the resulting IPC for the baseline case and the optimised benchmarks when run on a core with the optimal number of fused core to maximise performance.
 The IPC of the baseline is very low for the majority of the benchmarks which might give the impression that core fusion is rather inefficient.
 However, after applying the simple optimisations described above, the average IPC is significantly increased in many cases.
 
