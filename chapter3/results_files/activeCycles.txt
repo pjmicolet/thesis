@@ -1,0 +1,41 @@
+Benchmark,Cores,FetchingScheme,BPred,ValuePrediction,CycleCount,ActiveCount
+Disparity,16,New Fetching Scheme,perfpred,No Data Prediction,3456532,3.44086e+06
+Disparity,16,New Fetching Scheme,perfpred,Data Prediction,2638532,2.62699e+06
+Disparity,16,Normal Fetching Scheme,perfpred,No Data Prediction,4247353,2.74356e+06
+Disparity,16,Normal Fetching Scheme,perfpred,Data Prediction,4160307,2.5237e+06
+Disparity,1,Normal Fetching Scheme,normalpred,No Data Prediction,20805873,20805873
+Disparity,1,Normal Fetching Scheme,perfpred,No Data Prediction,20705055,20705055
+Disparity,1,Normal Fetching Scheme,perfpred,Data Prediction,20702988,20702988
+MSER,1,Normal Fetching Scheme,perfpred,No Data Prediction,18738596,18738595
+MSER,1,Normal Fetching Scheme,perfpred,Data Prediction,18119566,18119565
+MSER,4,New Fetching Scheme,perfpred,No Data Prediction,12889181,1.18994e+07
+MSER,4,New Fetching Scheme,perfpred,Data Prediction,9386050,8.37768e+06
+MSER,4,Normal Fetching Scheme,perfpred,No Data Prediction,16602100,8.14406e+06
+MSER,4,Normal Fetching Scheme,perfpred,Data Prediction,15680699,6.29869e+06
+Multi_NCut,16,New Fetching Scheme,perfpred,No Data Prediction,9058953,8.4002e+06
+Multi_NCut,16,New Fetching Scheme,perfpred,Data Prediction,4145988,3.60395e+06
+Multi_NCut,16,Normal Fetching Scheme,perfpred,No Data Prediction,15680585,2.81794e+06
+Multi_NCut,16,Normal Fetching Scheme,perfpred,Data Prediction,15586313,2.58123e+06
+Multi_NCut,1,Normal Fetching Scheme,normalpred,No Data Prediction,26145849,26145848
+Multi_NCut,1,Normal Fetching Scheme,perfpred,No Data Prediction,26142275,26142274
+Multi_NCut,1,Normal Fetching Scheme,perfpred,Data Prediction,26142180,26142179
+Localization,16,New Fetching Scheme,perfpred,No Data Prediction,16767708,1.02898e+07
+Localization,16,New Fetching Scheme,perfpred,Data Prediction,9974142,6.39967e+06
+Localization,16,Normal Fetching Scheme,perfpred,No Data Prediction,19161457,6.3256e+06
+Localization,16,Normal Fetching Scheme,perfpred,Data Prediction,13248256,3.78462e+06
+Localization,1,Normal Fetching Scheme,normalpred,No Data Prediction,35022877,35022877
+Localization,1,Normal Fetching Scheme,perfpred,No Data Prediction,34184770,34184770
+Sift,16,New Fetching Scheme,perfpred,No Data Prediction,11185835,1.11751e+07
+Sift,16,New Fetching Scheme,perfpred,Data Prediction,8637634,8.63016e+06
+Sift,16,Normal Fetching Scheme,perfpred,No Data Prediction,15802309,5.37633e+06
+Sift,16,Normal Fetching Scheme,perfpred,Data Prediction,15776748,4.34236e+06
+Sift,1,Normal Fetching Scheme,normalpred,No Data Prediction,52991236,52991236
+Sift,1,Normal Fetching Scheme,perfpred,No Data Prediction,52943783,52943783
+Sift,1,Normal Fetching Scheme,perfpred,Data Prediction,52918264,52918264
+Text_Synth,16,New Fetching Scheme,perfpred,No Data Prediction,19167019,1.54605e+07
+Text_Synth,16,New Fetching Scheme,perfpred,Data Prediction,13280873,9.4016e+06
+Text_Synth,16,Normal Fetching Scheme,perfpred,No Data Prediction,20422689,9.37681e+06
+Text_Synth,16,Normal Fetching Scheme,perfpred,Data Prediction,19630570,5.39792e+06
+Text_Synth,1,Normal Fetching Scheme,normalpred,No Data Prediction,71472166,71472165
+Text_Synth,1,Normal Fetching Scheme,perfpred,No Data Prediction,70873977,70873976
+Text_Synth,1,Normal Fetching Scheme,perfpred,Data Prediction,67713870,67713869

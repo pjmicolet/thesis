@@ -9,51 +9,91 @@
 \citation{sdvbs}
 \@writefile{toc}{\contentsline {section}{\numberline {7.2}Motivation}{93}}
 \newlabel{sect:ch3-motivation}{{7.2}{93}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.2.1}Fetching mechanism}{93}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7.1}{\ignorespaces Speedup obtained through the old fetching technique and new fetching technique on a synthetic block with varying execution times (facet). Higher is better.\relax }}{94}}
-\newlabel{fig:motivation_fetch}{{7.1}{94}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7.2}{\ignorespaces Basic loop.\relax }}{95}}
-\newlabel{lst:bloop}{{7.2}{95}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7.3}{\ignorespaces Speedup of executing code in Listing\nobreakspace  {}7.2\hbox {} using the new fetching mechanism, with and without value prediction. Higher is better.\relax }}{95}}
-\newlabel{fig:motivation_reg}{{7.3}{95}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.2.2}Register dependencies}{95}}
-\@writefile{toc}{\contentsline {section}{\numberline {7.3}Limit Study Part 2}{96}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.3.1}Block Fetching as a Bottleneck}{96}}
-\newlabel{ch3:sec:bfn}{{7.3.1}{96}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7.4}{\ignorespaces Speedup of the synthetic benchmark when modifying the cycle length of the block (facets), over number of cores fused on the X axis. Higher is better.\relax }}{96}}
-\newlabel{fig:block_graph}{{7.4}{96}}
-\citation{smith2006compilingedge}
-\citation{chrysos1998storesets}
-\citation{smith2006compilingedge}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.3.2}Inter-block communication}{98}}
-\@writefile{toc}{\contentsline {section}{\numberline {7.4}New block scheme}{98}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2.1}Branch prediction (with perfect branch prediction)}{93}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.1}{\ignorespaces Performance of \textit  {MSER} using the currently implemented branch predictor vs a perfect branch predictor.\relax }}{94}}
+\newlabel{fig:mser_motiv}{{7.1}{94}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2.2}Fetching mechanism}{94}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.2}{\ignorespaces Speedup obtained when executing the MSER benchmark on 2 and 4 core composition with the new fetching scheme. Higher is better.\relax }}{95}}
+\newlabel{fig:motivation_fetch}{{7.2}{95}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.3}{\ignorespaces Percentage of time (in cycles) cores in a composition are executing instructions compared to the overall execution time. Higher is better.\relax }}{95}}
+\newlabel{fig:motivation_perc}{{7.3}{95}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.4}{\ignorespaces Speedup of executing \textit  {MSER} using the new fetching mechanism, with perfect value prediction and perfect branch prediction. Higher is better.\relax }}{96}}
+\newlabel{fig:motivation_reg}{{7.4}{96}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2.3}Register dependencies}{96}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.5}{\ignorespaces Speedup obtained when executing the MSER benchmark on 2 and 4 core composition with the new fetching scheme. Higher is better.\relax }}{97}}
+\newlabel{fig:motivation_final}{{7.5}{97}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2.4}Putting it all together}{97}}
+\citation{sdvbs}
+\citation{peraisVTAGE2014}
+\citation{sheikh2017value}
+\citation{peraisVTAGE2014}
+\@writefile{toc}{\contentsline {section}{\numberline {7.3}Experimental Setup}{98}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.3.1}Benchmarks}{98}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.3.2}Value Predictor}{98}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.6}{\ignorespaces Performance of \textit  {MSER} using the currently implemented branch predictor vs a perfect branch predictor.\relax }}{99}}
+\newlabel{fig:trace-gen}{{7.6}{99}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.7}{\ignorespaces Performance of \textit  {MSER} using the currently implemented branch predictor vs a perfect branch predictor.\relax }}{99}}
+\newlabel{fig:trace-gen}{{7.7}{99}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.3.3}Execution}{99}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.3.4}Implementing perfect value and branch predictor}{99}}
+\citation{peraisBeBop2015}
+\citation{peraisBeBop2015}
+\newlabel{chp:chp3:sec:exp}{{7.3.4}{100}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.4}Value Predictor}{100}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.4.1}Implementation}{100}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {7.4.1.1}Design features of a value predictor}{100}}
+\citation{peraisBeBop2015}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {7.4.1.2}The Differential Value Tagged Geometric length Predictor}{101}}
+\citation{paraisBeBop2015}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.8}{\ignorespaces Average number of register reads per EDGE block.\relax }}{102}}
+\newlabel{fig:edge_reg_read}{{7.8}{102}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.9}{\ignorespaces Speculative window in DVTAGE provides speculative Last-Values to allow for multiple value predictions.\relax }}{102}}
+\newlabel{fig:edge_reg_read}{{7.9}{102}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.10}{\ignorespaces Average number of register reads per EDGE block.\relax }}{103}}
+\newlabel{fig:edge_reg_read}{{7.10}{103}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.4.2}Determining block size}{103}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.4.3}Perfect Value Predictor}{103}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.11}{\ignorespaces Example of the current fetching model on a 2 core composition. Each core has 4 segments, the arrows represent the block generating the predictions. This figure shows the first 5 steps of a new core composition fetching blocks.\relax }}{104}}
+\newlabel{fig:old_fetch}{{7.11}{104}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.5}Improving the performance of fetching blocks}{104}}
+\newlabel{chp3:sec:fetch}{{7.5}{104}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.5.1}Current fetching scheme}{104}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {7.1}{\ignorespaces Very basic loop.\relax }}{105}}
+\newlabel{lst:basic}{{7.1}{105}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.12}{\ignorespaces Example of the current fetching model on a 2 core composition. Each core has 4 segments, the arrows represent the block generating the predictions. This figure shows the first 5 steps of a new core composition fetching blocks.\relax }}{105}}
+\newlabel{fig:fetch_norm}{{7.12}{105}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.5.2}New fetching mechanism}{106}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {7.5.2.1}Generalised Form}{106}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {7.5.2.2}Example using a two core composition}{106}}
 \citation{SeznecITTAGE}
 \citation{SeseznecMultipleBlock}
-\@writefile{lof}{\contentsline {figure}{\numberline {7.5}{\ignorespaces Example of new fetching model on a 2 core composition. Each core has 4 segments, the arrows represent the block generating the predictions. This figure shows the first 3 steps of a new core composition fetching blocks.\relax }}{99}}
-\newlabel{fig:new_fetch_ex}{{7.5}{99}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.4.1}Example using a two core composition}{99}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7.6}{\ignorespaces Comparing the new fetching model to the current fetching model on the synethtic benchmark defined in Section\nobreakspace  {}7.3.1\hbox {}.\relax }}{100}}
-\newlabel{fig:synthetic_ex}{{7.6}{100}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.4.2}Generalised form}{100}}
-\@writefile{loa}{\contentsline {algocf}{\numberline {1}{\ignorespaces Overview of fetching algorithm for \textit  {n} cores fused\relax }}{101}}
-\newlabel{alg:fetch}{{1}{101}}
-\@writefile{loa}{\contentsline {algocf}{\numberline {2}{\ignorespaces Overview of commit stage for \textit  {n} cores fused\relax }}{101}}
-\newlabel{alg:commit}{{2}{101}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.4.3}Synthetic Results}{102}}
-\@writefile{toc}{\contentsline {section}{\numberline {7.5}Value Predictor}{102}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {1}{\ignorespaces Overview of fetching algorithm for \textit  {n} cores fused\relax }}{107}}
+\newlabel{alg:fetch}{{1}{107}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {2}{\ignorespaces Overview of commit stage for \textit  {n} cores fused\relax }}{108}}
+\newlabel{alg:commit}{{2}{108}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.13}{\ignorespaces Example of new fetching model on a 2 core composition. Each core has 4 segments, the arrows represent the block generating the predictions. This figure shows the first 3 steps of a new core composition fetching blocks.\relax }}{108}}
+\newlabel{fig:new_fetch_ex}{{7.13}{108}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.14}{\ignorespaces Speedup obtained when executing the synthetic block with varying execution times (facets) with the current fetching technique and new fetching technique. Higher is better.\relax }}{109}}
+\newlabel{fig:new_fetch_ex}{{7.14}{109}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.5.3}Evaluating the new fetch scheme on a synthetic block}{109}}
 \citation{peraisBeBop2015}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.5.1}Implementation}{103}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.5.2}Determining block size}{103}}
-\citation{peraisBeBop2015}
-\@writefile{toc}{\contentsline {section}{\numberline {7.6}Experimental Setup}{104}}
-\@writefile{toc}{\contentsline {paragraph}{\numberline {1}Data Predictor}{104}}
-\@writefile{toc}{\contentsline {paragraph}{\numberline {2}Speculative Window}{104}}
-\@writefile{toc}{\contentsline {section}{\numberline {7.7}Results}{104}}
-\@writefile{toc}{\contentsline {section}{\numberline {7.8}Analysis}{104}}
-\@writefile{toc}{\contentsline {section}{\numberline {7.9}Conclusion}{105}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.6}Results}{110}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.6.1}Using perfect branch and value prediction}{110}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.15}{\ignorespaces Comparing the performance of the standard fetching scheme to the new fetching scheme, with and without perfect value prediction. Higher is better\relax }}{111}}
+\newlabel{fig:perf_pred}{{7.15}{111}}
+\@writefile{lot}{\contentsline {table}{\numberline {7.1}{\ignorespaces Number of cores composed for each SD-VBS benchmark given a configuration.\relax }}{111}}
+\newlabel{tab:conf_cores}{{7.1}{111}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.16}{\ignorespaces Average cycle yada\relax }}{112}}
+\newlabel{fig:perf_av_cycle}{{7.16}{112}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.6.2}Using perfect branch prediction and Block VTAGE value predictor}{112}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.6.3}Bottleneck analysis}{112}}
+\newlabel{chp:chp3:sec:analysis}{{7.6.3}{112}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.17}{\ignorespaces Comparing the performance of the new fetching scheme, with perfect value prediction and with the VTAGE predictor. Higher is better\relax }}{113}}
+\newlabel{fig:perf_pred}{{7.17}{113}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.7}Conclusion}{113}}
 \@setckpt{./chapter3/chapter3}{
-\setcounter{page}{106}
-\setcounter{equation}{1}
+\setcounter{page}{114}
+\setcounter{equation}{0}
 \setcounter{enumi}{0}
 \setcounter{enumii}{0}
 \setcounter{enumiii}{0}
@@ -62,13 +102,13 @@
 \setcounter{mpfootnote}{0}
 \setcounter{part}{0}
 \setcounter{chapter}{7}
-\setcounter{section}{9}
+\setcounter{section}{7}
 \setcounter{subsection}{0}
 \setcounter{subsubsection}{0}
 \setcounter{paragraph}{0}
 \setcounter{subparagraph}{0}
-\setcounter{figure}{6}
-\setcounter{table}{0}
+\setcounter{figure}{17}
+\setcounter{table}{1}
 \setcounter{ContinuedFloat}{0}
 \setcounter{parentequation}{0}
 \setcounter{KVtest}{0}
@@ -79,7 +119,7 @@
 \setcounter{subtable@save}{0}
 \setcounter{lotdepth}{1}
 \setcounter{lips@count}{0}
-\setcounter{lstnumber}{4}
+\setcounter{lstnumber}{5}
 \setcounter{AlgoLine}{0}
 \setcounter{algocfline}{2}
 \setcounter{algocfproc}{2}
@@ -94,5 +134,5 @@
 \setcounter{r@tfl@t}{0}
 \setcounter{float@type}{8}
 \setcounter{@todonotes@numberoftodonotes}{0}
-\setcounter{lstlisting}{0}
+\setcounter{lstlisting}{1}
 }

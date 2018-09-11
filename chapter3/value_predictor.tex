@@ -1,8 +1,9 @@
-In EDGE, block dependencies are expressed through register reads and writes.
-To ensure that blocks in flight do not execute a register read before an older block has executed a write to the same register, register writes are encoded in the header.
-This informs the register-file which can then effectively push back speculative reads from younger blocks.
+In EDGE, data can be passed between blocks through reading and writing to general purpose registers.
+To ensure that a younger block does not not execute a register read before an older block has executed a write to the same register, the register-file keeps track of registers which will be written to.
+If the younger block attempts to execute the read, its request will be pushed back until the older block has executed its write.
+
 Whilst this ensures correct execution of speculative blocks, it effectively reduces the potential for block level parallelism (BLP).
-This is further exacerbated when composing cores is considered, as this increases the amount of blocks that may potentially have to wait on register reads and writes.
+This is further exacerbated when fusing cores, as this increases the amount of blocks that may potentially have to wait on register reads and writes.
 For example, tightly knit loops that write most values out to registers cannot be optimised using core composition due to register dependencies.
 
 In situations where register dependencies are a bottleneck and cannot be optimised via a compiler, core composition cannot be considered an effective method of improving performance.
@@ -10,14 +11,56 @@ The problem of trying to reduce register and memory dependencies to improve inst
 In these cases value prediction can be used to attempt to ensure that these blocks can run in parallel even if there are dependencies.
 
 \subsection{Implementation}
-%Explain TAGE either here or in the background
-In this chapter, a Differential Value Tagged Geometric (D-VTAGE) data predictor is implemented.
-The D-VTAGE is a computational based data predictor which stores the last value of a register in a Last Value Table (LVT) and also a stride for that value.
-When a data prediction is requested, the D-VTAGE predictor simply adds the value from the LVT to the stride.
 
-In the work of Perais et al.~\cite{peraisBeBop2015} they present a D-VTAGE predictor that operates on blocks of instructions rather than single instructions.
-This minimizes network pressure on the predictor whilst enabling it to service multiple requests at once.
-As EDGE is a block-based ISA by nature, this is a natural fit.
+\subsubsection{Design features of a value predictor}
+\paragraph*{Prediction Latency} Before discussing the implemented value predictor in this chapter, it is important to explain why it was chosen.
+In a traditional superscalar processor, one of the main challenges value predictors face is being able to sustain the potential number of prediction requests in a short time frame~\cite{peraisBeBop2015}.
+As value predictors were designed to improve ILP performance of out-of-order (OoO) superscalars, it is important to be able to submit value predictions quickly.
+If multiple prediction requests are made each cycle, this may require to add expensive hardware such as ***, which may dissuade designers from using value predictors.
+
+To tackle the challenge of issuing predictions quickly, research has focussed on grouping instructions into prediction blocks~\cite{peraisBeBop2015}.
+Instead of fetching a single prediction, the value predictor's tables are split into fixed groups of values.
+In a traditional OoO processor, this method can be compared to fetching values for a basic block of instructions; it allows the predictor to issue multiple predictions at once.
+However, in a traditional OoO this may be complicated by the fact that basic blocks have multiple entry points, and thus some extra hashing must be added to the predictor to ensure that the prediction blocks start at the correct instruction. % clarify
+Finally, a block-based value predictor requires that the size of a block be determined at design time, which adds a new design task: choosing a small block size will increase the number of requests per cycle, whilst a large block size will decrease the number of entries and thus reduce overall accuracy. %clarify
+Even so, as the EDGE ISA already organises instructions into blocks, a block-based value predictor is an attractive design.
+
+\paragraph*{Prediction generation} Another important feature when selecting a value predictor is how it generates a predicted value.
+As of the writing of this thesis, there exist two main methods: direct value prediction and stride-based value prediction.
+The direct value predictor is the simpler design, as it only stores the last value for the specific register or memory address.
+When a request is made, the direct value predictor will simply submit the last value.
+Whilst this makes a value predictor small easy to design, such implementation is known to have poor accuracy when predicting values that are modified in quick succession.
+
+On the other hand, stride-based value predictors use two components to make a prediction.
+The first component is a Last-Value Table (LVT) which holds the last known value for a register or memory address.
+The second component is a stride, which represents the difference between the last two values of the data.
+Thus, when a prediction is made, the value predictor fetches the value from the LVT, and adds the stride to make a prediction.
+Such a design may increase the memory footprint as it has to store both a value and a stride for each data point; however it improves the overall accuracy and usefulness of value predictors.
+
+\subsubsection{The Differential Value Tagged Geometric length Predictor}
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{chapter3/graphics/basic_valpred.pdf}
+
+    \caption{Average number of register reads per EDGE block.}
+    \label{fig:edge_reg_read}
+	\vspace{-1em}
+\end{figure}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{chapter3/graphics/specwindow.pdf}
+    \caption{Speculative window in DVTAGE provides speculative Last-Values to allow for multiple value predictions.}
+    \label{fig:edge_reg_read}
+	\vspace{1em}
+\end{figure}
+
+For this chapter, a good value predictor needs to be able to predict at a block level granularity as to reduce prediction latency and also use a stride-based prediction approach as it will often be used to predict registers used in loops.
+Perals et al. in their work~\cite{peraisBeBop2015} present such a predictor, the Differential Value Tagged Geometric length (D-VTAGE) predictor.
+The D-VTAGE predictor is a stride based value predictor.
+It operates on blocks of instructions to minimize network pressure and increase the prediction output; as EDGE is a block-based ISA by nature, this is a natural fit.
+
+As predictions are updated at commit time~\cite{paraisBeBop2015}
 Another consideration is that multiple blocks of the same PC may be speculatively executing at the same time, which could cause data mis-predictions if the predictor is not updated.
 This requires current live predictions to be in a speculative window so that new predictions may use the last predicted data and stride.
 
@@ -25,7 +68,14 @@ When a misprediction is detected this is treated in the same way as a load-store
 This means that blocks do not have to be refetched, simply re-executed with the correct data.
 
 \subsection{Determining block size}
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{chapter3/graphics/averageRegRead.pdf}
 
+    \caption{Average number of register reads per EDGE block.}
+    \label{fig:edge_reg_read}
+	\vspace{1em}
+\end{figure}
 One of the defining factors of the block based D-VTAGE predictor is that a single prediction fetches a fix set of data values rather than requiring one request per instruction.
 Due to the fact that the block size is fixed, determining the correct size is important.
 Having a large block size means that the D-VTAGE predictor can predict all values in a block, however this comes at the sacrifice of having less blocks in memory.
@@ -37,3 +87,21 @@ Focussing only on register reads will reduce the the block size requirements as 
 To determine the block size, all the EDGE blocks of the SD-VBS benchmarks are anaylsed to find out the what the average register read count is per block.
 To avoid overfitting the data predictor to the set of benchmarks explored in this chapter, different setups of the data predictor are explored to understand how the block size influences performance.
 More details are provided in the experimental setup.
+
+\subsection{Perfect Value Predictor}
+
+The perfect value predictor is implemented using traces of the application being executed.
+When a new block is fetched, it querries the trace file and looks for the values of all the registers which will be read.
+When the block can execute a read, the simulator then feeds the register directly into the instruction operands, instead of querying the register file.
+
+The perfect value predictor has no hardware restriction as to fully capture the potential performance improvements.
+Thus, all the registers in a block can be predicted.
+More on how restricting the number of values which can be predicted per block is discussed in the analysis in Section~\ref{chp:chp3:sec:analysis}.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{chapter3/graphics/normfetch.pdf}
+    \caption{Example of the current fetching model on a 2 core composition. Each core has 4 segments, the arrows represent the block generating the predictions. This figure shows the first 5 steps of a new core composition fetching blocks.}
+    \label{fig:old_fetch}
+\vspace{1em}
+\end{figure}
