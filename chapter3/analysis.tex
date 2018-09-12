@@ -3,7 +3,11 @@
 \newcommand{\nfnovp}{\textit{\textbf{NFNoVP}}}
 \newcommand{\nfvp}{\textit{\textbf{NFVP}}}
 
+\newcommand{\vt}{\textit{\textbf{VT}}}
+\newcommand{\nfvt}{\textit{\textbf{NFVT}}}
+
 \subsection{Using perfect branch and value prediction}
+\subsubsection{Setup}
 This chapter demonstrates that modifying the hardware to improve the performance of core composition requires the implementation of complex systems.
 The modifications discussed in the chapter are better branch prediction, adding a value predictor, and modifying the block fetching scheme.
 Whilst a value predictor improves performance by allowing blocks to execute independently via speculating register values, value predictors are still considered a work in progress~\cite{peraisBeBop2015}.
@@ -29,6 +33,7 @@ To understand how each component contributes to the performance improvements, di
 \end{figure}
 All configurations use perfect branch prediction as to ensure that core composition is always on the correct execution path.
 
+\subsubsection{Results}
 Figure~\ref{fig:perf_pred} shows the speedup obtained on the SD-VBS benchmarks using the different configurations.
 The baseline for this section is normal fetching scheme with no value prediction (\novp).
 It is chosen as it represents a setup similar to the previous two chapters, the only difference being the perfrect branch prediction.
@@ -96,16 +101,74 @@ If block execution time is reduced, this decreases the opportunity for efficient
 Since value prediction is aimed at increasing instruction level parallelism (ILP)~\cite{peraisBeBop2015} it is important that cores may fetch blocks quickly in a composition.
 The lack of performance differences between \novp{} and \vp{} is proof that a faster fetching scheme is required to allow core composition to benefit from value prediction.
 
-Overall, \nfnovp{} and \nfvp{} increase the average time each core is executing code by a factor of 3x.
+With the new fetching scheme, the percentage of active time is increased on average by a factor of 2.28x, and is on average 85\%.
+This means that during most of the execution of an application, all cores are executing code, and thus greatly increases the chance of improving performance via core composition.
+Interestingly enough, whilst the new fetching scheme aims to evenly distribute blocks amongst the cores, the average core utilisation for \bm{Localization} with the configurations \nfnovp{} and \nfvp{} is of 62\%.
 
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{chapter3/graphics/lsq_violations.pdf}
+    \caption{Number of blocks that cause LSQ violations, normalised by the number of committed blocks for each of the benchmarks.}
+    \label{fig:lsqvio}
+	\vspace{1em}
+\end{figure}
 
+This is due to flushes caused by Load-Store-Queue (LSQ) order violations, which causes cores to flush their instruction windows, and thus increases the number of times that cores will not be executing code.
+Figure~\ref{fig:lsqvio} shows the number of blocks that cause an LSQ violation, normalized by the number of committed blocks for each of the benchmarks.
+In this graph, 10\% of fetched blocks caused an LSQ violation, this is twice as much as the second benchmark impacted by violations (\bm{MSER}).
+A store-set dependency predictor is implemented in the processor, however it is sometimes hard to predict load-store dependencies accross multiple blocks, thus causing LSQ dependency violations.
+Store-set dependency predictors are not discussed in more detail in this chapter, however researching how store-set dependencies could be applied to core-composition is an interesting subject for future work.
 
 \subsection{Using perfect branch prediction and Block VTAGE value predictor}
+\subsubsection{Setup}
+
+This section now explores how implementing a block based VTAGE value predictor improves the performance of core composition, with and without the new block fetching scheme.
+Once again, four configurations are explored:
+\begin{itemize}
+\item Normal fetching scheme with no value prediction (\novp).
+\vspace{-1em}
+\item Normal fetching scheme with VTAGE value prediction (\vt).
+\vspace{-1em}
+\item New fetching scheme with no value prediction (\nfnovp).
+\vspace{-1em}
+\item New fetching scheme with VTAGE value prediction (\nfvt).
+\end{itemize}
+The objective of this section is to demonstrate that current work in value prediction can be used to improve the performance of large core compositions, and to show the difference between a real predictor and a perfect predictor.
+
+
+\begin{table}[t]
+  \small
+  \centering
+ \begin{tabular} {| l | l | l | l | l | l | }
+ \hline
+    & \cellcolor[gray]{0.7}Disparity & \cellcolor[gray]{0.7} Localization& \cellcolor[gray]{0.7} MSER& \cellcolor[gray]{0.7} Multi\_NCut& \cellcolor[gray]{0.7} Sift\\ \hline
+ \vt   & 16  & 16 & 4  & 16& 16\\ \hline
+ \nfvt   & 16  & 16 & 4  & 16& 16\\ \hline
+	  & \cellcolor[gray]{0.7} Stitch & \cellcolor[gray]{0.7} SVM & \cellcolor[gray]{0.7} Text. Synth & \cellcolor[gray]{0.7} Tracking&\\ \hline
+   \vt & 16  & 16 & 4  & 16 & \\ \hline
+ \nfvt   & 16  & 16 & 4  & 16 &\\ \hline
+
+	\end{tabular}
+  \caption{Number of cores composed given a configuration.}\label{tab:conf_cores}
+  \vspace{1em}
+\end{table}
+
+
+\subsubsection{Results}
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{chapter3/graphics/wip.pdf}
-    \caption{Comparing the performance of the new fetching scheme, with perfect value prediction and with the VTAGE predictor. Higher is better}
-    \label{fig:perf_pred}
+    \caption{Comparing the performance of the standard fetching scheme to the new fetching scheme, with and without perfect value prediction. Higher is better.}
+    \label{fig:vtag_perf}
+	\vspace{1em}
+\end{figure}
+
+\paragraph*{VTAGE Accuracy}
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{chapter3/graphics/wip.pdf}
+    \caption{Comparing the performance of the standard fetching scheme to the new fetching scheme, with and without perfect value prediction. Higher is better.}
+    \label{fig:vtag_accuracy}
 	\vspace{1em}
 \end{figure}
 
