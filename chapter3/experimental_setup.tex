@@ -1,24 +1,29 @@
 \subsection{Benchmarks}
-
 To evaluate how the hardware modifications improve the effectiveness of core composition; the same benchmarks used in Chapter~\ref{chp:cases} are used here.
 These benchmarks are all from the San-Diego Vision Benchmark Suite (SD-VBS)~\cite{sdvbs}, which is composed of a set of vision and image analysis applications.
+
 The previous chapter showed that even with code optimisations, core compositions do not perform optimally when executing the benchmarks.
+In Chapter~\ref{chp:cases}, core composition did not result in linear speedups, meaning that there is still space for improvement.
 Some of the programs, such as \bm{MSER} or \bm{Multi\_NCut} features an average block size of under 10 instructions per block, making it difficult to use core composition efficiently.
+They are therefore a perfect candidate to explore how the hardware modifications can improve the performance of core composition.
 
 \subsection{Value Predictor}
+
 Value predictors that can generate predictions both quickly and accurately are still actively being researched~\cite{peraisVTAGE2014,sheikh2017value}.
 In order to motivate the use of value prediction for core composition, it is first important to abstract away current implementation details of state of the art predictors.
 By considering a 100\% accurate prediction rate and immediate value prediction, this helps determine how much value prediction can help improve performance.
-Once the maximum speedup is determined, using an implementation of state-of-the art can help understand how far current value predictors are from the best performance.
+Once the maximum speedup is determined, using a current state-of-the art implementation can help understand how far current value predictors are from the best performance.
 
 Thus, this chapter uses two value predictors: a perfect value predictor that  can predict any value in a single cycle, and a VTAGE~\cite{peraisVTAGE2014} value predictor.
 
-\subsection{Execution} The previous chapter showed that the SD-VBS benchmarks feature phases of IPC, and that these phases often repeat.
+\subsection{Evaluation} 
+The previous chapter showed that the SD-VBS benchmarks feature phases of IPC, and that these phases often repeat.
 These benchmarks are structured as pipelines with distinct passes; often times the execution of a benchmark will iterate over the pipeline multiple times.
-This means that performance improvements can be analysed before the program has finished executing.
+This means that performance improvements can be analysed without having to fully execute the program.
 As this chapter is only concerned with demonstrating that the new hardware modifications outperform the current implementation, the benchmarks are executed long enough to capture all the phases.
 
-
+To ensure that the benchmarks are executed long enough, the phase data gathered from Chapter~\ref{chp:cases} is used to determine hotspots.
+The benchmarks are then instrumented so that the main phases are captured.
 
 \subsection{Implementing perfect value and branch predictor}
 
@@ -26,7 +31,7 @@ As this chapter is only concerned with demonstrating that the new hardware modif
     \centering
     \includegraphics[width=1\textwidth]{chapter3/graphics/trace-gen.pdf}
 
-    \caption{Performance of \bm{MSER} using the currently implemented branch predictor vs a perfect branch predictor.}
+    \caption{Overview of information gathering for generating traces which are used for the perfect branch and value predictors.}
     \label{fig:trace-gen}
 	\vspace{1em}
 \end{figure}
@@ -35,10 +40,19 @@ As this chapter is only concerned with demonstrating that the new hardware modif
     \centering
     \includegraphics[width=1\textwidth]{chapter3/graphics/fetching-trace.pdf}
 
-    \caption{Performance of \bm{MSER} using the currently implemented branch predictor vs a perfect branch predictor.}
-    \label{fig:trace-gen}
+    \caption{Overview of how the trace data generated for value prediction is used during execution of a block.}
+    \label{fig:trace-used}
 	\vspace{1em}
 \end{figure}
+
 This chapter is concerned with how changing the hardware will improve the performance of core composition.
 In order to motivate new research in branch prediction and value predictors and their use for core composition, it is essential to know what the maximum performance improvements are when using these techniques. %they're not techniques but you get the idea.
 Thus, a perfect value predictor and branch predictor are considered for the performance analysis.
+
+These perfect predictors use traces of previous executions of each application to make their predictions.
+Figure~\ref{fig:trace-gen} shows how these traces are genereated.
+The trace file contains an entry for every committed block, which is comprised of the Program Counter (PC) for the next block and a list of registers that were read and their corresponding values.
+
+When the perfect predictors are activated, the simulator reads in the trace file.
+Figrue~\ref{fig:trace-used} shows how the trace data is used: a newly fetched block is paired with its correspondant trace data.
+Instead of using the branch predictor, the next block's PC is directly taken from the trace entry, and whenever the block can issue a register read, the value is fetched from the trace entry instead of making a request to the register file.

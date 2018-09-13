@@ -1,10 +1,49 @@
-In EDGE, data can be passed between blocks through reading and writing to general purpose registers.
+In EDGE, data is passed between blocks through reading and writing to general purpose registers.
 To ensure that a younger block does not not execute a register read before an older block has executed a write to the same register, the register-file keeps track of registers which will be written to.
 If the younger block attempts to execute the read, its request will be pushed back until the older block has executed its write.
 
-Whilst this ensures correct execution of speculative blocks, it effectively reduces the potential for block level parallelism (BLP).
+\lstset{
+	backgroundcolor=\color{lbcolor},
+	tabsize=2,
+	rulecolor=,
+	language=matlab,
+        basicstyle=\tiny,
+        upquote=true,
+        aboveskip={1\baselineskip},
+        columns=fixed,
+        showstringspaces=false,
+        extendedchars=true,
+        breaklines=true,
+        prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+        frame=single,
+        showtabs=false,
+        showspaces=false,
+        showstringspaces=false,
+        identifierstyle=\ttfamily,
+        keywordstyle=\color[rgb]{0,0,1},
+        commentstyle=\color[rgb]{0.133,0.545,0.133},
+        stringstyle=\color[rgb]{0.627,0.126,0.941},
+		numbers=left,
+}
+
+\begin{figure}[t]
+\lstset{language=C,numbersep=4pt}
+\begin{center}
+\begin{lstlisting}
+for(int i = 0; i < 100000; i++)
+         a[i]+= c[i] * b[i];
+\end{lstlisting}
+\end{center}
+\vspace{-1em}
+\captionof{lstlisting}{Very basic loop.}
+\label{lst:chp3:small}
+\vspace{1em}
+\end{figure}
+
+Whilst this ensures correct execution of speculative blocks, it effectively reduces the potential for instruction level parallelism (ILP).
 This is further exacerbated when fusing cores, as this increases the amount of blocks that may potentially have to wait on register reads and writes.
-For example, tightly knit loops that write most values out to registers cannot be optimised using core composition due to register dependencies.
+For example, the loop iterator in Listing~\ref{lst:chp3:small} will be passed between iterations of the block through a register.
+If multiple cores are composed, and all have an iteration of the loop, they may have to wait on previous writes to be able to execute their loads; serialising execution of the loop.
 
 In situations where register dependencies are a bottleneck and cannot be optimised via a compiler, core composition cannot be considered an effective method of improving performance.
 The problem of trying to reduce register and memory dependencies to improve instruction level parallelism is not new, and is an issue for more traditional superscalar processors.
