@@ -1,0 +1,6 @@
+1Core: 47707029
+16 cores normal: 6669400
+16 cores new + predictor :3901447
+16 cores new: 5877963
+
+8.2 register reads per block.

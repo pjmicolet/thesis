@@ -1,0 +1,64 @@
+Benchmark,Cores,FetchingScheme,BPred,ValuePrediction,CycleCount
+Disparity,16,New Fetching Scheme,perfpred,No Data Prediction,4935494
+Disparity,16,New Fetching Scheme,perfpred,Data Prediction,3412198
+Disparity,16,Optimal Fetching Scheme,perfpred,Data Prediction,3241172
+Disparity,16,Normal Fetching Scheme,perfpred,No Data Prediction,6507135
+Disparity,16,Normal Fetching Scheme,perfpred,Data Prediction,6338026
+Disparity,1,Normal Fetching Scheme,normalpred,No Data Prediction,40580446
+Disparity,1,Normal Fetching Scheme,perfpred,No Data Prediction,39415603
+Disparity,1,Normal Fetching Scheme,perfpred,Data Prediction,40564422
+MSER,1,Normal Fetching Scheme,perfpred,No Data Prediction,18738596
+MSER,1,Normal Fetching Scheme,perfpred,Data Prediction,18119566
+MSER,4,New Fetching Scheme,perfpred,No Data Prediction,12889181
+MSER,4,New Fetching Scheme,perfpred,Data Prediction,9386050
+MSER,4,Optimal Fetching Scheme,perfpred,Data Prediction,7218247
+MSER,4,Normal Fetching Scheme,perfpred,No Data Prediction,16602100
+MSER,4,Normal Fetching Scheme,perfpred,Data Prediction,15680699
+Localization,16,New Fetching Scheme,perfpred,No Data Prediction,16767708
+Localization,16,New Fetching Scheme,perfpred,Data Prediction,9974142
+Localization,16,Normal Fetching Scheme,perfpred,No Data Prediction,19161457
+Localization,16,Normal Fetching Scheme,perfpred,Data Prediction,13248256
+Localization,1,Normal Fetching Scheme,normalpred,No Data Prediction,35022877
+Localization,1,Normal Fetching Scheme,perfpred,No Data Prediction,34184770
+Localization,1,Normal Fetching Scheme,perfpred,Data Prediction,33522178
+Localization,16,Optimal Fetching Scheme,perfpred,Data Prediction,7883057
+Multi_NCut,16,New Fetching Scheme,perfpred,No Data Prediction,9058953
+Multi_NCut,16,New Fetching Scheme,perfpred,Data Prediction,4145988
+Multi_NCut,16,Normal Fetching Scheme,perfpred,No Data Prediction,15680585
+Multi_NCut,16,Normal Fetching Scheme,perfpred,Data Prediction,15586313
+Multi_NCut,1,Normal Fetching Scheme,normalpred,No Data Prediction,26145849
+Multi_NCut,1,Normal Fetching Scheme,perfpred,No Data Prediction,26142275
+Multi_NCut,1,Normal Fetching Scheme,perfpred,Data Prediction,26142180
+Multi_NCut,16,Optimal Fetching Scheme,perfpred,Data Prediction,3958264
+Text_Synth,16,New Fetching Scheme,perfpred,No Data Prediction,19167019
+Text_Synth,16,New Fetching Scheme,perfpred,Data Prediction,13280873
+Text_Synth,16,Normal Fetching Scheme,perfpred,No Data Prediction,20422689
+Text_Synth,16,Normal Fetching Scheme,perfpred,Data Prediction,19630570
+Text_Synth,1,Normal Fetching Scheme,normalpred,No Data Prediction,71472166
+Text_Synth,1,Normal Fetching Scheme,perfpred,No Data Prediction,70873977
+Text_Synth,1,Normal Fetching Scheme,perfpred,Data Prediction,67713870
+Text_Synth,16,Optimal Fetching Scheme,perfpred,Data Prediction,9053032
+Sift,16,New Fetching Scheme,perfpred,No Data Prediction,24050150
+Sift,16,New Fetching Scheme,perfpred,Data Prediction,22150524
+Sift,16,Optimal Fetching Scheme,perfpred,Data Prediction,18048918
+Sift,16,Normal Fetching Scheme,perfpred,No Data Prediction,34687160
+Sift,16,Normal Fetching Scheme,perfpred,Data Prediction,34523770
+Sift,1,Normal Fetching Scheme,normalpred,No Data Prediction,141807596
+Sift,1,Normal Fetching Scheme,perfpred,No Data Prediction,141252533
+Sift,1,Normal Fetching Scheme,perfpred,Data Prediction,141251063
+Tracking,16,New Fetching Scheme,perfpred,No Data Prediction,22527353
+Tracking,16,New Fetching Scheme,perfpred,Data Prediction,15597927
+Tracking,16,Optimal Fetching Scheme,perfpred,Data Prediction,12704975
+Tracking,16,Normal Fetching Scheme,perfpred,No Data Prediction,24192034
+Tracking,16,Normal Fetching Scheme,perfpred,Data Prediction,22026346
+Tracking,1,Normal Fetching Scheme,normalpred,No Data Prediction,108686769
+Tracking,1,Normal Fetching Scheme,perfpred,No Data Prediction,108666573
+Tracking,1,Normal Fetching Scheme,perfpred,Data Prediction,101289492
+Stitch,16,New Fetching Scheme,perfpred,No Data Prediction,19844828
+Stitch,16,New Fetching Scheme,perfpred,Data Prediction,15257987
+Stitch,16,Optimal Fetching Scheme,perfpred,Data Prediction,11359416
+Stitch,16,Normal Fetching Scheme,perfpred,No Data Prediction,26283758
+Stitch,16,Normal Fetching Scheme,perfpred,Data Prediction,23038037
+Stitch,1,Normal Fetching Scheme,normalpred,No Data Prediction,65639798
+Stitch,1,Normal Fetching Scheme,perfpred,No Data Prediction,65032332
+Stitch,1,Normal Fetching Scheme,perfpred,Data Prediction,65009616

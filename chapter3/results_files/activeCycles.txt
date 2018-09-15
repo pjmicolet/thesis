@@ -39,3 +39,10 @@ Text_Synth,16,Normal Fetching Scheme,perfpred,Data Prediction,19630570,5.39792e+
 Text_Synth,1,Normal Fetching Scheme,normalpred,No Data Prediction,71472166,71472165
 Text_Synth,1,Normal Fetching Scheme,perfpred,No Data Prediction,70873977,70873976
 Text_Synth,1,Normal Fetching Scheme,perfpred,Data Prediction,67713870,67713869
+Tracking,16,New Fetching Scheme,perfpred,No Data Prediction,22527353,2.23828e+07
+Tracking,16,New Fetching Scheme,perfpred,Data Prediction,15597927,1.55046e+07
+Tracking,16,Normal Fetching Scheme,perfpred,No Data Prediction,24192034,1.69587e+07
+Tracking,16,Normal Fetching Scheme,perfpred,Data Prediction,22026346,1.38505e+07
+Tracking,1,Normal Fetching Scheme,normalpred,No Data Prediction,108686769,108686769
+Tracking,1,Normal Fetching Scheme,perfpred,No Data Prediction,108666573,108666573
+Tracking,1,Normal Fetching Scheme,perfpred,Data Prediction,101289492,101289492

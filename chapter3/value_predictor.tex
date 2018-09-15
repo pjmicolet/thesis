@@ -52,6 +52,9 @@ In these cases value prediction can be used to attempt to ensure that these bloc
 \subsection{Implementation}
 
 \subsubsection{Design features of a value predictor}
+
+This section covers different features that must be considered when implementing a value predictor for the EDGE architecture.
+
 \paragraph*{Prediction Latency} Before discussing the implemented value predictor in this chapter, it is important to explain why it was chosen.
 In a traditional superscalar processor, one of the main challenges value predictors face is being able to sustain the potential number of prediction requests in a short time frame~\cite{peraisBeBop2015}.
 As value predictors were designed to improve ILP performance of out-of-order (OoO) superscalars, it is important to be able to submit value predictions quickly.
@@ -81,16 +84,15 @@ Such a design may increase the memory footprint as it has to store both a value 
     \centering
     \includegraphics[width=1\textwidth]{chapter3/graphics/basic_valpred.pdf}
 
-    \caption{Average number of register reads per EDGE block.}
-    \label{fig:edge_reg_read}
-	\vspace{-1em}
+    \caption{VTAGE stride-based value predictor.}
+    \label{fig:stride_over}
 \end{figure}
 
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{chapter3/graphics/specwindow.pdf}
     \caption{Speculative window in DVTAGE provides speculative Last-Values to allow for multiple value predictions.}
-    \label{fig:edge_reg_read}
+    \label{fig:specwin}
 	\vspace{1em}
 \end{figure}
 
@@ -99,14 +101,23 @@ Perals et al. in their work~\cite{peraisBeBop2015} present such a predictor, the
 The D-VTAGE predictor is a stride based value predictor.
 It operates on blocks of instructions to minimize network pressure and increase the prediction output; as EDGE is a block-based ISA by nature, this is a natural fit.
 
-As predictions are updated at commit time~\cite{paraisBeBop2015}
+%MORE INFO HERE
+Figure~\ref{fig:stride_over} shows an overview of the D-VTAGE predictor.
+It is composed of a taglest Last-Value Table (LVT) which contains the last committed value for a given register, and a set of value tables VT0-N.
+These value tables are something something.
+
+%BE WAY CLEARER
 Another consideration is that multiple blocks of the same PC may be speculatively executing at the same time, which could cause data mis-predictions if the predictor is not updated.
-This requires current live predictions to be in a speculative window so that new predictions may use the last predicted data and stride.
+As predictions are updated at commit time~\cite{paraisBeBop2015}, this requires current live predictions to be in a speculative window so that new predictions may use the last predicted data and stride.
+Figure~\ref{fig:specwin} demonstrates how the speculative window works. 
+Instead of directly querrying the value predictor, the last value table and speculative window are searched in parallel for a matching tag which in this case is the Program Counter (PC) of the block.
+If there is a live prediction, then the data from that prediction is used instead of the predictor.
 
 When a misprediction is detected this is treated in the same way as a load-store dependency miss: the block is only partially flushed by resetting the operands.
 This means that blocks do not have to be refetched, simply re-executed with the correct data.
 
 \subsection{Determining block size}
+
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{chapter3/graphics/averageRegRead.pdf}
@@ -115,17 +126,26 @@ This means that blocks do not have to be refetched, simply re-executed with the 
     \label{fig:edge_reg_read}
 	\vspace{1em}
 \end{figure}
-One of the defining factors of the block based D-VTAGE predictor is that a single prediction fetches a fix set of data values rather than requiring one request per instruction.
+
+One of the defining factors of the block based D-VTAGE predictor is that a single prediction fetches a fix set of values rather than requiring one request per instruction.
 Due to the fact that the block size is fixed, determining the correct size is important.
 Having a large block size means that the D-VTAGE predictor can predict all values in a block, however this comes at the sacrifice of having less blocks in memory.
-On the other hand, small block size allows to have multiple blocks stored at a time but means we cannot capture all the data values in an EDGE block.
-In this chapter, the data predictor is focused on register reads rather than memory operations.
-This is due to the fact that, unless the dependence predictor detects a data dependency between two blocks, memory operations operate in parallel.
-Focussing only on register reads will reduce the the block size requirements as reads tend to be a minor component of an EDGE block.
+On the other hand, small block size allows to have multiple blocks stored at a time but may require values of an EDGE block to be found in multiple D-VTAGE blocks.
+This would increase the number of requests to the value predictor, which may become a bottleneck.
 
-To determine the block size, all the EDGE blocks of the SD-VBS benchmarks are anaylsed to find out the what the average register read count is per block.
-To avoid overfitting the data predictor to the set of benchmarks explored in this chapter, different setups of the data predictor are explored to understand how the block size influences performance.
-More details are provided in the experimental setup.
+In this chapter, the value predictor is focused on register reads rather than load-store operations.
+This is due to the fact that, unless the load-store dependence predictor detects a data dependency between two blocks, memory operations operate in parallel.
+Focussing only on register reads will reduce the the block size requirements as reads tend to be a minor component of an EDGE block.
+To determine the block size, all the EDGE blocks of the SD-VBS benchmarks are anaylsed to find out the what the average register read and write count is per block.
+The writes are also tracked as it provides information on the potential amount of register dependencies found in each of the applications.
+
+Figure~\ref{fig:edge_reg_read} shows the average number of register read and writes for each of the benchmarks.
+On average, there are 5 register reads and 3 register writes per block.
+Whilst \bm{Disparity} \bm{Localization}, \bm{Texture\_Synthesis} and \bm{Tracking} have higher register read counts than the average, most of them only have 5 writes per block.
+This potentially means that having a D-VTAGE block size of 5 would capture all dependencies.
+However this would require some form of detecting which reg
+
+
 
 \subsection{Perfect Value Predictor}
 

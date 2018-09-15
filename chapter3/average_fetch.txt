@@ -1,0 +1,17 @@
+Benchmark,FetchingScheme,AverageTime
+Disparity,NoVP,5.71
+Disparity,NFNoVP,8.10
+Localization,NoVP,5.47
+Localization,NFNoVP,10
+MSER,NoVP,1.64
+MSER,NFNoVP,1.98
+Multi_NCut,NoVP,2.05
+Multi_NCut,NFNoVP,2.08
+Sift,NoVP, 5.60
+Sift,NFNoVP,14.37
+Stitch,NoVP, 4.87
+Stitch,NFNoVP,14.61
+Text_Synth,NoVP,5.81
+Text_Synth,NFNoVP,17.53
+Tracking,NoVP,7.80
+Tracking,NFNoVP,21.32
