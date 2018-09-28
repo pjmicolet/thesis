@@ -78,7 +78,7 @@ The figure shows that by modifying the fetching scheme a 16 core composition can
 Overall, Figures~\ref{fig:motivation_perc} and ~\ref{fig:motivation_fetch} show that a new fetching scheme must be designed in order to better utilise large compositions.
 Most importantly, Figure~\ref{fig:motivation_fetch} highlights that a program such as \bm{MSER}, which previously showed little performance gains from composition, can in fact benefit from composition if the hardware is modified.
 Therefore, a new fetching mechanism needs to be designed.
-Section~\ref{} covers a new fetching scheme that aims to reduce the communication between cores by parallelising block fetches.
+Section~\ref{chp3:sec:fetch} covers a new fetching scheme that aims to reduce the communication between cores by parallelising block fetches.
 
 \subsection{Data dependencies between blocks}
 
@@ -148,7 +148,7 @@ This is due to the fact that register dependencies are no longer serialising the
 Data dependencies is a common problem for superscalar processors~\cite{peraisVTAGE2014} where ILP is limited by data-dependencies.
 One solution to the problem is adding a value predictor to the processor, which is able to predict the value of a register/
 This allows instructions to execute with speculative data, and thus decrease the penalty caused by data-dependencies.
-Section~\ref{} covers the implementation of a value predictor for an EDGE processor which is used throughout this chapter.
+Section~\ref{chp3:sec:val} covers the implementation of a value predictor for an EDGE processor which is used throughout this chapter.
 
 
 %\subsection{Putting it all together}
