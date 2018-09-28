@@ -1,0 +1,20 @@
+Motivation:
+
+1) Previous chapter discussed issues with branch prediction, what happens if branch predictoin wasn't a problem: Let's look at MSER.
+   We see that MSER does perform slightly better with perfect branch prediction, confirming previous statements.
+   However, we see that it's not a very drastic performance increase, why is that ?
+2) Current fetching mechanism, let's call it serial fetch (SF), serialises fetches amongst cores in a composition.
+   If cores don't have code they have to wait on another core in the composition to submit a fetch request.
+   If cores commit faster than they can fill their instruction window then this means they will idily wait to receive a request.
+   Look at figure 7.3 where we could the number of cycles in which a core in the composition has an active PC.
+   This drops a lot when we increase the core count, which explains why the speedup isn't important.
+   
+   So let's imagine a situation where blocks can be fetched independently and in parallel on each core.
+   Figure 7.5 shows that this can increase the speedup to up to 2x.
+   So this means that we need to find a way to improve the performance of composition by changing the fetching scheme.
+
+3) Another issue with composition is data dependencies between blocks. The only hardcoded dependencies are found in register read/writes.
+   This causes serialisation of block execution as blocks may have to wait for previous writes to execute before firing reads.
+   What would happen if we didn't have to wait ?
+   Better speedups (3x).
+   

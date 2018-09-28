@@ -23,7 +23,7 @@ Localization,1,Normal Fetching Scheme,perfpred,No Data Prediction,34184770
 Localization,1,Normal Fetching Scheme,perfpred,Data Prediction,33522178
 Localization,16,Optimal Fetching Scheme,perfpred,Data Prediction,7883057
 Multi_NCut,16,New Fetching Scheme,perfpred,No Data Prediction,9058953
-Multi_NCut,16,New Fetching Scheme,perfpred,Data Prediction,4145988
+Multi_NCut,16,New Fetching Scheme,perfpred,Data Prediction,6272234
 Multi_NCut,16,Normal Fetching Scheme,perfpred,No Data Prediction,15680585
 Multi_NCut,16,Normal Fetching Scheme,perfpred,Data Prediction,15586313
 Multi_NCut,1,Normal Fetching Scheme,normalpred,No Data Prediction,26145849

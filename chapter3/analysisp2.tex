@@ -1,18 +1,59 @@
 \subsection{Setup}
+This section demonstrates how a block based D-VTAGE value predictor improves the performance of core composition, with the round-robin fetch scheme.
+The default fetching scheme is not explored as the previous section showed that even with a perfect value predictor performance does not improve.
+This section introduces a new configuration for the core: Round Robin Fetch with D-VTAGE value prediction \nfvt{}.
 
-This section now explores how implementing a block based VTAGE value predictor improves the performance of core composition, with and without the new block fetching scheme.
-Once again, four configurations are explored:
-\begin{itemize}
-\item Normal fetching scheme with no value prediction (\novp).
-\vspace{-1em}
-\item Normal fetching scheme with VTAGE value prediction (\vt).
-\vspace{-1em}
-\item New fetching scheme with no value prediction (\nfnovp).
-\vspace{-1em}
-\item New fetching scheme with VTAGE value prediction (\nfvt).
-\end{itemize}
-The objective of this section is to demonstrate that current work in value prediction can be used to improve the performance of large core compositions, and to show the difference between a real predictor and a perfect predictor.
+The objective of this section is to demonstrate that a state of the art value predictor can be used to improve the performance of large core compositions, and to show the difference between a real predictor and the perfect predictor.
+The D-VTAGE size configuration can be found in Table~\ref{tab:vtage-conf}.
+The total memory budget for D-VTAGE was taken from Perais et al's original paper which introduced the predictor~\cite{}.
 
+For this section, three features of the predictor are modified: the number of entries per block, whether a Forward Probabilistic Counter (FPC) is used, and the confidence required to use a prediction.
+Modifying the required confidence and if the confidence is incremented using FPCs explores the trade-off beteween high coverage and low misprediction.
+The original D-VTAGE paper used FPCs to increment the confidence, and only used predictions once the counter was set to 7.
+This ensured that the predictor had an accuracy of over 99\%, but at the expense of a low coverage, 20\% on average.
+Table~\ref{tab:vtage-params} shows the possible values that can be taken for the three parameters.
+
+
+
+\begin{table}[t]
+  \small
+  \centering
+ \begin{tabular} {| l | l | l |}
+ \hline
+	\#Base Ent. & \#Tagged & \#Spec Window\\ \hline
+	256 & $6\times256$ & 64 \\ \hline
+	\end{tabular}
+  \caption{D-VTAGE table configuration.}\label{tab:vtage-conf}
+  \vspace{1em}
+\end{table}
+
+
+\begin{table}[t]
+\small
+\centering
+\begin{tabular}{p{5.2cm} p{1.8cm}}
+\toprule
+\textbf{Parameter} & \textbf{Values} \\ \midrule
+\# of entries per block & 16 or 32\\
+Forward Probabilistic Counters & On or Off \\
+Confidence Value & 4 or 7 \\ \bottomrule
+\end{tabular}
+\caption{Configurable parameters for D-VTAGE}\label{tab:vtage-params}
+\end{table}
+
+
+\begin{table}[t]
+\small
+\centering
+\begin{tabular}{p{5.2cm} p{1.8cm}}
+\toprule
+\textbf{Parameter} & \textbf{Values} \\ \midrule
+\# of entries per block & 16 or 32\\
+Forward Probabilistic Counters & On or Off \\
+Confidence Value & 4 or 7 \\ \bottomrule
+\end{tabular}
+\caption{Configurable parameters for D-VTAGE}\label{tab:vtage-params}
+\end{table}
 
 \begin{table}[t]
   \small
@@ -33,6 +74,10 @@ The objective of this section is to demonstrate that current work in value predi
 
 
 \subsection{Results}
+\subsubsection{Performance}
+
+
+
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{chapter3/graphics/wip.pdf}
@@ -41,7 +86,26 @@ The objective of this section is to demonstrate that current work in value predi
 	\vspace{1em}
 \end{figure}
 
-\paragraph*{VTAGE Accuracy}
+\subsubsection{D-VTAGE Accuracy}
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{chapter3/graphics/wip.pdf}
+    \caption{Comparing the performance of the standard fetching scheme to the new fetching scheme, with and without perfect value prediction. Higher is better.}
+    \label{fig:vtag_accuracy}
+	\vspace{1em}
+\end{figure}
+
+\subsubsection{D-VTAGE Coverage}
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{chapter3/graphics/wip.pdf}
+    \caption{Comparing the performance of the standard fetching scheme to the new fetching scheme, with and without perfect value prediction. Higher is better.}
+    \label{fig:vtag_accuracy}
+	\vspace{1em}
+\end{figure}
+
+
+\subsubsection{Changing counter requirements}
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{chapter3/graphics/wip.pdf}

@@ -1,3 +1,4 @@
+
 In EDGE, data is passed between blocks through reading and writing to general purpose registers.
 To ensure that a younger block does not not execute a register read before an older block has executed a write to the same register, the register-file keeps track of registers which will be written to.
 If the younger block attempts to execute the read, its request will be pushed back until the older block has executed its write.
@@ -78,43 +79,6 @@ The first component is a Last-Value Table (LVT) which holds the last known value
 The second component is a stride, which represents the difference between the last two values of the data.
 Thus, when a prediction is made, the value predictor fetches the value from the LVT, and adds the stride to make a prediction.
 Such a design may increase the memory footprint as it has to store both a value and a stride for each data point; however it improves the overall accuracy and usefulness of value predictors.
-
-\subsubsection{The Differential Value Tagged Geometric length Predictor}
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/basic_valpred.pdf}
-
-    \caption{VTAGE stride-based value predictor.}
-    \label{fig:stride_over}
-\end{figure}
-
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/specwindow.pdf}
-    \caption{Speculative window in DVTAGE provides speculative Last-Values to allow for multiple value predictions.}
-    \label{fig:specwin}
-	\vspace{1em}
-\end{figure}
-
-For this chapter, a good value predictor needs to be able to predict at a block level granularity as to reduce prediction latency and also use a stride-based prediction approach as it will often be used to predict registers used in loops.
-Perals et al. in their work~\cite{peraisBeBop2015} present such a predictor, the Differential Value Tagged Geometric length (D-VTAGE) predictor.
-The D-VTAGE predictor is a stride based value predictor.
-It operates on blocks of instructions to minimize network pressure and increase the prediction output; as EDGE is a block-based ISA by nature, this is a natural fit.
-
-%MORE INFO HERE
-Figure~\ref{fig:stride_over} shows an overview of the D-VTAGE predictor.
-It is composed of a taglest Last-Value Table (LVT) which contains the last committed value for a given register, and a set of value tables VT0-N.
-These value tables are something something.
-
-%BE WAY CLEARER
-Another consideration is that multiple blocks of the same PC may be speculatively executing at the same time, which could cause data mis-predictions if the predictor is not updated.
-As predictions are updated at commit time~\cite{paraisBeBop2015}, this requires current live predictions to be in a speculative window so that new predictions may use the last predicted data and stride.
-Figure~\ref{fig:specwin} demonstrates how the speculative window works. 
-Instead of directly querrying the value predictor, the last value table and speculative window are searched in parallel for a matching tag which in this case is the Program Counter (PC) of the block.
-If there is a live prediction, then the data from that prediction is used instead of the predictor.
-
-When a misprediction is detected this is treated in the same way as a load-store dependency miss: the block is only partially flushed by resetting the operands.
-This means that blocks do not have to be refetched, simply re-executed with the correct data.
 
 \subsection{Determining block size}
 

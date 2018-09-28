@@ -1,0 +1,7 @@
+Benchmark,Cores,FetchingScheme,BPred,ValuePrediction,Coverage,CycleCount
+Disparity,16,New Fetching Scheme,perfpred,No Data Prediction,0,4935494
+Disparity,16,New Fetching Scheme,perfpred,Data Prediction,100,3412198
+Disparity,16,New Fetching Scheme,perfpred,Data Prediction,20,3965795
+Disparity,16,New Fetching Scheme,perfpred,Data Prediction,5,4254587
+Disparity,16,New Fetching Scheme,perfpred,Data Prediction,60,3694447
+Disparity,16,New Fetching Scheme,perfpred,Data Prediction,80,3564764

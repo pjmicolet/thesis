@@ -77,6 +77,7 @@ The figure shows that by modifying the fetching scheme a 16 core composition can
 
 Overall, Figures~\ref{fig:motivation_perc} and ~\ref{fig:motivation_fetch} show that a new fetching scheme must be designed in order to better utilise large compositions.
 Most importantly, Figure~\ref{fig:motivation_fetch} highlights that a program such as \bm{MSER}, which previously showed little performance gains from composition, can in fact benefit from composition if the hardware is modified.
+Therefore, a new fetching mechanism needs to be designed.
 Section~\ref{} covers a new fetching scheme that aims to reduce the communication between cores by parallelising block fetches.
 
 \subsection{Data dependencies between blocks}
@@ -143,7 +144,6 @@ Once again, this is using the \bm{MSER} benchmark, with core compositions of siz
 The speedup is obtained by comparing the execution time of core compositions to a single core with perfect branch that can also immediately resovle data dependencies.
 As shown in the Figure, a 16 core composition can now get a speedup of up to 3x, compared to the 2x when using only perfect branch prediction and the OF scheme.
 This is due to the fact that register dependencies are no longer serialising the computation between blocks, and thus blocks can be executed almost entirely in parallel.
-
 
 Data dependencies is a common problem for superscalar processors~\cite{peraisVTAGE2014} where ILP is limited by data-dependencies.
 One solution to the problem is adding a value predictor to the processor, which is able to predict the value of a register/

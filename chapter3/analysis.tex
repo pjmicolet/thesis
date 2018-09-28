@@ -1,11 +1,11 @@
 \newcommand{\novp}{\textit{\textbf{NoVP}}}
 \newcommand{\vp}{\textit{\textbf{VP}}}
-\newcommand{\nfnovp}{\textit{\textbf{NFNoVP}}}
-\newcommand{\nfvp}{\textit{\textbf{NFVP}}}
+\newcommand{\nfnovp}{\textit{\textbf{RFNoVP}}}
+\newcommand{\nfvp}{\textit{\textbf{RFVP}}}
 
 \newcommand{\optvp}{\textit{\textbf{OptVP}}}
 \newcommand{\vt}{\textit{\textbf{VT}}}
-\newcommand{\nfvt}{\textit{\textbf{NFVT}}}
+\newcommand{\nfvt}{\textit{\textbf{RFVT}}}
 \subsection{Setup}
 This chapter demonstrates that modifying the hardware to improve the performance of core composition requires the implementation of complex systems.
 The modifications discussed in the chapter are better branch prediction, adding a value predictor, and modifying the block fetching scheme.
@@ -26,7 +26,7 @@ To understand how each component contributes to the performance improvements, di
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/tempres.pdf}
+    \includegraphics[width=1\textwidth]{chapter3/graphics/tempres2.pdf}
     \caption{Comparing the performance of the standard fetching scheme to the new fetching scheme, with and without perfect value prediction. Higher is better}
     \label{fig:perf_pred}
 \end{figure}
@@ -82,7 +82,7 @@ Therefore, value prediction does not benefit baseline setup, as the large core c
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/perf_av_cycle_exec.pdf}
+    \includegraphics[width=1\textwidth]{chapter3/graphics/perf_av_cycle_exec2.pdf}
     \caption{Average time each core is executing blocks (in \%) for each benchmark, using the different configurations. Higher is better.}
     \label{fig:perf_av_cycle}
 	\vspace{1em}
@@ -106,7 +106,7 @@ Interestingly enough, whilst the new fetching scheme aims to evenly distribute b
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/lsq_violations.pdf}
+    \includegraphics[width=1\textwidth]{chapter3/graphics/lsqViol2.pdf}
     \caption{Number of blocks that cause LSQ violations, normalised by the number of committed blocks for each of the benchmarks.}
     \label{fig:lsqvio}
 	\vspace{1em}
@@ -133,7 +133,7 @@ To avoid any potential inconsistencies that may arise from dispatching blocks ou
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/avTime.pdf}
+    \includegraphics[width=1\textwidth]{chapter3/graphics/avTimeToFetch2.pdf}
     \caption{Average time (in cycles) for block to go from fetched to dispatched using the current fetching scheme and new fetching scheme. Lower is better.}
     \label{fig:av_time}
 	\vspace{1em}
@@ -154,7 +154,7 @@ Even with the extra latency, the new fetching scheme still ensures that every co
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/opt_res.pdf}
+    \includegraphics[width=1\textwidth]{chapter3/graphics/opt_res2.pdf}
     \caption{Comparing the performance of an optimal fetching scheme with \vp{} and \nfvp{}, baseline is \novp. Higher is better.}
     \label{fig:opt_scheme}
 	\vspace{1em}
