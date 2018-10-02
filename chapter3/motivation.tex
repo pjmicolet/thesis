@@ -1,16 +1,16 @@
 This section explores three aspects of the hardware which core composition performance depends on and demonstrates how modifications can improve performance.
 These three aspects are branch prediction, the fetching mechanism, and finally data dependencies between blocks.
 
-\subsection{Perfect branch prediction}
+\subsection{Improving branch prediction}
 
 Chapter~\ref{chp:cases} highlighted the importance of branch prediction accuracy when fusing a high amount of cores.
 To maximise core utilisation, a core can have multiple blocks in its instruction window.
 In this thesis, the instruction window is segmented into four lanes, each of which can hold a block of up to 32 instructions.
-If the program executing is composed mainly of small blocks (less than 32 instructions long), then if it is running on a 16 core composition, the branch prediction accuracy needs to be as high as 98\% to ensure that the cores are fetching blocks on the correct execution path.
+If the program executing is composed mainly of small blocks (less than 32 instructions long), then if it is running on a 16 core composition, the branch prediction accuracy needs to be as high as 98\% to ensure that the cores are fetching blocks on the correct execution path (see Chapter~\ref{chp:cases}).
 A branch prediction accuracy that is under the requirement leads to inefficient use of the composition as cores will be flushing more often than they commit.
 More details on why this is the case can be found in Chapter~\ref{chp:cases}.
 
-The problem of branch prediction accuracy can clearly be illustrated by one of the benchmarks explored in Chapter~\ref{chp:cases}, the SD-VBS program \bm{MSER}.
+The inefficiencies of core composition due to low branch prediction accuracy can clearly be illustrated by one of the benchmarks explored in Chapter~\ref{chp:cases}, the SD-VBS program \bm{MSER}.
 The benchmark has an average branch prediction accuracy of 86\%, and the blocks are on average less than 10 instructions long.
 With such features, \bm{MSER} cannot benefit greatly from core composition, as even 2 fused cores flush too often, leading to a performance improvement of 1\%.
 
@@ -40,7 +40,7 @@ Small blocks put a strain on the composition as it increases the number of fetch
 Currently, when cores are composed, they fetch blocks in a serial fashion.
 When a core composition is initiated, one of the cores will start fetching blocks until its instruction window is full.
 Once the instruction window is full, the core will submit a fetch request to another core in the composition, which will then repreat the procedure.
-As cores only submit fetch requests to other cores in the composition if they are full, this means that if a core is able to commit blocks before being full, then it will never submit a fetch request.
+As cores only submit fetch requests to other cores in the composition if they are full, this means that if a core is able to commit a block before being full, then it will never submit a fetch request to another core.
 In this situation, cores in a composition may remain inactive during the execution of a program as they are not prompted to fetch blocks.
 Throughout the rest of this chapter, this scheme is refered to as Serial Fetch (SF).% (see Chapter~\ref{chp:Background} for more details).
 
@@ -54,13 +54,13 @@ Throughout the rest of this chapter, this scheme is refered to as Serial Fetch (
 
 A method of evaluating how the SF scheme affects performance is to analyse how often each core in a composition is used throughout the execution of a program.
 To do this, each core in the simulator has a counter which represents the number of cycles the core had a block to execute.
-By comparing the average number of cycles each core has a block, to the total number of cycles of the execution, this can give a hint as to whether or not the fetching scheme leads to efficient use of the composition.
+By comparing the average number of cycles each core has a block, to the total number of cycles of the execution, this can give a hint as to whether or not the cores in the composition were executing blocks in parallel.
 If the difference is large, as in each core executes blocks for a small percentage of the total time, this means that there are less blocks being executed in parallel, and thus the composition is not being efficiently used.
 
 Figure~\ref{fig:motivation_perc} plots the average \textit{active cycles} of cores in a 1, 2, 4, 8 and 16 core composition, compared to the total execution time in cycles using the SF scheme.
 The figure shows that increasing the size of a core composition when executing \bm{MSER} will reduce the average time a core is executing a block.
 On a 16 core composition, each core is only actively executing a block 12.5\% of the time.
-Thus, for a benchmark such as \bm{MSER}, the SF scheme leads to inefficiencies.
+This means that cores are not being provisioned with blocks fast enough, thus, for a benchmark such as \bm{MSER}, the SF scheme leads to inefficiencies.
 
 \begin{figure}[t]
     \centering
@@ -77,12 +77,11 @@ The figure shows that by modifying the fetching scheme a 16 core composition can
 
 Overall, Figures~\ref{fig:motivation_perc} and ~\ref{fig:motivation_fetch} show that a new fetching scheme must be designed in order to better utilise large compositions.
 Most importantly, Figure~\ref{fig:motivation_fetch} highlights that a program such as \bm{MSER}, which previously showed little performance gains from composition, can in fact benefit from composition if the hardware is modified.
-Therefore, a new fetching mechanism needs to be designed.
-Section~\ref{chp3:sec:fetch} covers a new fetching scheme that aims to reduce the communication between cores by parallelising block fetches.
+Therefore, a new fetching mechanism needs to be designed; section~\ref{chp3:sec:fetch} covers a new fetching scheme that aims to reduce the communication between cores by parallelising block fetches.
 
 \subsection{Data dependencies between blocks}
 
-In EDGE, registers are only used for inter-block communication.
+In EDGE, physical registers are used for inter-block communication.
 For example, the code found in Listing~\ref{lst:mser_snipet} shows a loop found in the \bm{MSER} benchmark.
 The value of the variable \textit{nvisited} which is used in both the header and loop body, will be passed from one block to another via a register read and write.
 
@@ -125,9 +124,9 @@ The value of the variable \textit{nvisited} which is used in both the header and
 \vspace{1em}
 \end{figure}
 
-If multiple blocks representing Listing~\ref{lst:mser_snipet} are in flight, a block reading the value of \textit{nvisited} will have to wait for the previous block to execute the write.
-This means that data dependencies arise when executing multiple blocks in parallel if a write to a register which has to be read by multiple blocks is pending.
-This can be especially problematic when core composition is used, as up to 64 blocks can potentially be in flight at any moment.
+If multiple blocks representing Listing~\ref{lst:mser_snipet} are in flight, the youngest block reading the value of \textit{nvisited} will have to wait for the previous block to execute the write.
+In such a case, a data dependency arises when executing multiple blocks in parallel if a write to a register which has to be read by multiple blocks is pending.
+This can be especially problematic when large core compositions are used, as up to 64 blocks can potentially be in flight at any moment.
 If the data dependencies are not resolved quickly enough, then this causes blocks to execute in a serial fashion, which reduces any benefit from using the composition.
 
 \begin{figure}[t]
@@ -138,16 +137,16 @@ If the data dependencies are not resolved quickly enough, then this causes block
 	\vspace{1em}
 \end{figure}
 
-If cores do not have to wait on data dependencies, this can increase efficiency of core compositions as they no longer have to wait on serialised reads and writes of registers.
+If cores do not have to wait on data dependencies, this can increase efficiency of core compositions, as they can execute their blocks independently.
 Figure~\ref{fig:motivation_reg} shows how the performance of core composition is affected if blocks can immeidately resolve their data dependencies.
 Once again, this is using the \bm{MSER} benchmark, with core compositions of size 1, 2, 4, 8 and 16, with perfect branch prediction and the OF scheme.
 The speedup is obtained by comparing the execution time of core compositions to a single core with perfect branch that can also immediately resovle data dependencies.
 As shown in the Figure, a 16 core composition can now get a speedup of up to 3x, compared to the 2x when using only perfect branch prediction and the OF scheme.
-This is due to the fact that register dependencies are no longer serialising the computation between blocks, and thus blocks can be executed almost entirely in parallel.
+This is due to the fact that register dependencies are no longer serialising some of the computation between blocks, and thus blocks can be executed entirely in parallel.
 
-Data dependencies is a common problem for superscalar processors~\cite{peraisVTAGE2014} where ILP is limited by data-dependencies.
-One solution to the problem is adding a value predictor to the processor, which is able to predict the value of a register/
-This allows instructions to execute with speculative data, and thus decrease the penalty caused by data-dependencies.
+Serialised execution due to data dependencies is a common problem for superscalar processors~\cite{peraisVTAGE2014}.
+One solution to the problem is adding a value predictor to the processor, which is able to predict the value of a register.
+This allows instructions to execute with speculative data, and thus increase ILP and reduce the impact of data-dependencies.
 Section~\ref{chp3:sec:val} covers the implementation of a value predictor for an EDGE processor which is used throughout this chapter.
 
 

@@ -1,7 +1,8 @@
-
-In EDGE, data is passed between blocks through reading and writing to general purpose registers.
-To ensure that a younger block does not not execute a register read before an older block has executed a write to the same register, the register-file keeps track of registers which will be written to.
-If the younger block attempts to execute the read, its request will be pushed back until the older block has executed its write.
+In EDGE, registers are used to pass data between blocks.
+To ensure that a younger block does not execute a register read on a register that must be written to by an older block, the register-file keeps track of registers which have to be written to.
+If the younger block attempts to execute the read, its request is pushed back until the older block has executed its write and any instruction that depends on the read must wait until the read fires.
+Whilst the serialisation of register reads and writes between blocks ensures correct execution of speculative blocks, it effectively reduces the potential for instruction level parallelism (ILP).
+This is further exacerbated when fusing a large number of cores, as this increases the amount of blocks that may potentially have to wait on register reads and writes.
 
 \lstset{
 	backgroundcolor=\color{lbcolor},
@@ -32,7 +33,7 @@ If the younger block attempts to execute the read, its request will be pushed ba
 \begin{center}
 \begin{lstlisting}
 for(int i = 0; i < 100000; i++)
-         a[i]+= c[i] * b[i];
+         a[i] = c[i] * b[i];
 \end{lstlisting}
 \end{center}
 \vspace{-1em}
@@ -41,20 +42,22 @@ for(int i = 0; i < 100000; i++)
 \vspace{1em}
 \end{figure}
 
-Whilst this ensures correct execution of speculative blocks, it effectively reduces the potential for instruction level parallelism (ILP).
-This is further exacerbated when fusing cores, as this increases the amount of blocks that may potentially have to wait on register reads and writes.
 For example, the loop iterator in Listing~\ref{lst:chp3:small} will be passed between iterations of the block through a register.
 If multiple cores are composed, and all have an iteration of the loop, they may have to wait on previous writes to be able to execute their loads; serialising execution of the loop.
+In situations where register dependencies are a bottleneck and cannot be optimised via a compiler, core composition cannot be considered an effective method of improving performance as the data dependencies serialise execution of blocks.
 
-In situations where register dependencies are a bottleneck and cannot be optimised via a compiler, core composition cannot be considered an effective method of improving performance.
-The problem of trying to reduce register and memory dependencies to improve instruction level parallelism is not new, and is an issue for more traditional superscalar processors.
+The problem of trying to reduce register and memory dependencies to improve instruction level parallelism is not new, and is an issue for more traditional superscalar processors~\cite{peraisVTAGE2014}.
+For the loop in Listing~\ref{lst:chp3:small}, the sole data dependency is found in the loop induction variable.
+This variable is always incremented by 1, which means that given a block, the value can easily be predicted based on previous values of the variable.
 In these cases value prediction can be used to attempt to ensure that these blocks can run in parallel even if there are dependencies.
 
-\subsection{Implementation}
+%\subsection{Implementation}
 
-\subsubsection{Design features of a value predictor}
+\subsection{Design features of a value predictor}
 
 This section covers different features that must be considered when implementing a value predictor for the EDGE architecture.
+In this chapter, the only target for value predictions are register read instructions.
+This is due to the fact that other instructions do not depend on previous blocks to fire, and load/store instructions can be fired independently unless dependencies are predicted.
 
 \paragraph*{Prediction Latency} Before discussing the implemented value predictor in this chapter, it is important to explain why it was chosen.
 In a traditional superscalar processor, one of the main challenges value predictors face is being able to sustain the potential number of prediction requests in a short time frame~\cite{peraisBeBop2015}.
@@ -79,6 +82,27 @@ The first component is a Last-Value Table (LVT) which holds the last known value
 The second component is a stride, which represents the difference between the last two values of the data.
 Thus, when a prediction is made, the value predictor fetches the value from the LVT, and adds the stride to make a prediction.
 Such a design may increase the memory footprint as it has to store both a value and a stride for each data point; however it improves the overall accuracy and usefulness of value predictors.
+
+\subsection{Block based D-VTAGE predictor}
+
+In this chapter, a block based differential value TAGE (D-VTAGE) predictor is implemented, based on the work of Perais et al.~\cite{peraisBeBop2015}.
+Full details on how such a value predictor works can be found in Chapter~\ref{chp:Background}.
+To summarise, D-VTAGE is a stride based value predictor, which means that a prediction is composed of the last seen value for the instruction (found in a Last Value Table (LVT)), and a stride which represents the delta between the last two values for the instruction.
+When a prediction is made, the last seen value and stride are added together to make the predicted value.
+
+The predictor must also handle the fact that multiple blocks may be in flight, and thus the value found in the LVT may not be up to date.
+In order to handle multiple in-flight predictions, D-VTAGE also contains a speculative window that has its own LVT that is speculatively updated when new predictions are made.
+This allows the predictor to be able to handle situations where mutliple iterations of a loop are in flight.
+
+Instead of issuing a single prediction per request, the block based D-VTAGE predictor issues multiple predictions for a single request.
+This is an ideal mechanism when considering EDGE is the targetted platform.
+In this case, when an EDGE block is fetched, a single request has to be made to the predictor to fetch all predictions for register reads.
+
+Finally, as EDGE blocks are single entry, multiple exits, this simplifies the update mechanism for the Speculative Window.
+In the original proposal of D-VTAGE by Perais et al.~\cite{peraisBeBop2015} they discuss the issue of how to handle updates in the Speculative Window after a flush.
+This is due to the fact that in a traditional x86 environment, instructions being fetched after a flush may belong to a block of instructions that initiated the flush.
+As this is not possible in EDGE, since whole blocks are flushed and fetched, there is no need for a complicated update policy.
+Instead, a new prediction is always made when a block is fetched.
 
 \subsection{Determining block size}
 
@@ -120,11 +144,3 @@ When the block can execute a read, the simulator then feeds the register directl
 The perfect value predictor has no hardware restriction as to fully capture the potential performance improvements.
 Thus, all the registers in a block can be predicted.
 More on how restricting the number of values which can be predicted per block is discussed in the analysis in Section~\ref{chp:chp3:sec:analysis}.
-
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/normfetch.pdf}
-    \caption{Example of the current fetching model on a 2 core composition. Each core has 4 segments, the arrows represent the block generating the predictions. This figure shows the first 5 steps of a new core composition fetching blocks.}
-    \label{fig:old_fetch}
-\vspace{1em}
-\end{figure}
