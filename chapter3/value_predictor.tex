@@ -1,6 +1,30 @@
-In EDGE, registers are used to pass data between blocks.
-To ensure that a younger block does not execute a register read on a register that must be written to by an older block, the register-file keeps track of registers which have to be written to.
-If the younger block attempts to execute the read, its request is pushed back until the older block has executed its write and any instruction that depends on the read must wait until the read fires.
+In an EDGE block, data dependent instructions do not pass data to each other via reads and writes to registers, instead the result of an instruction is passed to the operands of instructions who depend on the data (see Chapter~\ref{chp:Background} for more information).
+Registers are primarily used to pass information between blocks.
+In a core composition the register files of each core in the composition is shared (Chapter~\ref{chp:Background}) to ensure that each core has the same view of the current execution state.
+When the register files are shared each core becomes responsible for a set of registers; for example in a 2 core composition, the even nubmered registers are handled by Core 0 whilst the even number registers are handled by Core 1.
+This means that when Core 1 wants to read or write to Register 0 it must send a request via the network on chip (NoC) as this register is located on Core 0.
+
+\begin{figure}[t]
+\lstset{language=C,numbersep=4pt}
+\begin{center}
+\begin{lstlisting}
+	for(int i =0 ; i < 100000; i++)
+		a[i] = c[i]*b[i];
+	
+\end{lstlisting}
+\end{center}
+\vspace{-1em}
+\captionof{lstlisting}{Example of small loop.}
+\label{lst:basic}
+\end{figure}
+
+As the register reads found in blocks are hardcoded, this means that a single core may receive many register requests per cycle.
+For example, the base address of the arrays in Listing~\ref{lst:basic} are going to be passed via 3 registers in the block that represents the body of the loop.
+If this loop is executing on a 16 core composition, then 3 of the cores will have to issue all the reads to these 3 registers for all other cores.
+This of course will stress the NoC, and increase the latency of what is meant to be a relatively fast instruction.
+
+To ensure that a younger block does not execute a read to a register that must be written to by an older block, the register-file keeps track of registers which will be written to by older blocks.
+If the younger block attempts to execute the read, its request is pushed back until the older block has executed its write and any instruction that depends on the read must wait until the write fires.
 Whilst the serialisation of register reads and writes between blocks ensures correct execution of speculative blocks, it effectively reduces the potential for instruction level parallelism (ILP).
 This is further exacerbated when fusing a large number of cores, as this increases the amount of blocks that may potentially have to wait on register reads and writes.
 
@@ -8,9 +32,12 @@ For example, the loop iterator in Listing~\ref{lst:basic} in Section~\ref{chp3:s
 If multiple cores are composed, and all have an iteration of the loop, they may have to wait on previous writes to be able to execute their loads; serialising execution of the loop.
 In situations where register dependencies are a bottleneck and cannot be optimised via a compiler, core composition cannot be considered an effective method of improving performance as the data dependencies serialise execution of blocks.
 
-The problem of trying to reduce register and memory dependencies to improve instruction level parallelism is not new, and is an issue for more traditional superscalar processors~\cite{peraisVTAGE2014}.
-For the loop in Listing~\ref{lst:basic}, the sole data dependency is found in the loop induction variable.
+This chapter underlines two problems related to register reads on large compositions: the potential data dependencies caused by reads waiting for previous writes to execute, and the latency caused by having to send read requests via the NoC.
+The problem of trying to reduce register and memory dependencies to improve instruction level parallelism is not new, and is an issue found in more traditional superscalar processors~\cite{peraisVTAGE2014}.
+For example, in the loop of Listing~\ref{lst:basic}, the sole data dependency is found in the loop induction variable.
 This variable is always incremented by 1, which means that given a block, the value can easily be predicted based on previous values of the variable.
+The other register values, such as the memory bases can also be predicted as they never change.
+If each core is able to predict the value of the register reads, then they can speculatively execute instructions that depend on these registers before the real value arrives.
 In these cases value prediction can be used to attempt to ensure that these blocks can run in parallel even if there are dependencies.
 
 \begin{figure}[t]
@@ -84,6 +111,7 @@ In the original proposal of D-VTAGE by Perais et al.~\cite{peraisBeBop2015} they
 This is due to the fact that in a traditional x86 environment, instructions being fetched after a flush may belong to a block of instructions that initiated the flush.
 As this is not possible in EDGE, since whole blocks are flushed and fetched, there is no need for a complicated update policy.
 Instead, a new prediction is always made when a block is fetched.
+
 
 
 %\subsection{Perfect Value Predictor}

@@ -1,12 +1,13 @@
-\newcommand{\novp}{\textit{\textbf{NoVP}}}
-\newcommand{\vp}{\textit{\textbf{VP}}}
-\newcommand{\nfnovp}{\textit{\textbf{RFNoVP}}}
-\newcommand{\nfvp}{\textit{\textbf{RFVP}}}
+\newcommand{\novp}{\textit{\textbf{SFNoVP}}}
+\newcommand{\vp}{\textit{\textbf{SFVP}}}
+\newcommand{\nfnovp}{\textit{\textbf{RRFNoVP}}}
+\newcommand{\nfvp}{\textit{\textbf{RRFVP}}}
 
 \newcommand{\optvp}{\textit{\textbf{OptVP}}}
 \newcommand{\vt}{\textit{\textbf{VT}}}
 \newcommand{\nfvt}{\textit{\textbf{RFVT}}}
-\subsection{Setup}
+\vspace{-1em}
+
 This chapter demonstrates that modifying the hardware to improve the performance of core composition requires the implementation of complex systems.
 The modifications discussed in the chapter are better branch prediction, adding a value predictor, and modifying the block fetching scheme.
 Whilst a value predictor improves performance by allowing blocks to execute independently via speculating register values, value predictors are still considered a work in progress~\cite{peraisBeBop2015}.
@@ -15,19 +16,19 @@ It is important to consider how a perfect system with the new hardware additions
 This section therefore explores how a perfect branch and value predictor, paired with the new fetching scheme, improves the performance of core composition on the SD-VBS benchmarks.
 To understand how each component contributes to the performance improvements, different configurations were used, they are as follows:
 \begin{itemize}
-\item Normal fetching scheme with no value prediction (\novp).
+\item Serial fetching scheme with no value prediction (\novp).
 \vspace{-1em}
-\item Normal fetching scheme with perfect value prediction (\vp).
+\item Serial fetching scheme with perfect value prediction (\vp).
 \vspace{-1em}
-\item New fetching scheme with no value prediction (\nfnovp).
+\item Round robin fetching scheme with no value prediction (\nfnovp).
 \vspace{-1em}
-\item New fetching scheme with value prediction (\nfvp).
+\item Round robin fetching scheme with value prediction (\nfvp).
 \end{itemize}
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/tempres2.pdf}
-    \caption{Comparing the performance of the standard fetching scheme to the new fetching scheme, with and without perfect value prediction. Higher is better}
+    \includegraphics[width=1\textwidth]{chapter3/graphics/tempres4.pdf}
+    \caption{Comparing the performance of serial fetch to round robin fetch, with and without perfect value prediction. Higher is better}
     \label{fig:perf_pred}
 \end{figure}
 All configurations use perfect branch prediction as to ensure that core composition is always on the correct execution path.
@@ -35,148 +36,173 @@ All configurations use perfect branch prediction as to ensure that core composit
 \subsection{Results}
 Figure~\ref{fig:perf_pred} shows the speedup obtained on the SD-VBS benchmarks using the different configurations.
 The baseline for this section is normal fetching scheme with no value prediction (\novp).
-It is chosen as it represents a setup similar to the previous two chapters, the only difference being the perfrect branch prediction.
-The number of cores composed for each benchmark using the different configurations can be found in Table~\ref{tab:conf_cores}.
+This baseline is chosen as this chapter is focused on improving the performance of core composition.
+All benchmarks are executed compositions with 16 cores; this is the maximum number of cores that can be fused.
 As this chapter is primarily interested in getting the fastest execution times, only the fastest core composition is shown in the results.
 
-\begin{table}[t]
-  \small
-  \centering
- \begin{tabular} {| l | l | l | l | l | l | }
- \hline
-    & \cellcolor[gray]{0.7}Disparity & \cellcolor[gray]{0.7} Localization& \cellcolor[gray]{0.7} MSER& \cellcolor[gray]{0.7} Multi\_NCut& \cellcolor[gray]{0.7} Sift\\ \hline
- \novp   & 16  & 16 & 4  & 16& 16\\ \hline
- \vp   & 16  & 16 & 4  & 16& 16\\ \hline
- \nfnovp   & 16  & 16 & 4  & 16& 16\\ \hline
- \nfvp   & 16  & 16 & 4  & 16& 16\\ \hline
-	  & \cellcolor[gray]{0.7} Stitch & \cellcolor[gray]{0.7} SVM & \cellcolor[gray]{0.7} Text. Synth & \cellcolor[gray]{0.7} Tracking&\\ \hline
-\novp	 & 16& 16& 16& 16 &\\ \hline
-   \vp & 16  & 16 & 4  & 16 & \\ \hline
- \nfnovp  & 16  & 16 & 4  & 16 & \\ \hline
- \nfvp   & 16  & 16 & 4  & 16 &\\ \hline
-
-	\end{tabular}
-  \caption{Number of cores composed given a configuration.}\label{tab:conf_cores}
-  \vspace{1em}
-\end{table}
-
-First, it is clear that using the new fetching scheme with value prediction (\nfvp) always results in the best speedup compared to the baseline.
-For \bm{Multi\_NCut}, performance is improved by almost 4x when using \nfvp.
-This is a significant speedup, as Chapter~\ref{chp:cases} showed that \bm{Multi\_Ncut} was a difficult benchmark for core composition.
+First, it is clear that using the round robin fetching scheme (RRF) with value prediction (\nfvp) always results in the best speedup compared to the baseline.
+For \bm{Multi\_NCut}, performance is improved by 3x when using \nfvp.
+This is a significant speedup, as Chapter~\ref{chp:cases} showed that \bm{Multi\_Ncut} was a difficult benchmark for core composition (1.3x speedup in Chapter~\ref{chp:cases}).
 On average, \nfvp{} outperforms the baseline by a factor of 1.88x.
 
-The results in Figure~\ref{fig:perf_pred} show that when the new fetching scheme is not paired with value prediction, the performance improvements are less important.
-For example, \bm{Localization} only has a 1.10x speedup when using the \nfnovp{} configuration, compared to the 1.90x of \nfvp{}.
-This is due to the fact that whilst blocks are fetched faster, the register dependencies between blocks limit the performance of core composition.
-The performance limitations are caused by blocks that are further down the speculative that must wait for older blocks to write to the register file.
-In fact, \vp{} outperforms \nfnovp{} on \bm{Localization}, which shows that register dependencies between blocks can make the new fetching scheme less performant than the currently implemented.
+The results in Figure~\ref{fig:perf_pred} show that without value prediction the performance improvements brought by RRF on its own is almost non-existant, or in fact detrimental to performance.
+For example, \bm{Multi\_NCut} only has a 1.10x speedup when using the \nfnovp{} configuration, compared to the 3x of \nfvp{}.
+This is due to the fact that whilst more blocks are now spread accross cores, the register dependencies between blocks limit the performance of the composition. 
+The performance limitations are caused by blocks that are further down the speculative path that must wait for older blocks to write to the register file.
+In fact, the spreading accross cores is the reason why some benchmarks perform worse: \bm{Disparity}, \bm{Texture\_Synthesis} and \bm{Tracking} see a slight performance decrease.
+As blocks are now more spread out amongst cores, this increases the stress on the network on chip (NoC), meaning that not only are data dependencies not resolved, but register read responses may take slightly longer to arrive as the network is saturated.
+%In fact, \vp{} outperforms \nfnovp{} on \bm{Localization}, which shows that register dependencies between blocks can make the new fetching scheme less performant than the currently implemented.
 
-On the other hand, \bm{Multi\_NCut} with \textbf{\textit{NFNoVP}} has a 1.60x speedup compared to the baseline.
-This is because \bm{Multi\_NCut} has small blocks, on average less than 10 instructions long as seen in Chapter~\ref{chp:cases} Section~\ref{sec:expl}.
-When blocks are uniformly small, value prediction will not help when using the normal fetching scheme, as the composition will never be full, thus explaining why \vp{} does not perform better than the baseline.
-
-The performance of \vp{} compared to \novp{} can be surprising as the perfect value prediction does not appear to speed up execution.
-Value prediction is most useful when multiple data-dependent blocks are in flight as the data can be speculated.
-However, as seen in Section~\ref{chp3:sec:fetch} the normal fetching scheme is too slow to ensure that all cores in a composition are executing blocks.
-Therefore, value prediction does not benefit baseline setup, as the large core compositions are never full.
+The performance of RRF is more apparent when taking value prediction into account.
+\nfvp{} has a 54\% performance increase compared to \vp{} (1.88x vs 1.22x).
+The difference in performance comes from the fact that with value prediction, blocks can potentially execute faster, and thus a faster fetching scheme is required to keep up.
+Even so, \vp{} results in a 1.5x speedup for \bm{Localization} which shows that value prediction is valuable for composition regardless of the scheme.
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/perf_av_cycle_exec2.pdf}
+    \includegraphics[width=1\textwidth]{chapter3/graphics/perf_av_cycle_exec4.pdf}
     \caption{Average time each core is executing blocks (in \%) for each benchmark, using the different configurations. Higher is better.}
     \label{fig:perf_av_cycle}
 	\vspace{1em}
 \end{figure}
 
-To better highlight how the normal fetching scheme hinders performance even with value prediction, the percentage of time a core in a composition was actively executing code, for each benchmark, is shown in Figure~\ref{fig:perf_av_cycle}.
+To better highlight how the SF scheme hinders performance even with value prediction, the percentage of time a core in a composition was actively executing code, for each benchmark, is shown in Figure~\ref{fig:perf_av_cycle}.
 For each configuration, the number of cycles each core in a composition executed instructions is averaged out and then compared to the total execution time of the application.
 When the average active time of a core is close to the total execution time, this means that the composition was efficiently used, as each core executed the same amount of code.
 
-As Figure~\ref{fig:perf_av_cycle} shows, \novp{} and \vp{} often have low active time percentages.
-This is due to the fact that the current serialised block fetching scheme is slow, and thus, some cores will be innactive, waiting to receive a fetch request from another core.
-The lower the percentage is, the less likely there are going to be multiple blocks on different cores in flight which in turn means value prediction is less useful.
-The reason \novp{} has a higher average time of execution than \vp{} is due to the fact that in cases where value prediction is in fact usefull, it reduces the execution time of blocks.
-If block execution time is reduced, this decreases the opportunity for efficient use of large core compositions due to how the fetching mechanism is slow (recall Figure~\ref{fig:new_fetch_ex} in Section~\ref{chp3:sec:fetch}).
+As Figure~\ref{fig:perf_av_cycle} shows that \vp{} often has low active times when using a composition of 16 cores.
+This is due to the fact that the SF scheme is slow, and thus, some cores are innactive, waiting to receive a fetch request from another core.
+Of course, it is important to note that their LSQs and L1 caches may still be used by other active cores, simply that their execution units are not being used.
+The lower the percentage is, the less likely there are going to be multiple blocks on different cores in flight which in turn means the composition is less efficient and value prediction is less useful.
 Since value prediction is aimed at increasing instruction level parallelism (ILP)~\cite{peraisBeBop2015} it is important that cores may fetch blocks quickly in a composition.
 The lack of performance differences between \novp{} and \vp{} is proof that a faster fetching scheme is required to allow core composition to benefit from value prediction.
 
-With the new fetching scheme, the percentage of active time is increased on average by a factor of 2.28x, and is on average 85\%.
+With the RRF scheme, the percentage of active time is increased on average by a factor of 2.28x, and is on average 85\%.
 This means that during most of the execution of an application, all cores are executing code, and thus greatly increases the chance of improving performance via core composition.
-Interestingly enough, whilst the new fetching scheme aims to evenly distribute blocks amongst the cores, the average core utilisation for \bm{Localization} with the configurations \nfnovp{} and \nfvp{} is of 62\%.
+However, it is interesting to see that \nfvp{} has a lower average time than \nfnovp{} for some benchmarks such as \bm{MSER} and \bm{Texture\_Synthesis}.
+Also, whilst RRF aims to evenly distribute blocks amongst the cores, the average core utilisation for \bm{Localization} with the configurations \nfnovp{} and \nfvp{} is of 62\%.
+This reduced average time is due to flushes caused by Load-Store-Queue (LSQ) violations, which causes cores to flush their instruction windows, and thus increases the number of times that cores will not be executing code.
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/lsqViol2.pdf}
-    \caption{Number of blocks that cause LSQ violations, normalised by the number of committed blocks for each of the benchmarks.}
+    \includegraphics[width=1\textwidth]{chapter3/graphics/lsqViol4.pdf}
+    \caption{Number of blocks that cause LSQ violations, normalised by the number of fetched blocks for each of the benchmarks.}
     \label{fig:lsqvio}
 	\vspace{1em}
 \end{figure}
 
-This is due to flushes caused by Load-Store-Queue (LSQ) order violations, which causes cores to flush their instruction windows, and thus increases the number of times that cores will not be executing code.
-Figure~\ref{fig:lsqvio} shows the number of blocks that cause an LSQ violation, normalized by the number of committed blocks for each of the benchmarks.
-In this graph, 10\% of fetched blocks caused an LSQ violation, this is twice as much as the second benchmark impacted by violations (\bm{MSER}).
+Figure~\ref{fig:lsqvio} shows the number of blocks that cause an LSQ violation, normalized by the number of fetched blocks for each of the benchmarks.
+For example 3\% of fetched blocks caused an LSQ violation in the benchmark \bm{MSER}.
+For every LSQ violation, the entire composition may need to be flushed, and given the fact that \bm{MSER} features small blocks, refilling the entire composition may take some time, even with RRF.
+Even though the percentage is quite small, it still has an impact on how efficient the composition may be, due to the fact that compositions rely on heavy speculation to obtain any performance improvements.
 A store-set dependency predictor is implemented in the processor, however it is sometimes hard to predict load-store dependencies accross multiple blocks, thus causing LSQ dependency violations.
 Store-set dependency predictors are not discussed in more detail in this chapter, however researching how store-set dependencies could be applied to core-composition is an interesting subject for future work.
 
-\subsubsection{New fetching scheme bottleneck Analysis}
+\subsubsection{Round robin fetching scheme bottleneck Analysis}
 
-As seen in the previous section the new fetching scheme enables better use of the perfect value predictor. 
-Whilst \nfnovp{} can improve performance by up to 2x as seen in \bm{Multi\_NCut} on average it only obtains a speedup of 1.27x compared to \novp{}.
+As seen in the previous section RRF enables better use of the perfect value predictor. 
+However, on its own it often does not outperform \novp{}, averaging only a speedup of 1.05x.
 This section covers where the bottlenecks of the new fetching scheme are found, what potential solutions can be employed, and how that can improve performance overall.
 
-\paragraph*{Block fetching latency}
+\paragraph*{Block dispatching latency}
 
-The new fetching scheme improves performance of a core composition by reducing the amount of communication between cores.
-This is achieved through a pipeline-model fetching scheme, where cores do not fetch blocks sequentially, but rather in strides.
+RRF improves performance of a core composition by reducing the amount of communication between cores.
+This is achieved through a round robin fetching scheme, where cores do not fetch blocks sequentially, but rather in strides.
 This does introduce one extra complexity: blocks that are further down the speculative path may be fetched before blocks closer to the non-speculative block.
-To avoid any potential inconsistencies that may arise from dispatching blocks out of order, a block must wait for its parent block to be dispatched.
+Essentially, blocks can be fetched out of order, yet still require to be dispatched in order (recall Section~\ref{chp3:sec:fetch}).
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/avTimeToFetch2.pdf}
-    \caption{Average time (in cycles) for block to go from fetched to dispatched using the current fetching scheme and new fetching scheme. Lower is better.}
+    \includegraphics[width=1\textwidth]{chapter3/graphics/avTimeToFetch3.pdf}
+    \caption{Average time (in cycles) for block to go from fetched to dispatched using the serial fetching scheme and round robin fetching scehme. Lower is better.}
     \label{fig:av_time}
 	\vspace{1em}
 \end{figure}
 
 This means that cores may have fetched blocks in their window that must wait a certain number of cycles before executing.
 To understand how this affects the performance of the new fetching scheme, the average time from a block being fetched, to a block being dispatched is recorded in the simulator.
-Comparing the average time between the current and new fetching scheme can provide an estimate as to how much performance is potentially lost in the new fetching scheme.
+Comparing the average time between the current and new fetching scheme can provide an estimate as to how much performance is potentially lost when using RRF.
 
-Figure~\ref{fig:av_time} shows the average time for all the SD-VBS benchmarks using the current and new fetching scheme.
-As can be seen, for most benchmarks, the new fetching scheme's average time is 2x slower than the current.
-This is due to the fact that whenever the current fetching scheme fetches a block, it can immediately dispatched as fetches are serialised.
-\bm{Multi\_Ncut} has the lowest difference, which explains why it obtains the highest speedup with \nfnovp{}.
-It is important to note that \bm{MSER} and \bm{Multi\_Ncut} have lower average times than all other benchmarks as their blocks are mostly small and thus quick to dispatch.
-Even with the extra latency, the new fetching scheme still ensures that every core is full, cores must now only wait for their blocks to be dispatched, rather than having for a fetch request.
+Figure~\ref{fig:av_time} shows the average time for all the SD-VBS benchmarks using the different configurations.
+As can be seen, for most benchmarks, RRF's average time is 2x slower than the current.
+This is due to the fact that whenever the SF scheme fetches a block, it can immediately dispatched as fetches are serialised.
+Surprisingly, \bm{Multi\_NCut} for \nfvp{} has a much longer time between fetching and dispatching a block.
+This is due to the fact that \bm{Multi\_NCut} features blocks of only 11 instructions on average and with value prediction blocks are committing faster than on the other configurations.
+Given that a block must access a shared counter to check if it can dispatch, and the counter can only be incremented once per cycle (atomic increment), this shared resource is causing the long fetch to dispatch latency.
+Even with the extra latency, RRF still ensures that every core is full, cores must now only wait for their blocks to be dispatched, rather than having for a fetch request.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{chapter3/graphics/fetch_ex.pdf}
+    \caption{Two core composition where cores fetch blocks of varying size. Green blocks represent blocks that can be dispatched, whilst the red blocks cannot.}
+    \label{fig:var_ex}
+	\vspace{1em}
+\end{figure}
+
+\paragraph*{Block size variance}
+Another issue that can arise is that, when fetching with a fixed stride, if cores are fetching blocks of different sizes, this may increase the fetch to dispatch latency.
+For example, in the two core composition seen in Figure~\ref{fig:var_ex} the second core fetches a block that is 128 instructions.
+If the block were smaller, Core 2 would fetch and dispatch blocks 4 and 6, however, it will have to wait for block 2 to commit before doing so.
+This means that blocks 5 and 7 cannot be dispatched on Core 1 before block 2 has finished executing.
+
+Figure~\ref{fig:variance} shows the variance of block sizes in the SD-VBS benchmarks.
+This was obtained by counting the different block sizes each benchmark fetched, and grouping them into 4 distinct buckets: blocks that occupy 1, 2, 3 or 4 segments.
+The Figure shows that benchmarks \bm{Multi\_NCut} features a very low variance; this partially explains why RRF performs well even without value prediction.
+
+The issue of variance is not only specific to RRF, as SF will also suffer from this issue as well.
+The difference is that with SF, Core 1 would not fetch blocks 3, 5 and 7, instead it would wait for Core 2 to commit its block and submit a fetch request.
+Of course, variance only partially provides an insight as to why core composition may be less efficient; as it does not take into account data dependencies between blocks.
+Also, the variance does not take into account that blocks of different sizes may belong to different phases.
+Nevertheless, it is an important factor to take into consideration.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{chapter3/graphics/variance.pdf}
+    \caption{Variance of block sizes per benchmark. Blocks were grouped up in buckets (occupy 1, 2, 3 or 4 segments).}
+    \label{fig:variance}
+	\vspace{1em}
+\end{figure}
 
 %Explain how different blcok sizes may mess up the new fetching scheme
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/opt_res2.pdf}
+    \includegraphics[width=1\textwidth]{chapter3/graphics/optres4.pdf}
     \caption{Comparing the performance of an optimal fetching scheme with \vp{} and \nfvp{}, baseline is \novp. Higher is better.}
     \label{fig:opt_scheme}
 	\vspace{1em}
 \end{figure}
 
-\paragraph*{Enhancing the new fetching scheme}
+\paragraph*{Considering an oracle fetching scheme}
 
-The new fetching scheme aims to decentralise block fetches by statically determining the stride at which a core fetches ahead of time.
-As Figure~\ref{fig:av_time} shows, this increases the average time between a core fetching a block and dispatching it as cores may fetch blocks too far into the speculative chain.
-This increase in average time is due to cores fetching blocks that are too far into the speculative chain due to the fixed fetch stride.
-Relaxing the new fetching scheme by allowing cores to fetch any block can potentially improve performance.
+RRF aims to decentralise block fetches by statically determining the stride at which a core fetches ahead of time.
+As Figure~\ref{fig:av_time} shows, this increases the average time between a core fetching a block and dispatching it as cores may fetch blocks too far into the speculative chain, that must wait for previous blocks to dispatch.
+This issue is caused by the fact that cores are fetching in fixed strides which are determined ahead of time (the stride is equal to the number of cores in the composition).
+If RRF did not have a fixed stride, and attempted to allocate sequential blocks to cores that are available, this could improve the performance. 
 
-To understand how much this added time between fetch and dispatch impacts performance, the total number of cycles a core must wait before dispatching a block is recorded for the new fetching scheme.
-Once the program has terminated, this number is averaged out by the number of cores in the composition and subtracted from the total cycle count.
-This optimistically emulates a perfect fetching scheme in which cores fetch blocks in parallel and can immediately dispatch them in order, this configuration is named Optimal Fetching with Value Prediction (\optvp).
+To evaluate how much the added time between fetch and dispatch impacts the speedup obtained through RRF, an Oracle Fetching Scheme is devised.
+This scheme assumes that any core in the composition can fetch and dispatch a block immediately.
+It is an optimistic scheme that provides an upper limit on the performance that can be gained through modifying the fetching scheme. 
+It works similarly to RRF, except that the fetch stride is not fixed; however a core cannot fetch two sequential blocks to ensure that all cores are being used.
+To generate the results for the oracle fetching scheme, the execution time of \nfvp{} is taken and the average latency between fetch and dispatch is averaged out amongst all cores and subtracted to the total execution time.
+This can be summarised using this equation:
+\begin{equation}
+CycleCount = RRFVP CycleCount - AverageLatency
+\end{equation}
+
+This latency is only present RRF, as the serial fetching scheme can always dispatch a block is has fetched as it's in order.
+Removing this latency provides an estimate as to how the system would perform if any block could dispatch at any point.
+The latency is averaged out as multiple cores can increment their latency counter for a single cycle.
+This configuration is named Oracle Fetching with Value Prediction (\optvp).
 
 Figure~\ref{fig:opt_scheme} shows how \optvp{} compares to \vp{} and \nfvp{}, with \novp{} as a baseline.
-The graph shows that most applications benefit from \optvp{}, averaging at a speedup of 2.32x compared to \nfvp's 1.88x which is a 23\% increase.
-This increase can be considered optimistic, however it shows that some modifications to the new fetching scheme can potentially improve performance further.
+The figure shows that most applications benefit from \optvp{}, averaging at a speedup of 2.74 compared to \nfvp's 1.88x which is a 45\% increase.
+This increase is optimistic, however it shows that some modifications to the new fetching scheme can potentially improve performance further.
 
 \subsubsection{Summary}
 
-This section shows that a perfect branch predictor, paired with perfect value prediction and a new fetching scheme can outperform the current configuration by a factor of up to 4x.
-On average, new configuration obtains a speedup of 1.88x, and can potentially be improved to 2.23x with further modifications to the fetching scheme.
+This section shows that a perfect branch predictor, paired with perfect value prediction and the round robin fetching scheme can outperform the current configuration by a factor of up to 3x.
+On average, new configuration obtains a speedup of 1.87x, and can potentially be improved to 2.35x with further modifications to the fetching scheme.
+This section also showed that without value prediction RRF only obtains a 1.09x speedup compared to the serial fetching scheme.
+This is due to the fact that the benchmarks all display a certain amount of data-dependencies between blocks and that spreading blocks accross cores more evenly can put pressure on the NoC; thus reduce the performance improvements of fetching blocks quicker.
 

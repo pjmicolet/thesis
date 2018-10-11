@@ -3,6 +3,13 @@ These three aspects are branch prediction, the fetching mechanism, and finally d
 
 \subsection{Improving branch prediction}
 
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{chapter3/graphics/motiv_branch_mser.pdf}
+    \caption{Speedup obtained when executing the MSER benchmark on different core composition with a perfect branch predictor. Higher is better.}
+    \label{fig:mser_motiv}
+	\vspace{1em}
+\end{figure}
 Chapter~\ref{chp:cases} highlighted the importance of branch prediction accuracy when fusing a high amount of cores.
 To maximise core utilisation, a core can have multiple blocks in its instruction window.
 In this thesis, the instruction window is segmented into four lanes, each of which can hold a block of up to 32 instructions.
@@ -19,13 +26,6 @@ As branch prediction accuracy is essential for good performance when considering
 To evaluate the benefits of better branch prediction accuracy, a perfect-branch predictor is considered here.
 More details on how the perfect-branch predictor works can be found in Section~\ref{chp:chp3:sec:exp}.
 
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/motiv_branch_mser.pdf}
-    \caption{Speedup obtained when executing the MSER benchmark on different core composition with a perfect branch predictor. Higher is better.}
-    \label{fig:mser_motiv}
-	\vspace{1em}
-\end{figure}
 
 Figure~\ref{fig:mser_motiv} shows the speedup obtained whene executing \bm{MSER} on core compositions of size 2, 4, 8, 16 when using perfect branch prediction.
 The speedup is obtained by comparing the performance to a single core with perfect branch prediction.
@@ -148,6 +148,14 @@ Serialised execution due to data dependencies is a common problem for superscala
 One solution to the problem is adding a value predictor to the processor, which is able to predict the value of a register.
 This allows instructions to execute with speculative data, and thus increase ILP and reduce the impact of data-dependencies.
 Section~\ref{chp3:sec:val} covers the implementation of a value predictor for an EDGE processor which is used throughout this chapter.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{chapter3/graphics/normfetch.pdf}
+    \caption{Example of the current fetching model on a 2 core composition. Each core has 4 segments, the arrows represent the block generating the predictions.}
+    \label{fig:old_fetch}
+\vspace{1em}
+\end{figure}
 
 
 %\subsection{Putting it all together}
