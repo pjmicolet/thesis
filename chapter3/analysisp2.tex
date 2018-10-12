@@ -148,7 +148,7 @@ Therefore having a larger entry in the table captures more values that can be pr
 Comparing the performance of the different D-VTAGE configurations to the perfect value predictor, it is apparent that most benchmarks do not achieving their maximum potential as the perfect predictor results in an average speedup of 1.88x compared to 1.32x of D-VTAGE.
 However, benchmarks \bm{Disparity} and \bm{Multi\_NCut} show how value prediction paired with RRF is a promising lead for improving the performance of core composition.
 
-\subsubsection{Coverage and accuracy}
+\subsubsection{Coverage and Accuracy}
 To better understand the performance of the different D-VTAGE configurations, the predictors' coverage and misprediction rates are recorded.
 Since EDGE is a block based architecture, it is important to study the coverage and accuracy on both a per-instruction level and per-block level.
 This is due to the fact that a single read misprediction leads to flushing the block and all younger blocks in the chain.
@@ -185,14 +185,6 @@ This explains why the coverage will be lower: there's a higher chance of encount
 As blocks require multiple executions to train the predictor (if the values in the register are indeed predictable), than the higher diversity of blocks makes it harder.
 Thus, these benchmarks will naturally have a harder time to benefit from value prediction.
 
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/predAcc.pdf}
-    \caption{Accuracy of the different D-VTAGE predictors at a block and instruction level. Higher is better.}
-    \label{fig:vtag_accuracy_block}
-	\vspace{1em}
-\end{figure}
-
 Figure~\ref{fig:vtag_cov_block} shows that a lower confidence allows for higher coverage, yet the speedups seen in Figure~\ref{fig:vtage_perf} indicate that a higher confidence leads to better performance.
 Intuitively, this must mean that the lower confidence leads to a higher misprediction rate.
 To confirm this, Figure~\ref{fig:vtag_accuracy_block} presents the prediction accuracy rate for each benchmark at a per-block and per-instruction base respectively.
@@ -202,6 +194,13 @@ The effect of a value misprediction is similar to a branch misprediction: it cau
 Just like branch prediction, large core compositions are very sensitive to mispredictions, thus an accuracy rate of 93\% will impact performance if the blocks are small.
 This explains why the low confidence counter sometimes performs worse than the higher confidence as it mispredicts more often.
 
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{chapter3/graphics/predAcc.pdf}
+    \caption{Accuracy of the different D-VTAGE predictors at a block and instruction level. Higher is better.}
+    \label{fig:vtag_accuracy_block}
+	\vspace{1em}
+\end{figure}
 \subsubsection{Size of stride}
 
 \begin{figure}[t]

@@ -25,13 +25,6 @@ To understand how each component contributes to the performance improvements, di
 \item Round robin fetching scheme with value prediction (\nfvp).
 \end{itemize}
 
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/tempres4.pdf}
-    \caption{Comparing the performance of serial fetch to round robin fetch, with and without perfect value prediction. Higher is better}
-    \label{fig:perf_pred}
-\end{figure}
-
 All configurations use perfect branch prediction as to ensure that core composition is always on the correct execution path.
 All benchmarks are executed with 16 cores composed as this is the maximum number of cores that can be fused.
 No dynamic adaptation is done as Chapter~\ref{chp:cases} showed that the primary advantage of dynamic core composition is energy savings, whereas this chapter focuses on speedup.
@@ -42,11 +35,18 @@ Figure~\ref{fig:perf_pred} shows the speedup obtained on the SD-VBS benchmarks u
 The baseline for this section is normal fetching scheme with no value prediction (\novp).
 This baseline is chosen as this chapter is focused on improving the performance of core composition.
 
+
 First, it is clear that using the round robin fetching scheme (RRF) with value prediction (\nfvp) always results in the best speedup compared to the baseline.
 For \bm{Multi\_NCut}, performance is improved by 3x when using \nfvp.
 This is a significant speedup, as Chapter~\ref{chp:cases} showed that \bm{Multi\_Ncut} is a difficult benchmark for core composition (1.3x speedup in Chapter~\ref{chp:cases}).
 On average, \nfvp{} outperforms the baseline by a factor of 1.88x.
 
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{chapter3/graphics/tempres4.pdf}
+    \caption{Comparing the performance of serial fetch to round robin fetch, with and without perfect value prediction. Higher is better}
+    \label{fig:perf_pred}
+\end{figure}
 The results in Figure~\ref{fig:perf_pred} show that without value prediction the performance improvements brought by RRF on its own are almost non-existant, or in fact detrimental to performance.
 For example, \bm{Multi\_NCut} only has a 1.10x speedup when using the \nfnovp{} configuration, compared to the 3x of \nfvp{}.
 This is due to the fact that whilst more blocks are now spread accross cores, the register dependencies between blocks limit the performance of the composition. 
@@ -149,7 +149,7 @@ Another issue that can arise when fetching with a fixed stride is that if cores 
 For example, in the two core composition seen in Figure~\ref{fig:var_ex} the second core fetches Block 2 that is 128 instructions.
 If Block 2 were smaller, Core 2 could fetch and dispatch blocks 4 and 6.
 However, since Block 2 occupies the whole instruction window, Core 2 will have to wait for block 2 to commit before doing so.
-This means that blocks 5 and 7 cannot be dispatched on Core 1 before block 2 has finished executing.
+Thus blocks 5 and 7 cannot be dispatched on Core 1 before block 2 has finished executing.
 
 Figure~\ref{fig:variance} shows the variance of block sizes in the SD-VBS benchmarks.
 This was obtained by counting the different block sizes each benchmark fetched, and grouping them into 4 distinct buckets: blocks that occupy 1, 2, 3 or 4 lanes in the window.
@@ -171,13 +171,6 @@ Nevertheless, it is an important factor to take into consideration.
 
 %Explain how different blcok sizes may mess up the new fetching scheme
 
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/optres4.pdf}
-    \caption{Comparing the performance of an optimal fetching scheme with \vp{} and \nfvp{}, baseline is \novp. Higher is better.}
-    \label{fig:opt_scheme}
-	\vspace{1em}
-\end{figure}
 
 \paragraph*{Considering an oracle fetching scheme}
 
@@ -198,6 +191,13 @@ This can be summarised using this equation:
 CycleCount = RRFVP CycleCount - AverageLatency
 \end{equation}
 
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{chapter3/graphics/optres4.pdf}
+    \caption{Comparing the performance of an optimal fetching scheme with \vp{} and \nfvp{}, baseline is \novp. Higher is better.}
+    \label{fig:opt_scheme}
+	\vspace{1em}
+\end{figure}
 This latency is only present RRF, as the serial fetching scheme can always dispatch a block is has fetched as blocks are fetched in order.
 Removing this latency provides an estimate as to how the system would perform if any block could dispatch at any point.
 The latency is averaged out as multiple cores can increment their latency counter for a single cycle.

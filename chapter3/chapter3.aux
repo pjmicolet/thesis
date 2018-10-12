@@ -31,8 +31,8 @@
 \newlabel{lst:basic}{{7.2}{102}}
 \@writefile{lof}{\contentsline {figure}{\numberline {7.5}{\ignorespaces Example of the current fetching model on a 2 core composition. Each core has 4 segments, the arrows represent the block generating the predictions.\relax }}{102}}
 \newlabel{fig:old_fetch}{{7.5}{102}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7.6}{\ignorespaces Trace of when cores fetch blocks when executing Listing\nobreakspace  {}7.2\hbox {} on a 4 core composition. Y axis represents a core in the composition, X axis represents time.\relax }}{103}}
-\newlabel{fig:fetch_norm}{{7.6}{103}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.6}{\ignorespaces Trace of when cores fetch blocks when executing Listing\nobreakspace  {}7.2\hbox {} on a 4 core composition. Y axis represents a core in the composition, X axis represents time.\relax }}{102}}
+\newlabel{fig:fetch_norm}{{7.6}{102}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {7.3.2}Round Robin Fetching Scheme}{103}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {7.3.2.1}Generalised form}{103}}
 \citation{SeznecMultipleBlock}
@@ -63,8 +63,8 @@
 \citation{goeman01dfcm}
 \citation{peraisBeBop2015}
 \citation{peraisBeBop2015}
-\citation{peraisBeBop2015}
 \@writefile{toc}{\contentsline {subsection}{\numberline {7.4.2}Block based D-VTAGE predictor}{112}}
+\citation{peraisBeBop2015}
 \citation{sdvbs}
 \newlabel{chp3:sec:val}{{7.4.2}{113}}
 \@writefile{toc}{\contentsline {section}{\numberline {7.5}Experimental Setup}{113}}
@@ -74,11 +74,11 @@
 \citation{peraisBeBop2015}
 \citation{sheikh2017value}
 \citation{peraisBeBop2015}
-\@writefile{lof}{\contentsline {figure}{\numberline {7.10}{\ignorespaces Overview of information gathering for generating traces which are used for the perfect branch and value predictors.\relax }}{114}}
-\newlabel{fig:trace-gen}{{7.10}{114}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {7.5.3}Value Predictor}{114}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {7.5.4}Implementing perfect value and branch predictor}{114}}
 \citation{peraisBeBop2015}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.10}{\ignorespaces Overview of information gathering for generating traces which are used for the perfect branch and value predictors.\relax }}{115}}
+\newlabel{fig:trace-gen}{{7.10}{115}}
 \@writefile{lof}{\contentsline {figure}{\numberline {7.11}{\ignorespaces Overview of how the trace data generated for value prediction is used during execution of a block.\relax }}{115}}
 \newlabel{fig:trace-used}{{7.11}{115}}
 \newlabel{chp:chp3:sec:exp}{{7.5.4}{115}}
@@ -86,17 +86,17 @@
 \@writefile{lof}{\contentsline {figure}{\numberline {7.12}{\ignorespaces Comparing the performance of serial fetch to round robin fetch, with and without perfect value prediction. Higher is better\relax }}{116}}
 \newlabel{fig:perf_pred}{{7.12}{116}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {7.6.1}Results}{116}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7.13}{\ignorespaces Average time each core is executing blocks (in \%) for each benchmark, using the different configurations. Higher is better.\relax }}{117}}
-\newlabel{fig:perf_av_cycle}{{7.13}{117}}
 \citation{peraisBeBop2015}
 \citation{chrysos1998storesets}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.13}{\ignorespaces Average time each core is executing blocks (in \%) for each benchmark, using the different configurations. Higher is better.\relax }}{118}}
+\newlabel{fig:perf_av_cycle}{{7.13}{118}}
 \@writefile{lof}{\contentsline {figure}{\numberline {7.14}{\ignorespaces Number of blocks that cause LSQ violations, normalised by the number of fetched blocks for each of the benchmarks.\relax }}{119}}
 \newlabel{fig:lsqvio}{{7.14}{119}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {7.6.1.1}Round robin fetching scheme bottleneck Analysis}{119}}
 \@writefile{lof}{\contentsline {figure}{\numberline {7.15}{\ignorespaces Average time (in cycles) for block to go from fetched to dispatched using the serial fetching scheme and round robin fetching scehme. Lower is better.\relax }}{120}}
 \newlabel{fig:av_time}{{7.15}{120}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7.16}{\ignorespaces Two core composition where cores fetch blocks of varying size. Green blocks represent blocks that can be dispatched, whilst the red blocks cannot.\relax }}{120}}
-\newlabel{fig:var_ex}{{7.16}{120}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.16}{\ignorespaces Two core composition where cores fetch blocks of varying size. Green blocks represent blocks that can be dispatched, whilst the red blocks cannot.\relax }}{121}}
+\newlabel{fig:var_ex}{{7.16}{121}}
 \@writefile{lof}{\contentsline {figure}{\numberline {7.17}{\ignorespaces Variance of block sizes per benchmark. Blocks were grouped up in buckets (occupy 1, 2, 3 or 4 segments).\relax }}{121}}
 \newlabel{fig:variance}{{7.17}{121}}
 \@writefile{lof}{\contentsline {figure}{\numberline {7.18}{\ignorespaces Comparing the performance of an optimal fetching scheme with \textit  {\textbf  {SFVP}}{} and \textit  {\textbf  {RRFVP}}{}, baseline is \textit  {\textbf  {SFNoVP}}. Higher is better.\relax }}{122}}
@@ -115,21 +115,21 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {7.7.2}Setup}{125}}
 \citation{riley2006fpc}
 \citation{peraisBeBop2015}
-\@writefile{lot}{\contentsline {table}{\numberline {7.1}{\ignorespaces D-VTAGE table configuration.\relax }}{127}}
-\newlabel{tab:vtage-conf}{{7.1}{127}}
+\@writefile{lot}{\contentsline {table}{\numberline {7.1}{\ignorespaces D-VTAGE table configuration.\relax }}{126}}
+\newlabel{tab:vtage-conf}{{7.1}{126}}
 \@writefile{lot}{\contentsline {table}{\numberline {7.2}{\ignorespaces Configurable parameters for D-VTAGE\relax }}{127}}
 \newlabel{tab:vtage-params}{{7.2}{127}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.21}{\ignorespaces Comparing the performance of the standard fetching scheme to the new fetching scheme, with and without perfect value prediction. Higher is better.\relax }}{127}}
+\newlabel{fig:vtage_perf}{{7.21}{127}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {7.7.3}Results}{127}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {7.7.3.1}Performance}{127}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7.21}{\ignorespaces Comparing the performance of the standard fetching scheme to the new fetching scheme, with and without perfect value prediction. Higher is better.\relax }}{128}}
-\newlabel{fig:vtage_perf}{{7.21}{128}}
 \citation{peraisBeBop2015}
 \citation{peraisVTAGE2014}
 \@writefile{lof}{\contentsline {figure}{\numberline {7.22}{\ignorespaces Prediction coverage at a block and instruction level. Higher is better\relax }}{129}}
 \newlabel{fig:vtag_cov_block}{{7.22}{129}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {7.7.3.2}Coverage and accuracy}{129}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7.23}{\ignorespaces Accuracy of the different D-VTAGE predictors at a block and instruction level. Higher is better.\relax }}{130}}
-\newlabel{fig:vtag_accuracy_block}{{7.23}{130}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {7.7.3.2}Coverage and Accuracy}{129}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.23}{\ignorespaces Accuracy of the different D-VTAGE predictors at a block and instruction level. Higher is better.\relax }}{131}}
+\newlabel{fig:vtag_accuracy_block}{{7.23}{131}}
 \@writefile{lof}{\contentsline {figure}{\numberline {7.24}{\ignorespaces Distribution of the size of strides for each benchmark.\relax }}{131}}
 \newlabel{fig:strides}{{7.24}{131}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {7.7.3.3}Size of stride}{131}}
