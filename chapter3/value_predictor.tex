@@ -1,7 +1,7 @@
 In an EDGE block, data dependent instructions do not pass data to each other via reads and writes to registers, instead the result of an instruction is passed to the operands of instructions who depend on the data (see Chapter~\ref{chp:Background} for more information).
 Registers are primarily used to pass information between blocks.
 In a core composition the register files of each core in the composition is shared (Chapter~\ref{chp:Background}) to ensure that each core has the same view of the current execution state.
-When the register files are shared each core becomes responsible for a set of registers; for example in a 2 core composition, the even nubmered registers are handled by Core 0 whilst the even number registers are handled by Core 1.
+When the register files are shared each core becomes responsible for a set of registers; for example in a 2 core composition, the even numbered registers are handled by Core 0 whilst the even number registers are handled by Core 1.
 This means that when Core 1 wants to read or write to Register 0 it must send a request via the network on chip (NoC) as this register is located on Core 0.
 
 \begin{figure}[t]
@@ -15,20 +15,20 @@ This means that when Core 1 wants to read or write to Register 0 it must send a 
 \end{center}
 \vspace{-1em}
 \captionof{lstlisting}{Example of small loop.}
-\label{lst:basic}
+\label{lst:basic2}
 \end{figure}
 
 As the register reads found in blocks are hardcoded, this means that a single core may receive many register requests per cycle.
-For example, the base address of the arrays in Listing~\ref{lst:basic} are going to be passed via 3 registers in the block that represents the body of the loop.
+For example, the base address of the arrays in Listing~\ref{lst:basic2} are going to be passed via 3 registers in the block that represents the body of the loop.
 If this loop is executing on a 16 core composition, then 3 of the cores will have to issue all the reads to these 3 registers for all other cores.
-This of course will stress the NoC, and increase the latency of what is meant to be a relatively fast instruction.
+This of course will put stress on the NoC, and increase the latency of what is meant to be a relatively fast instruction.
 
 To ensure that a younger block does not execute a read to a register that must be written to by an older block, the register-file keeps track of registers which will be written to by older blocks.
 If the younger block attempts to execute the read, its request is pushed back until the older block has executed its write and any instruction that depends on the read must wait until the write fires.
 Whilst the serialisation of register reads and writes between blocks ensures correct execution of speculative blocks, it effectively reduces the potential for instruction level parallelism (ILP).
 This is further exacerbated when fusing a large number of cores, as this increases the amount of blocks that may potentially have to wait on register reads and writes.
 
-For example, the loop iterator in Listing~\ref{lst:basic} in Section~\ref{chp3:sec:fetch} is passed between iterations of the block through a register.
+For example, the loop iterator in Listing~\ref{lst:basic2} is passed between iterations of the block through a register.
 If multiple cores are composed, and all have an iteration of the loop, they may have to wait on previous writes to be able to execute their loads; serialising execution of the loop.
 In situations where register dependencies are a bottleneck and cannot be optimised via a compiler, core composition cannot be considered an effective method of improving performance as the data dependencies serialise execution of blocks.
 
@@ -50,10 +50,12 @@ In these cases value prediction can be used to attempt to ensure that these bloc
 
 \subsection{Design features of a value predictor}
 
-In this chapter, the only target for value predictions are register read instructions.
+In this chapter, the only target for value predictions is register read instructions.
 This is due to the fact that other instructions do not depend on previous blocks to fire, and load/store instructions can be fired independently unless dependencies are predicted.
-Ideally, a value predictor for EDGE would function as seen in Figure~\ref{fig:bad_overview}; when a block is fetched, a single request is made to the value predictor to fetch all predictions for the read instructions of the block.
-At dispatch time, the predicted values would be used and forwarded to instructions depending on a read, instead of issuing the read instructions.
+Ideally, a value predictor for EDGE would function as seen in Figure~\ref{fig:bad_overview}.
+When a block is fetched, a single request is made to the value predictor to fetch all predictions for the read instructions of the block.
+At dispatch time, the predicted values would be used and forwarded to instructions depending on a read, whilst the read instructions are issued.
+This allows the depending instructions to execute whilst the reads are still being processed.
 This section covers different features that must be considered when implementing such a value predictor.
 
 
@@ -71,7 +73,7 @@ As EDGE organises instructions as blocks, a block-based predictor would reduce t
 
 
 \paragraph*{Prediction generation} Another important feature when selecting a value predictor is how it generates a predicted value.
-As of the writing of this thesis, there exist two main methods: direct value prediction~\cite{peraisVTAGE2014} and stride-based value prediction~\cite{peraisBeBop2015}.
+As of the writing of this thesis, there exist two main methods: direct value prediction~\cite{peraisVTAGE2014} and stride-based value prediction~\cite{peraisBeBop2015,gabbayVPOrig,goeman01dfcm}.
 The direct value predictor is the simpler design, as it only stores the last retired value for the specific instruction.
 When a request is made, the direct value predictor will simply submit the last value.
 Whilst this makes a value predictor small easy to design, such implementation is known to have poor accuracy when predicting values that are modified in quick succession.

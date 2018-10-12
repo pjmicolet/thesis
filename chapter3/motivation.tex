@@ -1,4 +1,4 @@
-This section explores three aspects of the hardware which core composition performance depends on and demonstrates how modifications can improve performance.
+This section explores three aspects on which core composition performance depends on and demonstrates how modifications can improve performance.
 These three aspects are branch prediction, the fetching mechanism, and finally data dependencies between blocks.
 
 \subsection{Improving branch prediction}
@@ -17,12 +17,12 @@ If the program executing is composed mainly of small blocks (less than 32 instru
 A branch prediction accuracy that is under the requirement leads to inefficient use of the composition as cores will be flushing more often than they commit.
 More details on why this is the case can be found in Chapter~\ref{chp:cases}.
 
-The inefficiencies of core composition due to low branch prediction accuracy can clearly be illustrated by one of the benchmarks explored in Chapter~\ref{chp:cases}, the SD-VBS program \bm{MSER}.
+The inefficiencies of core composition due to low branch prediction accuracy can clearly be illustrated by one of the benchmarks previously explored, the SD-VBS program \bm{MSER}.
 The benchmark has an average branch prediction accuracy of 86\%, and the blocks are on average less than 10 instructions long.
 With such features, \bm{MSER} cannot benefit greatly from core composition, as even 2 fused cores flush too often, leading to a performance improvement of 1\%.
 
 This Chapter aims to demonstrate how modifying hardware can improve the overall performance of core composition.
-As branch prediction accuracy is essential for good performance when considering core composition, it is important to understand how much of a performance gain can be obtained by improving the accuracy.
+As branch prediction accuracy is essential for good performance in a core composition, it is important to understand how much of a performance gain can be obtained by improving the accuracy.
 To evaluate the benefits of better branch prediction accuracy, a perfect-branch predictor is considered here.
 More details on how the perfect-branch predictor works can be found in Section~\ref{chp:chp3:sec:exp}.
 
@@ -42,14 +42,14 @@ When a core composition is initiated, one of the cores will start fetching block
 Once the instruction window is full, the core will submit a fetch request to another core in the composition, which will then repreat the procedure.
 As cores only submit fetch requests to other cores in the composition if they are full, this means that if a core is able to commit a block before being full, then it will never submit a fetch request to another core.
 In this situation, cores in a composition may remain inactive during the execution of a program as they are not prompted to fetch blocks.
-Throughout the rest of this chapter, this scheme is refered to as Serial Fetch (SF).% (see Chapter~\ref{chp:Background} for more details).
+Throughout the rest of this chapter, this fetching scheme is referred to as Serial Fetch (SF).% (see Chapter~\ref{chp:Background} for more details).
 
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{chapter3/graphics/mser_active_16.pdf}
     \caption{Percentage of time (in cycles) cores in a composition are executing instructions compared to the overall execution time. Higher is better.}
     \label{fig:motivation_perc}
-	\vspace{1em}
+	\vspace{-1em}
 \end{figure}
 
 A method of evaluating how the SF scheme affects performance is to analyse how often each core in a composition is used throughout the execution of a program.
@@ -60,7 +60,7 @@ If the difference is large, as in each core executes blocks for a small percenta
 Figure~\ref{fig:motivation_perc} plots the average \textit{active cycles} of cores in a 1, 2, 4, 8 and 16 core composition, compared to the total execution time in cycles using the SF scheme.
 The figure shows that increasing the size of a core composition when executing \bm{MSER} will reduce the average time a core is executing a block.
 On a 16 core composition, each core is only actively executing a block 12.5\% of the time.
-This means that cores are not being provisioned with blocks fast enough, thus, for a benchmark such as \bm{MSER}, the SF scheme leads to inefficiencies.
+This means that cores are not being provisioned with blocks fast enough, thus, for a benchmark such as \bm{MSER}, the SF scheme leads to inefficient use of large compositions.
 
 \begin{figure}[t]
     \centering
@@ -149,13 +149,6 @@ One solution to the problem is adding a value predictor to the processor, which 
 This allows instructions to execute with speculative data, and thus increase ILP and reduce the impact of data-dependencies.
 Section~\ref{chp3:sec:val} covers the implementation of a value predictor for an EDGE processor which is used throughout this chapter.
 
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/normfetch.pdf}
-    \caption{Example of the current fetching model on a 2 core composition. Each core has 4 segments, the arrows represent the block generating the predictions.}
-    \label{fig:old_fetch}
-\vspace{1em}
-\end{figure}
 
 
 %\subsection{Putting it all together}

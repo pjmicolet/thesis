@@ -41,6 +41,13 @@
 
 \begin{figure}[t]
     \centering
+    \includegraphics[width=1\textwidth]{chapter3/graphics/normfetch.pdf}
+    \caption{Example of the current fetching model on a 2 core composition. Each core has 4 segments, the arrows represent the block generating the predictions.}
+    \label{fig:old_fetch}
+\vspace{1em}
+\end{figure}
+\begin{figure}[t]
+    \centering
     \includegraphics[width=1\textwidth]{chapter3/graphics/4fetchnorm2.pdf}
     \caption{Trace of when cores fetch blocks when executing Listing~\ref{lst:basic} on a 4 core composition. Y axis represents a core in the composition, X axis represents time.}
     \label{fig:fetch_norm}
@@ -78,9 +85,7 @@ It starts with a generalised version of the fetching algorith for \textit{n} cor
 This is followed by a more in-detail example using a two core composition.
 Finally it compares the performance of the new fetching scheme with the current fetching scheme on a synthetic benchmark.
 
-\subsubsection{Generalised Form}
-
-
+\subsubsection{Generalised form}
 The advantage of core composition is that multiple cores can execute the same thread.
 Thus, the fact that the SF scheme prioritises filling a single core before using another core in the composition is counter-intuitive as it reduces the chance that all the cores are in use.
 The new fetching scheme has two design objectives: reduce communication amongst cores and ensure that each core in the composition is always executing at least one block.
@@ -91,7 +96,7 @@ Currently, if a core does not have a block in its instruction window, it waits u
 If blocks are distributed equally amongst all cores using a round robin model, this new model still requires that each core must submit a fetch request to the next core.
 This means that changing the fetching scheme to a round robin scheme does not suffice to reduce communication amongst cores.
 However, once a core has a block it can use branch prediction to predict the next block it must fetch, rather than waiting for another fetch request from a core.
-As this new fetching mechanism employs a round robin scheme, the branch predictor must predict a block that is multiple steps into the future rather than the immediate branch.
+As this new fetching mechanism employs a round robin scheme, the branch predictor should predict a block that is multiple steps into the future rather than the immediate branch.
 By allowing cores to fetch blocks in \textit{strides}, instead of sequentially, the new fetching mechanism not only ensures cores have an equal amount of work, but that they can fetch in parallel.
 
 \begin{algorithm}
@@ -170,6 +175,30 @@ branches = prediction[i+1, i+n]\\
 \caption{Overview of commit stage for \textit{n} cores fused}~\label{alg:commit}
 \end{algorithm}
 
+Algorithm~\ref{alg:fetch} explains how the new fetching scheme, named Round Robin Fetch (RRF) works for \textit{n} cores in a composition.
+In the general case, when a core composition is created, each core, aside from the core that initiated the composition, is empty.
+When a core fetches a $block_i$, if the next core is empty, it makes two branch predictions, one for $block_{i+1}$ and one for $block_{i+n}$.
+The predictions do not have to be done on the same cycle, however previous work on multi-block ahead branch predictors demonstrated that two predictions per cycle is possible~\cite{SeznecMultipleBlock}.
+The core submits a fetch request to the next core in the composition for $block_{i+1}$ and then uses the prediction $block_{i+n}$ to fetch its next block.
+If the next core is not empty, then the current core simply predicts $block_{i+n}$.
+
+In case that a core cannot predict $block_{i+n}$, it simply submits a prediction for $block_{i+1}$ to the next core.
+The core will then have to wait for another core in the composition to send it the prediction for $block_{i+n}$.
+Whilst this case may impact overall throughput, it is no different than the SF scheme as SF would also stop fetching after $block_{i+n-1}$ and wait for $block_{i+n}$'s PC to be resolved.
+
+In the SF scheme, when a core is full, it submits a fetch request to another core in the composition by sending the address of a block to a buffer found on that core.
+To ensure cores are always fetching blocks in RRF, the buffer is used when a core has filled up its instruction window and can no longer fetch blocks.
+Instead of sending the fetch request to another core, a core saves the block address in its own buffer, and will handle that fetch request once it has committed a block.
+In this chapter, a core can only have one buffered PC at a time.
+
+Algorithm~\ref{alg:commit} shows how blocks are committed in RRF.
+When committing $block_i$, the core sets the next core in line to be the non-speculative core.
+This is due to the fact that the next core in line will always have $block_i+1$.
+If the next core in line does not yet have $block_{i+1}$ due to no prediction having been made, then the committing core will submit the resolved PC to the next core, rather than fetching it for itself.
+As previously stated, if the core has a PC in its buffer, it immediately starts fetching a new block.
+However, if it has no PC in its buffer, it must wait on another core to send it a request.
+\subsubsection{Two core example}
+	
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{chapter3/graphics/fetching-model.pdf}
@@ -178,29 +207,6 @@ branches = prediction[i+1, i+n]\\
     \label{fig:new_fetch_ex}
 \vspace{1em}
 	\end{figure}
-Algorithm~\ref{alg:fetch} explains how the new fetching scheme, named Round Robin Fetching (RRF) works for \textit{n} cores in a composition.
-In the general case, when a core composition is created, each core, aside from the core that initiated the composition, is empty.
-When a core fetches a $block_i$, if the next core is empty, it makes two branch predictions, one for $block_{i+1}$ and one for $block_{i+n}$.
-The predictions do not have to be done on the same cycle, however previous work on multi-block ahead branch predictors demonstrated that two predictions per cycle is possible~\ref{SeznecMultipleBlock}.
-The core submits a fetch request to the next core in the composition for $block_{i+1}$ and then uses the prediction $block_{i+n}$ to fetch its next block.
-If the next core is not empty, then the current core simply predicts $block_{i+n}$.
-
-In case that a core cannot predict $block_{i+n}$, it simply submits a prediction for $block_{i+1}$ to the next core.
-The core will then have to wait for another core in the composition to send it the prediction for $block_{i+n}$.
-Whilst this case may impact overall throughput, it is no different than the SF scheme as SF would also stop fetching after $block_{i+n-1}$ and wait for $block_{i+n}$'s PC to be resolved.
-
-In the SF scheme, when a core is full, it submits a fetch request to another core in the composition by sending the address of a block to a buffer of that core.
-To ensure cores are always fetching blocks in RRF, the buffer is used when a core has filled up its instruction window and can no longer fetch blocks.
-Instead of sending the fetch request to another core, a core saves the block address in its own buffer, and will handle the request once it has committed a block.
-In this chapter, a core can only have one buffered PC at a time.
-
-Algorithm~\ref{alg:commit} shows how blocks are committed in RRF.
-When committing $block_i$, the core sets the next core in line to be the non-speculative core.
-If the next core in line does not have $block_{i+1}$ due to no prediction having been made, then the committing core will submit the resolved PC to the next core, rather than fetching it for itself.
-As previously stated, if the core has a PC in its buffer, it immediately starts fetching a new block.
-However, if it has no PC in its buffer, it must wait on another core to send it a request.
-
-	
 %Given a 2 core-fusion \{$Core_0$,$Core_1$\} using a ITTAGE~\cite{SeznecITTAGE} multi-block ahead branch predictor described by A. Seznec et al in~\cite{SeseznecMultipleBlock} the cores can make two predictions in a single cycle: one for itself and one for the next core.
 Figure~\ref{fig:new_fetch_ex} gives an overview of the first few cycles of using RRF with two cores fused.
 When $Core_0$ starts the composition and fetches the first block, $block_0$, if it is able to predict $block_2$ is will submit a fetch request for $block_1$ on $Core_1$ whilst also attempting to fetch $block_2$ for itself.
@@ -223,9 +229,9 @@ Once $Core_1$ can make a branch prediction it will attempt to predict for $block
 \subsubsection{Limitations}
 
 Whilst RRF allows for cores to fetch out of order in parallel, blocks must still be dispatched in order.
-This is to ensure that blocks do not execute data-dependent register reads out of order.
-To achieve this, a record of the last dispatched block number is kept in a register.
-When a block tries to dispatch instructions it checks the register, if its block number is sequentially next then it atomically updates the register to the value of its block number and dispatches its block.
+This is to ensure that blocks do not execute data-dependent register reads out of order, when dependencies are not yet determined.
+To achieve this, a record of the last dispatched block number is kept in a shared counter.
+When a block tries to dispatch instructions it checks the counter, if its block number is sequentially next then it atomically updates the counter to the value of its block number and dispatches its block.
 
 This mainly impacts the performance of large compositions when the system is not in a steady-state of fetching and dispatching blocks and the blocks are small.
 This is due to the fact that the fetch stride is larger and thus cores will have to wait longer for blocks on other cores to dispatch.
