@@ -20,7 +20,12 @@
  publisher = {ACM},
  keywords = {Instruction-level parallelism, multi-core, thread-level parallelism},
 } 
-
+@misc{turleywhite,
+  title={White Paper Introduction to Intel{\textregistered} Architecture},
+  author={Turley, J},
+  year={2014},
+  url={https://www.intel.com/content/dam/www/public/us/en/documents/white-papers/ia-introduction-basics-paper.pdf}
+}
 @article{kanungoKMeans02,
 author = {T. Kanungo and D. M. Mount and N. S. Netanyahu and C. D. Piatko and R. Silverman and A. Y. Wu},
 journal = {IEEE Transactions on Pattern Analysis \& Machine Intelligence},
@@ -397,6 +402,13 @@ month={Oct},}
   year={2012},
   organization={ACM}
 }
+
+@misc{armbig,
+  title={big. LITTLE Technology: The Future of Mobile},
+  author={ARM, R},
+  year={2013},
+  howpublished={\url{https://www.arm.com/files/pdf/big\_LITTLE\_Technology\_the\_Futue\_of\_Mobile.pdf}}
+}
 @inproceedings{cong2012charm,
  author = {Cong, Jason and Ghodrat, Mohammad Ali and Gill, Michael and Grigorian, Beayna and Reinman, Glenn},
  title = {CHARM: A Composable Heterogeneous Accelerator-rich Microprocessor},
@@ -613,22 +625,6 @@ month={June},}
  keywords = {trips}
 } 
 
-@article{putnam2010dynamicvece2,
- author = {Putnam, Andrew and Smith, Aaron and Burger, Doug},
- title = {Dynamic Vectorization in the E2 Dynamic Multicore Architecture},
- journal = {SIGARCH Comput. Archit. News},
- issue_date = {September 2010},
- volume = {38},
- number = {4},
- month = jan,
- year = {2011},
- pages = {27--32},
- numpages = {6},
- acmid = {1926373},
- publisher = {ACM},
- address = {New York, NY, USA},
- keywords = {explicit data graph execution (EDGE)}
-} 
 
 @article{zhou2014sharingarch,
  author = {Zhou, Yanqi and Wentzlaff, David},
@@ -970,6 +966,15 @@ month={Feb}}
  address = {New York, NY, USA},
  keywords = {Amdahl's law, analytical performance modeling, critical sections, synchronization},
 } 
+
+@inproceedings{amdahl1967validity,
+  title={Validity of the single processor approach to achieving large scale computing capabilities},
+  author={Amdahl, Gene M},
+  booktitle={Proceedings of the April 18-20, 1967, spring joint computer conference},
+  pages={483--485},
+  year={1967},
+  organization={ACM}
+}
 
 @ARTICLE{bower2008impactd, 
 author={Bower, F.A. and Sorin, D.J. and Cox, L.P.}, 
@@ -1515,3 +1520,75 @@ keywords={parallel architectures;performance evaluation;probabilistic counter up
 doi={10.1109/HPCA.2006.1598118},
 ISSN={1530-0897},
 month={Feb},}
+
+@article{craeynest2013hetisa,
+ author = {Van Craeynest, Kenzo and Eeckhout, Lieven},
+ title = {Understanding Fundamental Design Choices in single-ISA Heterogeneous Multicore Architectures},
+ journal = {ACM Trans. Archit. Code Optim.},
+ issue_date = {January 2013},
+ volume = {9},
+ number = {4},
+ month = jan,
+ year = {2013},
+ issn = {1544-3566},
+ pages = {32:1--32:23},
+ articleno = {32},
+ numpages = {23},
+ url = {http://doi.acm.org/10.1145/2400682.2400691},
+ doi = {10.1145/2400682.2400691},
+ acmid = {2400691},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {Multicore processor, analytical modeling, design space exploration, single-ISA heterogeneous architecture},
+} 
+
+@techreport{asanovic2006landscape,
+  title={The landscape of parallel computing research: A view from berkeley},
+  author={Asanovic, Krste and Bodik, Ras and Catanzaro, Bryan Christopher and Gebis, Joseph James and Husbands, Parry and Keutzer, Kurt and Patterson, David A and Plishker, William Lester and Shalf, John and Williams, Samuel Webb and others},
+  year={2006},
+  institution={Technical Report UCB/EECS-2006-183, EECS Department, University of California, Berkeley}
+}
+
+@article{spec2000,
+ author = {Henning, John L.},
+ title = {SPEC CPU2000: Measuring CPU Performance in the New Millennium},
+ journal = {Computer},
+ issue_date = {July 2000},
+ volume = {33},
+ number = {7},
+ month = jul,
+ year = {2000},
+ issn = {0018-9162},
+ pages = {28--35},
+ numpages = {8},
+ url = {http://dx.doi.org/10.1109/2.869367},
+ doi = {10.1109/2.869367},
+ acmid = {621510},
+ publisher = {IEEE Computer Society Press},
+ address = {Los Alamitos, CA, USA},
+} 
+@ARTICLE{eembc,
+author={J. A. Poovey and T. M. Conte and M. Levy and S. Gal-On},
+journal={IEEE Micro},
+title={A Benchmark Characterization of the EEMBC Benchmark Suite},
+year={2009},
+volume={29},
+number={5},
+pages={18-29},
+keywords={benchmark testing;embedded systems;microprocessor chips;performance evaluation;benchmark score characterization technique;EEMBC embedded benchmark suite;processor performance measurement;Embedded Microprocessor Benchmark Consortium;Benchmark testing;Microprocessors;Hardware;Performance analysis;Microarchitecture;Office automation;Automatic testing;Stress measurement;Performance evaluation;Art;benchmarking;benchmark characterization;embedded systems;workload characterization;EEMBC},
+doi={10.1109/MM.2009.74},
+ISSN={0272-1732},
+month={Sept},}
+
+@ARTICLE{kMeans,
+author={S. Lloyd},
+journal={IEEE Transactions on Information Theory},
+title={Least squares quantization in PCM},
+year={1982},
+volume={28},
+number={2},
+pages={129-137},
+keywords={Least-squares approximation;PCM communication;Quantization (signal);Signal quantization},
+doi={10.1109/TIT.1982.1056489},
+ISSN={0018-9448},
+month={March},}

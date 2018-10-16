@@ -10,53 +10,55 @@ Finally, streaming programming languages, which are used in Chapter~ref{}, and t
 
 \begin{figure}[t]
  \center
- \includegraphics[width=1\textwidth]{background/graphics/i7intel.jpg}
- \caption{Intel Core i7 processor internal die photograph taken from intel whitepaper}\label{fig:i7}
+ \includegraphics[width=1\textwidth]{background/graphics/i7intel.pdf}
+ \caption{Intel Core i7 processor internal die photograph taken from~\cite{turleywhite}}\label{fig:i7}
 \end{figure}
  
-Chip Multicore Processors (CMPs) have become ubiquitous due to the difficulty in scaling single core performance.
-In a CMP, multiple processor cores are put on a single package as can be seen in Figure~\ref{fig:i7}.
-The most common CMP uses homogeneous cores as they reduce the design complexity both from a hardware and software perspective~\cite{}.
-Unlike single core systems, the performance improvement in CMPs come from running multiple tasks in parallel.
-These tasks can either be different programs or multiple threads from the same program running on the multiple cores.
-By defining speedup \textit{S} to be the original execution time of the program over the new execution time with \textit{n} processors and \textit{f} representing the fraction of the program which can be parallelised; Amdahl's Law states
+Chip Multicore Processors (CMPs) are now ubiquitous due to the difficulty in scaling single core performance.
+In a CMP, multiple processor cores are packaged on a single die as seen in Figure~\ref{fig:i7}.
+The most commonly adopted CMP design features homogeneous cores as it reduces the design complexity from a hardware perspective~\cite{asanovic2006landscape}.
+In a CMP the performance improvement come from running multiple tasks in parallel.
+These tasks can either be different programs or multiple threads from the a single program executing on multiple cores.
+
+The performance benefit of executing a program on a CMP can be estimated using Amdahl's Law~\cite{amdahl1967validity}.
+It states that the speedup \textit{S} obtained by executing a program on \textit{n} cores depends on the fraction of work which is parallelisable \textit{f}.
 
 \begin{equation}
 S = \frac{1}{(1-f) + \frac{f}{n}}
 \end{equation}\label{amdlaw}
 
-thus, given an infinite number of processor cores~\cite{ekhout2010amdalh}
+Thus, if a CMP features an infinite number of cores~\cite{eyerman2010amdahl}, then Amdahl's law can be rewritten as:
 
 \begin{equation}
 \lim_{n\to\infty} S = \frac{1}{(1-f)}
 \end{equation}
 
-This second equation demonstrates how, given any program, the speedup obtained by using a CMP will be limited to the fraction \textit{f} of parallel code found in the program itself.
-As all the processor cores are homogeneous t	his will cause serial bottlenecks to severely reduce the potential speedup as no core is adapted to speedup such regions.
-This implication has pushed research into finding ways of parallelising code to its fullest~\cite{}, however this may not always be possible~\cite{}.
-Thus whilst CMPs have become a mainstain in processor design, the homogeneous model has its limits.
+Therefore, given any program, the speedup obtained by using a CMP is limited to the fraction \textit{f} of parallel work found in the program.
+As all the processor cores are homogeneous, if the parallel fraction is low, then this causes serial bottlenecks to severely reduce the potential speedup, as no core will be specialised for single-threaded execution.
+%This implication has pushed research into finding ways of parallelising code to its fullest~\cite{}, however this may not always be possible~\cite{}.
+%Thus whilst CMPs have become a mainstain in processor design, the homogeneous model has its limits.
 
 \section{Heterogeneous Chip Multicore Processors}
 
 \begin{figure}[t]
  \center
  \includegraphics[width=1\textwidth]{background/graphics/biglittle.png}
- \caption{Example of a heterogeneous multicore processor proposed by ARM (big.LITTLE)}\label{fig:blarm}
+ \caption{Example of a heterogeneous multicore processor proposed by ARM (big.LITTLE)~\cite{armbig}}\label{fig:blarm}
 \end{figure}
 
 Unlike CMPs, Heterogeneous Chip Multicore Processors (HCMPs) or Asymmetrical Chip Multicore Processors (ACMPs) bring a variety of cores onto a single package.
-This may come in different forms, such as having multiple instruction set architectures on the same system on chip (MPSoCs)~\cite{venkat2014harnessingisa,venkatHipstr2016}, or same ISA different size cores on an SoC~\cite{bigLittle}.
-For example, Figure~\ref{fig:blarm} shows a schemata for ARM's big.LITTLE HCMP, where a high-performance Cortex-A15 is paired with a simpler, power efficient Cortex-A7.
-The two cores are connected via a cache coherent interconnect which provides data coherence at the bus-level, allowing the cores to make reads to its neighbor.
-Software is then run on one of the cores depending on a profile; if the user requires performance over energy, then the Cortex-A15 will be chosen, however if energy/power efficiency is required then the Cortex-A7 will be chosen.
+This may come in different forms, such as having multiple instruction set architectures (ISA) on the same system on chip (MPSoCs)~\cite{venkat2014harnessingisa,venkatHipstr2016}, or same ISA different size cores on an SoC~\cite{armbig,jeff2012big}.
+Figure~\ref{fig:blarm} shows a schemata for ARM's big.LITTLE HCMP, where a high-performance Cortex-A15 is paired with a simpler, power efficient Cortex-A7.
+The two cores are connected via a cache coherent interconnect which provides data coherence at the bus-level, allowing the cores to make reads to its neighbor~\cite{armbig}.
+Software is then executed on one of the cores depending on a profile; if the user requires performance over energy, then the Cortex-A15 will be chosen, however if energy/power efficiency is required then the Cortex-A7 will be chosen.
 
-This small example already demonstrates an advantage of HCMPs; unlike CMPs, the variety of cores on an HCMP provide a flexibility to the hardware.
+This small example demonstrates an advantage of HCMPs; unlike CMPs, the variety of cores on an HCMP provide a flexibility to the hardware.
 This can be used for different purposes, such as security~\cite{venkatHipstr2016}, energy/power savings~\cite{venkat2014harnessingisa} and speeding up applications~\cite{venkat2014harnessingisa}.
 In their 2014 paper, Venkat et al.~\cite{venkat2014harnessingisa} demonstrate that a multi-ISA HCMP can improve performance by up to 1.4x and achieve energy savings of up to 40\% compared to a CMP on a peak-power budget of 40W.
 They motivate the idea that HCMPs with heterogeneous ISAs even improve over the performance of single-ISA HCMPs with speedups around 15\% and energy savings of 21.5\%.
 
-However, whilst the hardware diversity in HCMPs is an advantage compared to CMPs, it also increases programming complexity.
-For example, Gupta et al. in ~\cite{Gupta2017Dypo} show that a single-ISA octa-core big.LITTLE architecture can have 20 CPU cores, combined with the ability to dynamically modify the voltage, this leads to 4000 different configurations.
+Whilst the hardware diversity in HCMPs is an advantage compared to CMPs, it also increases programming complexity.
+For example, Gupta et al. in ~\cite{Gupta2017Dypo} show that a single-ISA octa-core big.LITTLE architecture can have 20 different CPU core configurations, combined with the ability to dynamically modify the voltage, this leads to 4000 unique possible hardware configurations to choose from at runtime.
 This highly increases the complexity of obtaining the correct settings for different programs.
 MPSoCs also face a similar issue as having more than a single ISA not only adds design challenges, but program migration between different cores may in fact deteriorate performance~\cite{DeVuystMigration2012}.
 
@@ -64,123 +66,135 @@ MPSoCs also face a similar issue as having more than a single ISA not only adds 
 
 % This section explains what a dynamic multicore is
 
-In both CMPs and HCMPs, once the chip is fabricated the design cannot be modified, meaning that many of the trade-offs between power, performance and area cannot be changed after production.
+In both CMPs and HCMPs, the design of the processor is fixed, meaning that many of the trade-offs between power, performance and area cannot be changed after production.
 Dynamic Multicore Processors (DMPs) attempt to bridge the gap between the two previous designs by allowing the execution substrate to adapt dynamically at runtime.
-Mitall's survey ~\cite{MittalSurv2016} defines three types of modifiable resources: the core count~\cite{ipek2007CoreFusion}, number of resources that each core has~\cite{Homayoun3DPooling2012} and microarchitectural features~\cite{fallinhetblock2014,BauerRSE08,tavanaElastic}.
+Mitall's survey ~\cite{MittalSurv2016} defines three types of modifiable resources: the core count~\cite{ipek2007CoreFusion,kim2007tflex,pricopi2012bahurupi}, number of resources that each core has~\cite{Homayoun3DPooling2012} and microarchitectural features~\cite{fallinhetblock2014,BauerRSE08,tavanaElastic}.
 
-\subsection{Core Fusion Dynamic Multicore Processors}\label{chp:Background:sec:EDGE}
+\paragraph*{Core Composition Dynamic Multicore Processors}\label{chp:Background:sec:EDGE}
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=.7\textwidth]{streamit-paper/graphics/dmcgraph.pdf}
+    \includegraphics[width=1\textwidth]{background/graphics/cmp_new.pdf}
     \caption{High-level view of a dynamic multicore processor that can modify its core count.}
     \label{fig:dynmulticore}
 \end{figure}
 
-A DMP that modifies core count is composed of homogeneous cores with a reconfigurable fabric.
-Physical cores can function either on their own or as a group of physical cores; this is called a Logical Core (LC).
-Throughout this thesis, the term core-fusion will be used to define the mechanism of cores creating an LC.
-A logical core will fetch instructions from a single source and execute them accross all the physical cores that compose the LC.
+A DMP that can modify its core count is composed of homogeneous cores with a reconfigurable fabric.
+Physical cores can function either on their own or as a group, this is called a Logical Core (LC).
+Throughout this thesis, the term core composition is  used to define the mechanism of cores creating an LC.
+Figure~\ref{fig:dynmulticore} provides an high level view of a DMP: the physical cores \textit{P}, are composed into 3 separate LCs of sizes 2, 8 and 4.
+Each of the LCs executes a single thread, leveraging the power of the cores that are grouped together.
+An LC fetches instructions from a single source and executes them accross all the physical cores that compose the LC.
 Cores can fuse dynamically and create a logical core of any sizes.
-For example in Figure~\ref{fig:dynmulticore}, the DMP fuses cores into 3 LCs of sizes 1, 8 and 6 physical cores.
-The exact mechanism of core-fusion are described later on in Section~\ref{sec}.
+The exact mechanism of core composition is described later on in Section~\ref{chp:bg:sec:edge}.
 
-The advantage of a core-fusion DMP over the traditional CMP or HCMP is the ability to reconfigure the processor dynamically to better match the tasks at hand.
+The advantage of a core composition DMP over the traditional CMP or HCMP is the ability to reconfigure the processor dynamically to better match the tasks at hand.
 For example, large sequential sections of code with high Instruction Level Parallelism (ILP) can be accelerated on a logical core that mimics a wide superscalar processor.
 On parallel workloads the DMP can be reconfigured by de-composing the logical cores as seen in Figure~\ref{fig:dynmulticore} to match the Thread Level Parallelism (TLP).
 
-%More here
-\subsection{Resource Sharing Dynamic Multicore Processors}
-A more fine-grained reconfiguration can be found in resource-sharing DMPs.
-There exist different models for resource sharing DMPs.
-For example the WiDGET DMP by Watanabe et al.~\cite{Watanabe2010Widget}, cores are built out of Instruction Engine front-ends which function similarly to Out of Order (OoO) cores' front and back ends.
+\paragraph*{Resource Sharing Dynamic Multicore Processors}
+A more fine-grained DMP technique is resource-sharing.
+For example in the WiDGET DMP by Watanabe et al. \cite{Watanabe2010Widget}, cores are built out of Instruction Engine front-ends which function similarly to Out of Order (OoO) cores' front and back ends.
 They then are connected to Execution Units which they can choose to use.
 Each core in the WiDGET DMP also have access to their neighbors Execution Units, allowing for more variation.
 Another example of resource sharing can be found in Rodrigues et al.'s work~\cite{rodrigues2014perf} where a core can use resources such as Arithmetic Logic Units (ALUs) from other cores.
 
-%More here
-\subsection{Microarchitectural Reconfigurable Dynamic Multicore Processors}
+\paragraph*{Microarchitectural Reconfigurable Dynamic Multicore Processors}
 A final example is a DMP which can reconfigure microarchitectural features to better fit the current application.
-Fallin et al.~\cite{fallin} observe that serial code can exhibit phases that fit different microarchitectural features.
+Fallin et al.~\cite{fallinhetblock2014} observe that serial code can exhibit phases that fit different microarchitectural features.
 According to them, these phases may only been in the ten to hundred thousands instructions long.
 These DMPs can therefore modify microarchitecural features, such as in-order or out-of-order execution, to best match the current phase of a program.
 
+\section{EDGE}\label{chp:bg:sec:edge}
 \begin{figure}[t]
     \centering
-    \includegraphics[width=1\textwidth]{background/graphics/EDGE_3.pdf}
-    \caption{High-level view of the EDGE ISA flow.}
+    \includegraphics[width=1\textwidth]{background/graphics/EDGE_4.pdf}
+    \caption{High-level view of the two main EDGE compiler passes. First pass involves standard optimisations, and code generation. Second pass transforms the code into atomic blocks of instructions.}
     \label{fig:EdgeHigh}
 \end{figure}
 
-\section{EDGE Instruction Set Architecture}\label{chp:bg:sec:edge}
-The Explicit Data Graph Execution~\cite{burger04edge} (EDGE) instruction set architecture (ISA) is a data-flow based ISA.
-Figure~\ref{fig:EdgeHigh} shows a high-level overview of how EDGE differs from a traditional instruction set architecture.
-The EDGE compiler has a first pass which generates instructions from the original source code.
-Blocks are then generated from the basic-blocks found in the code generation pass.
+%More on why EDGE
+\subsection{EDGE Instruction Set Architecture}
 
-%what I'm trying to say here is that registers are used only for outer communication, in a block instructions are 
-Unlike traditional ISAs, blocks do not communicate via registers, but rather the output targets of instructions are encoded to instruction inputs~\cite{smith2006edge}.
-Loads and stores in each EDGE block are assigned unique identifiers which are used resolve load-store dependencies.
-Thus, the EDGE ISAs encode dependencies between instructions at the ISA level, registers are only used for inter-communication between blocks.
-An EDGE block also contains a header that will inform the hardware about the number of stores and register writes contained in the block~\cite{e2paper}, this is used to facilitate committing blocks.
+The Explicit Data Graph Execution (EDGE) architecture~\cite{burger04edge} is a dataflow architecture aimed at improving concurrency whilst being energy and power efficient~\cite{smith2006edge,burger04edge}.
+Similar to very long instruction word (VLIW) architectures that pack multiple sub-instructions into a single instruction, EDGE requires that the compiler structure instructions as atomic blocks.
+Unlike VLIW that uses static placement and static issue which puts high pressure on the compiler, EDGE allows for dynamic issue thus more evenly distributing responsability between the hardware and the compiler.
 
-EDGE blocks also have a set of restrictions to satisfy correctness.
-If a block does not meet these requirements, it may need to be broken down into smaller blocks.
+\paragraph*{Block Formation}
+The Explicit Data Graph Execution (EDGE)~\cite{burger04edge} architecture uses a data-flow based ISA.
+In EDGE, instructions are organised into blocks, which are fetched as single units by the processor.
+Figure~\ref{fig:EdgeHigh} shows a high-level overview of how EDGE creates the blocks of instructions.
+The first pass (Code Generation) transforms source code into a control flow graph (CFG), performing optimisations such as loop unrolling and inlining.
+Then, each node of the CFG is turned into an EDGE block given a set of restrictions.
 These restrictions are:
-
 \begin{itemize}
 \item Block Size: an EDGE block may be between 4 to 128 instructions.
+\vspace{-1em}
 \item Load/Store: an EDGE block may have at most 32 load/store instructions.
+\vspace{-1em}
 \item Entry/Exit: an EDGE block may have a single exit but may have multiple exits.
 \end{itemize}
+If a block does not meet these requirements, it may need to be broken down into smaller blocks.
 
+Unlike traditional ISAs, instructions in a block do not communicate via registers, but rather the output targets of instructions are encoded to instruction inputs~\cite{smith2006edge}.
+Loads and stores in each EDGE block are assigned unique identifiers which are used resolve load-store dependencies.
+Thus, the EDGE ISAs encode dependencies between instructions at the ISA level, registers are only used for inter-communication between blocks.
+An EDGE block also contains a header that will inform the hardware about the number of stores and register writes contained in the block~\cite{smith2006edge}, this is used to facilitate committing blocks.
+
+\paragraph*{Hyperblock formation}
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{background/graphics/hyperblock.pdf}
+    \caption{High-level view of hyperblock formation. The three top blocks can be fused into a single block using instruction predication.}
+    \label{fig:EdgeHB}
+\end{figure}
 To increase the average size of EDGE blocks, multiple blocks can be combined together to form one large block called a hyperblock.
-This is achieved through the use of instruction predication.
-For example given an if/else statement, the compiler can generate a single block, predicating all instructions of the else statement.
-As the compiler needs to declare the number of stores and register writes in the block header, extra instructions may need to be generated to ensure the block always executes the same amount of stores.
+This is achieved through the use of instruction predication~\cite{smith2006edge}.
+For example, the code in Figure~\ref{fig:EdgeHigh} can generate a single block instead of three blocks.
+Figure~\ref{fig:EdgeHB} shows the organisation of the new block, the box colour representing where the instructions originated.
+In this case, the if and else statements of the original code are merged into a single block, using instruction predication.
+As the compiler needs to declare the number of stores and register writes in the block header, extra instructions may need to be generated to ensure the block always executes the same amount of stores. 
+In the case of Figure~\ref{fig:EdgeHB}, the last instruction is generated to ensure that a write to the register \textit{g71} always happens regardless of the predicate.
+Hyperblocks allow for increased instruction level parallelism (ILP) which in turn improves the performance of the application being executed~\cite{smith2006edge}.
 
 Overall, the EDGE ISA enables the architecture to dispatch blocks speculatively, with low overhead~\cite{putnam2010e2,kim2007tflex}, therefore, increasing exploitation of ILP.
 
-\section{EDGE Processor}
+\subsection{EDGE Processor features}
 
-\subsection{Core Lanes}
+\paragraph*{Core Lanes} According to Smith et al. in ~\cite{smith2006edge}, the sizes of blocks generated by the compiler for a set of applications from SPEC2000~\cite{spec2000} and EEMBC~\cite{eembc} range from 5 instructions to 50 instructions and on average are 20.6 instructions long.
+If an EDGE processor is designed to fetch large blocks, which can be up to 128 instructions long, then the compiler is currently not able to generate large enough blocks.
+Therefore, to maximise core-utilisation, an EDGE processor can segment its instruction window into lanes.
+
+For example, Figure~\ref{fig:e2segment} shows a schemata for a four-lane core.
+Given that a block in EDGE can be up to 128 instructions long, each lane is allowed to fetch a block of up to 32 instructions.
+Fetching blocks larger than 32 instructions results in more than one lane being occupied.
+Depending on the architectural setup, lanes may either share or have their private ALUs.
+A core can continue fetching blocks until all its lanes are filled, allowing the processor to have multiple blocks in flight per core.
+Segment lanes therefore allow EDGE cores to be more flexible to block size variability.
+
  \begin{figure}[t]
  \center
- \includegraphics[width=1\textwidth]{background/graphics/e2segment.png}
- \caption{Example of a four lane core on an EDGE processor taken from~\cite{e2smith}.}\label{fig:e2segment}
+ \includegraphics[width=1\textwidth]{background/graphics/edge_lanes.pdf}
+ \caption{Example of a four lane core on an EDGE processor taken from~\cite{putnam2010e2}.}\label{fig:e2segment}
  \end{figure}
  
-EDGE instruction blocks can be up to 128 instructions long, however this often isn't the case.
-To maximize core-utilisation, each core on an EDGE Processor is segmented into a set number of lanes which can each fetch and decode their own blocks.
-A lane is able to fetch a block of maximum size
-
-\begin{equation}
-\frac{128}{NumberOfLanes}
-\end{equation}
-
-For example, a four lane core as seen in Figure~\ref{fig:e2segment} can have up to four blocks of 32 instructions.
-Fetching blocks larger than 32 instructions will fill up more than one lane.
-Depending on the architectural setup, lanes may either share or have their private ALUs.
-In case of non-private ALUs, the load-store-queue and register files ensure that memory operations are still happening in order if needed.
-Lanes allow EDGE cores to be more flexible to block size variability.
-
-\subsection{Core Fusion}
+\paragraph*{Core Composition Functionality}
  \begin{figure}[t]
  \center
  \includegraphics[width=1\textwidth]{cases-paper/graphics/background/proc_test.pdf}
- \caption{Core Fusion Mechanisms for our EDGE-based architecture.}\label{fig:dmp}
+ \caption{Core Composition Mechanisms for our EDGE-based architecture.}\label{fig:dmp}
  \end{figure}
  
-Core Fusion is achieved by fusing a set of \textit{physical} cores to create larger \textit{logical} cores.
-This does not modify the physical structure of the chip, instead it provides a unified view of a group of physical cores to the software.
+Core Composition is achieved by fusing a set of \textit{physical} cores to create a larger \textit{logical} cores.
+This does not modify the physical structure of the processor, instead it provides a unified view of a group of physical cores to the software.
 In the processor used throughout the thesis, the micro-architecture is distributed: register files, Load Store Queues (LSQs), L1 caches and ALUs all look like nodes on a network.
-This means that when cores fuse together, this is similar to adding an extra node to the network.
-Fusion is a dynamic modification and may occur during the execution of a program to better fit the workload.
-Unlike traditional CMPs, fused cores will operate on the same thread and attempt to extract Instruction Level Parallelism (ILP) rather than Thread Level Parallelism (TLP)~\cite{micolet2016dmpstream,pricopi2012bahurupi}.
+This means that when cores are composed together, this is similar to adding an extra node to the network.
+Core composition is a dynamic modification and may occur during the execution of a program to better fit the workload.
+Unlike traditional CMPs, composed cores operate on the same thread and extract Instruction Level Parallelism (ILP) rather than Thread Level Parallelism (TLP)~\cite{micolet2016dmpstream,pricopi2012bahurupi}.
 
-Figure~\ref{fig:dmp} shows the different stages and mechanisms of core fusion for a four core system.
-When creating a new core fusion a master core informs all other cores about the fusion and sends the predicted next block address to the next available fused core.
-When we start a new thread on a fused core the OS and runtime write the new core mapping to a system register.
+Figure~\ref{fig:dmp} shows the different stages and mechanisms of core composition for a four core system.
+When creating a new core composition a master core informs all other cores about the fusion and sends the predicted next block address to the next available fused core.
+When a new thread is started on a fused core the OS and runtime write the new core mapping to a system register.
 The hardware then flushes these cores if they are not idle and sets the PC of the first block of that thread on one core in the logical processor and starts executing.
 When a core mispredicts a branch in a fusion, it informs the other cores which flush any younger blocks.
 When un-fusing, the master core informs the other cores, which then commit or flush their blocks and power down while the master core continues to fetch and execute blocks from the thread.
@@ -191,43 +205,40 @@ However memory instructions and instructions that modify registers pass through 
 This ensures that blocks operate on memory in a consistent fashion.
 In case of a memory violation caused by undetected dependencies a flush of all blocks younger than the violator, including the violating block, is performed.
 
-%Fusing cores is therefore a lightweight process.
-%We estimate that switching the size of the logical-core (LC) results in a delay of 100 cycles on average.
-%The actual time varies based on the time it takes the cache coherence protocol to move the data around the memory system.
-%Section~\ref{sec:reconfoverhead} discusses in more details how latency affects energy efficiency and shows that dynamic core fusion is still highly beneficial even when considering overheads of 1,000 cycles.
-
-\section{Value Predictors}
+\section{Value Prediction}
 %This will go in the background most likely
-Value Prediction's aim is to provide a hardware solution to reducing latencies caused by memory dependencies in out of order superscalar processors~\cite{gabbayVPOrig}.
-Until recently the benefits of using value predictors have been overshadowed by the potential power consumption and design complexity requried to implement them~\cite{peraisVTAGE2014}.
+Value Prediction's aim is to provide a hardware solution to reducing latencies caused by memory dependencies in out of order superscalar processors~\cite{gabbayVPOrig} by predicting the values read in by instructions.
+Until recently the benefits of using value prediction has been overshadowed by the potential power consumption and design complexity requried to implement them~\cite{peraisVTAGE2014}.
 However, recent work by Perais et al.~\cite{peraisVTAGE2014,peraisBeBop2015} shows that by adopting a similar prediction scheme such as the ITTAGE predictor~\cite{SeznecITTAGE}, value predictors can be efficiently implemented to predict data for blocks of instructions.
 
-\subsection{The Differential Value Tagged Geometric length Predictor}~\label{chp:bck:vtage}
+\paragraph*{Type of predictors}
+There exist two types of predictors, the first one is \textit{Context} based value predictors that return the previously seen value for an instruction.
+The second type of predictor is a \textit{Stride} based predictors; it cacluate the delta between two previously committed values for an instruction, also known as the \textit{stride}, and stores the last committed value of the instruction in a Last Value Table (LVT).
+When the \textit{Stride} prediction makes a prediction, it fetches both the value from the LVT and the stride and adds them together to provide a prediction.
+Stride based predictors are often more accurate when used in loop-heavy programs.
+
+\paragraph*{The Differential Value Tagged Geometric length Predictor}~\label{chp:bck:vtage}
 \begin{figure}[t]
     \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/basic_valpred.pdf}
+    \includegraphics[width=1\textwidth]{background/graphics/valuepred.pdf}
 
-    \caption{VTAGE stride-based value predictor.}
+    \caption{VTAGE stride-based value predictor and Speculative Window.}
     \label{fig:stride_over}
 \end{figure}
 
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/specwindow.pdf}
-    \caption{Speculative window in DVTAGE provides speculative Last-Values to allow for multiple value predictions.}
-    \label{fig:specwin}
-	\vspace{1em}
-\end{figure}
+%\begin{figure}[t]
+%    \centering
+%    \includegraphics[width=1\textwidth]{chapter3/graphics/specwindow.pdf}
+%    \caption{Speculative window in DVTAGE provides speculative Last-Values to allow for multiple value predictions.}
+%    \label{fig:specwin}%
+%	\vspace{1em}
+%\end{figure}
 
-For this chapter, a good value predictor needs to be able to predict at a block level granularity as to reduce prediction latency and also use a stride-based prediction approach as it will often be used to predict registers used in loops.
-Perals et al. in their work~\cite{peraisBeBop2015} present such a predictor, the Differential Value Tagged Geometric length (D-VTAGE) predictor.
-The D-VTAGE predictor is a stride based value predictor.
-It operates on blocks of instructions to minimize network pressure and increase the prediction output; as EDGE is a block-based ISA by nature, this is a natural fit.
-
-%MORE INFO HERE
+The D-VTAGE predictor is a stride based value predictor that operates on blocks of instructions to minimize network pressure and increase the prediction output.
+The predictor is organised in two parts, a Last Value Table (LVT) that contains the last committed value for a given instruction, and a set of tables which contain strides.
 Figure~\ref{fig:stride_over} shows an overview of the D-VTAGE predictor.
-It is composed of a taglest Last-Value Table (LVT) which contains the last committed value for a given register, and a set of value tables VT0-N.
-These value tables are something something.
+The prediction scheme is inherited from the Tagged Geometric (TAGE) branch predictor~\cite{SeznecITTAGE}.
+It uses the global branch history of the branch predictor 
 
 %BE WAY CLEARER
 Another consideration is that multiple blocks of the same PC may be speculatively executing at the same time, which could cause data mis-predictions if the predictor is not updated.
@@ -239,9 +250,9 @@ If there is a live prediction, then the data from that prediction is used instea
 When a misprediction is detected this is treated in the same way as a load-store dependency miss: the block is only partially flushed by resetting the operands.
 This means that blocks do not have to be refetched, simply re-executed with the correct data.
 
-Also check this~\ref{sheikLVP2017}
+%Also check this~\ref{sheikLVP2017}
 
-\section{Streaming Programming Languages}~\ref{sec:bg:stream}
+\section{Streaming Programming Languages}~\label{sec:bg:stream}
 
 % % This section should explain what steaming programming is (remove all the details about each language)
 % General purpose programming languages often propose very little support for programs that handle with a continuous flow of data.
@@ -267,7 +278,7 @@ However, the main challenge consists of deciding how to map the different tasks 
     \label{fig:streamittypes}
 \end{figure}
 
-\subsection{StreamIt Programming Language}
+\paragraph*{StreamIt Programming Language}
 StreamIt~\cite{theis2002streamit} is a high-level synchronous dataflow streaming programming language that defines programs as directed graphs.
 StreamIt offers an elegant way of describing streaming applications, abstracting away how infinite data streams are managed to allow the programmer to solely focus on how the data must be treated.
 A StreamIt program is composed of functions - called \textit{Filters} - which operate on streams of data.
@@ -281,14 +292,16 @@ The output of all the filters in a SplitJoin are then concatenated in a round-ro
 Finally a Feedback Loop (Figure~\ref{fig:streamittypes}(b)) provides a way for filters to operate on their outputs.
 The resulting program written in StreamIt represents a graph where the nodes are filters and their edges represent the incoming and outgoing data streams.
 
-\section{Machine-learning guided optimisations}
-
-Using machine learning to guide optimisations has been a popular area of research as of late~\cite{cummins2017pact,wang2018ml,dubach13dynamic}.
-There are two areas in which machine learning is used: compiler driven optimisations and runtime driven optimisations.
-Depending on the use, different models will have to be used; for example runtime systems require fast responses, thus the models will have to be smaller, whilst compiler driven optmisations are less pressured by this.
+\section{Machine-learning techniques and evaluation}
 
 \subsection{Linear Regression}
 
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.45\textwidth]{background/graphics/lin_reg_ex.pdf}
+    \caption{Example of linear regression on toy dataset.}
+    \label{fig:linregex}
+\end{figure}
 In a Dynamically reconfigurable processor machine learning can be used to detect when hardware must switch configurations~\cite{micolet2017cases, tavanaElastic}.
 Knowing when to reconfigure the processor necessitates fast decision making to minimize the overall cost of reconfiguration.
 Machine learning models therefore need to be lightweight to ensure that the computations required to operate the model are as low as possible.
@@ -304,11 +317,48 @@ where y is the predicted output, $X_{1..n}$ are the inputs and $\beta_{0.n}$ are
 When training a linear regression, it generates the $\beta$ weights as to minimize the square-error between the training inputs and predicted outputs.
 Once a model has been generated from input data, it can be implemented as a set of sums in hardware, making it an efficient way of making predictions.
 
+Figure~\ref{fig:linregex} shows an example of a linear regression on a small dataset.
+The linear regression takes the form of $y=4.77 + 0.88 \times x$.
+
 \subsection{k Nearest Neighbors}
 
 k Nearest Neighbors can be used for both regression and classification.
 In both situations an output is generated by averaging the \textit{k} nearest neighbors to the input from the training data.
 The average is often obtained by a weighted sum of the features of the k neighbors.
 
-\section{kMeans clustering}
+\subsection{k-Means Clustering}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.45\textwidth]{background/graphics/smallest_clust_example.pdf}
+    \caption{Small example of k-Means clustering on a toy dataset with two clusters. The squares represent datapoints whilst the circles represent the centroids of the clusters.}
+    \label{fig:kmeanex}
+\end{figure}
+
+k-Means is a clustering technique that groups \textit{n} observations into \textit{k} clusters such that $k < n$.
+The original algorithm presented by Lloyd in ~\cite{kMeans} first randomly places \textit{k} centroids \textit{c} at random locations in the space.
+Then, each point \textit{$x_{i}$} in the space of \textit{n} observations is assigned to a cluster whos centroid \textit{$c_{j}$} is closest to it.
+Once each point has been assigned to a cluster, each centroid is recomputed by re-centering itself around the datapoints in the cluster.
+This is repeated until the centroids no longer move.
+ 
+Figure~\ref{fig:kmeanex} provides a visual example of a running k-Means on a toy dataset, with k set to two.
+Each colour in the graph represents a cluster, the squares represent the n observations, whilst the circles represent the centroids.
+
+\subsection{Leave One Out Cross Validation}
+The process of leave one out cross validation involves using the training dataset as the evaluation dataset.
+Given a set of $n$ points in the training set, a new model is trained using $n-1$ of the points available.
+The last unsed datapoint is evaluated against this new model.
+This procedure is repeated for every point in the dataset, and the results of the evaluation are averaged out to produce a final result.
+This validation model works well when the number of testing and training data is small.
+
 \section{Early Stopping Criterion}
+
+When exhaustive search of an optimisation space is not feasible, a subset of the space is explored.
+The early stopping criterion (ESC)~\cite{vuduc2003AutomaticPerf} provides a method of determining when new points added in the subspace no longer provide new information, and thus the currently evaluated subspace is representative of the total space.
+Given an implementation $i$ with performance $x_i$ normalised between 0 and 1, at time $t$ the maximum performance observed is defined as $M_t = max_{1 \le i \le t} x_t$.
+Informally, ESC posits that for every time $t$ if the probability that the performance $M_t$ supercedes 1-$\epsilon$ is of $\alpha$ ($\epsilon$ and $\alpha$ are both chosen by the user), then the search can stop.
+If there are $N$ possible implementations, then the total space of performances is defined as $S={x1,...,x_N}$, 
+
+\begin{equation}
+Pr[M_t \leq 1 - \epsilon \big ] < \alpha
+\end{equation}
