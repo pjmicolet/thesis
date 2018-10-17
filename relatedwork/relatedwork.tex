@@ -1,67 +1,122 @@
 \chapter{Related Work}
-
-\subsection{Dynamic Multicore Processors}
-
-This thesis defines a dynamic multicore processor as a processor whose cores can be fused together to execute a single thread.
-This is different from cores which can modify certain microarchitectural features.
+This chapter covers the related work relevant to this thesis.
+The topics covered are:
 \begin{itemize}
-\item CoreFusion~\cite{ipek2007CoreFusion}
-\item Bahurupi~\cite{pricopi2012bahurupi,pricopiSchedCoreComp2014}
-\item CHARM~\cite{cong2012charm}
-\item WidGET~\cite{Watanabe2010Widget}
-\item Tflex~\cite{kim2007tflex}
+\item The different dynamic multicore processors using core composition proposed in recent research.
+\vspace{-1em}
+\item Work on determining core composition sizes.
+\vspace{-1em}
+\item Research on different hardware techniques for saving energy.
+\vspace{-1em}
+\item Work on streaming programming languages.
+\vspace{-1em}
+\item Work on machine learning guided optimisations in both hardware and software.
+\vspace{-1em}
+\item Current research in value prediction.
 \end{itemize}
 
+\section{Reconfigurable Processors}
 
-\subsection{Heterogeneous Mix}
-\begin{itemize}
-\item big.LITTLE~\cite{jeff2012big}
-\item Mirage Cores~\cite{Padmanabha2017mirage}
-\end{itemize}
+This section covers work on both dynamic multicore processors (DMP) and processors that can reconfigure their microarchitectures.
+
+\subsection{Core composition}
+The idea of composing physical cores was first introduced by Ipek et al. in CoreFusion~\cite{ipek2007CoreFusion}.
+CoreFusion employs a traditional architecture with 2 issue out of order cores.
+When cores are fused, they collectively fetch from the same thread, whenever an instruction cache miss is issued, an eight word block is delivered and distributed across all of the cores' caches.
+Fetches are aligned with the core responsible for the 2 oldest instructions.
+In the original paper, an 4 core composition obtains a 1.3x speedup on SPECINT and a 1.5x speedup on SPECFP over a 2 issue core.
+ 
+The Bahurupi~\cite{pricopi2012bahurupi} polymorphic heterogenous multicore architecture proposed by Pricopi et al. introduces a sentinel instruction which informs the hardware about the \textit{live-in} and \textit{live-out} registers of a basic block.
+Baharupi uses the SimpleScalar ISA~\cite{burger1997simplescalar}, and the compiler adds this instruction to the top of every basic block, splitting the program up into blocks similarly to EDGE.
+They show that, on average this introduces a 24\% code size increase for SPEC integer applications, 15\% for SPEC floating point and 19\% for Mediabench~\cite{mediabench} and MiBench~\cite{mibench} benchmark suites.
+Another important piece of information contained in this instruction is the size of a block.
+Cores in a composition fetch basic blocks in a similar fashion to the one described in Chapter~\ref{chp:Background} Section~\ref{chp:Background:sec:EDGE}.
+However, cores must execute global register renaming in the sequential order of blocks.
+To ensure sequential renaming, a Global Program Counter (GPC) is introduced, and each core in the composition must lock the GPC before fetching a block and doing the renaming; this makes Baharupi less efficient at fetching blocks than EDGE.
+Using a 4 core composition they report a performance improvement of 2x on SPECINT,3x on SPECFP and 4x on Mibench/Mediabench compared to a 2 issue core. 
+
+TFlex~\cite{kim2007tflex} proposed by Kim et al. is an EDGE processor that also deploys core composition.
+The mechanism is similar to the one described in Chapter~\ref{chp:Background} Section~\ref{chp:Background:sec:EDGE}.
+They motivate that EDGE simplifies distributing instructions accross cores as EDGE itself is designed for distributed microarchitectures.
+Unlike the model used throughout this thesis, a block's instructions can be distributed amongst the cores in the composition, with one of the cores being the block owner.
+As each core can be responsible for a single block, the total number of blocks in flight is equal to the number of cores in the composition.
+In their work~\cite{kim2007tflex} Kim et al. show that a 32 core composition can outperform a single TFlex core by 3x on a set of EEMBC benchmarks and SPEC2000 microbenchmarks.
+
+Finally, the E2 processor is another EDGE based processor that can compose its cores~\cite{putnam2010e2}.
+Unlike TFlex, when cores are fused in the E2 processor, each core is responsible for the blocks they fetch.
+E2 introduces the concept of segmenting the instruction window into lanes, allowing cores to fetch multiple blocks.
+The processor explored throughout this thesis is based on the E2 processor.
+
+\subsection{Reconfigurable microarchitectures}
+ElasticCore~\cite{tavanaElastic} proposes a morphable core that uses dynamic voltage and frequency scaling (DVFS) and microarchitectural modifications such as instruction bandwidth and capacity to adapt the processor to current needs.
+This is similar to the work proposed by Dubach et al. in ~\cite{dubach13dynamic} where microarchitectural features can be modified for better performance or energy efficiency.
+They provide extensive analysis of SPEC 2000 benchmarks and demonstrate that machine learning and dynamic adaptation can double the energy/performance efficiency compared to a static configuration.
+
+MorphCore~\cite{khubaibMorphCore2012} focuses on reconfiguring a core for thread level parallelism.
+It switches between out-of-order (OoO) when running single threaded applications and an in-order core optimised for simultaneous multi threading (SMT) workloads.
+This provides an opposite solution to our DMP: providing a large core made for ILP that can be modified to better fit TLP workloads.
+MorphCore outperform a 2-Way SMT OoO core by 10\% whilst being 22\% more efficient.
 
 
+\section{Automated reconfiguration for DMPS}
 
-DMPs such as CoreFusion~\cite{ipek2007CoreFusion} differentiate themselves to EDGE based DMPs on their Instruction Set Architecture (ISA).
-CoreFusion uses a CISC/RISC based architecture which limits the degree of scalability (fusion), whereas EDGE based DMPs have shown promising scalability~\cite{kim2007tflex, sibi2014}.
-Other types of DMPs such as WidGET~\cite{Watanabe2010Widget} and Sharing Architecture~\cite{zhou2014sharingarch} present a fine-grain level of composition.
-In these two architectures, cores can be created out of different components on the processor, including ALUs, floating point units and memory units.
-This differs from CoreFusion and EDGE where a logical core is composed out of a set of physical cores.
-This fine-grained composition can allow for even more optimisation but it increases the complexity of the problem.
+Very little work exists on determining the size of a core composition given an application, or when the composition must change.
+In Ipek et al's. original work on CoreFusion~\cite{ipek2007CoreFusion} they introduce the \textit{FUSE}/\textit{SPLIT} instructions that allow for dynamic reconfiguration.
+However, their eight core system only has two possible configurations: either each core is executes on their own or they are fused into groups of four cores; no details as to when to compose cores is discussed.
+This is the same for TFlex~\cite{kim2007tflex}, where 5 different configurations are explored (2, 4, 8, 16 and 32 composed cores), but does not provide any insight as to how to determine the composition size automatically.
 
-Previous work on Dynamic Multicore Processors includes CoreFusion~\cite{ipek2007CoreFusion} and Bahurupi~\cite{pricopi2012bahurupi,pricopiSchedCoreComp2014}.
-These architectures use a standard ISA and either fetch fixed sized instruction windows~\cite{ipek2007CoreFusion} or entire basic blocks~\cite{pricopi2012bahurupi}.
-Other DMPs such as TFlex~\cite{kim2007tflex} and E2~\cite{e2} use an hybrid-dataflow EDGE ISA~\cite{burger04edge}. 
-In TFlex, instructions from a block are executed on different fused cores.
-In E2, a block is mapped to a fused core and all instructions from that block execute locally.
+In the work of Pricopi et al.~\cite{pricopiSchedCoreComp2014}, they show how dynamic reconfiguration is beneficial when it comes to scheduling multiple tasks.
+However, they do not discuss any method of automatically deciding the optimal configuration beyond a 4 core composition.
+In their work they use speedup functions determined from profile executions of applications to determine how to schedule tasks.
+This means that whenever an application is modified, it must be re-analysed to benefit from dynamic composition.
+They do not discuss what software characteristics help determine when to reconfigure the cores, or how to optimise software.
 
-\subsection{Core Configuration}
-
-Little work has been done on automatically determining the correct core composition for a given application.
-The work conducted in~\cite{ipek2007CoreFusion,kim2007tflex} manually configure their processors before running benchmarks.
 In~\cite{santos2013nocdmc} they use information provided by the application to determine how to reconfigure some components of the processor.
 This initial information then assists the rest of the reconfiguration, this process still requires input from the programmer though.
-Therefore we present a novel method for automating the choice of core composition.  
 
-\subsection{Dataflow Programming Languages}
+\section{Hardware techniques for power and energy efficiency}
 
-There exist streaming languages that target different architectures.
-For example Brook~\cite{buck2004brook} is designed to be used on GPUs and WaveScript for embedded systems~\cite{newton2008wavescript}.
-These languages present different constructs to StreamIt, in particular they lack the graph oriented constructs. 
-Lacking such constructs make these languages less attractive for tiled processors.
+This section covers different hardware techniques used for energy efficiency that do not depend on core composition.
 
-\subsection{Partitioning StreamIt on multicore chip}
+\subsection{Dynamic Voltage and Frequency Scaling}
+Dynamic Voltage and Frequency scaling (DVFS) is a method of modifying the power and energy consumption~\cite{paganiEECHM2017} by modifying the voltage or the clock rate of the processor.
+Often times, DVFS is used to reduce energy or power consumption in phases of low performance.
+Herbert et al in ~\cite{herbertDVFS07} demonstrate that DVFS can be used to reduce $energy/throughput^2$ on a 16 chip multicore processor (CMP) by 39\% on a set of multithreaded workloads.
+They argue that on a CMP, DVFS does not need to be on a per-core basis, as fine-grained DVFS does not improve $energy/throughput^2$ by much compared to coarse grained DVFS.
+
+Vega et al. in ~\cite{vega2013crank} underline that whilst DVFS is an effective way of reducing power and energy consumption, the fact that it is decoupled from other techniques such as per core power-gating (PCPG) reduces the overall benefits.
+They suggest an online algorithm at the OS level that collects data from performance counters and makes multiple decisions based on the data gathered.
+%write more
+
+%However this approach is orthogonal to DMPs~\cite{sibi2014}, whilst both techniques (DVFS and core composition) adapt to programs phases, DMPs can also be used to speed up the execution of programs.
+
+\subsection{Heterogeneous Chip Multicore Processors}
+ARM big.LITTLE~\cite{} is an example of a heterogeneous chip multicore processor (HCMP) that provides two different types of cores to allow the programmer to choose between energy efficiency and performance.
+A program can be migrated from one core to another depending on the requirements, however this comes at the cost of a very high migration overhead, over 10,000 cycles~\cite{}.
+
+\section{Improving performance via aggressive speculation}
+High performance fault tolerance through predictive instruction re-execution ~\cite{soman2017predinst}, Koch spec~\cite{koch2013spec}, SAM~\cite{Abeydeera2017SpecMulti}
+
+
+\section{Value Prediction}
+Load value approx~\cite{miguel2014LoadVal}
+Loop data~\cite{murphy2016loopdata}
+Value prediction has seen a resurgence in interest, with the works of Perais et al. on the Value TAGE Predictor~\cite{peraisBeBop2015,peraisVTAGE2014}.
+The work focuses on traditional x86 superscalars, yet they provide a solid foundation for value prediction for EDGE.
+
+
+\section{Partitioning programs on multicore chip}
 
 Previous work on scheduling streaming applications onto DMPs or heterogenous multicore chips focuses on finding mathematical ways of partitioning the graph onto the chip ~\cite{carpenter2009streammap,kudlur2008orchestratingstreamprog}.  
 In Carpenter et al.'s work~\cite{carpenter2009streammap} they restrain themselves to partitioning a StreamIt application maintaining connectedness.
 Connectedness can be defined as a subgraph where the filters are connected. 
 This restriction reduces the number of potential partitions that can be generated by their algorithm and will put TLP in favour of ILP. 
+
 Kudlur et al. in~\cite{kudlur2008orchestratingstreamprog} choose to represent the partitioning problem as an integer linear programming problem.
 They start by fissionioning stateless filters to obtain the optimal load balance across all cores and assign the filters to a core using a modulo scheduler.
+
 Farhad et al. also use integer linear programming in~\cite{farhad2012streamilp} to schedule StreamIt programs on multicore.
 They profile the communication costs of the streaming programs by running the program using different multicore allocations and feed that information into their integer linear programming model.
-
-\subsection{Heterogeneous Thread}
-Read ~\cite{becchi2006ThreadOnCore}, ~\cite{adileh2016power}
 
 \subsection{Machine Learning} 
 Using a machine learning model to partition StreamIt programs was previously explored in the work of Wang et al. in ~\cite{wang2013partitionstreamit}.
@@ -70,53 +125,62 @@ The features we extracted using correlation analysis are similar to those presen
 Unlike our work their model is used to find ways of fusing and fissioning filters to discover a new graph that can then be mapped onto a multicore system.
 Recent work on tuning software to hardware~\cite{cummins2017pact}.
 
+\subsection{Heterogeneous Thread}
+Read ~\cite{becchi2006ThreadOnCore}, ~\cite{adileh2016power}
 
-\subsection{Reconfigurable Processors}
+\section{Dataflow Programming Languages}
 
-\begin{itemize}
-\item ElasticCore~\cite{tavanaElastic}
-\end{itemize}
+There exist streaming languages that target different architectures.
+For example Brook~\cite{buck2004brook} is designed to be used on GPUs and WaveScript for embedded systems~\cite{newton2008wavescript}.
+These languages present different constructs to StreamIt, in particular they lack the graph oriented constructs. 
+Lacking such constructs make these languages less attractive for tiled processors.
 
-ElasticCore~\cite{tavanaElastic} proposes a morphable core that uses dynamic voltage and frequency scaling (DVFS) and microarchitectural modifications such as instruction bandwidth and capacity.
-They propose a linear regressor model to determine reconfiguration, which uses more runtime information than ours, such as branch prediction and cache misses.
-Overall Tavana et al's architecture is 30\% more energy efficient than a big.LITTLE architecture.
-
-In~\cite{dubach13dynamic} they also propose a similar core architecture that modifies microarchitectural features.
-They provide extensive analysis of SPEC 2000 benchmarks and demonstrate that machine learning and dynamic adaptation can double the energy/performance efficiency compared to a static configuration.
-
-MorphCore~\cite{khubaibMorphCore2012} focuses on reconfiguring a core for thread level parallelism.
-It switches between out-of-order (OoO) when running single threaded applications and an in-order core optimised for simultaneous multi threading (SMT) workloads.
-This provides an opposite solution to our DMP: providing a large core made for ILP that can be modified to better fit TLP workloads.
-MorphCore outperform a 2-Way SMT OoO core by 10\% whilst being 22\% more efficient.
-
-All these projects focus on uni-core modifications, and traditional CISC/RISC like architecture which differs from our work.
-
-\subsection{Dynamic Core Fusion}
-In the work of Pricopi et al.~\cite{pricopiSchedCoreComp2014}, they show how dynamic reconfiguration is beneficial when it comes to scheduling tasks.
-However, they do not discuss any method of automatically deciding the optimal configuration beyond a 4 core fusion.
-Instead they use speedup functions determined from profile executions of applications to determine how to schedule tasks.
-They do not discuss what software characteristics help determine when to reconfigure the cores, or how to optimise software.
-
-Work on using machine learning to automatically choose a composition was achieved in~\cite{micolet2016dmpstream}.
-This work does not involve changing the core fusion dynamically during the execution of the benchmark.
-The machine learning model focuses on using high-level information from StreamIt's~\cite{thiesStreamit2010} language constructs.
-
-\subsection{Voltage Scaling}
-Voltage scaling is another method of reducing energy consumption~\cite{paganiEECHM2017}, however this approach is orthogonal to DMPs~\cite{sibi2014}.
-Whilst both methods adapt to programs phases, DMPs can also be used to speed up the execution of programs.
-
-\subsection{Value Prediction}
-Load value approx~\cite{miguel2014LoadVal}
-Loop data~\cite{murphy2016loopdata}
-Value prediction has seen a resurgence in interest, with the works of Perais et al. on the Value TAGE Predictor~\cite{peraisBeBop2015,peraisVTAGE2014}.
-The work focuses on traditional x86 superscalars, yet they provide a solid foundation for value prediction for EDGE.
-
-\subsection{Aggressive speculation}
-
-High performance fault tolerance through predictive instruction re-execution ~\cite{soman2017predinst}, Koch spec~\cite{koch2013spec}, SAM~\cite{Abeydeera2017SpecMulti}
 
 \section{Machine-learning guided optimisations}
 
 Using machine learning to guide optimisations has been a popular area of research as of late~\cite{cummins2017pact,wang2018ml,dubach13dynamic}.
 There are two areas in which machine learning is used: compiler driven optimisations and runtime driven optimisations.
 Depending on the use, different models will have to be used; for example runtime systems require fast responses, thus the models will have to be smaller, whilst compiler driven optmisations are less pressured by this.
+
+
+
+
+
+
+
+
+
+
+
+
+
+%\paragraph*{
+%\begin{itemize}
+%\item CoreFusion~\cite{ipek2007CoreFusion}
+%\item Bahurupi~\cite{pricopi2012bahurupi,pricopiSchedCoreComp2014}
+%\item CHARM~\cite{cong2012charm}
+%\item WidGET~\cite{Watanabe2010Widget}
+%\item Tflex~\cite{kim2007tflex}
+%\end{itemize}
+
+
+%\subsection{Heterogeneous Mix}
+%\begin{itemize}
+%\item big.LITTLE~\cite{jeff2012big}
+%\item Mirage Cores~\cite{Padmanabha2017mirage}
+%s\end{itemize}
+
+
+
+%DMPs such as CoreFusion~\cite{ipek2007CoreFusion} differentiate themselves to EDGE based DMPs on their Instruction Set Architecture (ISA).
+%CoreFusion uses a CISC/RISC based architecture which limits the degree of scalability (fusion), whereas EDGE based DMPs have shown promising scalability~\cite{kim2007tflex, sibi2014}.
+%Other types of DMPs such as WidGET~\cite{Watanabe2010Widget} and Sharing Architecture~\cite{zhou2014sharingarch} present a fine-grain level of composition.
+%In these two architectures, cores can be created out of different components on the processor, including ALUs, floating point units and memory units.
+%This differs from CoreFusion and EDGE where a logical core is composed out of a set of physical cores.
+%This fine-grained composition can allow for even more optimisation but it increases the complexity of the problem.
+
+%Previous work on Dynamic Multicore Processors includes CoreFusion~\cite{ipek2007CoreFusion} and Bahurupi~\cite{pricopi2012bahurupi,pricopiSchedCoreComp2014}.
+%These architectures use a standard ISA and either fetch fixed sized instruction windows~\cite{ipek2007CoreFusion} or entire basic blocks~\cite{pricopi2012bahurupi}.
+%Other DMPs such as TFlex~\cite{kim2007tflex} and E2~\cite{e2} use an hybrid-dataflow EDGE ISA~\cite{burger04edge}. 
+%In TFlex, instructions from a block are executed on different fused cores.
+%In E2, a block is mapped to a fused core and all instructions from that block execute locally.
