@@ -29,6 +29,7 @@ In the original paper, an 4 core composition obtains a 1.3x speedup on SPECINT a
 The Bahurupi~\cite{pricopi2012bahurupi} polymorphic heterogenous multicore architecture proposed by Pricopi et al. introduces a sentinel instruction which informs the hardware about the \textit{live-in} and \textit{live-out} registers of a basic block.
 Baharupi uses the SimpleScalar ISA~\cite{burger1997simplescalar}, and the compiler adds this instruction to the top of every basic block, splitting the program up into blocks similarly to EDGE.
 They show that, on average this introduces a 24\% code size increase for SPEC integer applications, 15\% for SPEC floating point and 19\% for Mediabench~\cite{mediabench} and MiBench~\cite{mibench} benchmark suites.
+
 Another important piece of information contained in this instruction is the size of a block.
 Cores in a composition fetch basic blocks in a similar fashion to the one described in Chapter~\ref{chp:Background} Section~\ref{chp:Background:sec:EDGE}.
 However, cores must execute global register renaming in the sequential order of blocks.
@@ -63,13 +64,20 @@ MorphCore outperform a 2-Way SMT OoO core by 10\% whilst being 22\% more efficie
 Very little work exists on determining the size of a core composition given an application, or when the composition must change.
 In Ipek et al's. original work on CoreFusion~\cite{ipek2007CoreFusion} they introduce the \textit{FUSE}/\textit{SPLIT} instructions that allow for dynamic reconfiguration.
 However, their eight core system only has two possible configurations: either each core is executes on their own or they are fused into groups of four cores; no details as to when to compose cores is discussed.
-This is the same for TFlex~\cite{kim2007tflex}, where 5 different configurations are explored (2, 4, 8, 16 and 32 composed cores), but does not provide any insight as to how to determine the composition size automatically.
+This is the same for the original proposal for TFlex~\cite{kim2007tflex}, where 5 different configurations are explored (2, 4, 8, 16 and 32 composed cores), but does not provide any insight as to how to determine the composition size automatically.
 
 In the work of Pricopi et al.~\cite{pricopiSchedCoreComp2014}, they show how dynamic reconfiguration is beneficial when it comes to scheduling multiple tasks.
 However, they do not discuss any method of automatically deciding the optimal configuration beyond a 4 core composition.
 In their work they use speedup functions determined from profile executions of applications to determine how to schedule tasks.
 This means that whenever an application is modified, it must be re-analysed to benefit from dynamic composition.
 They do not discuss what software characteristics help determine when to reconfigure the cores, or how to optimise software.
+
+Gulati et al. propose an offline and online scheduling algorithms for Tflex \cite{tflexmultitask}. 
+This work focuses on maximising speedup for a set of workloads in a multi-tasking environment.
+The offline model uses profiling data to make decisions whereas the online model measures the current performance of a task being exected and switches the size of the composition based on a threshold.
+In their results they show that the offline profiling tool outperforms the online algorithm.
+As the threshold is set ahead of time, the online model is not able to fully utilise the system when applications do not meet the required threshold.
+Overall they demonstrate that a DMP that can adapt to workloads can result in faster response times than a tradition CMP, between 21\% to 13 times faster.
 
 In~\cite{santos2013nocdmc} they use information provided by the application to determine how to reconfigure some components of the processor.
 This initial information then assists the rest of the reconfiguration, this process still requires input from the programmer though.
@@ -81,28 +89,81 @@ This section covers different hardware techniques used for energy efficiency tha
 \subsection{Dynamic Voltage and Frequency Scaling}
 Dynamic Voltage and Frequency scaling (DVFS) is a method of modifying the power and energy consumption~\cite{paganiEECHM2017} by modifying the voltage or the clock rate of the processor.
 Often times, DVFS is used to reduce energy or power consumption in phases of low performance.
+
 Herbert et al in ~\cite{herbertDVFS07} demonstrate that DVFS can be used to reduce $energy/throughput^2$ on a 16 chip multicore processor (CMP) by 39\% on a set of multithreaded workloads.
 They argue that on a CMP, DVFS does not need to be on a per-core basis, as fine-grained DVFS does not improve $energy/throughput^2$ by much compared to coarse grained DVFS.
 
 Vega et al. in ~\cite{vega2013crank} underline that whilst DVFS is an effective way of reducing power and energy consumption, the fact that it is decoupled from other techniques such as per core power-gating (PCPG) reduces the overall benefits.
 They suggest an online algorithm at the OS level that collects data from performance counters and makes multiple decisions based on the data gathered.
 %write more
-
 %However this approach is orthogonal to DMPs~\cite{sibi2014}, whilst both techniques (DVFS and core composition) adapt to programs phases, DMPs can also be used to speed up the execution of programs.
 
 \subsection{Heterogeneous Chip Multicore Processors}
 ARM big.LITTLE~\cite{} is an example of a heterogeneous chip multicore processor (HCMP) that provides two different types of cores to allow the programmer to choose between energy efficiency and performance.
 A program can be migrated from one core to another depending on the requirements, however this comes at the cost of a very high migration overhead, over 10,000 cycles~\cite{}.
+However Gutpa et al. show that by selecting the correct core configuration at runtime this can lead to an energy reduction of up to 46\%
 
-\section{Improving performance via aggressive speculation}
-High performance fault tolerance through predictive instruction re-execution ~\cite{soman2017predinst}, Koch spec~\cite{koch2013spec}, SAM~\cite{Abeydeera2017SpecMulti}
+%More on HAQUE
+Haque et al. show that an HCMP is able to reduce energy consumption and improve throughput for applications with high-percentile latencies~\cite{tailAMP2017}.
+They highlight that service provides receive requests of different lengths of computation.
+By successfuly scheduling the different lengths to the correct cores in an HCMP, they can reduce the energy consumption of short requests by a factor of 50\% compared to DVFS.
+
+\section{Speculative Execution}
+Core composition is able to improve performance of applications by executing many instructions speculatively from the same thread.
+This section covers work on speculative parallelism, where performance improvements are obtained by speculatively executing mutliple tasks in parallel, rather than through deep branch prediction.
+
+Jeffrey et al. present a novel tiled architecture called Swarm~\cite{swarm2016} that perfroms aggressive thread-level speculation.
+The Swarm architecture executes tasks that are identified via timestamps.
+Each task can access any data and has the ability to generate new tasks, also known as children, that will be assigned a greater timestamp.
+All tasks are maintained by a task-queue, and cores can execute tasks out of order.
+
+Swarm is extended by Abeydeera et al. in their speculation-ware multithreading policy SAM~\cite{Abeydeera2017SpecMulti}.
+According to Abeydeera et al. having a high number of speculative threads often leads to a large amount of aborted tasks which impacts performance
+SAM extends Swarm by ensuring that tasks with lower timestamps are prioritised as they are most likely to commit, thus reducing the number of aborted tasks.
+This is achieved by performing issue stage prioritisation.
+They also relax conflict resolution by using a similar technique to Wait-n-GoTM~\cite{waitNGo2013}.
+Instead of assigning tie-breakers to tasks when they are spawned, SAM assigns them when a task acquires a dependence from another task with equal timestamp; this reduces the number of needless aborts.
+Overall, an 8 in order core Swarm processor with SAM improves performance by 2.33x compared to a single core for a set of graph algorithms.
+
+Subramian et al. present a new execution model for speculative parallelism called Fractal~\cite{fractal2017} which is also built on top of Swarm.
+
+ Koch spec~\cite{koch2013spec}
 
 
 \section{Value Prediction}
-Load value approx~\cite{miguel2014LoadVal}
-Loop data~\cite{murphy2016loopdata}
-Value prediction has seen a resurgence in interest, with the works of Perais et al. on the Value TAGE Predictor~\cite{peraisBeBop2015,peraisVTAGE2014}.
-The work focuses on traditional x86 superscalars, yet they provide a solid foundation for value prediction for EDGE.
+%The value predictor used in Chapter~\ref{chp:hardchanges} is the block based D-VTAGE predictor \cite{peraisBeBop2015}.
+%It is a \textit{computational} value predictor that is adapted from the VTAGE value predictor also presented by Perais et al~\cite{peraisVTAGE2014}.
+The earliest works can be retraced to Mikko et al. where they propose a \textit{Load Value Predictor} \cite{lipasti96valpred} that is able to predict the value of load instructions.
+They showed that a performance increase of up to 27\% can be achieved by only predicting load values.
+
+Perais et al propose the VTAGE \textit{context} value predictor ~\cite{peraisVTAGE2014}, that by adoptes the same prediction scheme as the ITTAGE branch predictor~\cite{SeznecITTAGE}.
+Using global branch history, which is easier to maintain that data-flow history~\cite{peraisVTAGE2014}, VTAGE can improve performance of some SPEC applications by up to 65\%.
+
+The block based D-VTAGE predictor~\cite{peraisBeBop2015} can issue multiple predictions in a cycle by grouping up predictions as a single block.
+The basic prediction fetch and update mechanism are inherited from VTAGE, except D-VTAGE is a \textit{computational} value predictor.
+In order to improve value prediction for tightly knit loops where multiple iterations of the loop body can be live in parallel, the D-VTAGE predictor employs a speculative window that is able to keep track of live speculative data.
+D-VTAGE is able to obtain up to a 1.7x speedup, and averages a 1.10x speedup on a set of SPEC applications. 
+
+Miguel et al. propose a different technique called load value approximation \cite{miguel2014LoadVal} for applications where value inexactness is acceptable.
+Applications such as image tracking or image comparison do not need to operate on exact values as they often allow for a margin of error.
+Therefore, these applications do not need to roll-back on a mispredicted value, and can continue to operate with incorrect data as long as it is sufficiently accurate.
+
+Sheikh et al. present a value predictor that is able to avoid mispredictions caused by Load $\,\to\,$ Store $\,\to\,$ Load conflicts~\cite{sheikh2017value}.
+This is achieved by predicting load memory address at the instruction fetch stage and checking the data-cache for that memory address.
+If the memory address is contained in the data-cache, then the value is is fetched (this is considered a prediction).
+If the address is not contained in the cache, then a data prefetch is issued.
+Their new approach to value prediction generates a 4.8\% speedup on a set of SPEC, EEMBC and Octane applications.
+This is almost 2x more than the VTAGE predictor used in the paper (2.1\%).
+
+\section{Data Prefetching}
+Whilst value prediction tries to mask data dependencies or long latencies caused by cache misses by predicting values, data prefetching attempts to make data available before it is needed.
+This can be achieved both in software by inserting instructions that trigger a data fetch-request ahead of time, or in hardware.
+
+Ainsworth et al. in ~\cite{graphPrefetch2016} suggest that stride-based prefetcher is not adequate for irregular memory accesses.
+They propose a hardware prefetcher that has knowledge on the data structures being treated, to be able to trigger multiple prefetches based on loads snooped on the L1 cache.
+Using Breadth-First-Search (BFS) as an example with the compressed sparse row data-format, they demonstrate that a specialised prefetcher can improve performance by a factor of 2.3x compared to stride prefetching and software prefetching that only generates a 1.1x speedup.
+
+They extend this work in ~\cite{eventTriggeredPrefetcher2018}
 
 
 \section{Partitioning programs on multicore chip}
@@ -141,46 +202,3 @@ Lacking such constructs make these languages less attractive for tiled processor
 Using machine learning to guide optimisations has been a popular area of research as of late~\cite{cummins2017pact,wang2018ml,dubach13dynamic}.
 There are two areas in which machine learning is used: compiler driven optimisations and runtime driven optimisations.
 Depending on the use, different models will have to be used; for example runtime systems require fast responses, thus the models will have to be smaller, whilst compiler driven optmisations are less pressured by this.
-
-
-
-
-
-
-
-
-
-
-
-
-
-%\paragraph*{
-%\begin{itemize}
-%\item CoreFusion~\cite{ipek2007CoreFusion}
-%\item Bahurupi~\cite{pricopi2012bahurupi,pricopiSchedCoreComp2014}
-%\item CHARM~\cite{cong2012charm}
-%\item WidGET~\cite{Watanabe2010Widget}
-%\item Tflex~\cite{kim2007tflex}
-%\end{itemize}
-
-
-%\subsection{Heterogeneous Mix}
-%\begin{itemize}
-%\item big.LITTLE~\cite{jeff2012big}
-%\item Mirage Cores~\cite{Padmanabha2017mirage}
-%s\end{itemize}
-
-
-
-%DMPs such as CoreFusion~\cite{ipek2007CoreFusion} differentiate themselves to EDGE based DMPs on their Instruction Set Architecture (ISA).
-%CoreFusion uses a CISC/RISC based architecture which limits the degree of scalability (fusion), whereas EDGE based DMPs have shown promising scalability~\cite{kim2007tflex, sibi2014}.
-%Other types of DMPs such as WidGET~\cite{Watanabe2010Widget} and Sharing Architecture~\cite{zhou2014sharingarch} present a fine-grain level of composition.
-%In these two architectures, cores can be created out of different components on the processor, including ALUs, floating point units and memory units.
-%This differs from CoreFusion and EDGE where a logical core is composed out of a set of physical cores.
-%This fine-grained composition can allow for even more optimisation but it increases the complexity of the problem.
-
-%Previous work on Dynamic Multicore Processors includes CoreFusion~\cite{ipek2007CoreFusion} and Bahurupi~\cite{pricopi2012bahurupi,pricopiSchedCoreComp2014}.
-%These architectures use a standard ISA and either fetch fixed sized instruction windows~\cite{ipek2007CoreFusion} or entire basic blocks~\cite{pricopi2012bahurupi}.
-%Other DMPs such as TFlex~\cite{kim2007tflex} and E2~\cite{e2} use an hybrid-dataflow EDGE ISA~\cite{burger04edge}. 
-%In TFlex, instructions from a block are executed on different fused cores.
-%In E2, a block is mapped to a fused core and all instructions from that block execute locally.
