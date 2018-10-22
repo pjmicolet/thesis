@@ -47,6 +47,8 @@ On average, \nfvp{} outperforms the baseline by a factor of 1.88x.
     \caption{Comparing the performance of serial fetch to round robin fetch, with and without perfect value prediction. Higher is better}
     \label{fig:perf_pred}
 \end{figure}
+
+\subsubsection{Performance without value prediction}
 The results in Figure~\ref{fig:perf_pred} show that without value prediction the performance improvements brought by RRF on its own are almost non-existant, or in fact detrimental to performance.
 For example, \bm{Multi\_NCut} only has a 1.10x speedup when using the \nfnovp{} configuration, compared to the 3x of \nfvp{}.
 This is due to the fact that whilst more blocks are now spread accross cores, the register dependencies between blocks limit the performance of the composition. 
@@ -57,6 +59,8 @@ This means that not only are data dependencies not resolved, but register read r
 Therefore, without value prediction, RRF suffers due to NoC stress and data dependencies.
 %In fact, \vp{} outperforms \nfnovp{} on \bm{Localization}, which shows that register dependencies between blocks can make the new fetching scheme less performant than the currently implemented.
 
+
+\subsubsection{Performance with value prediction}
 The performance improvements brought by RRF are more apparent when taking value prediction into account.
 \nfvp{} has a 54\% performance increase compared to \vp{} (1.88x vs 1.22x).
 The difference in performance comes from the fact that with value prediction, blocks can potentially execute faster, and thus a faster fetching scheme is required to keep up.
@@ -75,6 +79,7 @@ To better highlight how the SF scheme hinders performance even with value predic
 For each configuration, the number of cycles each core in a composition has instructions to execute is averaged out and then compared to the total execution time of the application.
 When the average active time of a core is close to the total execution time, this means that the composition was efficiently used, as each core had a block to run throughout the program execution.
 
+\paragraph*{Active Cycles}
 Figure~\ref{fig:perf_av_cycle} shows that \vp{} often has low active times when using a composition of 16 cores.
 This is due to the fact that the SF scheme is slow, and thus, some cores are innactive, waiting to receive a fetch request from another core.
 Of course, it is important to note that their LSQs and L1 caches may still be used by other active cores, simply that their execution units are not being used.

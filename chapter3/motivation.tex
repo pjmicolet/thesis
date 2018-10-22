@@ -15,11 +15,11 @@ To maximise core utilisation, a core can have multiple blocks in its instruction
 In this thesis, the instruction window is segmented into four lanes, each of which can hold a block of up to 32 instructions.
 If the program executing is composed mainly of small blocks (less than 32 instructions long), then if it is running on a 16 core composition, the branch prediction accuracy needs to be as high as 98\% to ensure that the cores are fetching blocks on the correct execution path (see Chapter~\ref{chp:cases}).
 A branch prediction accuracy that is under the requirement leads to inefficient use of the composition as cores will be flushing more often than they commit.
-More details on why this is the case can be found in Chapter~\ref{chp:cases}.
+More details on why this is the case can be found in Chapter~\ref{chp:cases} Section~\ref{sec:lim_study}.
 
 The inefficiencies of core composition due to low branch prediction accuracy can clearly be illustrated by one of the benchmarks previously explored, the SD-VBS program \bm{MSER}.
 The benchmark has an average branch prediction accuracy of 86\%, and the blocks are on average less than 10 instructions long.
-With such features, \bm{MSER} cannot benefit greatly from core composition, as even 2 fused cores flush too often, leading to a performance improvement of 1\%.
+With such characteristics \bm{MSER} cannot benefit greatly from core composition, as even 2 fused cores flush too often, leading to a performance improvement of only 1\%.
 
 This Chapter aims to demonstrate how modifying hardware can improve the overall performance of core composition.
 As branch prediction accuracy is essential for good performance in a core composition, it is important to understand how much of a performance gain can be obtained by improving the accuracy.
@@ -81,7 +81,7 @@ Therefore, a new fetching mechanism needs to be designed; section~\ref{chp3:sec:
 
 \subsection{Data dependencies between blocks}
 
-In EDGE, physical registers are used for inter-block communication.
+In the EDGE architecture, physical registers are used for inter-block communication.
 For example, the code found in Listing~\ref{lst:mser_snipet} shows a loop found in the \bm{MSER} benchmark.
 The value of the variable \textit{nvisited} which is used in both the header and loop body, will be passed from one block to another via a register read and write.
 
@@ -138,10 +138,10 @@ If the data dependencies are not resolved quickly enough, then this causes block
 \end{figure}
 
 If cores do not have to wait on data dependencies, this can increase efficiency of core compositions, as they can execute their blocks independently.
-Figure~\ref{fig:motivation_reg} shows how the performance of core composition is affected if blocks can immeidately resolve their data dependencies.
+Figure~\ref{fig:motivation_reg} shows how the performance of core composition is affected if blocks can immediately resolve their data dependencies.
 Once again, this is using the \bm{MSER} benchmark, with core compositions of size 1, 2, 4, 8 and 16, with perfect branch prediction and the OF scheme.
 The speedup is obtained by comparing the execution time of core compositions to a single core with perfect branch that can also immediately resovle data dependencies.
-As shown in the Figure, a 16 core composition can now get a speedup of up to 3x, compared to the 2x when using only perfect branch prediction and the OF scheme.
+As shown in the Figure~\ref{fig:motivation_reg}, a 16 core composition can now get a speedup of up to 3x, compared to the 2x when using only perfect branch prediction and the OF scheme.
 This is due to the fact that register dependencies are no longer serialising some of the computation between blocks, and thus blocks can be executed entirely in parallel.
 
 Serialised execution due to data dependencies is a common problem for superscalar processors~\cite{peraisVTAGE2014}.

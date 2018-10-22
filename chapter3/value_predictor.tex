@@ -1,7 +1,7 @@
-In an EDGE block, data dependent instructions do not pass data to each other via reads and writes to registers, instead the result of an instruction is passed to the operands of instructions who depend on the data (see Chapter~\ref{chp:Background} for more information).
+In an EDGE block, data dependent instructions do not pass data to each other via reads and writes to registers, instead the result of an instruction is passed to the operands of instructions who depend on the data (see Chapter~\ref{chp:Background} Section~\ref{sec:edge_isa} for more information).
 Registers are primarily used to pass information between blocks.
-In a core composition the register files of each core in the composition is shared (Chapter~\ref{chp:Background}) to ensure that each core has the same view of the current execution state.
-When the register files are shared each core becomes responsible for a set of registers; for example in a 2 core composition, the even numbered registers are handled by Core 0 whilst the even number registers are handled by Core 1.
+In a core composition the register files of each core in the composition is shared (Chapter~\ref{chp:Background} Section~\ref{chp:Background:sec:EDGE}) to ensure that each core has the same view of the current execution state.
+The register files becomes distributed and each core becomes responsible for a set of registers; for example in a 2 core composition, the even numbered registers are handled by Core 0 whilst the even number registers are handled by Core 1.
 This means that when Core 1 wants to read or write to Register 0 it must send a request via the network on chip (NoC) as this register is located on Core 0.
 
 \begin{figure}[t]
@@ -19,8 +19,7 @@ This means that when Core 1 wants to read or write to Register 0 it must send a 
 \vspace{3em}
 \end{figure}
 
-As the register reads found in blocks are hardcoded, this means that a single core may receive many register requests per cycle.
-For example, the base address of the arrays in Listing~\ref{lst:basic2} are going to be passed via 3 registers in the block that represents the body of the loop.
+The base address of the arrays in Listing~\ref{lst:basic2} are going to be passed via 3 registers in the block that represents the body of the loop.
 If this loop is executing on a 16 core composition, then 3 of the cores will have to issue all the reads to these 3 registers for all other cores.
 This of course will put stress on the NoC, and increase the latency of what is meant to be a relatively fast instruction.
 
@@ -63,21 +62,21 @@ This section covers different features that must be considered when implementing
 \paragraph*{Prediction Latency}
 In a traditional superscalar processor, one of the main challenges value predictors face is being able to sustain the potential number of prediction requests in a short time frame~\cite{peraisBeBop2015}.
 As value predictors are designed to improve ILP performance of out-of-order (OoO) superscalars, it is important to be able to issue a predicted value quickly.
-If multiple prediction requests are made each cycle, this may require xpensive hardware such as a re-order buffer to hold all predictions~\cite{peraisBeBop2015}, which may dissuade designers from using value predictors.
+If multiple prediction requests are made each cycle, this may require expensive hardware such as a re-order buffer to hold all predictions~\cite{peraisBeBop2015}, which may dissuade designers from using value predictors.
 
 To tackle the challenge of issuing predictions quickly, research has focussed on grouping instructions into prediction blocks~\cite{peraisBeBop2015}.
 Instead of fetching a single prediction, each entry in the value predictor represents a set of predictions.
 Entries are accessed by using the PC of the first instruction in a fetch block.
 By grouping multiple predictions into a single entry, it drastically reduces the amount of requests to the value predictor, reducing the prediction latency for a large amount of instructions.
-However, a block-based value predictor requires that the size of a block be determined at design time, which adds a new design task: choosing a small block size will increase the number of requests per cycle, whilst a large block size will decrease the number of entries and thus reduce overall accuracy.
+However, a block-based value predictor requires that the size of a block be determined at design time, which adds a new design challenge: choosing a small block size will increase the number of requests per cycle, whilst a large block size will decrease the number of entries and thus reduce overall accuracy.
 As EDGE organises instructions as blocks, a block-based predictor would reduce the number of prediction requests per cycle, making it an attractive feature.
 
-
+%Rewrite
 \paragraph*{Prediction generation} Another important feature when selecting a value predictor is how it generates a predicted value.
-As of the writing of this thesis, there exist two main methods: direct value prediction~\cite{peraisVTAGE2014} and stride-based value prediction~\cite{peraisBeBop2015,gabbayVPOrig,goeman01dfcm}.
+Currently, there exist two main methods: direct value prediction~\cite{peraisVTAGE2014} and stride-based value prediction~\cite{peraisBeBop2015,gabbayVPOrig,goeman01dfcm}.
 The direct value predictor is the simpler design, as it only stores the last retired value for the specific instruction.
 When a request is made, the direct value predictor will simply submit the last value.
-Whilst this makes a value predictor small easy to design, such implementation is known to have poor accuracy when predicting values that are modified in quick succession.
+Whilst this makes a value predictor easier to design, such implementation is known to have poor accuracy when predicting values that are modified in quick succession.
 
 On the other hand, stride-based value predictors use two components to make a prediction.
 The first component is a Last-Value Table (LVT) which holds the last retired value for the instruction.

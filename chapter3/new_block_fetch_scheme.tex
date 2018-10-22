@@ -62,7 +62,7 @@ As the figure shows, Core 1 is not active until the 5th fetch request.
 
 The main issue with the SF scheme is that cores in a composition depend on each other in order to fetch blocks.
 For example, if Listing~\ref{lst:basic} is compiled without unrolling and executed on a 4 core composition, each core would have to fetch 4 iterations of the loop before sending the next fetch request to another core.
-To illustrate how fetching can be a bottleneck in this situation, instrumentation was added to the simulator to track when cores fetch blocks in order to be able to visualise how long it takes to fill up a core composition.
+To illustrate how fetching can be a bottleneck in this situation, instrumentation is added to the simulator to track when cores fetch blocks in order to be able to visualise how long it takes to fill up a core composition.
 Figure~\ref{fig:fetch_norm} plots the when cores fetch blocks for a 4 core composition executing the code in Listing~\ref{lst:basic}.
 Each point represents a block fetch, the X-axis represents the time (in cycles) whilst the Y axis represents which core has started fetching a block.
 The figure shows that there are 50 cycles between the first block fetched by Core 0 and the first block fetched by Core 3.
@@ -174,7 +174,7 @@ branches = prediction[i+1, i+n]\\
 }
 \caption{Overview of commit stage for \textit{n} cores fused}~\label{alg:commit}
 \end{algorithm}
-
+\paragraph*{Fetching mechanism}
 Algorithm~\ref{alg:fetch} explains how the new fetching scheme, named Round Robin Fetch (RRF) works for \textit{n} cores in a composition.
 In the general case, when a core composition is created, each core, aside from the core that initiated the composition, is empty.
 When a core fetches a $block_i$, if the next core is empty, it makes two branch predictions, one for $block_{i+1}$ and one for $block_{i+n}$.
@@ -190,7 +190,7 @@ In the SF scheme, when a core is full, it submits a fetch request to another cor
 To ensure cores are always fetching blocks in RRF, the buffer is used when a core has filled up its instruction window and can no longer fetch blocks.
 Instead of sending the fetch request to another core, a core saves the block address in its own buffer, and will handle that fetch request once it has committed a block.
 In this chapter, a core can only have one buffered PC at a time.
-
+\paragraph*{Committing mechanism}
 Algorithm~\ref{alg:commit} shows how blocks are committed in RRF.
 When committing $block_i$, the core sets the next core in line to be the non-speculative core.
 This is due to the fact that the next core in line will always have $block_i+1$.
@@ -209,7 +209,7 @@ However, if it has no PC in its buffer, it must wait on another core to send it 
 	\end{figure}
 %Given a 2 core-fusion \{$Core_0$,$Core_1$\} using a ITTAGE~\cite{SeznecITTAGE} multi-block ahead branch predictor described by A. Seznec et al in~\cite{SeseznecMultipleBlock} the cores can make two predictions in a single cycle: one for itself and one for the next core.
 Figure~\ref{fig:new_fetch_ex} gives an overview of the first few cycles of using RRF with two cores fused.
-When $Core_0$ starts the composition and fetches the first block, $block_0$, if it is able to predict $block_2$ is will submit a fetch request for $block_1$ on $Core_1$ whilst also attempting to fetch $block_2$ for itself.
+When $Core_0$ starts the composition and fetches the first block, $block_0$, if it is able to predict $block_2$ will submit a fetch request for $block_1$ on $Core_1$ whilst also attempting to fetch $block_2$ for itself.
 On the next cycl	e $Core_1$ receives the request for $block_1$ and starts fetching the block.
 Once $Core_1$ can make a branch prediction it will attempt to predict for $block_3$ instead of $block_2$; this is because $block_2$ was already predicted and fetched on $Core_0$.
 
@@ -240,7 +240,9 @@ However, it will have to wait on all other cores to fetch a block before dispatc
 
 This limitation could be alleviated by creating a more complex fetching scheme that takes into account which cores are available to fetch and dispatch blocks immediately, rather than having a stride that is fixed ahead of time.
 Such a scheme may require to centralise the fetching though, as it would require more awareness of what each core is executing.
-This is not explored throughout this Chapter, yet it is suggested as future work.
+Centralising the fetching mechanism increases the pressure on the network as each core will have to send a block PC to the scheduler, and the scheduler will then have to re-submit that PC to an available core.
+This is twice as many network messages per block compared to SF and RF.
+The implementation of a centralised fetching scheme is not explored throughout this Chapter, yet it is suggested as future work.
 
 \subsection{Evaluating the round robin fetch scheme on a synthetic block}
 
@@ -248,7 +250,14 @@ This is not explored throughout this Chapter, yet it is suggested as future work
     \centering
     \includegraphics[width=1\textwidth]{chapter3/graphics/motivation_fetch.pdf}
     \caption{Speedup obtained when executing the synthetic block with varying execution times (facets) with the current fetching technique and new fetching technique. Higher is better.}
-    \label{fig:new_fetch_ex}
+    \label{fig:motiv_res}
+\vspace{1em}
+\end{figure}
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{chapter3/graphics/sdvbsav.pdf}
+    \caption{Average execution time (in cycles) of blocks for each of the SV-DBS benchmarks. Each benchmark was executed on a single core with a single lane with perfect branch prediction.}
+    \label{fig:svdbs_av}
 \vspace{1em}
 \end{figure}
 
@@ -263,10 +272,11 @@ On the other hand, if a block is small yet hundres of cycles to execute, for exa
 This is why the execution time of the block is variable, as it allows to cover different cases.
 For this experiment, six different execution times are explored: $Exec=\{10,20,40,80,160,320\}$.
 
-Figure~\ref{fig:new_fetch_ex} shows the speedup obtained when using core composition when executing the synthetic benchmark, with the SF or RRF scheme.
+Figure~\ref{fig:motiv_res} shows the speedup obtained when using core composition when executing the synthetic benchmark, with the SF or RRF scheme.
 The baseline in this case is a single core executing the benchmark.
 The facets represent one of the different execution times of the block whilst the colours represent the different fetching schemes.
 The results in the figure show that unless a block is at least 80 cycles long, it is difficult to efficiently use 16 core compositions using the normal fetching scheme.
-To give a point of reference -- using data gathered from the SD-VBS benchmarks from Chapter~\ref{chp:cases} -- the average execution time of a block in SD-VBS is 20 cycles long.
+To give a point of reference -- using data gathered from the SD-VBS benchmarks from Chapter~\ref{chp:cases} -- the average execution time (in cycles) of a block for each of the SD-VBS benchmarks is displayed in Figure~\ref{fig:svdbs_av}.
+The figure shows that, on average each block in a benchmark only takes 15 cycles to execute, with \bm{Disparity} having the longest blocks with an average of 40 cycles.
 However, with the new fetching scheme, 16 cores becomes useful when blocks are at least 40 cycles long, enabling a 3x speedup compared to the old fetching scheme.
 For smaller core compositions, such as 2 and 4 fused cores, using a different fetching scheme from the traditional method allows for core composition to speedup execution when blocks are even 10 cycles long.
