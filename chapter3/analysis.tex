@@ -138,7 +138,8 @@ As can be seen, for most benchmarks, RRF's average time is 2x slower than the cu
 This is due to the fact that whenever the SF scheme fetches a block, it can immediately dispatched as fetches are serialised.
 Surprisingly, \bm{Multi\_NCut} for \nfvp{} has a much longer time between fetching and dispatching a block.
 This is due to the fact that \bm{Multi\_NCut} features blocks of only 11 instructions on average and with value prediction blocks are committing faster than on the other configurations.
-Given that a block must access a shared counter to check if it can dispatch, and the counter can only be incremented once per cycle (atomic increment), this shared resource is causing the long fetch to dispatch latency.
+%Given that a block must access a shared counter to check if it can dispatch, and the counter can only be incremented once per cycle (atomic increment), this shared resource is causing the long fetch to dispatch latency.
+Given that only one block can be dispatched per cycle, this is causing the long fetch to dispatch latency.
 Even with the extra latency, RRF still ensures that every core is full, cores must now only wait for their blocks to be dispatched, rather than having for a fetch request.
 
 \begin{figure}[t]
