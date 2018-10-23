@@ -230,8 +230,14 @@ Once $Core_1$ can make a branch prediction it will attempt to predict for $block
 
 Whilst RRF allows for cores to fetch out of order in parallel, blocks must still be dispatched in order.
 This is to ensure that blocks do not execute data-dependent register reads out of order, when dependencies are not yet determined.
-To achieve this, a record of the last dispatched block number is kept in a shared counter.
-When a block tries to dispatch instructions it checks the counter, if its block number is sequentially next then it atomically updates the counter to the value of its block number and dispatches its block.
+To achieve this, each core maintains a flag that tells it whether or not its oldest, not yet dispatched block, can be dispatched.
+At all times, only a single core will have this flag set to true, thus insuring blocks are dispatched in order.
+Since blocks are fetched in a round-robin fashion, whenever a core starts dispatching a block, it sets the flag to false, and informs the next core to start fetching.
+In this chapter, compositions are created out of cores that are physically close, and the following block is always on a core that is 1 network hop away.
+Assuming, for this architecture, that a hop takes a single cycle, a block can theoretically be dispatched every cycle.
+
+%To achieve this, a record of the last dispatched block number is kept in a shared counter.
+%When a block tries to dispatch instructions it checks the counter, if its block number is sequentially next then it atomically updates the counter to the value of its block number and dispatches its block.
 
 This mainly impacts the performance of large compositions when the system is not in a steady-state of fetching and dispatching blocks and the blocks are small.
 This is due to the fact that the fetch stride is larger and thus cores will have to wait longer for blocks on other cores to dispatch.

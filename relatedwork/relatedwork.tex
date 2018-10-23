@@ -49,14 +49,19 @@ E2 introduces the concept of segmenting the instruction window into lanes, allow
 The processor explored throughout this thesis is based on the E2 processor.
 
 \subsection{Reconfigurable microarchitectures}
-ElasticCore~\cite{tavanaElastic} proposes a morphable core that uses dynamic voltage and frequency scaling (DVFS) and microarchitectural modifications such as instruction bandwidth and capacity to adapt the processor to current needs.
-This is similar to the work proposed by Dubach et al. in ~\cite{dubach13dynamic} where microarchitectural features can be modified for better performance or energy efficiency.
-They provide extensive analysis of SPEC 2000 benchmarks and demonstrate that machine learning and dynamic adaptation can double the energy/performance efficiency compared to a static configuration.
 
 MorphCore~\cite{khubaibMorphCore2012} focuses on reconfiguring a core for thread level parallelism.
 It switches between out-of-order (OoO) when running single threaded applications and an in-order core optimised for simultaneous multi threading (SMT) workloads.
 This provides an opposite solution to our DMP: providing a large core made for ILP that can be modified to better fit TLP workloads.
 MorphCore outperform a 2-Way SMT OoO core by 10\% whilst being 22\% more efficient.
+
+ElasticCore~\cite{tavanaElastic} proposes a morphable core that uses dynamic voltage and frequency scaling (DVFS) and microarchitectural modifications such as instruction bandwidth and capacity to adapt the processor to current needs.
+Unlike heterogeneous systems that can present different sized cores on a single package, the ElasticCore is a single core with four different size configurations.
+Each size configuration uses more resources than the previous, such as increasing the fetch width from 2 to 4 to 8 instructions.
+Having all the resources on the single core allows adaptation to be quicker than migrating a thread to a  more appropriate core, 1000 cycles compared to the 10,000 for ARM's big.LITTLE architecture.
+
+This is similar to the work proposed by Dubach et al. in ~\cite{dubach13dynamic} where microarchitectural features can be modified for better performance or energy efficiency.
+They provide extensive analysis of SPEC 2000 benchmarks and demonstrate that machine learning and dynamic adaptation can double the energy/performance efficiency compared to a static configuration.
 
 
 \section{Automated reconfiguration for DMPS}
@@ -72,7 +77,7 @@ In their work they use speedup functions determined from profile executions of a
 This means that whenever an application is modified, it must be re-analysed to benefit from dynamic composition.
 They do not discuss what software characteristics help determine when to reconfigure the cores, or how to optimise software.
 
-Gulati et al. propose an offline and online scheduling algorithms for Tflex \cite{tflexmultitask}. 
+Gulati et al. propose an offline and online scheduling algorithms for Tflex \cite{gulati2008multitaskingdmc}. 
 This work focuses on maximising speedup for a set of workloads in a multi-tasking environment.
 The offline model uses profiling data to make decisions whereas the online model measures the current performance of a task being exected and switches the size of the composition based on a threshold.
 In their results they show that the offline profiling tool outperforms the online algorithm.
@@ -82,6 +87,18 @@ Overall they demonstrate that a DMP that can adapt to workloads can result in fa
 In~\cite{santos2013nocdmc} they use information provided by the application to determine how to reconfigure some components of the processor.
 This initial information then assists the rest of the reconfiguration, this process still requires input from the programmer though.
 
+\section{Code optimisation for EDGE}
+
+Whilst there exists no literature on code optimisations geared towards improving the performance of core compositions, some previous work exists on studying how block sizes affect the performance of the EDGE architecture.
+Smith et al. highlight the importance of block size in their work on an EDGE compiler ~\cite{smith2006edge} stating that larger blocks will lead to better performance.
+They suggest the use of instruction predication~\cite{smith2006dataflowpred} that allows multiple EDGE blocks to be fused into a single block, also known as a hyperblock.
+
+Since EDGE instructions pass their results directly to an instruction's input operands, some optimisations are required to ensure that predicates are efficiently broadcasted to all instructions that depend on it.
+The optimisations defined in ~\cite{smith2006dataflowpred} are predicate fanout reduction, path-sensitive predicate removal and instruction merging.
+Overall, hyperblocks are able to improve the performance of a set of EEMBC benchmarks by 29\% compared to only using basic blocks.
+Using the optimisations previously defined improves the performance of hyperblocks by up to 12\% compared to non-optimised hyperblocks.
+
+
 \section{Hardware techniques for power and energy efficiency}
 
 This section covers different hardware techniques used for energy efficiency that do not depend on core composition.
@@ -90,8 +107,17 @@ This section covers different hardware techniques used for energy efficiency tha
 Dynamic Voltage and Frequency scaling (DVFS) is a method of modifying the power and energy consumption~\cite{paganiEECHM2017} by modifying the voltage or the clock rate of the processor.
 Often times, DVFS is used to reduce energy or power consumption in phases of low performance.
 
-Herbert et al in ~\cite{herbertDVFS07} demonstrate that DVFS can be used to reduce $energy/throughput^2$ on a 16 chip multicore processor (CMP) by 39\% on a set of multithreaded workloads.
-They argue that on a CMP, DVFS does not need to be on a per-core basis, as fine-grained DVFS does not improve $energy/throughput^2$ by much compared to coarse grained DVFS.
+Herbert et al in ~\cite{herbertDVFS07} demonstrate that DVFS is an effective technique for reducing $energy/throughput^2$ ($E/T^2$).
+They suggest two methods of using DVFS: controlling it at a per-core basis, or at a cluster basis, also known as Voltage Frequency Islands (VFI).
+Using VFIs reduces the design complexity of both the hardware and algorithms that control DVFS.
+They demonstrate that on a 16 chip multicore processor (CMP), DVFS can reduce $E/T^2$ by 38.2\% on a set of multithreaded workloads.
+The results also highlight how core-level DVFS does not reduce $E/T^2$ significantly compared to using VFIs: 38.2\% for core-level, compared to 37.9\% for a VFI composed of 4 cores.
+
+Pagani et al. consider the use of VFIs in a heterogeneous system in ~\cite{paganiEECHM2017}, where cores in a VFI are homogeneous, but the different VFIs are heterogeneous.
+Their objective is to ensure that tasks are running on the most energy efficient core whilst satisfying the time constraints of the task.
+Once a task is partitioned and dispatched onto a core in a VFI cluster, Pagani et al. use Single Frequency Approximation (SFA)~\cite{sfaScheme} as the DVFS strategy.
+SFA determines a single voltage/frequency that satisfies timing constrains of a task.
+
 
 Vega et al. in ~\cite{vega2013crank} underline that whilst DVFS is an effective way of reducing power and energy consumption, the fact that it is decoupled from other techniques such as per core power-gating (PCPG) reduces the overall benefits.
 They suggest an online algorithm at the OS level that collects data from performance counters and makes multiple decisions based on the data gathered.
@@ -99,8 +125,8 @@ They suggest an online algorithm at the OS level that collects data from perform
 %However this approach is orthogonal to DMPs~\cite{sibi2014}, whilst both techniques (DVFS and core composition) adapt to programs phases, DMPs can also be used to speed up the execution of programs.
 
 \subsection{Heterogeneous Chip Multicore Processors}
-ARM big.LITTLE~\cite{} is an example of a heterogeneous chip multicore processor (HCMP) that provides two different types of cores to allow the programmer to choose between energy efficiency and performance.
-A program can be migrated from one core to another depending on the requirements, however this comes at the cost of a very high migration overhead, over 10,000 cycles~\cite{}.
+ARM big.LITTLE~\cite{armbig} is an example of a heterogeneous chip multicore processor (HCMP) that provides two different types of cores to allow the programmer to choose between energy efficiency and performance.
+A program can be migrated from one core to another depending on the requirements, however this comes at the cost of a very high migration overhead, over 10,000 cycles~\cite{armbig}.
 However Gutpa et al. show that by selecting the correct core configuration at runtime this can lead to an energy reduction of up to 46\%
 
 %More on HAQUE
@@ -143,9 +169,10 @@ They also relax conflict resolution by using a similar technique to Wait-n-GoTM~
 Instead of assigning tie-breakers to tasks when they are spawned, SAM assigns them when a task acquires a dependence from another task with equal timestamp; this reduces the number of needless aborts.
 Overall, an 8 in order core Swarm processor with SAM improves performance by 2.33x compared to a single core for a set of graph algorithms.
 
-Subramian et al. present a new execution model for speculative parallelism called Fractal~\cite{fractal2017} which is also built on top of Swarm.
-
-
+Subramian et al. present a new execution model that supports nested parallelism and is implemented for a Swarm~\cite{fractal2017} .
+Fractal introduces the concept of grouping tasks into hierarchies of nested \textit{domains}.
+Tasks in a domain can either execute in order or out of order relative to their timestamps and appear to execute as a single atomic unit to other domains.
+By allowing tasks to generate domains, Fractal is able to exploit nested parallelism without complicating the software, and can lead to a performance increase of up to 88x compared to Swarm on some graph algorithms.
 
 \section{Value Prediction}
 %The value predictor used in Chapter~\ref{chp:hardchanges} is the block based D-VTAGE predictor \cite{peraisBeBop2015}.
@@ -161,7 +188,7 @@ The basic prediction fetch and update mechanism are inherited from VTAGE, except
 In order to improve value prediction for tightly knit loops where multiple iterations of the loop body can be live in parallel, the D-VTAGE predictor employs a speculative window that is able to keep track of live speculative data.
 D-VTAGE is able to obtain up to a 1.7x speedup, and averages a 1.10x speedup on a set of SPEC applications. 
 
-Miguel et al. propose a different technique called load value approximation \cite{miguel2014LoadVal} for applications where value inexactness is acceptable.
+Miguel et al. propose a different technique for value prediction called load value approximation \cite{miguel2014LoadVal} for applications where value inexactness is acceptable.
 Applications such as image tracking or image comparison do not need to operate on exact values as they often allow for a margin of error.
 Therefore, these applications do not need to roll-back on a mispredicted value, and can continue to operate with incorrect data as long as it is sufficiently accurate.
 
@@ -183,7 +210,26 @@ Using Breadth-First-Search (BFS) as an example with the compressed sparse row da
 They extend this work in ~\cite{eventTriggeredPrefetcher2018}
 
 
-\section{Partitioning programs on multicore chip}
+\section{Dataflow Programming Languages}
+
+StreamIt~\cite{theis2002streamit} is one of the first programming languages directed towards streaming applications.
+As previously described in Chapter~\ref{chp:Background} Section~\ref{sec:bg:stream}, StreamIt defines a set of constructs to build scalable parallel streaming applications.
+StreamIt was originally intended for the RAW ~\cite{waingold1997raw} tile-based architecture, but can be used in other settings as well.
+
+Brook~\cite{buck2004brook} is another streaming programming language geared towards Graphical Processing Units (GPUs).
+Unlike StreamIt, Brook extends the C language by providing a new datatype and function types.
+The new datatype, called a \textit{stream}, provides a collection of data which can be operated on in parallel, which can be modified by stream functions.
+A stream function takes one or more stream inputs and will output one or more streams; this is similar to a StreamIt \textit{filter}.
+To operate on streams in parallel, Brook defines a subset of stream functions called \textit{kernel} functions.
+These functions do not have access to global values, cannot call functions that aren't kernel functions as well, and are only allowed to access streams in a read-only \textit{OR} write-only way.
+This is to facilitate the compiler generation of dataflow graphs for the program.
+
+WaveScript on the other hand is developed for embedded systems~\cite{newton2008wavescript}.
+Unlike StreamIt, WaveScript uses an asynchronous streaming model, where the input and output rates of functions are not known at compile time.
+%Programs are not defined as graphs, instead 
+
+
+\section{Partitioning streaming programs on multicore chip}
 
 Previous work on scheduling streaming applications onto DMPs or heterogenous multicore chips focuses on finding mathematical ways of partitioning the graph onto the chip ~\cite{carpenter2009streammap,kudlur2008orchestratingstreamprog}.  
 In Carpenter et al.'s work~\cite{carpenter2009streammap} they restrain themselves to partitioning a StreamIt application maintaining connectedness.
@@ -196,22 +242,13 @@ They start by fissionioning stateless filters to obtain the optimal load balance
 Farhad et al. also use integer linear programming in~\cite{farhad2012streamilp} to schedule StreamIt programs on multicore.
 They profile the communication costs of the streaming programs by running the program using different multicore allocations and feed that information into their integer linear programming model.
 
-\subsection{Machine Learning} 
 Using a machine learning model to partition StreamIt programs was previously explored in the work of Wang et al. in ~\cite{wang2013partitionstreamit}.
 They use a k nearest neighbor model to determine the perfect partitioning of a StreamIt program for a multicore system. 
 The features we extracted using correlation analysis are similar to those presented in the work of ~\cite{wang2013partitionstreamit}.
 Unlike our work their model is used to find ways of fusing and fissioning filters to discover a new graph that can then be mapped onto a multicore system.
-Recent work on tuning software to hardware~\cite{cummins2017pact}.
 
 \subsection{Heterogeneous Thread}
 Read ~\cite{becchi2006ThreadOnCore}, ~\cite{adileh2016power}
-
-\section{Dataflow Programming Languages}
-
-There exist streaming languages that target different architectures.
-For example Brook~\cite{buck2004brook} is designed to be used on GPUs and WaveScript for embedded systems~\cite{newton2008wavescript}.
-These languages present different constructs to StreamIt, in particular they lack the graph oriented constructs. 
-Lacking such constructs make these languages less attractive for tiled processors.
 
 
 \section{Machine-learning guided optimisations}

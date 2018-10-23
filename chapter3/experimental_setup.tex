@@ -14,7 +14,8 @@ This means that performance improvements can be analysed without having to fully
 
 As this chapter is only concerned with demonstrating that the new hardware modifications outperform the current implementation, the benchmarks are executed long enough to capture all the phases.
 The phase data gathered from Chapter~\ref{chp:cases} is used to determine hotspots.
-The benchmarks are then instrumented so that the main phases are captured, and executed for at least 100 million instructions to ensure that the caches and predictors are warmed up.
+The benchmarks are then instrumented so that the main phases are captured, and executed for at least 100 million instructions.
+Of that 100 million instructions, 10 million instructions are for warming up the caches and predictors.
 Finally, the same data-sets from Chapter~\ref{chp:cases} are used, to maintain a consistency amongst the thesis.
 
 \subsection{Value Predictor}
