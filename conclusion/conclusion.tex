@@ -1,4 +1,62 @@
 \chapter{Conclusion}
-\section{Summary}
+This thesis has explored how static ahead of time reconfiguration, dynamic runtime adaptation and microarchitectural modifications can make dynamic multicore processors (DMP) more practical.
+Chapter~\ref{chp:streamit} showed that a multithreaded application can automatically be mapped ahead of time to a DMP, where different number of cores are composed for each thread.
+Chapter~\ref{chp:cases} demonstrated that at runtime the DMP can automitically change the size of a composition to ensure that the system is maximising speed whilst being energy efficient.
+Both chapters extract features from the software and use machine learning techniques such as linear regression and k Nearest Neighbors to determine correct configurations.
+Using cross-validation, the two chapters show that the automatic reconfiguration can be used in new unseen situations.
+Finally, Chapter~\ref{chp:hardchanges} explored how modifying the fetching scheme in core composition and adding value prediction can improve the performance of large core compositions.
+
+This chapter summarises the contributions of the thesis, followed by a critical analysis of chapters ~\ref{chp:streamit}, \ref{chp:cases} and \ref{chp:hardchanges}.
+The final section covers future work in core composition.
+
 \section{Contributions}
+
+\subsection{Static ahead of time thread and core partitioning}
+
+Chapter~\ref{chp:streamit} tackled mapping streaming applications to a dynamic multicore processor (DMP).
+This process involved determining the best number of threads for an application and how many cores need to be composed per thread.
+The chapter first presented a design space exploration analysis of a set of streaming applications where 1500 different thread to core composition mappings were used.
+A compiler optimisation was also explored, loop unrolling, and showed that core composition is sensitive to block size: the larger the blocks the more likely core composition is going to more useful.
+Overall the design space exploration underlined that in order to get the best performance, a mix of multi-threading and core composition is required and leads to an average speedup of 3x compared to a single core.
+ 
+This was followed by the presentation of two models that can determine the number of threads that lead to the best performance for a given application and the number of cores per thread.
+The thread model used k Nearest Neighbor to classify a program based on its structure.
+The core composition model uses linear regression to determine how large a composition must be by analysing the average size of an unconditional block of operations found in the thread.
+Using leave one out cross-validation, automated model leads to DMP configurations that are within 16\% of the best from the total exploration space.
+This proved that a machine learning model can be used to determine good configurations ahead of time by only analysing static features of an application. 
+
+%clarify baseline
+\subsection{Dynamic runtime adaptation for efficient execution}
+
+Chapter~\ref{chp:cases} first covered how branch prediction and synchronisation costs affect the performance of different core composition sizes.
+It confirmed the early analysis of Chapter~\ref{chp:streamit} that large EDGE blocks are critical to the efficient use of large core compositions: it reduces the branch prediction accuracy requirements and reduces the cost of synchronising cores.
+Then, an in depth comparison of dynamic and static ahead of time core compositions was conducted on a set of vision benchmarks.
+This study showed that whilst dynamic core compositions do not outperform static ahead of time compositions in terms of speed, dynamically changing the size of a composition can help reduce energy consumption.
+By allowing the DMP to switch between compositions of sizes 1, 2, 4, 8 and 16 cores, dynamic adaptation can reduce energy consumption by 42\% on average compared to a static ahead of time configuration.
+
+The chapter then studied how the latency caused by switching the size of the composition can affect the energy savings.
+It was determined that, as phases are long, on average 100k cycles, the reconfiguration penalty can be between 100 to 1000 cycles without affecting savings.
+Finally, a simple linear regression was used to determine when to switch the size of a core composition at runtime.
+The model analysed the instruction mix of the blocks being executed to determine if the current composition was adequate.
+Using this automated adaptation scheme led to an average energy saving of 36\% which was close to the best possible results.
+
+\subsection{Adapting hardware to improve core composition performance}
+Chapter~\ref{chp:hardchanges} proposed two modifications to the DMP in order to improve performance of core composition.
+The two modifications aim to reduce data-dependencies between cores in a composition and also increase the percentage of time each core in a large composition was active.
+First, it analysed how the current fetching mechanism was not adequate for large core compositions when blocks are small.
+As the current fetching mechanism focuses on filling the instruction window of a single core, many cores in the composition are left idle.
+The chapter suggests a decentralised round-robin fetch scheme where cores fetch blocks out of order and dispatch them in order.
+
+Second, the use of value prediction was motivated to reduce the penalty incurred by inter-block data dependencies.
+The chapter suggests that a block based computational value predictor be used as it allows multiple predictions to be generated quickly.
+This is followed by a performance analysis using a perfect value predictor with and without the round robin fetch scheme on the same benchmarks used in Chapter~\ref{chp:cases}.
+The analysis shows that without value prediction, the round robin fetch scheme cannot improve performance due to the data dependencies found between blocks.
+However, when both value prediction and the round robin fetching scheme are used, this can improve the performance of a 16 core composition by 1.8x on average.
+Finally, a block-based Differential VTAGE (D-VTAGE) value predictor was implemented and its performance analysed.
+Overall, using current state of the art value prediction with the round robin fetching scheme resulted in an average speedup of 1.33x, and could provide a speedup of up to 2.7x.
+
+\section{Critical Analysis}
+\subsection{Static ahead of time thread and core partitioning}
+\subsection{Dynamic runtime adaptation for efficient execution}
+\subsection{Adapting hardware to improve core composition performance}
 \section{Future Work}
