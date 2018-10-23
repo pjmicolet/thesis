@@ -30,9 +30,9 @@ All benchmarks are executed with 16 cores composed as this is the maximum number
 No dynamic adaptation is done as Chapter~\ref{chp:cases} showed that the primary advantage of dynamic core composition is energy savings, whereas this chapter focuses on speedup.
 
 
-\subsection{Results}
+\subsection{Analysing the performance of the different configurations}
 Figure~\ref{fig:perf_pred} shows the speedup obtained on the SD-VBS benchmarks using the different configurations.
-The baseline for this section is normal fetching scheme with no value prediction (\novp).
+The baseline for this section is normal fetching scheme with no value prediction (\novp) with perfect branch prediction.
 This baseline is chosen as this chapter is focused on improving the performance of core composition.
 
 
@@ -108,7 +108,7 @@ Even though the percentage is quite small, it still has an impact on how efficie
 A store-set dependency predictor is implemented in the processor~\cite{chrysos1998storesets}, however it is sometimes hard to predict load-store dependencies accross multiple blocks, which is why LSQ violations occur.
 Store-set dependency predictors are not discussed in more detail in this chapter, however researching how store-set dependencies could be applied to core-composition is an interesting subject for future work.
 
-\subsubsection{Round robin fetching scheme bottleneck Analysis}
+\subsection{Round robin fetching scheme bottleneck Analysis}
 
 As seen in the previous section RRF enables better use of the perfect value predictor. 
 However, on its own it often does not outperform \novp{}, averaging only a speedup of 1.05x.
@@ -169,7 +169,7 @@ Nevertheless, it is an important factor to take into consideration.
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{chapter3/graphics/variance.pdf}
-    \caption{Variance of block sizes per benchmark. Blocks were grouped up in buckets (occupy 1, 2, 3 or 4 segments).}
+    \caption{Variance of block sizes per benchmark. Blocks are grouped up in buckets (occupy 1, 2, 3 or 4 segments).}
     \label{fig:variance}
 	\vspace{1em}
 \end{figure}
