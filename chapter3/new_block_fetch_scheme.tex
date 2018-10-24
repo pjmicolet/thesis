@@ -72,7 +72,7 @@ This is due to the fact that once Core 0 submits a fetch request to Core 1, it w
 Having a serialised block fetching scheme for core composition is one of the main bottlenecks for performance when the compiler cannot produce large blocks.
 This means that core composition is not an efficient method of executing small blocks in parallel, compared to using multithreading.
 When using multithreading cores can fetch blocks independently and thus maximize throughput easily, the size of the block will not have the same impact on performance.
-A mechanism that can alleviate communication between cores is a first step in improving block throughput for core-compositions.
+A mechanism that can alleviate fetch dependencies between cores is a first step in improving block throughput for core-compositions.
 
 \subsection{Round Robin Fetching Scheme}
 
@@ -88,13 +88,13 @@ Finally it compares the performance of the new fetching scheme with the current 
 \subsubsection{Generalised form}
 The advantage of core composition is that multiple cores can execute the same thread.
 Thus, the fact that the SF scheme prioritises filling a single core before using another core in the composition is counter-intuitive as it reduces the chance that all the cores are in use.
-The new fetching scheme has two design objectives: reduce communication amongst cores and ensure that each core in the composition is always executing at least one block.
+The new fetching scheme has two design objectives: reduce the number of times core's depend on each other to fetch blocks and ensure that each core in the composition is always executing at least one block.
 Sequential blocks should not be found on the same core, instead they should all be on separate cores and fetched in a round robin fashion.
 This ensures a more equal distribution of work amongst all the cores in the composition, and also reduces the overhead of ensuring each core has a block.
 
 Currently, if a core does not have a block in its instruction window, it waits until another core in the composition sends it a fetch request.
 If blocks are distributed equally amongst all cores using a round robin model, this new model still requires that each core must submit a fetch request to the next core.
-This means that changing the fetching scheme to a round robin scheme does not suffice to reduce communication amongst cores.
+This means that changing the fetching scheme to a round robin scheme does not necessarily stop cores from depending from one another to fetch blocks.
 However, once a core has a block it can use branch prediction to predict the next block it must fetch, rather than waiting for another fetch request from a core.
 As this new fetching mechanism employs a round robin scheme, the branch predictor should predict a block that is multiple steps into the future rather than the immediate branch.
 By allowing cores to fetch blocks in \textit{strides}, instead of sequentially, the new fetching mechanism not only ensures cores have an equal amount of work, but that they can fetch in parallel.
