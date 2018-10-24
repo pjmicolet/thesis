@@ -10,7 +10,7 @@ This chapter summarises the contributions of the thesis, followed by a critical 
 The final section covers future work in core composition.
 
 \section{Contributions}
-
+This section summarises the contributions of this thesis, specifically the work conducted in chapters  ~\ref{chp:streamit}, \ref{chp:cases} and \ref{chp:hardchanges}.
 \subsection{Static ahead of time thread and core partitioning}
 
 Chapter~\ref{chp:streamit} tackled mapping streaming applications to a dynamic multicore processor (DMP).
@@ -56,7 +56,43 @@ Finally, a block-based Differential VTAGE (D-VTAGE) value predictor was implemen
 Overall, using current state of the art value prediction with the round robin fetching scheme resulted in an average speedup of 1.33x, and could provide a speedup of up to 2.7x.
 
 \section{Critical Analysis}
-\subsection{Static ahead of time thread and core partitioning}
-\subsection{Dynamic runtime adaptation for efficient execution}
-\subsection{Adapting hardware to improve core composition performance}
+This thesis aimed to make dynamic multicore processors more practical, however it is important to conduct a critical analysis to understand the limitations of the research conducted.
+
+\subsection{Simulation}
+
+The experiments done throughout this thesis use a cycle-accurate simulator for the EDGE architecture.
+This is due to the fact that there exists no processor that uses the EDGE architecture and also has core composition.
+In fact, there exist no physical processor that implement core composition, thus simulation is the only current method of evaluating it.
+This is also an issue for value prediction, as no processor manufacturer has yet to implement one.
+
+Whilst simulation can provide a good overview of how can be affected by different configurations of the processor, runtime adaptation, and the effect of value prediction, certain inaccuracies may arise from the implementation of the model.
+Furthermore, energy or power consumption can only be estimated through the use of a model.
+A Register-transfer level (RTL) implementation of the EDGE processor that features core composition and value prediction would allow for better precision.
+
+
+\subsection{Compiler}
+In chapters ~\ref{chp:streamit}, \ref{chp:cases} one of the factors that limits performance in core composition is block size.
+The chapters explored source-level transformations to improve the size of blocks.
+However code transformations at the compiler level could potentially increase block sizes for some programs that could not be improved manually.
+This could potentially affect the amount of instruction level parallelism found in some of the benchmarks explored throughout this thesis, which, naturally could affect energy savings when considering dynamic reconfiguration.
+
+Furthermore hyperblock formation is currently limited to the merging of two blocks, which once again limits the potential size of a block.
+Hyperblock formation also does not take into account any profiling information which could potentially impact the formation of blocks.
+For example, the merging of two blocks that form an if/else statement is only useful if both conditions happen fairly regularly.
+If this is not the case and one of the statements is taken most of the time then the block's size is only artificially increased, as some of the predicated instructions will never fire.
+
+\subsection{Architectural Features}
+Throughout this thesis, a single core configuration was explored throughout.
+Naturally, this means that the design-space exploration done throughout the thesis are specific to the configuration used.
+Whilst the work conducted throughout the thesis provide a good methodology for generating models that automate reconfiguration, the overall improvements are mainly specific to the configuration.
+
 \section{Future Work}
+
+Compiler passes to improve performance of core composition.
+For example, looking at modulo scheduling for loops that feature control flow to try and maximise block sizes.
+
+Design space exploration on a micro-architectural level to determine what type of core is best for core composition.
+For example, maybe having a processor with even smaller cores, therefore less power-hungry, may be best.
+
+Exploring a runtime system that can do both speculative multithreading and core composition.
+This may be useful for irregular parallelism where multithreading may be better when there's abundance of work, and core composition is better when there isn't.
