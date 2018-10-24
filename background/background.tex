@@ -109,7 +109,7 @@ On parallel workloads the DMP can be reconfigured by de-composing the compositio
 
 \paragraph*{Resource Sharing Dynamic Multicore Processors}
 A more fine-grained DMP technique is resource-sharing.
-For example in the WiDGET DMP by Watanabe et al. \cite{Watanabe2010Widget}, cores are built out of Instruction Engine front-ends which function similarly to Out of Order (OoO) cores' front and back ends.
+For example in the WiDGET DMP by Watanabe et al. \cite{Watanabe2010Widget}, cores are built out of Instruction Engine front-ends which function similarly to Out of Order (OoO) cores' front and back end pipeline functions.
 They then are connected to Execution Units which they can choose to use.
 Each core in the WiDGET DMP also have access to their neighbors Execution Units, allowing for more variation.
 Another example of resource sharing can be found in Rodrigues et al.'s work~\cite{rodrigues2014perf} where a core can use resources such as Arithmetic Logic Units (ALUs) from other cores.
