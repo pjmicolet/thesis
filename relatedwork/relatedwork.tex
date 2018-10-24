@@ -19,7 +19,7 @@ The topics covered are:
 
 This section covers work on both dynamic multicore processors (DMP) and processors that can reconfigure their microarchitectures.
 
-\subsection{Core composition}
+\subsection{Dynamic Multicore Processors}
 The idea of composing physical cores was first introduced by Ipek et al. in CoreFusion~\cite{ipek2007CoreFusion}.
 CoreFusion employs a traditional architecture with 2 issue out of order cores.
 When cores are fused, they collectively fetch from the same thread, whenever an instruction cache miss is issued, an eight word block is delivered and distributed across all of the cores' caches.
@@ -43,11 +43,18 @@ Unlike the model used throughout this thesis, a block's instructions can be dist
 As each core can be responsible for a single block, the total number of blocks in flight is equal to the number of cores in the composition.
 In their work~\cite{kim2007tflex} Kim et al. show that a 32 core composition can outperform a single TFlex core by 3x on a set of EEMBC benchmarks and SPEC2000 microbenchmarks.
 
-Finally, the E2 processor is another EDGE based processor that can compose its cores~\cite{putnam2010e2}.
+The E2 processor is another EDGE based processor that can dynamically compose its cores~\cite{putnam2010e2}.
 Unlike TFlex, when cores are fused in the E2 processor, each core is responsible for the blocks they fetch.
 E2 introduces the concept of segmenting the instruction window into lanes, allowing cores to fetch multiple blocks.
 The processor explored throughout this thesis is based on the E2 processor.
 
+Watanabe et al. propose a different type of dynamic multicore processor, where cores share execution units ~\cite{Watanabe2010Widget}.
+The Wisconsin Decoupled Grid Execution Tiles (WidGET) architecture's design is based on a sea of resources, where a core is composed of a simple Instruction Engine (IE) that can send instructions to a set of available Execution Units (EU) that execute instructions in order.
+This allows for fine-grained reconfiguration of the cores: depending on the available ILP, an IE can increase the number of EUs it needs if there's a high amount of ILP available, or inversely reduce it.
+Watanabe et al. compare the performance of their processor to that of an Intel Atom and Intel Xeon using the SPEC2006 benchmark suite.
+They show that using in-order cores with a fine-grained reconfiguration can reduce power consumption by 21\% compared to the Xeon whilst achieving the same performance.
+It is even able to outperform it by 26\% whilst still reducing power consumption by 6\%.
+ 
 \subsection{Reconfigurable microarchitectures}
 
 MorphCore~\cite{khubaibMorphCore2012} focuses on reconfiguring a core for thread level parallelism.
@@ -66,7 +73,6 @@ They provide extensive analysis of SPEC 2000 benchmarks and demonstrate that mac
 
 \section{Automated reconfiguration for DMPS}
 
-Very little work exists on determining the size of a core composition given an application, or when the composition must change.
 In Ipek et al's. original work on CoreFusion~\cite{ipek2007CoreFusion} they introduce the \textit{FUSE}/\textit{SPLIT} instructions that allow for dynamic reconfiguration.
 However, their eight core system only has two possible configurations: either each core is executes on their own or they are fused into groups of four cores; no details as to when to compose cores is discussed.
 This is the same for the original proposal for TFlex~\cite{kim2007tflex}, where 5 different configurations are explored (2, 4, 8, 16 and 32 composed cores), but does not provide any insight as to how to determine the composition size automatically.
@@ -101,7 +107,7 @@ Using the optimisations previously defined improves the performance of hyperbloc
 
 \section{Hardware techniques for power and energy efficiency}
 
-This section covers different hardware techniques used for energy efficiency that do not depend on core composition.
+This section covers different hardware techniques used for energy efficiency that do not use core composition or other reconfigurable system.
 
 \subsection{Dynamic Voltage and Frequency Scaling}
 Dynamic Voltage and Frequency scaling (DVFS) is a method of modifying the power and energy consumption~\cite{paganiEECHM2017} by modifying the voltage or the clock rate of the processor.
@@ -134,6 +140,18 @@ Haque et al. show that an HCMP is able to reduce energy consumption and improve 
 They highlight that service provides receive requests of different lengths of computation.
 By successfuly scheduling the different lengths to the correct cores in an HCMP, they can reduce the energy consumption of short requests by a factor of 50\% compared to DVFS.
 
+
+Adileh et al. argue that current proposals for scheduling tasks on small or large cores are inadequate when operating on a power-constrained HCMPs in a multi-tasking environment~\cite{adileh2016power}.
+Using linear programming they determine that applications can be ranked based on their delta performance/delta power (DPDP) which is defined as the ratio of performance and power difference between executing an application on a small or large core.
+Applications that ranked highly are to be executed on the large core whilst those that ranked lower are executed on the smaller cores.
+After defining five schemes that used DPDP to schedule tasks within a power budget of 1W per second per application they show that DPDP outperforms other schemes by 16\% on average and up to 40\%.
+ 
+Gupta et al. tackle the issue of the high number of configurations possible in an HCMP by characterising workloads offline~\cite{Gupta2017Dypo}.
+Applications are executed and their performance is recorded on the different available cores, with different parameters tuned such as the core's clock frequency.
+Then, for different optimisation goals they found the Pareto-optimal configuration for each of the benchmarks.
+This information is then used to build a classifier that can determine the correct core configuration for a given snipet of an application.
+Using this classifier Gupta et al. are able to improve performance per watt of a set of single and multithreaded benchmarks by 93\%, 81\% and 6\% compared to an interactive, ondemand and powersave governor respectively.
+
 \section{Speculative Execution}
 Core composition is able to improve performance of applications by executing many instructions speculatively from the same thread.
 This section covers work on speculative parallelism, where performance improvements are obtained by speculatively executing mutliple tasks in parallel, rather than through deep branch prediction.
@@ -141,7 +159,7 @@ This section covers work on speculative parallelism, where performance improveme
 \paragraph*{Software level}
 The idea of speculatively extracting parallelism at runtime was first introduced by Rauchwerger et al. in~\cite{runtimeSpec}.
 They underlined that compile-time analysis of single-threaded programs does not allow for the complete detection of parallel sections, and must be completented by runtime analysis.
-They proposed a framework for parallelising loops at runtime: instead of detecting if the loop is parallelisable or not, the loop is speculatively executed in parallel and then runtime analysis is conducted to verify that no data-dependencies were violated.
+They proposed a framework for parallelising loops at runtime: instead of detecting if the loop is parallelisable or not, the loop is speculatively executed in parallel and then runtime analysis is conducted to verify that no data-dependencies are violated.
 If any violations occur, the loop is re-executed serially.
 Loops must be marked as speculatively parallel by the compiler, the run-time system only verifies whether or not the speculative execution does not violate dependencies.
 
@@ -150,7 +168,7 @@ Instead of generating speculative parallel loops at compile time, they propose t
 The code continues to be analysed even after the generation of parallel loops in order to ensure that the optimal code has been generated.
 Using RASP, Hertzberg et al demonstrate that their system can lead to a performance increase average of 1.46x on SPEC2006 integer benchmarks and up to a 3x speedup on SPEC2006 floating point benchmarks compared to single-threaded execution.
 
-Whilst the work proposed by Hertzberg et al. motivated pairing DBT with speculative parallelism, Koch et al. show in ~\cite{koch2013spec} that the majority of the speedup obtained arises from the DBT optimisations and not speculative parallelism.
+Whilst the work proposed by Hertzberg et al. motivate pairing DBT with speculative parallelism, Koch et al. show in ~\cite{koch2013spec} that the majority of the speedup obtained arises from the DBT optimisations and not speculative parallelism.
 As serial programs can also benefit from DBT optimisations, Koch et al. argue that the work in Hertzberg et al. does not necessarily motivate dynamic binary parallelisation (DBP) but instead DBT.
 Without DBT, RASP only provides a 1.12x speedup on SPEC2006 integer benchmarks, compared to the 1.46x when DBT optimisations are turned on.
 Koch et al. underline that the cost of detecting loops which can be parallelised, paired with the cost of starting threads can often outweigh the performance benefits of DBP.
@@ -159,7 +177,7 @@ Koch et al. underline that the cost of detecting loops which can be parallelised
 Jeffrey et al. present a novel tiled architecture called Swarm~\cite{swarm2016} that perfroms aggressive thread-level speculation.
 The Swarm architecture executes tasks that are identified via timestamps.
 Each task can access any data and has the ability to generate new tasks, also known as children, that will be assigned a greater timestamp.
-All tasks are maintained by a task-queue, and cores can execute tasks out of order.
+All tasks are maintained by a task-queue, and can be executed out of order.
 
 Swarm is extended by Abeydeera et al. in their speculation-ware multithreading policy SAM~\cite{Abeydeera2017SpecMulti}.
 According to Abeydeera et al. having a high number of speculative threads often leads to a large amount of aborted tasks which impacts performance
@@ -200,15 +218,19 @@ Their new approach to value prediction generates a 4.8\% speedup on a set of SPE
 This is almost 2x more than the VTAGE predictor used in the paper (2.1\%).
 
 \section{Data Prefetching}
-Whilst value prediction tries to mask data dependencies or long latencies caused by cache misses by predicting values, data prefetching attempts to make data available before it is needed.
-This can be achieved both in software by inserting instructions that trigger a data fetch-request ahead of time, or in hardware.
+Whilst value prediction is used to mask data dependencies or long latencies caused by cache misses by predicting values, data prefetching attempts to make data available in L1 caches before it is needed.
+This can be achieved both in software by inserting instructions that trigger a data fetch-request ahead of time, or in hardware by analysing memory access patterns.
 
 Ainsworth et al. in ~\cite{graphPrefetch2016} suggest that stride-based prefetcher is not adequate for irregular memory accesses.
 They propose a hardware prefetcher that has knowledge on the data structures being treated, to be able to trigger multiple prefetches based on loads snooped on the L1 cache.
 Using Breadth-First-Search (BFS) as an example with the compressed sparse row data-format, they demonstrate that a specialised prefetcher can improve performance by a factor of 2.3x compared to stride prefetching and software prefetching that only generates a 1.1x speedup.
 
-They extend this work in ~\cite{eventTriggeredPrefetcher2018}
-
+Indirect memory accesses are considered difficult to prefetch using hardware techniques~\cite{lee2012whenprefetchworks,prefetchForIndirect2017}.
+Thus Ainsworth et al. also propose a compiler pass that inserts non-blocking loads to enable prefetching for indirect memory accesses in ~\cite{prefetchForIndirect2017}.
+The compiler pass target loads inside loops whos address depends on a loop induction variable and meet a set of conditions to ensure that the prefetches do not cause faults.
+Once the loads have been detected, the prefetches are scheduled based on a formula they devise in the paper.
+The formula takes into account the number of loads found in the prefetch sequence for the loop, the position of the real load, and a constant that is based on architectural features such as memory-latencies and the possible IPC.
+Using their compiler pass they are able to improve the average performance of memory intensive benchmarks by 1.1x to 2.7x on different processors.
 
 \section{Dataflow Programming Languages}
 
@@ -244,15 +266,22 @@ They profile the communication costs of the streaming programs by running the pr
 
 Using a machine learning model to partition StreamIt programs was previously explored in the work of Wang et al. in ~\cite{wang2013partitionstreamit}.
 They use a k nearest neighbor model to determine the perfect partitioning of a StreamIt program for a multicore system. 
-The features we extracted using correlation analysis are similar to those presented in the work of ~\cite{wang2013partitionstreamit}.
-Unlike our work their model is used to find ways of fusing and fissioning filters to discover a new graph that can then be mapped onto a multicore system.
-
-\subsection{Heterogeneous Thread}
-Read ~\cite{becchi2006ThreadOnCore}, ~\cite{adileh2016power}
+Their model is used to find ways of fusing and fissioning filters to discover a new graph that can then be mapped onto a multicore system.
 
 
-\section{Machine-learning guided optimisations}
+\section{Machine-learning guided performance optimisations}
 
-Using machine learning to guide optimisations has been a popular area of research as of late~\cite{cummins2017pact,wang2018ml,dubach13dynamic}.
+Using machine learning to increase performance has been a popular area of research as of late.
 There are two areas in which machine learning is used: compiler driven optimisations and runtime driven optimisations.
-Depending on the use, different models will have to be used; for example runtime systems require fast responses, thus the models will have to be smaller, whilst compiler driven optmisations are less pressured by this.
+
+Dubach et al. use machine learning to determine what the performance and energy consumption will be based on the microarchitectural parameters and compiler optimisations that are used in ~\cite{DubachExpl2012}.
+By exploring the 35 MiBench benchmarks and modifying compiler optimisations and microarchitectural features of an embedded system.
+Over 1000 compiler flags are explored, and 200 configurations of the processor are used (modifying cache sizes, associativity, branch target buffer sizes and associativity).
+Their design space exploration shows that to obtain the best performance for each of the applications, both the compiler optimisations and processor must be tuned.
+They then use this information to build a machine learning model using an Artificial Neural Network which is able to predict the performance, in terms of $Energy \times Delay \times Delay$ of an application given a set of compiler flags and microarchitectural features.
+Their model is able to predict a performance that with an error rate of just 3.2\%.
+
+Cummins et al. developed a deep learning model that takes source-code and is able to learn how the code correlates to performance~\cite{cummins2017pact}.
+Their deep learning model ingests source-code and through a set of transformations, and through training the model, it is able to also generate optimisation heuristics.
+They train their deep learning model for two scenarios: GPU thread-coarsening and CPU/GPU task partitioning.
+Compared to state of the art hand-crafted heuristics, the deep learning model is able to outperform both scenarios by 12\% and 14\% respectively.
