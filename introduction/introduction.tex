@@ -12,3 +12,48 @@ One solution to this problem is heterogeneous multicores which utilize cores wit
 Although heterogeneous multicores are common place in mobile devices, they have little reconfiguration or adaptive capabilities (\eg only two type of cores available for ARM big.LITTLE).
 Dynamic multicore processors offer a solution to this problem by allowing cores to compose (or fuse) together~\cite{ipek2007CoreFusion} into larger logical cores to accelerate single threads.
 This produces ``on-demand'' heterogeneity where cores are grouped to adapt to the workload's demand.
+
+\section{The Problem}
+
+\paragraph*{Dynamic multicore processor reconfiguration}
+Whilst there exists a multitude of proposed dynamic multicore processor architectures ~\cite{MittalSurv2016} work on understanding when to compose cores, or what type of programs can benefit the most out of core composition is scarce.
+A 16 core DMP for example has over 15,000 configurations when executing multi-threaded programs, making exhaustive search of the space impractical.
+Therefore, without some method of automating the reconfiguration of the processor the programmer must have intimate knowledge of both the architecture and the programs that will execute on them.
+
+Previous work on determining how many cores must be composed for a given program at runtime or ahead of time focus on using profiling information~\cite{pricopiSchedCoreComp2014} or heuristics based on observations~\cite{gulati2008multitaskingdmc}.
+They consider core composition to be a \textit{black box}: instead of trying to understand what features of a program lead to good performance, they will instead evaluate it on different core composition sizes and determine the best one.
+This approach makes dynamic multicore processors less practical as it increases the amount of work required to 
+
+\paragraph*{Software Optimisations}
+
+\paragraph*{Core composition mechanisms} 
+
+
+\section{Contributions}
+\section{Structure}
+The overall aim of this thesis is to provide methods of making DMPs more practical, from automated reconfiguration to new hardware that improves the overall performance of the DMP.
+The structure of the thesis is as follows:
+
+\textbf{Chapter ~\ref{chp:Background}} provides information on the different topics approached throughout this thesis. The topics involve the reconfiguration mechanisms of DMPs, the EDGE architecture, how value prediction works and the different machine learning techniques used throughout this thesis.
+
+\textbf{Chapter ~\ref{chp:rw}} presents the related work. This covers previously proposed DMP processors and the different offline and online reconfiguration schemes that are suggested. 
+This is followed by a discussion of work done on compiler optimisations for EDGE, the different hardware techniques that improve energy efficiency, other proposed value predictors and different types of speculative hardware.
+
+\textbf{Chapter ~\ref{chp:setup}} covers the setup of the cycle-accurate simulator used throughout this thesis.
+
+\textbf{Chapter ~\ref{chp:streamit}} explores how a dynamic multicore processor can be configured to improve the performance of multi-threaded streaming applications.
+A design space exploration is conducted where a set of streaming applications are executed on 1300 different configurations of the processor.
+The chapter demonstrates that a mix of core composition and multithreading is requried to get the best speedup for these applications.
+A machine learning model is then trained to determine a good configuration of the processor based on source-code information derived from the application.
+This chapter is based on the work previously published in ~\cite{micolet2016dmpstream}.
+
+\textbf{Chapter ~\ref{chp:cases}} uses dynamic reconfiguration to reduce energy consumption whilst maintaining the same performance as the optimal static ahead of time configuration.
+The chapter first covers some of the factors that affect the performance of core compositions, such as branch prediction accuracy requirements.
+This is folowed by a study of how dynamically adapting the processor at runtime, based on phases of the application, can affect energy savings.
+A machine learning model that can determine the correct size of a core composition at runtime, based on the types of instruction being executed is then designed.
+The chapter is based on the work previously published in ~\cite{micolet2017cases}.
+
+\textbf{Chapter ~\ref{chp:hardchanges}} presents modifications to the hardware that allow larger core compositions to perform better in the average situation.
+The modifications involve a new fetching mechanism that ensures each core can fetch blocks independently and in a round robin fashion and the use of value prediction to minimise stress on the network on chip and reduce the effect of data dependencies between cores.
+
+\textbf{Chapter ~\ref{chp:conclusion}} finally concludes this thesis by summarising the contributions, providing critical analysis and presenting future work in the field of dynamic multicore processors.
