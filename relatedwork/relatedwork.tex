@@ -71,7 +71,7 @@ This is similar to the work proposed by Dubach et al. in ~\cite{dubach13dynamic}
 They provide extensive analysis of SPEC 2000 benchmarks and demonstrate that machine learning and dynamic adaptation can double the energy/performance efficiency compared to a static configuration.
 
 
-\section{Automated reconfiguration for DMPS}
+\section{Automated processor reconfiguration}
 
 In Ipek et al's. original work on CoreFusion~\cite{ipek2007CoreFusion} they introduce the \textit{FUSE}/\textit{SPLIT} instructions that allow for dynamic reconfiguration.
 However, their eight core system only has two possible configurations: either each core is executes on their own or they are fused into groups of four cores; no details as to when to compose cores is discussed.
@@ -225,7 +225,7 @@ Ainsworth et al. in ~\cite{graphPrefetch2016} suggest that stride-based prefetch
 They propose a hardware prefetcher that has knowledge on the data structures being treated, to be able to trigger multiple prefetches based on loads snooped on the L1 cache.
 Using Breadth-First-Search (BFS) as an example with the compressed sparse row data-format, they demonstrate that a specialised prefetcher can improve performance by a factor of 2.3x compared to stride prefetching and software prefetching that only generates a 1.1x speedup.
 
-Indirect memory accesses are considered difficult to prefetch using hardware techniques~\cite{lee2012whenprefetchworks,prefetchForIndirect2017}.
+Prefetching for indirect memory accesses is considered difficult when using a hardware prefetcher~\cite{lee2012whenprefetchworks,prefetchForIndirect2017}.
 Thus Ainsworth et al. also propose a compiler pass that inserts non-blocking loads to enable prefetching for indirect memory accesses in ~\cite{prefetchForIndirect2017}.
 The compiler pass target loads inside loops whos address depends on a loop induction variable and meet a set of conditions to ensure that the prefetches do not cause faults.
 Once the loads have been detected, the prefetches are scheduled based on a formula they devise in the paper.
