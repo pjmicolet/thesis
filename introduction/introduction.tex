@@ -22,14 +22,35 @@ Therefore, without some method of automating the reconfiguration of the processo
 
 Previous work on determining how many cores must be composed for a given program at runtime or ahead of time focus on using profiling information~\cite{pricopiSchedCoreComp2014} or heuristics based on observations~\cite{gulati2008multitaskingdmc}.
 They consider core composition to be a \textit{black box}: instead of trying to understand what features of a program lead to good performance, they will instead evaluate it on different core composition sizes and determine the best one.
-This approach makes dynamic multicore processors less practical as it increases the amount of work required to 
+This approach makes DMPs less practical as it increases the amount of work required to ensure that workloads benefit from core composition.
 
-\paragraph*{Software Optimisations}
+If the system could determine the correct configuration of the processor by analysing the source-code or assembly of a program, then this would make the process of getting the best performance lightweight.
+This would allow programers to modify their programs without having to extensively re-profile their applications, making dynamic multicore processors more approachable.
+
+\paragraph*{Benefiting from core composition}
+Not all applications will benefit from executing on a core composition, which can reduce the attractiveness of implementing the feature in a processor.
+The lack of performance may be due to the fact that the programs were not initially designed to be executed on a system that supports core composition.
+Programmers may have to re-design their code to ensure that a program that currently does not perform any better could not be re-written to benefit from the new hardware.
+
+However, there exists no information as to what optimisations may help improve the performance of applications on a dynamic multicore processor.
+Furthermore, a programmer may not necessarily have access to a compiler that provides passes that are targetted towards such systems.
+In this case, it is important to explore source-level optimisations and study how they can help increase the performance of programs on core composition.
+By underlining which optimisations will lead to performance improvements, this encourages the ease-of-use of dynamic multicore processors.
 
 \paragraph*{Core composition mechanisms} 
+Finally, as the concept of dynamic multicore processors is still relatively new compared to other processor designs, the currently proposed techniques may not be enough to maximise performance.
+For example, core composition exploits instruction level parallelism by executing a single thread through the use of aggressive speculation.
+Yet, there the architectures proposed in research do not discuss how data-dependencies, that often occur when many instructions are executing in parallel, can be resolved quickly.
+This means that dynamic multicore processors will not improve performance to the fullest of their capacities.
+
+It is therefore important to critically analyse where the current bottlenecks of core composition are from a hardware perspective.
+By proposing solutions to these bottlenecks, core composition can become more effective at improving the performance of programs.
+Modifications to the hardware can even help dynamic multicore processors become more adaptable to new types of programs, once again making them more practical.
 
 
 \section{Contributions}
+This thesis tackles the three problems previously described.
+First, through the use of machine learning, multiple modles 
 \section{Structure}
 The overall aim of this thesis is to provide methods of making DMPs more practical, from automated reconfiguration to new hardware that improves the overall performance of the DMP.
 The structure of the thesis is as follows:
@@ -42,14 +63,12 @@ This is followed by a discussion of work done on compiler optimisations for EDGE
 \textbf{Chapter ~\ref{chp:setup}} covers the setup of the cycle-accurate simulator used throughout this thesis.
 
 \textbf{Chapter ~\ref{chp:streamit}} explores how a dynamic multicore processor can be configured to improve the performance of multi-threaded streaming applications.
-A design space exploration is conducted where a set of streaming applications are executed on 1300 different configurations of the processor.
 The chapter demonstrates that a mix of core composition and multithreading is requried to get the best speedup for these applications.
 A machine learning model is then trained to determine a good configuration of the processor based on source-code information derived from the application.
 This chapter is based on the work previously published in ~\cite{micolet2016dmpstream}.
 
 \textbf{Chapter ~\ref{chp:cases}} uses dynamic reconfiguration to reduce energy consumption whilst maintaining the same performance as the optimal static ahead of time configuration.
-The chapter first covers some of the factors that affect the performance of core compositions, such as branch prediction accuracy requirements.
-This is folowed by a study of how dynamically adapting the processor at runtime, based on phases of the application, can affect energy savings.
+The chapter first covers some of the factors that affect the performance of core compositions, such as branch prediction accuracy requirements folowed by a study of how dynamically adapting the processor at runtime can reduce energy consumption.
 A machine learning model that can determine the correct size of a core composition at runtime, based on the types of instruction being executed is then designed.
 The chapter is based on the work previously published in ~\cite{micolet2017cases}.
 
