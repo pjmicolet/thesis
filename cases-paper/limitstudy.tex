@@ -14,7 +14,7 @@ IPC(ASB,CS,BPredAcc) &= \bigg(\frac{ABS}{SyncCost(ABS,CS) + {\frac{ABS}{2}}}\big
 \subsection{Branch Prediction}
 
 As discussed in Chapter~\ref{chp:Background} Section~\ref{chp:Background:sec:EDGE}, an EDGE based DMP accelerates a single thread by executing blocks of instructions from the same thread speculatively across several fused cores. 
-In a core composition, the fetching scheme dictates that a core must fetch blocks until its instruction window is either full or cannot accomodate the newest block.
+In a core composition, the fetching scheme dictates that a core must fetch blocks until its instruction window is either full or cannot accommodate the newest block.
 Once this requirement is met, the following block is sent to the next core in the composition.
 If a core mispeculates a block, this can cause the entire composition to be flushed.
 Thus core composition puts a strain on the branch predictor since efficiently using the cores depends on the prediction accuracy.
@@ -51,16 +51,16 @@ In Equation~\ref{form:minpred}, the -1 is due to the fact that when a program is
 \end{figure}
 Figure~\ref{fig:req_pred} plots the results of using Equation~\ref{form:minpred} with different block sizes and core composition sizes.
 Adding extra physical cores to a composition requires an increasingly accurate branch predictor, especially when the size of a block is under 50 instructions.
-This provides two insights; first of all large LCs will need to run on code sections with less control flow as they are more sensitive to branch misspredictions.
+This provides two insights; first of all large compositions will need to run on code sections with less control flow as they are more sensitive to branch mispredictions.
 Second of all, branch prediction can be a simple method of evaluating the current effectiveness of a core composition.
 Given a certain number of cores, if the prediction accuracy is under the limits presented in Figure~\ref{fig:req_pred} it can be easily determine that the core composition size is sub-optimal.
 
-\subsection{Synchronization Cost}
+\subsection{Synchronisation Cost}
 
 For a program to execute correctly, the cores in a composition must communicate when they have finished executing a block.
 This ensures that the cores fetch blocks from the correct control paths and update memory and registers consistently.
 A core may have to wait for other cores to commit before fetching a new block. 
-The worst-case estimate of this stall is defined as the \textbf{Synchronization Cost}.
+The worst-case estimate of this stall is defined as the \textbf{Synchronisation Cost}.
 
 \begin{equation}\label{form:synccost}
 SyncCos(ABS,CompSize) = \frac{\sum_{CoreID=0}^{CompSize-1}\left(BlocksInFlight(ABS)\right) \times CoreID }{CompSize}
@@ -69,20 +69,20 @@ SyncCos(ABS,CompSize) = \frac{\sum_{CoreID=0}^{CompSize-1}\left(BlocksInFlight(A
 
 Blocks commit in a sequential fashion with the non-speculative block committing first and the most recent speculative block committing last.
 If a core's instruction window is full then it must commit a block before it fetches a new one.
-The Synchronization Cost, in cycles, is defined in equation~\ref{form:synccost} and is measured by averaging the overall number of cycles each fused core waits until it can continue to fetch and execute new blocks.
+The Synchronisation Cost, in cycles, is defined in equation~\ref{form:synccost} and is measured by averaging the overall number of cycles each fused core waits until it can continue to fetch and execute new blocks.
 \textit{AvBlocksInFlight} represents the average number of blocks in flight on a single core in the composition.
 This is a worst-case estimate as block sizes will fluctuate during the execution of a program.
 
-Figure~\ref{fig:sync_cost} shows how many cycles the Synchronization Cost will be for a given core composition size and average block size.
-The larger the block size the lower the Synchronization Cost is since cores fetch fewer blocks and wait less for other fused cores to finish committing.
-Large LCs executing small blocks have a high Synchronization Cost. 
-This indicates that large LCs should be avoided when dealing with smaller blocks as the Synchronization Cost outweighs the code execution.
+Figure~\ref{fig:sync_cost} shows how many cycles the Synchronisation Cost will be for a given core composition size and average block size.
+The larger the block size the lower the Synchronisation Cost is since cores fetch fewer blocks and wait less for other fused cores to finish committing.
+Large LCs executing small blocks have a high Synchronisation Cost. 
+This indicates that large LCs should be avoided when dealing with smaller blocks as the Synchronisation Cost outweighs the code execution.
 
 \begin{figure}[t]
     \centering
     \includegraphics[width=\textwidth]{cases-paper/graphics/limit_study/sync_cost.pdf}
 
-    \caption{Synchronization Cost in cycles for a given number of cores in a composition and an average block size.} %Each core has 4 lanes and each lane can fetch a block of up to 32 instructions. Lower is better.}
+    \caption{Synchronisation Cost in cycles for a given number of cores in a composition and an average block size.} %Each core has 4 lanes and each lane can fetch a block of up to 32 instructions. Lower is better.}
     \label{fig:sync_cost}
 	\vspace{1em}
 \end{figure}

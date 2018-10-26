@@ -1,5 +1,5 @@
 This section motivates the use of dynamic core fusion and its impact on performance and energy.
-It also shows that loop optimizations have a significant performance impact when fusing cores.
+It also shows that loop optimisations have a significant performance impact when fusing cores.
 As IPC is a commonly used method of measuring performance, it is used throughout this chapter.
 
 \subsection{Dynamic Core Fusion}
@@ -127,7 +127,7 @@ On the other hand, if the DMP is reconfigured at runtime, the core-composition c
 In this situation, runtime reconfiguration allows to maximise speed whilst being energy efficient; a goal that cannot be achieved via static ahead of time configurations.
 
 %Maybe, just maybe, add a graph showing how the size of the blocks change (need data on this).
-\subsection{Code Optimizations}
+\subsection{Code Optimisations}
 
 When cores are fused they execute blocks of instructions in parallel on each physical core in the core composition, also known as a logical core (LC).
 %Having multiple cores in a composition can increase the amount of block level parallelism (BLP) that can be extracted out of a program.
@@ -137,7 +137,7 @@ In a nutshell, larger blocks reduce the amount of time taken to fetch blocks for
 
 Thus, optimisations that maximise block size will positively affect the performance of compositions.
 This includes optimisations such as aggressive loop unrolling, inlining and replacing conditional statements with either software predication or architecture-level predication.
-These optimizations are well known and do not require any structural modifications of the program.
+These optimisations are well known and do not require any structural modifications of the program.
 
 \begin{figure}[t]
     \includegraphics[width=\textwidth]{cases-paper/graphics/motivation/code_opt_3.pdf}
@@ -152,7 +152,7 @@ The Figure shows the IPC performance of a 16 core composition with and without o
 For example, in Listing~\ref{lst:high_ipc}, the nested loop at lines 14 to 16 has a data dependency between iterations; switching the for loop headers can get rid of the dependency.
 As can be seen, the impact of these transformations can be large, leading to an 12x improvement on IPC.
 Figure~\ref{fig:compmotiv} shows that the optimisations allow the core-composition to sustain a high IPC phase longer than without the optimisations.
-Longer high IPC phases also means that the DMP will require less switching between core compositions, thus encurring less of a reconfiguration penalty.
+Longer high IPC phases also means that the DMP will require less switching between core compositions, thus incurring less of a reconfiguration penalty.
 However, it also demonstrates that not all of the code in a program can be optimised, as the low-IPC phases do not change.
 More details about the loop transformations are given in section~\ref{sec:opt} but this example illustrates the need for careful tuning of the compiler to achieve high performance on such an architecture.
 

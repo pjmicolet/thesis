@@ -14,7 +14,7 @@ Once trained, the model predicts the optimal number of cores based on the perfor
 \end{figure}
 \subsection{Model}
 
-As the decisions are made at runtime, a lightweight model that is able to predict the correct configuration that can be integreated in hardware is necessery.
+As the decisions are made at runtime, a lightweight model that is able to predict the correct configuration that can be integrated in hardware is necessary.
 Linear regression, which makes predictions using a weighted sum of the input feature, has been demonstrated to be useful for predicting processor performance~\cite{Joseph2006LinReg}.
 It is chosen as it has been as it can easily be implemented in hardware~\cite{lee2006linreg,Lukefahr2012Composite} and has a low overhead when computing the sum.
 The model is trained offline using the traces gathered from the prior analysis for the \textbf{DSpeed} scenario which maximizes energy savings while maintaining performance.

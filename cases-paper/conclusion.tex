@@ -5,7 +5,7 @@ Runtime dynamic reconfiguration of DMPs is therefore necessary to ensure that co
 
 To better understand how core-composition is sensitive to branch prediction and block size, a limit study has been conducted.
 It showed that larger core-compositions favour large blocks as this reduces the strain on the branch predictor and also reduces the communication cost between cores.
-To improve the size of blocks and block level parallelism, a set of compiler optisations such as loop inversion, loop unrolling and predication have been discussed.
+To improve the size of blocks and block level parallelism, a set of compiler optimisations such as loop inversion, loop unrolling and predication have been discussed.
 
 These optimisation were then applied on a set of vision benchmarks, as they are programs that feature varying phases of IPC, and the performance of static core compositions help show that these programs have phases of IPC patterns.
 Using this information, two dynamic runtime reconfiguration schemes are created:  \textbf{DSpeed} that matches the speed of the fastest static core fusion and \textbf{DEff} that maximizes efficiency.

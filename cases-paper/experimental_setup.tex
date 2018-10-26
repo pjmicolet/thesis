@@ -20,7 +20,7 @@ This section now presents the experimental setup used for the remaining parts of
 For this chapter the performance of the Dynamic Multicore Processor (DMP) is studied on a set of Vision Benchmarks designed for hardware and compiler research~\cite{sdvbs}.
 The San Diego Vision Benchmark suite (SD-VBS) is composed of nine single-threaded C benchmarks ranging from image analysis to motion tracking.
 These benchmarks represent state-of-the-art applications in image and vision recognition which are prevalent in embedded systems.
-The domain of image analysis and vision recognition is prevalent in multiple commerical and research fields, such as robotics, self-driving cars and even facial recognition in smartphones.
+The domain of image analysis and vision recognition is prevalent in multiple commercial and research fields, such as robotics, self-driving cars and even facial recognition in smartphones.
 
 Vision applications are usually designed as software pipelines featuring different passes which will naturally form phases throughout the execution of the program.
 The programs typically have regular and simple control flow which enables the formation of large blocks of instructions.
@@ -99,7 +99,7 @@ The objective of the chapter is to explore how adapting the DMP to the phases of
 To evaluate dynamic adaptation, it is compared to different static ahead of time configurations.
 
 Five simulations per benchmark are ran, one for each core composition size: 1, 2, 4, 8 and 16.
-For each core composition the IPC of the core composition at an interval of 640 committed blocks is recoreded.
+For each core composition the IPC of the core composition at an interval of 640 committed blocks is recorded.
 640 committed blocks is chosen as it allows each core in a core composition to execute enough blocks before taking the measurement.
 This is due to the fact that the highest core composition of 16 cores can execute up to 64 blocks at a time, thus recording performance after 640 blocks allows each core to have executed at least 10 blocks.
 Using committed blocks as an interval allows us to easily compare each simulation as the total number of committed blocks does not change even if the core compositions are different.
