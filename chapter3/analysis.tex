@@ -51,7 +51,7 @@ On average, \nfvp{} outperforms the baseline by a factor of 1.88x.
 \subsubsection{Performance without value prediction}
 The results in Figure~\ref{fig:perf_pred} show that without value prediction the performance improvements brought by RRF on its own are almost non-existant, or in fact detrimental to performance.
 For example, \bm{Multi\_NCut} only has a 1.10x speedup when using the \nfnovp{} configuration, compared to the 3x of \nfvp{}.
-This is due to the fact that whilst more blocks are now spread accross cores, the register dependencies between blocks limit the performance of the composition. 
+This is due to the fact that whilst more blocks are now spread across cores, the register dependencies between blocks limit the performance of the composition. 
 The performance limitations are caused by blocks that are further down the speculative path that must wait for older blocks to write to the register file.
 In fact, the more even distribution is the reason why some benchmarks perform worse: \bm{Disparity}, \bm{Texture\_Synthesis} and \bm{Tracking} see a slight performance decrease.
 As blocks are now more evenly distributed amongst cores, this increases the stress on the network on chip (NoC) as more cores will make accesses in parallel.
@@ -64,7 +64,7 @@ Therefore, without value prediction, RRF suffers due to NoC stress and data depe
 The performance improvements brought by RRF are more apparent when taking value prediction into account.
 \nfvp{} has a 54\% performance increase compared to \vp{} (1.88x vs 1.22x).
 The difference in performance comes from the fact that with value prediction, blocks can potentially execute faster, and thus a faster fetching scheme is required to keep up.
-Since the SF scheme focuses on filling a single core, it is less likely going to benefit from paralell execution.
+Since the SF scheme focuses on filling a single core, it is less likely going to benefit from parallel execution.
 Even so, \vp{} results in a 1.5x speedup for \bm{Localization} which shows that value prediction is valuable for composition regardless of the scheme.
 
 \begin{figure}[t]
@@ -81,7 +81,7 @@ When the average active time of a core is close to the total execution time, thi
 
 \paragraph*{Active Cycles}
 Figure~\ref{fig:perf_av_cycle} shows that \vp{} often has low active times when using a composition of 16 cores.
-This is due to the fact that the SF scheme is slow, and thus, some cores are innactive, waiting to receive a fetch request from another core.
+This is due to the fact that the SF scheme is slow, and thus, some cores are inactive, waiting to receive a fetch request from another core.
 Of course, it is important to note that their LSQs and L1 caches may still be used by other active cores, simply that their execution units are not being used.
 The lower the percentage is, the less likely there are going to be multiple blocks on different cores in flight which in turn means the composition is less efficient and value prediction is less useful.
 Since value prediction is aimed at increasing instruction level parallelism (ILP)~\cite{peraisBeBop2015} it is important that cores may fetch blocks quickly in a composition.
@@ -105,7 +105,7 @@ Figure~\ref{fig:lsqvio} shows the number of blocks that cause an LSQ violation, 
 For example 3\% of fetched blocks caused an LSQ violation in the benchmark \bm{MSER}.
 For every LSQ violation, the entire composition may need to be flushed, and given the fact that \bm{MSER} features small blocks, refilling the entire composition may take some time, even with RRF.
 Even though the percentage is quite small, it still has an impact on how efficient the composition may be, due to the fact that compositions rely on heavy speculation to obtain any performance improvements.
-A store-set dependency predictor is implemented in the processor~\cite{chrysos1998storesets}, however it is sometimes hard to predict load-store dependencies accross multiple blocks, which is why LSQ violations occur.
+A store-set dependency predictor is implemented in the processor~\cite{chrysos1998storesets}, however it is sometimes hard to predict load-store dependencies across multiple blocks, which is why LSQ violations occur.
 Store-set dependency predictors are not discussed in more detail in this chapter, however researching how store-set dependencies could be applied to core-composition is an interesting subject for future work.
 
 \subsection{Round robin fetching scheme bottleneck Analysis}
@@ -124,7 +124,7 @@ Essentially, blocks can be fetched out of order, yet still require to be dispatc
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{chapter3/graphics/avTimeToFetch3.pdf}
-    \caption{Average time (in cycles) for block to go from fetched to dispatched using the serial fetching scheme and round robin fetching scehme. Lower is better.}
+    \caption{Average time (in cycles) for block to go from fetched to dispatched using the serial fetching scheme and round robin fetching scheme. Lower is better.}
     \label{fig:av_time}
 	\vspace{1em}
 \end{figure}
@@ -218,5 +218,5 @@ This increase is optimistic, however it shows that some modifications to the new
 This section shows that a perfect branch predictor, paired with perfect value prediction and the round robin fetching scheme can outperform the current configuration by a factor of up to 3x.
 On average, new configuration obtains a speedup of 1.87x, and can potentially be improved to 2.35x with further modifications to the fetching scheme.
 This section also showed that without value prediction RRF only obtains a 1.09x speedup compared to the serial fetching scheme.
-This is due to the fact that the benchmarks all display a certain amount of data-dependencies between blocks and that spreading blocks accross cores more evenly can put pressure on the NoC; thus reduce the performance improvements of fetching blocks quicker.
+This is due to the fact that the benchmarks all display a certain amount of data-dependencies between blocks and that spreading blocks across cores more evenly can put pressure on the NoC; thus reduce the performance improvements of fetching blocks quicker.
 

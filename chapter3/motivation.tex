@@ -27,7 +27,7 @@ To evaluate the benefits of better branch prediction accuracy, a perfect-branch 
 More details on how the perfect-branch predictor works can be found in Section~\ref{chp:chp3:sec:exp}.
 
 
-Figure~\ref{fig:mser_motiv} shows the speedup obtained whene executing \bm{MSER} on core compositions of size 2, 4, 8, 16 when using perfect branch prediction.
+Figure~\ref{fig:mser_motiv} shows the speedup obtained when executing \bm{MSER} on core compositions of size 2, 4, 8, 16 when using perfect branch prediction.
 The speedup is obtained by comparing the performance to a single core with perfect branch prediction.
 As the figure shows, modifying the accuracy leads to a performance increase of 1.15x on a 16 core composition.
 Whilst this increase may appear small, it already demonstrates that branch prediction can help improve performance.
@@ -35,11 +35,11 @@ Whilst this increase may appear small, it already demonstrates that branch predi
 \subsection{Fetching mechanism}
 
 The reason performance does not improve drastically is still due to the fact that \bm{MSER} features small blocks.
-Small blocks put a strain on the composition as it increases the number of fetch requests requried to populate the composition.
+Small blocks put a strain on the composition as it increases the number of fetch requests required to populate the composition.
 
 Currently, when cores are composed, they fetch blocks in a serial fashion.
 When a core composition is initiated, one of the cores will start fetching blocks until its instruction window is full.
-Once the instruction window is full, the core will submit a fetch request to another core in the composition, which will then repreat the procedure.
+Once the instruction window is full, the core will submit a fetch request to another core in the composition, which will then repeat the procedure.
 As cores only submit fetch requests to other cores in the composition if they are full, this means that if a core is able to commit a block before being full, then it will never submit a fetch request to another core.
 In this situation, cores in a composition may remain inactive during the execution of a program as they are not prompted to fetch blocks.
 Throughout the rest of this chapter, this fetching scheme is referred to as Serial Fetch (SF).% (see Chapter~\ref{chp:Background} for more details).
@@ -140,7 +140,7 @@ If the data dependencies are not resolved quickly enough, then this causes block
 If cores do not have to wait on data dependencies, this can increase efficiency of core compositions, as they can execute their blocks independently.
 Figure~\ref{fig:motivation_reg} shows how the performance of core composition is affected if blocks can immediately resolve their data dependencies.
 Once again, this is using the \bm{MSER} benchmark, with core compositions of size 1, 2, 4, 8 and 16, with perfect branch prediction and the OF scheme.
-The speedup is obtained by comparing the execution time of core compositions to a single core with perfect branch that can also immediately resovle data dependencies.
+The speedup is obtained by comparing the execution time of core compositions to a single core with perfect branch that can also immediately resolve data dependencies.
 As shown in the Figure~\ref{fig:motivation_reg}, a 16 core composition can now get a speedup of up to 3x, compared to the 2x when using only perfect branch prediction and the OF scheme.
 This is due to the fact that register dependencies are no longer serialising some of the computation between blocks, and thus blocks can be executed entirely in parallel.
 

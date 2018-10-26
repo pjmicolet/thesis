@@ -64,7 +64,7 @@ In a traditional superscalar processor, one of the main challenges value predict
 As value predictors are designed to improve ILP performance of out-of-order (OoO) superscalars, it is important to be able to issue a predicted value quickly.
 If multiple prediction requests are made each cycle, this may require expensive hardware such as a re-order buffer to hold all predictions~\cite{peraisBeBop2015}, which may dissuade designers from using value predictors.
 
-To tackle the challenge of issuing predictions quickly, research has focussed on grouping instructions into prediction blocks~\cite{peraisBeBop2015}.
+To tackle the challenge of issuing predictions quickly, research has focused on grouping instructions into prediction blocks~\cite{peraisBeBop2015}.
 Instead of fetching a single prediction, each entry in the value predictor represents a set of predictions.
 Entries are accessed by using the PC of the first instruction in a fetch block.
 By grouping multiple predictions into a single entry, it drastically reduces the amount of requests to the value predictor, reducing the prediction latency for a large amount of instructions.
@@ -91,9 +91,10 @@ Not only does this reduce the amount of entries a single instruction occupies in
 
 Core composition is often most effective when executing over loops, as seen in chapter~\ref{chp:cases}.
 As variables such as loop inductors are passed between blocks via register reads and writes, they are a prime candidate for value prediction.
-Since these varaibles are often modified using the same stride throughout the loop and the loops may occur multiple times during the execution of the program it is important that the predictor keeps the least amount of information for each value.
+Since these variables are often modified using the same stride throughout the loop and the loops may occur multiple times during the execution of the program it is important that the predictor keeps the least amount of information for each value.
 This is to ensure that multiple values can co-exist in the predictor, increasing the overall coverage.
 \textit{Computational} predictors are therefore more adequate for this scenario, as they require less entries to predict a single value and are able to generate predictions faster.
+
 
 \paragraph*{Summary}
 
@@ -111,10 +112,10 @@ When a prediction is made, the last seen value and stride are added together to 
 
 The predictor must also handle the fact that multiple blocks may be in flight, and thus the value found in the LVT may not be up to date.
 In order to handle multiple in-flight predictions, D-VTAGE also contains a speculative window that has its own LVT that is speculatively updated when new predictions are made.
-This allows the predictor to be able to handle situations where mutliple iterations of a loop are in flight.
+This allows the predictor to be able to handle situations where multiple iterations of a loop are in flight.
 
 Instead of issuing a single prediction per request, the block based D-VTAGE predictor issues multiple predictions for a single request.
-This is an ideal mechanism when considering EDGE is the targetted platform.
+This is an ideal mechanism when considering EDGE is the targeted platform.
 In this case, when an EDGE block is fetched, a single request has to be made to the predictor to fetch all predictions for register reads.
 
 Finally, as EDGE blocks are single entry, multiple exits, this simplifies the update mechanism for the Speculative Window.

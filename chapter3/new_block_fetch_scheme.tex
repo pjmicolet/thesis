@@ -81,7 +81,7 @@ Whilst serialising fetches aims to improve the efficiency of a single core by en
 If cores can fetch blocks independently, this allows larger core compositions to populate cores in a much quicker fashion.
 
 This section demonstrates how the fetching mechanism can be modified to allow for cores to fetch blocks in parallel.
-It starts with a generalised version of the fetching algorith for \textit{n} cores in a composition.
+It starts with a generalised version of the fetching algorithm for \textit{n} cores in a composition.
 This is followed by a more in-detail example using a two core composition.
 Finally it compares the performance of the new fetching scheme with the current fetching scheme on a synthetic benchmark.
 
@@ -210,7 +210,7 @@ However, if it has no PC in its buffer, it must wait on another core to send it 
 %Given a 2 core-fusion \{$Core_0$,$Core_1$\} using a ITTAGE~\cite{SeznecITTAGE} multi-block ahead branch predictor described by A. Seznec et al in~\cite{SeseznecMultipleBlock} the cores can make two predictions in a single cycle: one for itself and one for the next core.
 Figure~\ref{fig:new_fetch_ex} gives an overview of the first few cycles of using RRF with two cores fused.
 When $Core_0$ starts the composition and fetches the first block, $block_0$, if it is able to predict $block_2$ will submit a fetch request for $block_1$ on $Core_1$ whilst also attempting to fetch $block_2$ for itself.
-On the next cycl	e $Core_1$ receives the request for $block_1$ and starts fetching the block.
+On the next cycle	e $Core_1$ receives the request for $block_1$ and starts fetching the block.
 Once $Core_1$ can make a branch prediction it will attempt to predict for $block_3$ instead of $block_2$; this is because $block_2$ was already predicted and fetched on $Core_0$.
 
 %In this new fetch mechanism, when a core is in fetching mode, it does not attempt to predict $block_{n+1}$ but rather $block_{n+numberOfCoresInComposition}$; the reason behind this will be clarified shortly.
@@ -262,7 +262,7 @@ The implementation of a centralised fetching scheme is not explored throughout t
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{chapter3/graphics/sdvbsav.pdf}
-    \caption{Average execution time (in cycles) of blocks for each of the SV-DBS benchmarks. Each benchmark was executed on a single core with a single lane with perfect branch prediction.}
+    \caption{Average execution time (in cycles) of blocks for each of the SD-VBS benchmarks. Each benchmark was executed on a single core with a single lane with perfect branch prediction.}
     \label{fig:svdbs_av}
 \vspace{1em}
 \end{figure}
@@ -274,7 +274,7 @@ Therefore, evaluating the new fetching scheme on a synthetic benchmark can provi
 For this section the synthetic block is only four instructions long using a custom instruction whose execution time is defined ahead of the simulation.
 The reason a four instruction block was chosen is due to the fact that it allows for four blocks to be fetched on each core, which is the worst-case scenario for the SF scheme.
 Whilst the SF scheme is susceptible to small blocks, the main issue is when these blocks execute quickly, as it means that the composition cannot be filled.
-On the other hand, if a block is small yet hundres of cycles to execute, for example due to multiple cache misses, then the SF scheme would still perform fine, as filling cores would take less time than executing blocks.
+On the other hand, if a block is small yet hundreds of cycles to execute, for example due to multiple cache misses, then the SF scheme would still perform fine, as filling cores would take less time than executing blocks.
 This is why the execution time of the block is variable, as it allows to cover different cases.
 For this experiment, six different execution times are explored: $Exec=\{10,20,40,80,160,320\}$.
 
