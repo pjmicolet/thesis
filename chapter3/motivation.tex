@@ -65,7 +65,7 @@ This means that cores are not being provisioned with blocks fast enough, thus, f
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{chapter3/graphics/perfect_fetch_motiv.pdf}
-    \caption{Speedup obtained when executing the MSER benchmark on different core composition with an oracle fetching scheme and perfect branch prediction. Higher is better.}
+    \caption{Speedup obtained when executing the MSER benchmark on different core composition with an oracle fetching scheme and perfect branch prediction. Higher is better. }
     \label{fig:motivation_fetch}
 	\vspace{1em}
 \end{figure}
@@ -132,8 +132,16 @@ If the data dependencies are not resolved quickly enough, then this causes block
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{chapter3/graphics/mser_motiv_reg.pdf}
-    \caption{Speedup of executing \bm{MSER} using the new fetching mechanism, with perfect value prediction and perfect branch prediction. Higher is better.}
+    \caption{Speedup of executing \bm{MSER} using the new fetching mechanism, with perfect value prediction and perfect branch prediction. Baseline is a single core with perfect value prediction. Higher is better.}
     \label{fig:motivation_reg}
+	\vspace{1em}
+\end{figure}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{chapter3/graphics/mser_ex.pdf}
+    \caption{Example of how data-dependencies cause delays when executing four blocks in parallel. The blocks represent part of the instructions from the loop body in Listing~\ref{lst:mser_snipet}.}
+    \label{fig:mser_nvsited}
 	\vspace{1em}
 \end{figure}
 
