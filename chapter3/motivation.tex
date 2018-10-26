@@ -124,9 +124,22 @@ The value of the variable \textit{nvisited} which is used in both the header and
 \vspace{1em}
 \end{figure}
 
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{chapter3/graphics/mser_ex.pdf}
+    \caption{Example of how data-dependencies cause delays when executing four blocks in parallel. The blocks represent part of the instructions from the loop body in Listing~\ref{lst:mser_snipet}.}
+    \label{fig:mser_nvsited}
+	\vspace{1em}
+\end{figure}
+
 If multiple blocks representing Listing~\ref{lst:mser_snipet} are in flight, the youngest block reading the value of \textit{nvisited} will have to wait for the previous block to execute the write.
 In such a case, a data dependency arises when executing multiple blocks in parallel if a write to a register which has to be read by multiple blocks is pending.
 This can be especially problematic when large core compositions are used, as up to 64 blocks can potentially be in flight at any moment.
+
+To illustrate the problem, Figure~\ref{fig:mser_nvsited} shows a simplified view of four blocks representing the body of the loop in Listing~\ref{lst:mser_snipet} being executed in parallel.
+Each block starts executing a cycle after its parent; the instructions highlighted in colour represent the register causing the data-dependency; blue represents the register being read, and red represents the register being written to.
+The gray slots represent cycles where the block cannot execute any instructions.
+Assuming each instruction takes a single cycle to execute, 22 cycles are needed to execute all four blocks in parallel, compared to 28 cycles if they were to be executed sequentially.
 If the data dependencies are not resolved quickly enough, then this causes blocks to execute in a serial fashion, which reduces any benefit from using the composition.
 
 \begin{figure}[t]
@@ -137,13 +150,6 @@ If the data dependencies are not resolved quickly enough, then this causes block
 	\vspace{1em}
 \end{figure}
 
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/mser_ex.pdf}
-    \caption{Example of how data-dependencies cause delays when executing four blocks in parallel. The blocks represent part of the instructions from the loop body in Listing~\ref{lst:mser_snipet}.}
-    \label{fig:mser_nvsited}
-	\vspace{1em}
-\end{figure}
 
 If cores do not have to wait on data dependencies, this can increase efficiency of core compositions, as they can execute their blocks independently.
 Figure~\ref{fig:motivation_reg} shows how the performance of core composition is affected if blocks can immediately resolve their data dependencies.
