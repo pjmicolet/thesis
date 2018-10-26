@@ -269,7 +269,7 @@ FUNCTION {n.dashify}
   pageresult
 }
  
-FUNCTION {format.date}
+FUNCTION {format.dateOLD}
 { year missing$
     { month missing$
         { "" }
@@ -281,6 +281,22 @@ FUNCTION {format.date}
     { month missing$
         { year }
         { month " " * year * }
+      if$
+    }
+  if$
+}
+FUNCTION {format.date}
+{ year missing$
+    { month missing$
+        { "" }
+        { "Warning: there's a month but no year in " cite$ * top$
+          month
+        }
+      if$
+    }
+    { month missing$
+        { year }
+        {  year  }
       if$
     }
   if$
@@ -401,8 +417,6 @@ FUNCTION {article}
   new.block
   "journal" journal field.or.null italicize output.check
   format.volume output
-  format.number output
-  format.pages output
   "year" format.date output.check
   new.block
   note field.or.null output
@@ -478,7 +492,7 @@ FUNCTION {incollection}
   fin.entry
 }
  
-FUNCTION {inproceedings}
+FUNCTION {inproceedingsOld}
 { output.bibitem
   "author" format.authors output.check
   new.block
@@ -489,6 +503,20 @@ FUNCTION {inproceedings}
   organization field.or.null output
   publisher field.or.null output
   address field.or.null output
+  "year" format.date output.check
+  new.block
+  note field.or.null output
+  fin.entry
+}
+
+FUNCTION {inproceedings}
+{ output.bibitem
+  "author" format.authors output.check
+  new.block
+  "title" format.title output.check
+  new.block
+  "booktitle" format.in.ed.booktitle output.check
+  format.pages output
   "year" format.date output.check
   new.block
   note field.or.null output
