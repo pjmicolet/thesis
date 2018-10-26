@@ -73,23 +73,32 @@ As EDGE organises instructions as blocks, a block-based predictor would reduce t
 
 %Rewrite
 \paragraph*{Prediction generation} Another important feature when selecting a value predictor is how it generates a predicted value.
-Currently, there exist two main methods: direct value prediction~\cite{peraisVTAGE2014} and stride-based value prediction~\cite{peraisBeBop2015,gabbayVPOrig,goeman01dfcm}.
-The direct value predictor is the simpler design, as it only stores the last retired value for the specific instruction.
-When a request is made, the direct value predictor will simply submit the last value.
-Whilst this makes a value predictor easier to design, such implementation is known to have poor accuracy when predicting values that are modified in quick succession.
+Currently, there exist two methods: \textit{context} value prediction~\cite{peraisVTAGE2014} and \textit{computational} value prediction~\cite{peraisBeBop2015,gabbayVPOrig,goeman01dfcm}.
+More details on how these two predictors differ can be found in Chapter~\ref{chp:Background} Section~\ref{sec:valpred}.
+The \textit{context} predictor stores all the different values committed by the instruction in its tables.
+On the other hand the \textit{computational} predictor stores the committed value of the instruction in a table called the Last Value Table (LVT), and stores the delta between the two previous values in another set of tables, this delta is called a \textit{stride}.
+When a prediction request arrives in the \textit{computational} predictor, it fetches an entry from the LVT and the stride table and sums them together to form a prediction.
 
-On the other hand, stride-based value predictors use two components to make a prediction.
-The first component is a Last-Value Table (LVT) which holds the last retired value for the instruction.
-The second component is a stride, which represents the delta between the last two retired values for the instruction.
-When a prediction is made, the value predictor fetches the value from the LVT, and adds the stride to make a prediction.
-Such a design may increase the memory footprint as it has to store both a value and a stride for each data point; however it improves the overall accuracy and usefulness of value predictors.
-It is also more accurate when executing loops as it can detect the stride at which the register values are modified.
-As core composition is best used when executing loops, a stride-based predictor is recommended.
+Whilst \textit{context} predictors are simpler to design, as there are no extra functions required to generate the predictions aside from fetching a value from a table, they are often considered less efficient when used in loops~\cite{peraisBeBop2015}.
+For example, the memory address of an item in an array that is accessed using the loop induction variable is always incremented using a fixed stride (the loop induction increment).
+If this is the first time the loop is executed, none of the memory address can be predicted at any given iteration of the loop as the predictor does not have the addresses already stored in its tables.
+In order for a \textit{context} value predictor to make a correct prediction in such a scenario, the full loop must have already executed once, and all memory address computed must be stored in its tables.
+Having a large number of values stored in the predictor for a single instruction is inefficient, unless the predictor is infinitely large.
+
+On the other hand, a \textit{computational} predictor can capture how the memory address changes each iteration by determining the \textit{stride} at which the it is modified.
+This means that a \textit{computational} predictor will only have to store 2 values: one for the stride and another for the last committed value.
+Not only does this reduce the amount of entries a single instruction occupies in the predictor, but it allows a \textit{computational} predictor to generate predictions faster than the \textit{context} predictor since the next memory address will be equal to $ lastCommittedValue + stride$.
+
+Core composition is often most effective when executing over loops, as seen in chapter~\ref{chp:cases}.
+As variables such as loop inductors are passed between blocks via register reads and writes, they are a prime candidate for value prediction.
+Since these varaibles are often modified using the same stride throughout the loop and the loops may occur multiple times during the execution of the program it is important that the predictor keeps the least amount of information for each value.
+This is to ensure that multiple values can co-exist in the predictor, increasing the overall coverage.
+\textit{Computational} predictors are therefore more adequate for this scenario, as they require less entries to predict a single value and are able to generate predictions faster.
 
 \paragraph*{Summary}
 
 A perfect value predictor for EDGE must therefore be able to provide predictions in groups, as EDGE organises its instructions in blocks as this reduces the number of prediction requests per cycle.
-Also, as value prediction is to be used in core compositions, a stride-based predictor is more adequate than a context based one.
+Also, as value prediction is to be used in core compositions, a \textit{computational} predictor is more adequate than a context based one.
 Perais et al. propose such a predictor: a block based differential Value TAGE predictor~\cite{peraisBeBop2015}.
 The next section covers briefly how this predictor works.
 
