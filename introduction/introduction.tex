@@ -10,8 +10,13 @@ This improves hardware scalability and enables multi-threaded applications to ex
 However, workloads that require high single threaded performance are penalized by the simple nature of each core~\cite{eyerman2010amdahl}.
 One solution to this problem is heterogeneous multicores which utilize cores with different levels of power and performance.
 Although heterogeneous multicores are common place in mobile devices, they have little reconfiguration or adaptive capabilities (\eg only two type of cores available for ARM big.LITTLE).
-Dynamic multicore processors offer a solution to this problem by allowing cores to compose (or fuse) together~\cite{ipek2007CoreFusion} into larger logical cores to accelerate single threads.
+Dynamic multicore processors (DMPs) offer a solution to this problem by allowing cores to compose (or fuse) together~\cite{ipek2007CoreFusion} into larger logical cores to accelerate single threads.
 This produces ``on-demand'' heterogeneity where cores are grouped to adapt to the workload's demand.
+
+Whilst the flexibility of a DMP is an advantage, it does increase the complexity of getting the optimal performance out of applications.
+If the processor cannot automatically reconfigure itself, then it is up to the programmer to determine how the processor must be partitioned, adding extra development work.
+In order to motivate further development of DMPs, it is important to demonstrate that they can be practical.
+This thesis demonstrates that different techniques can help improve the ease-of-use and performance of DMPs, making them an attractive approach towards processor design. 
 
 \section{The Problem}
 
