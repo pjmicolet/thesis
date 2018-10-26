@@ -81,25 +81,24 @@
 \definecolor{listinggray}{gray}{0.9}
 \definecolor{lbcolor}{rgb}{0.9,0.9,0.9}
 \usepackage{subfig}
-
+\usepackage{verbatim}
+\usepackage[titletoc]{appendix}
 \usepackage[normalem]{ulem}
 \usepackage{amsmath}
 \usepackage{mathtools}
-\usepackage{xspace}
-
+\usepackage{xspace} 
 \usepackage{float}
 \DeclarePairedDelimiter\ceil{\lceil}{\rceil}
 \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
 \usepackage{todonotes}
-
+\SetKwComment{Comment}{$\triangleright$\ }{}
 \renewcommand{\theparagraph}{\arabic{paragraph}}
 \newcommand{\ie}{i.\,e.\xspace}
 \newcommand{\eg}{e.\,g.\xspace}
 \newcommand{\bench}[1]{\textit{#1}\xspace}
 \usepackage[labelfont=bf]{caption}
-
 %% Information about the title, etc.
-\title{From software to hardware: dynamic multicore processors a holistic approach (fake title)}
+\title{From Software to Hardware: Making Dynamic Multicore Processors Practical}
 \author{Paul-Jules Micolet}
 
 %% If the year of submission is not the current year, uncomment this line and 
@@ -126,6 +125,7 @@
 
 %% Acknowledgements
 \begin{acknowledgements}
+
 Many thanks to my mummy for the numerous packed lunches; and of course to
 Igor, my faithful lab assistant.
 \end{acknowledgements}
@@ -168,6 +168,7 @@ Igor, my faithful lab assistant.
 
 %% Choose your favourite bibliography style here.
 \bibliographystyle{wmaainf}
+%\bibliographystyle{ksfh_nat}
 
 %% If you want the bibliography single-spaced (which is allowed), uncomment
 %% the next line.
