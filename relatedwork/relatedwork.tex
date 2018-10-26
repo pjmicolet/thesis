@@ -26,7 +26,7 @@ When cores are fused, they collectively fetch from the same thread, whenever an 
 Fetches are aligned with the core responsible for the 2 oldest instructions.
 In the original paper, an 4 core composition obtains a 1.3x speedup on SPECINT and a 1.5x speedup on SPECFP over a 2 issue core.
  
-The Bahurupi~\cite{pricopi2012bahurupi} polymorphic heterogenous multicore architecture proposed by Pricopi et al. introduces a sentinel instruction which informs the hardware about the \textit{live-in} and \textit{live-out} registers of a basic block.
+The Bahurupi~\cite{pricopi2012bahurupi} polymorphic heterogeneous multicore architecture proposed by Pricopi et al. introduces a sentinel instruction which informs the hardware about the \textit{live-in} and \textit{live-out} registers of a basic block.
 Baharupi uses the SimpleScalar ISA~\cite{burger1997simplescalar}, and the compiler adds this instruction to the top of every basic block, splitting the program up into blocks similarly to EDGE.
 They show that, on average this introduces a 24\% code size increase for SPEC integer applications, 15\% for SPEC floating point and 19\% for Mediabench~\cite{mediabench} and MiBench~\cite{mibench} benchmark suites.
 
@@ -38,7 +38,7 @@ Using a 4 core composition they report a performance improvement of 2x on SPECIN
 
 TFlex~\cite{kim2007tflex} proposed by Kim et al. is an EDGE processor that also deploys core composition.
 The mechanism is similar to the one described in Chapter~\ref{chp:Background} Section~\ref{chp:Background:sec:EDGE}.
-They motivate that EDGE simplifies distributing instructions accross cores as EDGE itself is designed for distributed microarchitectures.
+They motivate that EDGE simplifies distributing instructions across cores as EDGE itself is designed for distributed microarchitectures.
 Unlike the model used throughout this thesis, a block's instructions can be distributed amongst the cores in the composition, with one of the cores being the block owner.
 As each core can be responsible for a single block, the total number of blocks in flight is equal to the number of cores in the composition.
 In their work~\cite{kim2007tflex} Kim et al. show that a 32 core composition can outperform a single TFlex core by 3x on a set of EEMBC benchmarks and SPEC2000 microbenchmarks.
@@ -85,7 +85,7 @@ They do not discuss what software characteristics help determine when to reconfi
 
 Gulati et al. propose an offline and online scheduling algorithms for Tflex \cite{gulati2008multitaskingdmc}. 
 This work focuses on maximising speedup for a set of workloads in a multi-tasking environment.
-The offline model uses profiling data to make decisions whereas the online model measures the current performance of a task being exected and switches the size of the composition based on a threshold.
+The offline model uses profiling data to make decisions whereas the online model measures the current performance of a task being executed and switches the size of the composition based on a threshold.
 In their results they show that the offline profiling tool outperforms the online algorithm.
 As the threshold is set ahead of time, the online model is not able to fully utilise the system when applications do not meet the required threshold.
 Overall they demonstrate that a DMP that can adapt to workloads can result in faster response times than a tradition CMP, between 21\% to 13 times faster.
@@ -138,7 +138,7 @@ However Gutpa et al. show that by selecting the correct core configuration at ru
 %More on HAQUE
 Haque et al. show that an HCMP is able to reduce energy consumption and improve throughput for applications with high-percentile latencies~\cite{tailAMP2017}.
 They highlight that service provides receive requests of different lengths of computation.
-By successfuly scheduling the different lengths to the correct cores in an HCMP, they can reduce the energy consumption of short requests by a factor of 50\% compared to DVFS.
+By successfully scheduling the different lengths to the correct cores in an HCMP, they can reduce the energy consumption of short requests by a factor of 50\% compared to DVFS.
 
 
 Adileh et al. argue that current proposals for scheduling tasks on small or large cores are inadequate when operating on a power-constrained HCMPs in a multi-tasking environment~\cite{adileh2016power}.
@@ -149,16 +149,16 @@ After defining five schemes that used DPDP to schedule tasks within a power budg
 Gupta et al. tackle the issue of the high number of configurations possible in an HCMP by characterising workloads offline~\cite{Gupta2017Dypo}.
 Applications are executed and their performance is recorded on the different available cores, with different parameters tuned such as the core's clock frequency.
 Then, for different optimisation goals they found the Pareto-optimal configuration for each of the benchmarks.
-This information is then used to build a classifier that can determine the correct core configuration for a given snipet of an application.
-Using this classifier Gupta et al. are able to improve performance per watt of a set of single and multithreaded benchmarks by 93\%, 81\% and 6\% compared to an interactive, ondemand and powersave governor respectively.
+This information is then used to build a classifier that can determine the correct core configuration for a given snippet of an application.
+Using this classifier Gupta et al. are able to improve performance per watt of a set of single and multithreaded benchmarks by 93\%, 81\% and 6\% compared to an interactive, on demand and powersave governor respectively.
 
 \section{Speculative Execution}
 Core composition is able to improve performance of applications by executing many instructions speculatively from the same thread.
-This section covers work on speculative parallelism, where performance improvements are obtained by speculatively executing mutliple tasks in parallel, rather than through deep branch prediction.
+This section covers work on speculative parallelism, where performance improvements are obtained by speculatively executing multiple tasks in parallel, rather than through deep branch prediction.
 
 \paragraph*{Software level}
 The idea of speculatively extracting parallelism at runtime was first introduced by Rauchwerger et al. in~\cite{runtimeSpec}.
-They underlined that compile-time analysis of single-threaded programs does not allow for the complete detection of parallel sections, and must be completented by runtime analysis.
+They underlined that compile-time analysis of single-threaded programs does not allow for the complete detection of parallel sections, and must be complemented by runtime analysis.
 They proposed a framework for parallelising loops at runtime: instead of detecting if the loop is parallelisable or not, the loop is speculatively executed in parallel and then runtime analysis is conducted to verify that no data-dependencies are violated.
 If any violations occur, the loop is re-executed serially.
 Loops must be marked as speculatively parallel by the compiler, the run-time system only verifies whether or not the speculative execution does not violate dependencies.
@@ -174,7 +174,7 @@ Without DBT, RASP only provides a 1.12x speedup on SPEC2006 integer benchmarks, 
 Koch et al. underline that the cost of detecting loops which can be parallelised, paired with the cost of starting threads can often outweigh the performance benefits of DBP.
  
 \paragraph*{Hardware level}
-Jeffrey et al. present a novel tiled architecture called Swarm~\cite{swarm2016} that perfroms aggressive thread-level speculation.
+Jeffrey et al. present a novel tiled architecture called Swarm~\cite{swarm2016} that performs aggressive thread-level speculation.
 The Swarm architecture executes tasks that are identified via timestamps.
 Each task can access any data and has the ability to generate new tasks, also known as children, that will be assigned a greater timestamp.
 All tasks are maintained by a task-queue, and can be executed out of order.
@@ -198,7 +198,7 @@ By allowing tasks to generate domains, Fractal is able to exploit nested paralle
 The earliest works can be retraced to Mikko et al. where they propose a \textit{Load Value Predictor} \cite{lipasti96valpred} that is able to predict the value of load instructions.
 They showed that a performance increase of up to 27\% can be achieved by only predicting load values.
 
-Perais et al propose the VTAGE \textit{context} value predictor ~\cite{peraisVTAGE2014}, that by adoptes the same prediction scheme as the ITTAGE branch predictor~\cite{SeznecITTAGE}.
+Perais et al propose the VTAGE \textit{context} value predictor ~\cite{peraisVTAGE2014}, that by adopts the same prediction scheme as the ITTAGE branch predictor~\cite{SeznecITTAGE}.
 Using global branch history, which is easier to maintain that data-flow history~\cite{peraisVTAGE2014}, VTAGE can improve performance of some SPEC applications by up to 65\%.
 
 The block based D-VTAGE predictor~\cite{peraisBeBop2015} can issue multiple predictions in a cycle by grouping up predictions as a single block.
@@ -227,7 +227,7 @@ Using Breadth-First-Search (BFS) as an example with the compressed sparse row da
 
 Prefetching for indirect memory accesses is considered difficult when using a hardware prefetcher~\cite{lee2012whenprefetchworks,prefetchForIndirect2017}.
 Thus Ainsworth et al. also propose a compiler pass that inserts non-blocking loads to enable prefetching for indirect memory accesses in ~\cite{prefetchForIndirect2017}.
-The compiler pass target loads inside loops whos address depends on a loop induction variable and meet a set of conditions to ensure that the prefetches do not cause faults.
+The compiler pass target loads inside loops whose address depends on a loop induction variable and meet a set of conditions to ensure that the prefetches do not cause faults.
 Once the loads have been detected, the prefetches are scheduled based on a formula they devise in the paper.
 The formula takes into account the number of loads found in the prefetch sequence for the loop, the position of the real load, and a constant that is based on architectural features such as memory-latencies and the possible IPC.
 Using their compiler pass they are able to improve the average performance of memory intensive benchmarks by 1.1x to 2.7x on different processors.
