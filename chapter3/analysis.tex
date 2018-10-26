@@ -56,7 +56,7 @@ The performance limitations are caused by blocks that are further down the specu
 In fact, the more even distribution is the reason why some benchmarks perform worse: \bm{Disparity}, \bm{Texture\_Synthesis} and \bm{Tracking} see a slight performance decrease.
 As blocks are now more evenly distributed amongst cores, this increases the stress on the network on chip (NoC) as more cores will make accesses in parallel.
 This means that not only are data dependencies not resolved, but register read responses may take slightly longer to arrive as the network is saturated.
-Therefore, without value prediction, RRF suffers due to NoC stress and data dependencies.
+Without value prediction, RRF suffers due to NoC stress and data dependencies.
 %In fact, \vp{} outperforms \nfnovp{} on \bm{Localization}, which shows that register dependencies between blocks can make the new fetching scheme less performant than the currently implemented.
 
 
@@ -101,7 +101,7 @@ This reduced average time is due to flushes caused by Load-Store-Queue (LSQ) vio
 	\vspace{1em}
 \end{figure}
 
-Figure~\ref{fig:lsqvio} shows the number of blocks that cause an LSQ violation, normalized by the number of fetched blocks for each of the benchmarks.
+Figure~\ref{fig:lsqvio} shows the number of blocks that cause an LSQ violation, normalised by the number of fetched blocks for each of the benchmarks.
 For example 3\% of fetched blocks caused an LSQ violation in the benchmark \bm{MSER}.
 For every LSQ violation, the entire composition may need to be flushed, and given the fact that \bm{MSER} features small blocks, refilling the entire composition may take some time, even with RRF.
 Even though the percentage is quite small, it still has an impact on how efficient the composition may be, due to the fact that compositions rely on heavy speculation to obtain any performance improvements.
@@ -112,7 +112,7 @@ Store-set dependency predictors are not discussed in more detail in this chapter
 
 As seen in the previous section RRF enables better use of the perfect value predictor. 
 However, on its own it often does not outperform \novp{}, averaging only a speedup of 1.05x.
-This section covers where the bottlenecks of the new fetching scheme are found, what potential solutions can be employed, and how that can improve performance overall.
+This section covers where the bottlenecks of RRF are, what potential solutions can be employed, and how that can improve performance overall.
 
 \paragraph*{Block dispatching latency}
 

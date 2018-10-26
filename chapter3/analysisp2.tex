@@ -30,7 +30,7 @@ Whilst \bm{Disparity} \bm{Localization}, \bm{Texture\_Synthesis} and \bm{Trackin
 This potentially means that having a D-VTAGE block size of 5 would capture all dependencies.
 However this would require either compiler support to mark register reads that potentially need value prediction, or have hardware to detect register reads that lead to data-dependencies to figure out which register read instructions should be in the predictor; this work is left for future endeavors.
 Therefore, to ensure that most blocks have all their register reads captured, a block size of at least 8 is required.
-More details on how block size affects performance of the predictor can be found later on in this section.
+More details on how block size affects performance can be found later on in this section.
 
 \subsubsection{Block variation analysis}
 
@@ -57,7 +57,7 @@ For these applications, it might be harder to predict values as new blocks may o
 
 \subsection{Setup}
 This section demonstrates how the block based D-VTAGE value predictor improves the performance of core composition using the round-robin fetch scheme (RRF).
-Serial fetch is not explored as the previous section showed that when considering value prediction, RRF always provides the best results.
+Serial fetch is not explored since previous section showed that when using value prediction, RRF always provides the best results.
 The results reported in this section represent the culmination of hardware modifications for core composition discussed in this chapter.
 
 The objective of this section is to demonstrate that a state of the art value predictor, paired with a new fetching scheme, can be used to improve the performance of large core compositions, and to show the difference between a real predictor and the perfect predictor.
@@ -66,12 +66,12 @@ The Last-Value Table shares the same number of values as the Base Entry and uses
 Each tagged entry has a tag of varying size (first table is 12 bits, second 13 bits so on and so forth).
 The total number of values for the D-VTAGE predictor is taken from Perais et al's original paper which introduced the predictor~\cite{peraisBeBop2015}.\
 The adopted size for this chapter is the medium predictor as it provides a good compromise between performance and memory footprint.
-It is important to note that in this context, the values represent single entries in the table, they can be grouped up into any number of blocks.
+It is important to note that the values represent single entries in the table, they can be grouped up into any number of blocks.
 
 The blocks in the speculative window represents the total number of in-flight blocks that can be handled by the speculative window.
 As each core can only have up to four blocks live, the speculative window is set to have four block.
 For the size of the stride, 64 bit values are used throughout the experiments to maximise the reach of the predictor.
-However, different stride sizes are considered: the simulator tracks the size of the strides used in valid predictions to detect how small the strides can be made for each of the benchmarks.
+However, different stride sizes are considered: the simulator tracks the size of the strides used in valid predictions to detect how small they can be made for each of the benchmarks.
 The analysis of the stride size is discussed later on in this section.
 
 Two features of the predictor can be modified: the number of values per entry and at what confidence a prediction is used.

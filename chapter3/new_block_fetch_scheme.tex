@@ -36,7 +36,7 @@
 \vspace{-1em}
 \captionof{lstlisting}{Example of small loop.}
 \label{lst:basic}
-\vspace{-1em}
+\vspace{1em}
 \end{figure}
 
 \begin{figure}[t]
@@ -45,8 +45,6 @@
     \caption{Example of the current fetching model on a 2 core composition. Each core has 4 segments, the arrows represent the block generating the predictions.}
     \label{fig:old_fetch}
 \vspace{1em}
-%\end{figure}
-%\begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{chapter3/graphics/4fetchnorm2.pdf}
     \caption{Trace of when cores fetch blocks when executing Listing~\ref{lst:basic} on a 4 core composition. Y axis represents a core in the composition, X axis represents time.}
@@ -71,14 +69,14 @@ This is due to the fact that once Core 0 submits a fetch request to Core 1, it w
 
 Having a serialised block fetching scheme for core composition is one of the main bottlenecks for performance when the compiler cannot produce large blocks.
 This means that core composition is not an efficient method of executing small blocks in parallel, compared to using multithreading.
-When using multithreading cores can fetch blocks independently and thus maximize throughput easily, the size of the block will not have the same impact on performance.
-A mechanism that can alleviate fetch dependencies between cores is a first step in improving block throughput for core-compositions.
+When using multithreading, cores fetch blocks independently, thus maximizing throughput easily; the size of the block will not have the same impact on performance.
+A mechanism that alleviates fetch dependencies between cores is a first step in improving block throughput for core-compositions.
 
 \subsection{Round Robin Fetching Scheme}
 
 Fetching blocks in a serial fashion currently makes large core compositions more difficult to use efficiently when blocks are small.
 Whilst serialising fetches aims to improve the efficiency of a single core by ensuring that its instruction window is full, it makes populating large core compositions a challenging task.
-If cores can fetch blocks independently, this allows larger core compositions to populate cores in a much quicker fashion.
+If cores can fetch blocks independently, this allows larger core compositions to populate cores much quicker.
 
 This section demonstrates how the fetching mechanism can be modified to allow for cores to fetch blocks in parallel.
 It starts with a generalised version of the fetching algorithm for \textit{n} cores in a composition.
@@ -90,7 +88,7 @@ The advantage of core composition is that multiple cores can execute the same th
 Thus, the fact that the SF scheme prioritises filling a single core before using another core in the composition is counter-intuitive as it reduces the chance that all the cores are in use.
 The new fetching scheme has two design objectives: reduce the number of times core's depend on each other to fetch blocks and ensure that each core in the composition is always executing at least one block.
 Sequential blocks should not be found on the same core, instead they should all be on separate cores and fetched in a round robin fashion.
-This ensures a more equal distribution of work amongst all the cores in the composition, and also reduces the overhead of ensuring each core has a block.
+This ensures a more equal distribution of work amongst all the cores in the composition, and reduces the overhead of ensuring each core has a block.
 
 Currently, if a core does not have a block in its instruction window, it waits until another core in the composition sends it a fetch request.
 If blocks are distributed equally amongst all cores using a round robin model, this new model still requires that each core must submit a fetch request to the next core.
