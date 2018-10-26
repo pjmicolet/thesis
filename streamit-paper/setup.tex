@@ -29,7 +29,7 @@ This information is used to partition the program into threads which is done by 
 This is exemplified in Figure~\ref{fig:examplestream}, the colours filling in the nodes represent the threads each node has been assign to.
 This C++ program is then compiled using the compiler for EDGE described in Chapter~\ref{chp:setup}.
 
-Then, a second machine-learning model is deployed which also analyzses static code features extracted from the SteamIt code, once again provided by the source-to-source compiler.
+Then, a second machine-learning model is deployed which also analyses static code features extracted from the SteamIt code, once again provided by the source-to-source compiler.
 This model decides on the number of cores each thread will have.
 This is achieved by estimating the amount of Instruction Level Parallelism (ILP) that can be possibly extracted in each thread and by determining how many physical cores should be fused for that thread.
 Finally, the processor is reconfigured to fuse the requested resources ahead of time and execute the partitioned program.
@@ -38,7 +38,7 @@ For example in Figure~\ref{fig:examplestream}, once the graph is coloured, the m
 \subsection{Design Space}
 
 This chapter explores 15 StreamIt benchmark all taken from the official StreamIt repository~\cite{streamitrepo}.
-There exist other benchmarks in the repository, however at the time of writing these benchmarks did not execute correclty on the provided simulator.
+There exist other benchmarks in the repository, however at the time of writing these benchmarks did not execute correctly on the provided simulator.
 These applications represent a variety of embedded applications and kernels, from digital signal processing to a matrix-multiplication kernel or band pass filters.
 They can be found in a multitude of devices from digital radios to HDTVs and smartphones (audio/video streaming applications).
 
@@ -111,7 +111,7 @@ Each core is restricted to running only a single thread, as no context switching
 The core-composition is not used on the master core, leaving 15 physical cores to be distributed to each of the worker threads.
 Cores can be fused together to form a logical core with up to 15 physical cores, making the total number of cores assigned to a thread between 1 and 15.
 Of course, not all cores have to be assigned to a thread, in this case all remaining cores that aren't in a composition or a thread are turned off.
-Overal, this leads to a total space size of 32,767 unique combination per benchmark as previously described in Section~\ref{sec:motivation}.
+Overall, this leads to a total space size of 32,767 unique combination per benchmark as previously described in Section~\ref{sec:motivation}.
 
 \subsection{Sample Space}
 

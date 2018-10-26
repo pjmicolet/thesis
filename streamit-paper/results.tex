@@ -26,7 +26,7 @@ As can been seen in Figure~\ref{fig:results} the largest performance penalty res
 Table~\ref{tab:summary} presents the actual configuration found for the best sampled point and the machine learning model prediction.
 Each column represent a different threads and the number in the cell represents the number of core associated with that thread.
 For ~\bench{ChannelVocoder} the model predicts only 8 threads rather than the optimal 13.
-Refering back to Figure~\ref{fig:threadtrend} and Figure~\ref{fig:overviewhist} from Section~\ref{sec:streamit:dse} \bench{ChannelVocoder} always performs better when adding more threads rather than increasing the size of a core composition.
+Referring back to Figure~\ref{fig:threadtrend} and Figure~\ref{fig:overviewhist} from Section~\ref{sec:streamit:dse} \bench{ChannelVocoder} always performs better when adding more threads rather than increasing the size of a core composition.
 This is the cause of the performance penalty, for ~\bench{ChannelVocoder} it is more important to allocate a higher number of threads rather than compose cores.
 Aside from this case, the machine learning model obtains similar speedups to the best sample.
 

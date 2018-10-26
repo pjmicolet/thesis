@@ -52,11 +52,11 @@ The ten features can be described as follows
 \vspace{-1em}
 \item Average Size of Unconditional Blocks: Average number of operations per blocks that must execute unconditionally.
 \vspace{-1em}
-\item Average / Smallest Uncondional Size: The ratio between the average size of a block compared to the smallest size of unconditional blocks.
+\item Average / Smallest Unconditional Size: The ratio between the average size of a block compared to the smallest size of unconditional blocks.
 \vspace{-1em}
-\item Average / Largest Uncondional Size: The ratio between the average size of a block compared to the largest size of unconditional blocks.
+\item Average / Largest Unconditional Size: The ratio between the average size of a block compared to the largest size of unconditional blocks.
 \vspace{-1em}
-\item Ratio of Uncoditional Blocks to Conditional Blocks.
+\item Ratio of Unconditional Blocks to Conditional Blocks.
 \vspace{-1em}
 \item Percentage of blocks that have the largest number of operations.
 \vspace{-1em}
@@ -83,7 +83,7 @@ The fifth feature measures the ratio of the number of unconditional blocks to co
 Overall the highest correlating features are not features distinct to StreamIt, such as Pipelines or SplitJoins.
 This is due to the fact that, from a single-threaded perspective, SplitJoins and Pipelines are less visible in terms of performance.
 This is especially true of SplitJoins as they will not be distributing data amongst different threads and, technically, a single-threaded StreamIt program is a long pipeline structure.
-It can thus be infered that the optimal number of cores is independent of the structure of a StreamIt program.
+It can thus be inferred that the optimal number of cores is independent of the structure of a StreamIt program.
 Instead determining the correct core-composition is more dependent on the amount of computation found in each program.
 
 From Figure~\ref{fig:corrCore} the highest correlating features fit naturally under the assumptions that higher core compositions will perform better with larger blocks of operations and thus blocks of instructions.

@@ -62,7 +62,7 @@ The 10 features can be described as followed:
 \item Total Number of filters in SplitJoins: Amount of filters that are found in SplitJoins.
 \end{itemize}
 
-According to Figure~\ref{fig:corr} the highest correlating value is Number of Distinct Multiplicitie found in the StreamIt application.
+According to Figure~\ref{fig:corr} the highest correlating value is Number of Distinct Multiplicities found in the StreamIt application.
 There are very little variables that highly correlate beyond Number of Distinct Multiplicities.
 A high number of distinct multiplicities implies that the StreamIt application features an important amount of filters with different execution rates.
 This means that certain filters may be local bottlenecks in a Pipeline for example.
@@ -72,7 +72,7 @@ For example, the benchmark \bench{ChannelVocoder} only has 66\% of its filters s
 The benchmark features a single SplitJoin yet when recalling section \ref{sec:streamit:dse}'s Figure~\ref{fig:overviewhist} \bench{ChannelVocoder}'s performance is greatly improved via multi-threading.
 The number of threads also depends on certain structural features such as Pipelines, SplitJoins and number of Filters.
 Yet, these variables seem to hold less influence on the number of threads a program needs than the different multiplicities found in the graph.
-This is most certainly due to the fact that whilst SplitJoins make parallelizable areas more visible, the amount of work contained in each stream of the SplitJoin, especially when this size is small, may actually make parallelizing the program worse due to ratio of communication to computation.
+This is most certainly due to the fact that whilst SplitJoins make parallelisable areas more visible, the amount of work contained in each stream of the SplitJoin, especially when this size is small, may actually make parallelising the program worse due to ratio of communication to computation.
 
 It is also important to understand that a high number of Pipelines implies the use of SplitJoins.
 This is due to the fact that a StreamIt application with no SplitJoins will feature only a singe Pipeline, thus a larger number of pipelines implies at least one SplitJoin.
