@@ -99,7 +99,7 @@ A DMP that can modify its core count is composed of homogeneous cores with a rec
 Physical cores can function either on their own or as a group.
 Figure~\ref{fig:dynmulticore} provides an high level view of a DMP: the physical cores \textit{P}, are composed into 3 separate compositions of sizes 2, 8 and 4.
 Each of the compositions executes a single thread, leveraging the power of the cores that are grouped together.
-A composition fetches instructions from a single source and executes them accross all the physical cores that compose it.
+A composition fetches instructions from a single source and executes them across all the physical cores that compose it.
 Cores can fuse dynamically and create core compositions of any sizes.
 The exact mechanism of core composition is described later on in Section~\ref{chp:bg:sec:edge}.
 
@@ -136,7 +136,7 @@ Then the features of an EDGE processor are described, such as the ability of exe
 
 The Explicit Data Graph Execution (EDGE) architecture~\cite{burger04edge} is a dataflow architecture aimed at improving concurrency whilst being energy and power efficient \cite{smith2006edge,burger04edge}.
 Similar to very long instruction word (VLIW) architectures that pack multiple sub-instructions into a single instruction, EDGE requires that the compiler structure instructions as blocks.
-Unlike VLIW that uses static placement and static issue which puts high pressure on the compiler, EDGE allows for dynamic issue which distributes responsability between the hardware and the compiler more evenly.
+Unlike VLIW that uses static placement and static issue which puts high pressure on the compiler, EDGE allows for dynamic issue which distributes responsibility between the hardware and the compiler more evenly.
 
 \paragraph*{Block Formation}
 In EDGE, instructions are organised into blocks, which are fetched as single units by the processor.
@@ -243,7 +243,7 @@ Instructions can be speculatively executed with predicted values as they wait fo
 This is similar to branch prediction, where instructions from a predicted branch path are executed before the branch is resolved.
 As long as the accuracy of the prediction is high, then executing the data-dependent instructions with speculative data increases ILP.
 
-Until recently the benefits of using value prediction has been overshadowed by the potential power consumption and design complexity requried to implement them \cite{peraisVTAGE2014}.
+Until recently the benefits of using value prediction has been overshadowed by the potential power consumption and design complexity required to implement them \cite{peraisVTAGE2014}.
 However, recent work by Perais et al.~\cite{peraisVTAGE2014,peraisBeBop2015} shows that by adopting the prediction and update scheme of the ITTAGE branch predictor~\cite{SeznecITTAGE}, and grouping predictions into blocks, value predictors be efficiently implemented.
 
 \paragraph*{Type of predictors}
@@ -255,7 +255,7 @@ This makes \textit{Context} predictors less efficient for predicting values that
 
 On the other hand \textit{Computational} based predictors make a prediction by computing the value.
 This can be achieved by detecting the delta between two commits of a value for an instruction, also known as the \textit{stride}.
-Instead of storing each observed value for an instruction, a \textit{Computational} predictor stores the \textit{stride}, and the last commited value of an instruction.
+Instead of storing each observed value for an instruction, a \textit{Computational} predictor stores the \textit{stride}, and the last committed value of an instruction.
 When a prediction is requested, the \textit{Computational} predictor fetches the last committed value and the stride and adds them together to produce the prediction.
 This allows \textit{Computational} to potentially reduce the size of the predictor as it only requires a single copy of the value to make a prediction. 
 
@@ -298,7 +298,7 @@ The prediction and update schemes are directly inherited from the Tagged Geometr
 Another consideration is that multiple blocks of the same PC may be speculatively executing at the same time, which could cause data mis-predictions if the predictor is not updated.
 As predictions are updated at commit time, this requires current live predictions to be in a speculative window so that new predictions may use the last predicted data and stride.
 The right hand side of figure~\ref{fig:stride_over} demonstrates how the speculative window works. 
-Instead of directly querrying the value predictor, the last value table and speculative window are searched in parallel for a matching tag which in this case is the Program Counter (PC) of the block.
+Instead of directly querying the value predictor, the last value table and speculative window are searched in parallel for a matching tag which in this case is the Program Counter (PC) of the block.
 If there is a live prediction, then the data from that prediction is used instead of the predictor.
 
 
@@ -315,8 +315,8 @@ Streaming programming languages are a branch of dataflow programming that focus 
 These applications, such as audio or video decoding can be commonly found in mobile devices.
 Unlike conventional programming languages such as C++, these languages abstract the concept of incoming and outgoing data to permit the programmer to focus on how the data should be treated.
 Programs are described as directed graphs where nodes are functions and their edges represent their input and output streams. 
-These languages offer primitives to describe such a graph~\cite{theis2002streamit} which expose parallelizable and serial sections of the application directly to the compiler. 
-Rates of incoming and outcoming data can also be defined to facilitate load balancing optimizations~\cite{chen2005rawstream}.
+These languages offer primitives to describe such a graph~\cite{theis2002streamit} which expose parallelisable and serial sections of the application directly to the compiler. 
+Rates of incoming and out-coming data can also be defined to facilitate load balancing optimisations~\cite{chen2005rawstream}.
 
 Features of streaming programming languages make them an ideal language for targeting multicore processors.
 The explicit data communication between the different tasks in the program, the ability to estimate the amount of work performed in each task and information about data rates between tasks allows the compiler to easily generate a multi-threaded application that can run on a dynamic multicore processor.
@@ -345,7 +345,7 @@ Finally a Feedback Loop (Figure~\ref{fig:streamittypes}(b)) provides a way for f
 The resulting program written in StreamIt represents a graph where the nodes are filters and their edges represent the incoming and outgoing data streams.
 
 \section{Machine-learning techniques and evaluation}~\label{sec:ml}
-This section covers the different machine learning techniques and evaluation model used throught the thesis.
+This section covers the different machine learning techniques and evaluation model used throughout the thesis.
 
 \begin{figure}[t]
     \centering
@@ -384,7 +384,7 @@ The linear regression takes the form of $y=4.77 + 0.88 \times x$ and is represen
 
 k-Means is a clustering technique that groups \textit{n} observations into \textit{k} clusters such that $k < n$.
 The original algorithm presented by Lloyd in ~\cite{kMeans} first randomly places \textit{k} centroids \textit{c} at random locations in the space.
-Then, each point \textit{$x_{i}$} in the space of \textit{n} observations is assigned to a cluster whos centroid \textit{$c_{j}$} is closest to it.
+Then, each point \textit{$x_{i}$} in the space of \textit{n} observations is assigned to a cluster who's centroid \textit{$c_{j}$} is closest to it.
 Once each point has been assigned to a cluster, each centroid is recomputed by re-centering itself around the datapoints in the cluster.
 This is repeated until the centroids no longer move.
  
@@ -409,7 +409,7 @@ When a new point is added (as seen on the right hand graph), the four closest ne
 \subsection{Leave One Out Cross Validation}~\label{sec:valid}
 The process of leave one out cross validation involves using the training dataset as the evaluation dataset.
 Given a set of $n$ points in the training set, a new model is trained using $n-1$ of the points available.
-The last unsed datapoint is evaluated against this new model.
+The last unused datapoint is evaluated against this new model.
 This procedure is repeated for every point in the dataset, and the results of the evaluation are averaged out to produce a final result.
 This validation model works well when the number of testing and training data is small.
 \vspace{-1em}
