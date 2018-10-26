@@ -68,7 +68,8 @@ To tackle the challenge of issuing predictions quickly, research has focused on 
 Instead of fetching a single prediction, each entry in the value predictor represents a set of predictions.
 Entries are accessed by using the PC of the first instruction in a fetch block.
 By grouping multiple predictions into a single entry, it drastically reduces the amount of requests to the value predictor, reducing the prediction latency for a large amount of instructions.
-However, a block-based value predictor requires that the size of a block be determined at design time, which adds a new design challenge: choosing a small block size will increase the number of requests per cycle, whilst a large block size will decrease the number of entries and thus reduce overall accuracy.
+However, a block-based value predictor requires that the number of entries that are to be fetched per single request be determined at design time.
+This adds a new design challenge: choosing a small block size will increase the number of requests per cycle, whilst a large block size will decrease the number of entries and thus reduce overall accuracy.
 As EDGE organises instructions as blocks, a block-based predictor would reduce the number of prediction requests per cycle, making it an attractive feature.
 
 %Rewrite
@@ -89,7 +90,7 @@ On the other hand, a \textit{computational} predictor can capture how the memory
 This means that a \textit{computational} predictor will only have to store 2 values: one for the stride and another for the last committed value.
 Not only does this reduce the amount of entries a single instruction occupies in the predictor, but it allows a \textit{computational} predictor to generate predictions faster than the \textit{context} predictor since the next memory address will be equal to $ lastCommittedValue + stride$.
 
-Core composition is often most effective when executing over loops, as seen in chapter~\ref{chp:cases}.
+Core composition is often most effective when executing over loops, as seen throughout chapter~\ref{chp:cases}.
 As variables such as loop inductors are passed between blocks via register reads and writes, they are a prime candidate for value prediction.
 Since these variables are often modified using the same stride throughout the loop and the loops may occur multiple times during the execution of the program it is important that the predictor keeps the least amount of information for each value.
 This is to ensure that multiple values can co-exist in the predictor, increasing the overall coverage.
