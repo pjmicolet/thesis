@@ -90,7 +90,7 @@ From Figure~\ref{fig:corrCore} the highest correlating features fit naturally un
 When blocks are small, a single core can fetch and execute multiple blocks in parallel; up to 4 blocks per core when blocks are smaller than 32 instructions.
 Cores in a composition do not fetch blocks independently; instead one of the cores in the composition will start by fetching blocks until it all its lanes are used and then submits the following predicted PC to the next core in the composition.
 If blocks are small this means that core-compositions will have to predict a high amount of blocks to fill up all its cores.
-Thus large blocks reduce the amount of branches predictions required to populate all the cores with EDGE blocks this reduces the latency of fetching blocks for all cores.
+Thus large blocks reduce the amount of predictions required to populate all the cores with blocks, reducing the latency of fetching blocks for all cores.
 The necessity to correctly predict blocks to ensure that all cores are fully utilised explains why a higher number of unconditionally executed blocks compared to conditional blocks correlates positively with large core compositions.
 
 The importance of size is also apparent as the difference between the largest block size and the average block size negatively correlates with core-composition.

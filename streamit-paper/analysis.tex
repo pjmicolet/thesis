@@ -12,7 +12,7 @@ The hardware side is about finding out the best core composition that maximizes 
 
 This section first starts by analysing the impact of thread partitioning on performance.
 In this section, the term optimal number of threads defines the number of threads which results in the best performance for any given benchmark.
-Thread partitioning is about deciding how many threads to create and how to partition StreamIt filters into these threads.
+Thread partitioning is about deciding how many threads to create and how to partition filters into these threads.
 
 To simplify this study, the default streaming partitioner is used to decide on how to allocate filters to threads which is based on simulated annealing~\cite{simulatedAnnealing1983}.
 On the hardware side, two scenarios are considered: the ``without composition scenario'' where there is exactly one core per thread and the ``with composition scenario'' where each thread receives between 1 and 15 cores.
@@ -56,7 +56,7 @@ For this benchmark, the impact of having core-composition enabled often leads to
 Interestingly, as more threads are used, performance worsens, echoing the results shown in the previous section.
 This is due to the fact that when the number of threads is increased, synchonization between threads will increase whilst the potential number of cores which can be fused decreases.
 In the case where the application does not feature highly parallel tasks, de-prioritising core compositions can negatively impact performance.
-This signifies that for the benchmark \bench{FilterBank}, it is more important to fuse cores with a small amount of threads rather than add more and more threads to the application.
+This signifies that for the benchmark \bench{FilterBank}, it is more important to fuse cores with a small amount of threads rather than add more threads to the application.
 
 
 \begin{figure}[t]
@@ -91,7 +91,7 @@ Figure~\ref{fig:unroll_summary} shows how unrolling affects the amount of speedu
 In this figure, the X axis represents the number of cores in the composition, ranging from single core to 15.
 The Y axis compares the execution time in number of cycles for the benchmark using a single core vs a given core-composition.
 The colours of the lines represent with and without unrolling.
-As can be seen, for the set of benchmarks used throughout this chapter, five benchmarks benefit from unrolling.
+As can be seen, for the set of benchmarks used in this chapter, five benchmarks benefit from unrolling.
 These benchmarks are \bench{Beamformer}, \bench{ChannelVocoder}, \bench{FFT6}, \bench{FilterBank} and \bench{FMRadio}. 
 
 \begin{figure}[t]
