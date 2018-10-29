@@ -7,6 +7,20 @@ In Chapter~\ref{chp:cases}, core composition did not result in linear speedups, 
 Some of the programs, such as \bm{MSER} or \bm{Multi\_NCut} features an average block size of under 10 instructions per block, making it difficult to use core composition efficiently.
 They are therefore a perfect candidate to explore how the hardware modifications can improve the performance of core composition.
 
+\begin{table}[t]
+  \small
+  \centering
+ \begin{tabular} {| l | l | l | l | l | l | }
+ \hline
+   & \cellcolor[gray]{0.7}Disparity & \cellcolor[gray]{0.7} Localization& \cellcolor[gray]{0.7} MSER& \cellcolor[gray]{0.7} Multi\_NCut& \cellcolor[gray]{0.7} Sift\\ \hline
+Input&	VGA  & VGA & CIF  & SIM\_FAST& CIF\\ \hline
+	
+	 & \cellcolor[gray]{0.7} Stitch & \cellcolor[gray]{0.7} SVM & \cellcolor[gray]{0.7} Text. Synth & \cellcolor[gray]{0.7} Tracking&\\ \hline
+	  Input & CIF& CIF& FULLHD& VGA &\\ \hline
+
+	\end{tabular}
+  \caption{Datasets used for each of the benchmarks.}\label{tab:sd-data2}
+\end{table}
 \subsection{Evaluation} 
 The previous chapter showed that the SD-VBS benchmarks feature phases of IPC, and that these phases often repeat.
 These benchmarks are structured as pipelines with distinct passes; often times the execution of a benchmark will iterate over the pipeline multiple times.
@@ -16,7 +30,7 @@ As this chapter is only concerned with demonstrating that the new hardware modif
 The phase data gathered from Chapter~\ref{chp:cases} is used to determine hotspots.
 The benchmarks are then instrumented so that the main phases are captured, and executed for at least 100 million instructions.
 Of that 100 million instructions, 10 million instructions are for warming up the caches and predictors.
-Finally, the same data-sets from Chapter~\ref{chp:cases} are used, to maintain a consistency amongst the thesis.
+Finally, the same data-sets from Chapter~\ref{chp:cases} are used, to maintain a consistency amongst the thesis; they can be found in Table~\ref{tab:sd-data2}.
 
 \subsection{Value Predictor}
 
