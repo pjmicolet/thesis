@@ -50,7 +50,7 @@ If a CMP features an infinite number of cores~\cite{eyerman2010amdahl}, then Amd
 \end{equation}
 
 Therefore, given any program, the speedup obtained through using a CMP is limited to the fraction \textit{f} of parallel work found in the program.
-As all the processor cores are homogeneous, if the parallel fraction is low, then this causes serial bottlenecks to reduce the potential speedup, as no core will be specialised for single-threaded execution.
+As all the cores are homogeneous, if the parallel fraction is low, then this causes serial bottlenecks to reduce the potential speedup, as no core will be specialised for single-threaded execution.
 %This implication has pushed research into finding ways of parallelising code to its fullest~\cite{}, however this may not always be possible~\cite{}.
 %Thus whilst CMPs have become a mainstain in processor design, the homogeneous model has its limits.
 \section{Heterogeneous Chip Multicore Processors}~\label{sec:hcmp}
@@ -185,11 +185,14 @@ Overall, the EDGE ISA enables the architecture to dispatch blocks speculatively,
  \begin{figure}[t]
  \center
  \includegraphics[width=1\textwidth]{background/graphics/edge_lanes.pdf}
- \caption{Example of a four lane core on an EDGE processor taken from~\cite{putnam2010e2}. The instruction window is split into 4 lanes, each can fetch a block of up to 32 instructions.}\label{fig:e2segment}
+ \caption{Example of a 4 lane core on an EDGE processor taken from~\cite{putnam2010e2}. The instruction window is split into 4 lanes, each can fetch a block of up to 32 instructions.}\label{fig:e2segment}
 \vspace{-0.5em}
  \end{figure}
 
 \subsection{EDGE Processor features}~\label{sec:edge_arch}
+
+This section covers two important features of an implementation of EDGE processor called E2~\cite{putnam2010e2}.
+The two features are the segmentation of the instruction window, and the core-composition mechanism used throughout this thesis.
 
 \subsubsection{Core Lanes} 
 
@@ -346,16 +349,17 @@ The resulting program written in StreamIt represents a graph where the nodes are
 
 \section{Machine-learning techniques and evaluation}~\label{sec:ml}
 This section covers the different machine learning techniques and evaluation model used throughout the thesis.
+The three techniques discussed are: linear regression, k-Means Clustering and k-Nearest Neighbours, whilst the evaluation technique is "leave-one out" cross validation.
+
+\subsection{Linear Regression}~\label{sec:lr}
 
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.45\textwidth]{background/graphics/lin_reg_ex.pdf}
-    \caption{Example of linear regression on toy dataset where the inputs are represented by the circles, and the linear regression generated is represented by the red line.}
+    \caption{Example of linear regression. The inputs are represented by the circles, and the generated linear regression is represented by the red line.}
     \label{fig:linregex}
 \end{figure}
-\subsection{Linear Regression}~\label{sec:lr}
-
-In a Dynamically reconfigurable processor machine learning can be used to detect when hardware must switch configurations~\cite{micolet2017cases, tavanaElastic}.
+Linear regression has previously been used to detect when to reconfigure hardware~\cite{tavanaElastic}.
 Knowing when to reconfigure the processor necessitates fast decision making to minimize the overall cost of reconfiguration.
 Machine learning models therefore need to be lightweight to ensure that the computations required to operate the model are as low as possible.
 In these situations, a popular model is Linear Regression as it has a fairly low computational footprint~\cite{tavanaElastic}.
@@ -369,7 +373,6 @@ y = \beta_0 + \beta_1X_1 + \beta_2X_2 + ... + \beta_nX_n
 where y is the predicted output, $X_{1..n}$ are the inputs and $\beta_{0.n}$ are weighted regression coefficients.
 When training a linear regression, it generates the $\beta$ weights as to minimize the square-error between the training inputs and predicted outputs.
 Once a model has been generated from input data, it can be implemented as a set of sums in hardware, making it an efficient way of making predictions.
-
 Figure~\ref{fig:linregex} shows an example of a linear regression on a small dataset.
 The linear regression takes the form of $y=4.77 + 0.88 \times x$ and is represented by the red line.
 
@@ -378,7 +381,7 @@ The linear regression takes the form of $y=4.77 + 0.88 \times x$ and is represen
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.45\textwidth]{background/graphics/smallest_clust_example.pdf}
-    \caption{Small example of k-Means clustering on a toy dataset with two clusters. The squares represent datapoints whilst the circles represent the centroids of the clusters.}
+    \caption{Small example of k-Means clustering with two clusters. The squares represent datapoints whilst the circles represent the centroids of the clusters.}
     \label{fig:kmeanex}
 \end{figure}
 
@@ -412,7 +415,7 @@ Given a set of $n$ points in the training set, a new model is trained using $n-1
 The last unused datapoint is evaluated against this new model.
 This procedure is repeated for every point in the dataset, and the results of the evaluation are averaged out to produce a final result.
 This validation model works well when the number of testing and training data is small.
-\vspace{-1em}
+\newpage
 \section{Early Stopping Criterion}~\label{sec:esc}
 
 When exhaustive search of an optimisation space is not feasible, a subset of the space is explored.

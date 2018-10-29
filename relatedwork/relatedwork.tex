@@ -1,18 +1,17 @@
 \chapter{Related Work}~\label{chp:rw}
-This chapter covers the related work relevant to this thesis.
+Whilst dynamic multicore processors (DMPs) are relatively new in terms of processor design they are still a solution to a well researched set of problems.
+These problems include improving performance of single-threaded applications and reducing energy consumption.
+This chapter covers the related work relevant and adjacent to this thesis.
 The topics covered are:
 \begin{itemize}
 \item The different dynamic multicore processors using core composition proposed in recent research.
-\vspace{-1em}
-\item Work on determining core composition sizes.
-\vspace{-1em}
-\item Research on different hardware techniques for saving energy.
-\vspace{-1em}
+\item Work on determining when to change the size of a core composition either ahead of time or at runtime.
+\item Research on different hardware techniques for saving energy such as dynamic voltage and frequency scaling or using heterogeneous chip multicore processors.
+\item Research in optimising code for core composition and EDGE.
+\item Other models of speculative execution.
 \item Work on streaming programming languages.
-\vspace{-1em}
-\item Work on machine learning guided optimisations in both hardware and software.
-\vspace{-1em}
-\item Current research in value prediction.
+\item Current research in value prediction and data pre-fetching.
+\item Work on machine learning guided optimisations for both hardware and software.
 \end{itemize}
 
 \section{Reconfigurable Processors}
@@ -28,7 +27,7 @@ In the original paper, an 4 core composition obtains a 1.3x speedup on SPECINT a
  
 The Bahurupi~\cite{pricopi2012bahurupi} polymorphic heterogeneous multicore architecture proposed by Pricopi et al. introduces a sentinel instruction which informs the hardware about the \textit{live-in} and \textit{live-out} registers of a basic block.
 Baharupi uses the SimpleScalar ISA~\cite{burger1997simplescalar}, and the compiler adds this instruction to the top of every basic block, splitting the program up into blocks similarly to EDGE.
-They show that, on average this introduces a 24\% code size increase for SPEC integer applications, 15\% for SPEC floating point and 19\% for Mediabench~\cite{mediabench} and MiBench~\cite{mibench} benchmark suites.
+They show that, on average this introduces a 24\% code size increase for SPEC integer applications, 15\% for SPEC floating point and 19\% for Mediabench~\cite{mediabench} and MiBench~\cite{mibench} benchmarks.
 
 Another important piece of information contained in this instruction is the size of a block.
 Cores in a composition fetch basic blocks in a similar fashion to the one described in Chapter~\ref{chp:Background} Section~\ref{chp:Background:sec:EDGE}.
@@ -90,8 +89,8 @@ In their results they show that the offline profiling tool outperforms the onlin
 As the threshold is set ahead of time, the online model is not able to fully utilise the system when applications do not meet the required threshold.
 Overall they demonstrate that a DMP that can adapt to workloads can result in faster response times than a tradition CMP, between 21\% to 13 times faster.
 
-In~\cite{santos2013nocdmc} they use information provided by the application to determine how to reconfigure some components of the processor.
-This initial information then assists the rest of the reconfiguration, this process still requires input from the programmer though.
+%In~\cite{santos2013nocdmc} they use information provided by the application to determine how to reconfigure some components of the processor.
+%This initial information then assists the rest of the reconfiguration, this process still requires input from the programmer.
 
 \section{Code optimisation for EDGE}
 
@@ -99,8 +98,8 @@ Whilst there exists no literature on code optimisations geared towards improving
 Smith et al. highlight the importance of block size in their work on an EDGE compiler ~\cite{smith2006edge} stating that larger blocks will lead to better performance.
 They suggest the use of instruction predication~\cite{smith2006dataflowpred} that allows multiple EDGE blocks to be fused into a single block, also known as a hyperblock.
 
-Since EDGE instructions pass their results directly to an instruction's input operands, some optimisations are required to ensure that predicates are efficiently broadcasted to all instructions that depend on it.
-The optimisations defined in ~\cite{smith2006dataflowpred} are predicate fanout reduction, path-sensitive predicate removal and instruction merging.
+Since EDGE instructions pass their results directly to an instruction's input operands, some optimisations are required to ensure that predicates are efficiently broadcasted to all depending instructions.
+The optimisations are predicate fanout reduction, path-sensitive predicate removal and instruction merging~\cite{smith2006dataflowpred}.
 Overall, hyperblocks are able to improve the performance of a set of EEMBC benchmarks by 29\% compared to only using basic blocks.
 Using the optimisations previously defined improves the performance of hyperblocks by up to 12\% compared to non-optimised hyperblocks.
 
@@ -117,7 +116,7 @@ Herbert et al in ~\cite{herbertDVFS07} demonstrate that DVFS is an effective tec
 They suggest two methods of using DVFS: controlling it at a per-core basis, or at a cluster basis, also known as Voltage Frequency Islands (VFI).
 Using VFIs reduces the design complexity of both the hardware and algorithms that control DVFS.
 They demonstrate that on a 16 chip multicore processor (CMP), DVFS can reduce $E/T^2$ by 38.2\% on a set of multithreaded workloads.
-The results also highlight how core-level DVFS does not reduce $E/T^2$ significantly compared to using VFIs: 38.2\% for core-level, compared to 37.9\% for a VFI composed of 4 cores.
+The results also highlight how core-level DVFS does not reduce $E/T^2$ significantly compared to using VFIs: 38.2\% for core-level, compared to 37.9\% for a 4 core VFI.
 
 Pagani et al. consider the use of VFIs in a heterogeneous system in ~\cite{paganiEECHM2017}, where cores in a VFI are homogeneous, but the different VFIs are heterogeneous.
 Their objective is to ensure that tasks are running on the most energy efficient core whilst satisfying the time constraints of the task.
@@ -196,14 +195,14 @@ By allowing tasks to generate domains, Fractal is able to exploit nested paralle
 %The value predictor used in Chapter~\ref{chp:hardchanges} is the block based D-VTAGE predictor \cite{peraisBeBop2015}.
 %It is a \textit{computational} value predictor that is adapted from the VTAGE value predictor also presented by Perais et al~\cite{peraisVTAGE2014}.
 The earliest works can be retraced to Mikko et al. where they propose a \textit{Load Value Predictor} \cite{lipasti96valpred} that is able to predict the value of load instructions.
-They showed that a performance increase of up to 27\% can be achieved by only predicting load values.
+They show that performance can be improved by up to 27\% by only predicting load values.
 
 Perais et al propose the VTAGE \textit{context} value predictor ~\cite{peraisVTAGE2014}, that by adopts the same prediction scheme as the ITTAGE branch predictor~\cite{SeznecITTAGE}.
 Using global branch history, which is easier to maintain that data-flow history~\cite{peraisVTAGE2014}, VTAGE can improve performance of some SPEC applications by up to 65\%.
 
-The block based D-VTAGE predictor~\cite{peraisBeBop2015} can issue multiple predictions in a cycle by grouping up predictions as a single block.
+The block based D-VTAGE predictor~\cite{peraisBeBop2015} can quickly issue multiple predictions grouping up predictions as a single block.
 The basic prediction fetch and update mechanism are inherited from VTAGE, except D-VTAGE is a \textit{computational} value predictor.
-In order to improve value prediction for tightly knit loops where multiple iterations of the loop body can be live in parallel, the D-VTAGE predictor employs a speculative window that is able to keep track of live speculative data.
+In order to improve value prediction for tightly knit loops where multiple iterations of the loop body can be live in parallel, the predictor employs a speculative window that is able to keep track of live speculative data.
 D-VTAGE is able to obtain up to a 1.7x speedup, and averages a 1.10x speedup on a set of SPEC applications. 
 
 Miguel et al. propose a different technique for value prediction called load value approximation \cite{miguel2014LoadVal} for applications where value inexactness is acceptable.
