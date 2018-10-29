@@ -8,7 +8,7 @@
 \end{figure}
 
 This section explores how core composition affects the performance of the SD-VBS benchmarks.
-First a phase analysis is performed, followed by a study of the IPC variation for static core fusion.
+First a phase analysis is performed, followed by a study of the IPC variation for static core composition.
 Then the use of dynamic core composition is motivated by using the gathered information.
 
 
@@ -19,12 +19,12 @@ To re-iterate, the interval of 640 blocks was chosen as the largest core composi
 Thus measuring performance every 640 blocks allows to fully capture the performance of large compositions without sacrificing loss of information.
 
 Displaying the performance of the core composition of size 16 gives a performance ceiling for all the benchmarks as it is the maximum number of cores which can be fused at any point.
-Figure~\ref{fig:sxt} shows that the IPC varies a lot for some of the benchmarks such as \bm{Disparity} or \bm{Localization} where dynamic fusion is expected to be especially good.
-For other, such as \bm{Multi\_NCut}, the execution is dominated by a single long phase with constant IPC, which will clearly show no benefit from using dynamic fusion.
+Figure~\ref{fig:sxt} shows that the IPC varies a lot for some of the benchmarks such as \bm{Disparity} or \bm{Localization} where dynamic composition is expected to be especially good.
+For other, such as \bm{Multi\_NCut}, the execution is dominated by a single long phase with constant IPC, which will clearly show no benefit from using dynamic composition.
 
-To better understand how dynamic core fusion improves performance, either by improving speedup or reducing energy, this section studies how each benchmark features different phases during their execution.
+To better understand how dynamic core composition improves performance, either through speedup or energy rediction, this section studies how the benchmarks feature different phases during their execution.
 Determining phases in a program requires profiling applications and analysing the profile data.
-This can be done by using tools such as SimPoint~\cite{simpoint} which tracks basic blocks to generate basic block vectors.
+This can be done with tools such as SimPoint~\cite{simpoint} which tracks basic blocks to generate basic block vectors.
 These basic block vectors are then analysed using a clustering technique to determine phases.
 
 In this chapter the objective is to reconfigure the DMP to match the different IPC phases of a program.
@@ -61,7 +61,7 @@ The data can be corroborated with the information found in Figure~\ref{fig:sxt}.
 For example, benchmark \bm{Multi\_NCut} features one phase covering over 80\% of the total execution, whereas for \bm{MSER}, the two dominant phases have very similar IPC values.
 This means that it will be impossible to obtain any kind of performance improvements through dynamic reconfiguration due to the fact that there is little opportunity to switch the size of the composition.
 For all the other benchmarks, they each have at least two dominant phases.
-Since each phase is a cluster of similar IPC values, having two or more clusters will result in a higher chance of benefiting from dynamic core fusion.
+Since each phase is a cluster of similar IPC values, having two or more clusters will result in a higher chance of benefiting from dynamic core composition.
 
 \begin{figure}[t]
     \centering
@@ -79,15 +79,15 @@ Since each phase is a cluster of similar IPC values, having two or more clusters
 	\vspace{5mm}
 \end{figure}
 
-\subsection{Static Ahead-of-Time Core Fusion Exploration}
+\subsection{Static Ahead-of-Time Core composition Exploration}
 
-In this chapter, Static Core Fusion defines a processor configuration that is determined ahead of time and does not change once it has been set.
+In this chapter, Static Core composition defines a processor configuration that is determined ahead of time and does not change once it has been set.
 Figure~\ref{fig:stddev} shows how the average Instructions Per Cycle (IPC) changes as the size of a core composition is increased, going in powers of 2 from 1 to 16 fused cores.
 It can be seen that, for most benchmarks, fusing more cores provides an increase in IPC performance.
-Benchmarks \bm{Disparity}, \bm{Localization}, \bm{Sift}, \bm{Stitch}, \bm{Texture Synthesis} and \bm{Tracking} all at least observe a speedup of 2x when using core fusion.
+Benchmarks \bm{Disparity}, \bm{Localization}, \bm{Sift}, \bm{Stitch}, \bm{Texture Synthesis} and \bm{Tracking} all at least observe a speedup of 2x when using core composition.
 
 However increasing the size of a composition is not always beneficial as can be seen in benchmarks \bm{Localization}, \bm{MSER}, \bm{Multi\_NCut}, \bm{Stich}, and \bm{SVM}.
-For benchmarks \bm{Localization} and \bm{Stitch} the performance increases when fusing up to 8 cores, where-as \bm{MSER} and \bm{Multi\_NCut} never benefit from core fusion.
+For benchmarks \bm{Localization} and \bm{Stitch} the performance increases when fusing up to 8 cores, where-as \bm{MSER} and \bm{Multi\_NCut} never benefit from core composition.
 These benchmarks may not see a reduction in performance on 16 cores due to the increase in network traffic, which will make the largest core composition size slower than 8 cores.
 To summarise, when cores are fused, register files, caches and LSQs are shared, which means that cores must communicate via the network to send register or memory requests to other cores when the data they required is not stored locally.
 Thus, having a higher number of cores composed will put pressure on the network.
@@ -102,9 +102,9 @@ Thus, if the logical-core could change size, there is a possibility that this co
 
 Figure~\ref{fig:block_sizes} shows the distribution of block-sizes for each of the benchmarks.
 As two blocks cannot occupy the same lane, which is a segment of the instruction window (see Chapter~\ref{chp:Background}), the block sizes are clustered into groups which represent how ever many number of lanes will be occupied (one lane may execute a block of up to 32 instructions).
-Using the information previously discussed in Section~\ref{sec:lim_study}, the size of blocks is a determining factor of whether or not a program may benefit from core fusion.
+Using the information previously discussed in Section~\ref{sec:lim_study}, the size of blocks is a determining factor of whether or not a program may benefit from core composition.
 
-Figure~\ref{fig:block_sizes} helps explain why benchmarks \bm{MSER} and \bm{Multi\_NCut} do not perform any better with core-fusion.
+Figure~\ref{fig:block_sizes} helps explain why benchmarks \bm{MSER} and \bm{Multi\_NCut} do not perform any better with core-composition.
 For both cases, not only do they have a single detected phase, but both are predominantly formed of blocks that will occupy a single lane.
 In fact, the most frequent block in \bm{MSER}, comprising 21\% the total executed blocks are comprised of only 8 instructions, whilst 31\% of \bm{Multi\_NCut}'s blocks are of 28 instructions.
 Having such small blocks will always increase both the \textit{SynchronizationCost} and the branch-prediction requirements.
@@ -240,4 +240,4 @@ This is why the benchmark does not perform significantly better with core-compos
 
 Overall, both benchmarks demonstrate that some loops cannot be adapted to benefit from core-composition.
 This is especially true of while loops that cannot be converted into more traditional for loops.
-Due to the small size of these loops, the overhead of dispatching multiple blocks over multiple cores simply outweighs the performance benefits.
+Due to the small size of these loops, the overhead of dispatching multiple blocks over multiple cores outweighs the performance benefits.

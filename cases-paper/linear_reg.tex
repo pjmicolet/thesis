@@ -17,7 +17,7 @@ Once trained, the model predicts the optimal number of cores based on the perfor
 As the decisions are made at runtime, a lightweight model that is able to predict the correct configuration that can be integrated in hardware is necessary.
 Linear regression, which makes predictions using a weighted sum of the input feature, has been demonstrated to be useful for predicting processor performance~\cite{Joseph2006LinReg}.
 It is chosen as it has been as it can easily be implemented in hardware~\cite{lee2006linreg,Lukefahr2012Composite} and has a low overhead when computing the sum.
-The model is trained offline using the traces gathered from the prior analysis for the \textbf{DSpeed} scenario which maximizes energy savings while maintaining performance.
+The model is trained offline using the traces gathered from the prior analysis for the \textbf{DSpeed} scenario which maximises energy savings while maintaining performance.
 
 Figure~\ref{fig:linmod} is a shows how the linear model is trained.
 The dataset consists of a set of four input features (average block size, and percentage of integer, floating point and load operations) and the optimal number of cores for each time tick for each program.
@@ -46,19 +46,19 @@ Rounded up to the nearest integer value, 2, the optimal number of cores predicte
 As can be seen, the largest weight is on the percentage of loads operations.
 This is due to different reasons, mainly execution time and the fact that Load-Store Queues are fused.
 When it comes to execution time, loads may take from 3 to 128 cycles depending on whether or not it is a cache miss or hit.
-Whether it is a cache hit or miss, a block that takes longer to execute will often minimize the \textit{SynchronizationCost} penalty.
+Whether it is a cache hit or miss, a block that takes longer to execute will often minimise the \textit{SynchronisationCost} penalty.
 A block composed mainly of integer or floating point operations will often result in shorter execution rates; thus may execute faster, making it harder for large logical cores to improve performance.
 
 More discussion on how the time it takes to execute a block influences the performance of core compositions is discussed in Chapter~\ref{chp3}.
 The other reason loads have the largest weight is due to the fact that loads can be fired independently to the Load-Store Queue.
 Unlike stores that depend on previous memory instructions blocks being committed, loads can be fired with less overhead.
-As data can be speculatively fetched, loads instructions can receive data from other cores before the data is stored, speeding up the load instruction.
+As data can be speculatively fetched, load instructions can receive data from other cores before the data is stored, speeding up executions.
 By increasing the core count on load heavy blocks this will improve performance more reliably due to cores being able to issue loads in parallel.
 
 \begin{figure}[t]
     \centering
 	\includegraphics[width=1\textwidth]{cases-paper/graphics/results/lr_speed3.pdf}
-    \caption{Performance results for maximizing speed for the SD-VBS benchmarks using the linear regressor (LR) model. The results are normalized against the Static Suite core composition.}% For Speedup, higher means better, for energy lower is better.}
+    \caption{Performance results for maximising speed for the SD-VBS benchmarks using the linear regressor (LR) model. The results are normalised against the Static Suite core composition.}% For Speedup, higher means better, for energy lower is better.}
     \label{fig:speedlr}
 	\vspace{1em}
 \end{figure}
@@ -71,8 +71,8 @@ To evaluate the performance of the model leave-one-out cross-validation  is used
 For instance, if the model is tested for one program, let say \textit{Disparity}, the model is then trained using the dataset from all the other programs combined.
 Then the resulting trained linear model is used to predict the optimal core number for each time tick of the disparity program and report the performance achieved.
 
-Figure~\ref{fig:speedlr} shows the performance in terms of speed and energy that is achieved using the linear model normalized by a fixed static configuration.
-The fixed configuration maximized performance across all the benchmarks using 8 cores and is the same as in the previous results presented in figure~\ref{fig:speedres}.
+Figure~\ref{fig:speedlr} shows the performance in terms of speed and energy that is achieved using the linear model normalised by a fixed static configuration.
+The fixed configuration maximised performance across all the benchmarks using 8 cores and is the same as in the previous results presented in figure~\ref{fig:speedres}.
 On average, the linear regressor model is able to consume 37\% less energy compared to the 8 cores fixed configuration and is able to exactly match its speed.
 The main outlier is \bm{MSER} where the linear regressor consumes over 2x more energy than \textbf{DSpeed}.
 This is due to the fact that \bm{MSER} is a benchmark where the branch prediction is poor as previously mentioned in Table~\ref{tab:sd-vbsbpred}.

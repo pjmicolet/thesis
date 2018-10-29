@@ -3,8 +3,8 @@ This section describes optimisations focused on reducing control flow and expand
 \subsection{Loop Unrolling}
 As seen in Chapter~\ref{chp:streamit}, loop unrolling can be used to reduce the overhead of the loop header and to better expose Instruction Level Parallelism (ILP).
 When dealing with tightly-knit loops, logical cores may perform poorly due to the fact that they execute many small blocks, thus increasing the Synchronization Cost and increasing the branch prediction requirements.
-Unrolling loops will both reduce the number of blocks required to execute the loop and increase the size of the blocks, thus reducing the Synchronization Cost and increasing ILP.
-For example, the innermost loop in Figure~\ref{lst:small} should be completely unrolled and its outer loop unrolled partially to increase the block size.
+Unrolling loops both reduces the number of blocks required to execute the loop and increases the size of the blocks, thus reducing the Synchronisation Cost and increasing ILP.
+For example, the innermost loop in Listing~\ref{lst:small} should be completely unrolled and its outer loop unrolled partially to increase the block size.
 
 There are certain factors limit the usefulness of loop unrolling.
 In the evaluated EDGE architecture, blocks may not have more than 32 load or store instructions.
@@ -49,12 +49,8 @@ for(int i = 0; i < 1000; i++)
 \end{lstlisting}
 \end{center}
 \vspace{-1em}
-\caption{Example of an inner-most loop which should be completely unrolled.}
+\captionof{lstlisting}{Example of an inner-most loop which should be completely unrolled.}
 \label{lst:small}
-\vspace{1em}
-\end{figure}
-
-\begin{figure}[t]
 \lstset{language=C,numbersep=4pt}
 \begin{center}
 \begin{lstlisting}
@@ -64,7 +60,7 @@ for(int i = 0; i < 1000; i++)
 \end{lstlisting}
 \end{center}
 \vspace{-1em}
-\caption{Example of a data dependency which can be removed by interchanging the loops.}
+\captionof{lstlisting}{Data dependency which can be removed via loop interchange.}
 \label{lst:dep}
 \vspace{1em}
 \end{figure}
@@ -73,7 +69,7 @@ for(int i = 0; i < 1000; i++)
 \subsection{Loop Interchange}
 When dealing with nested loops there is one reason for interchanging the loops.
 The case arises when interchanging the loop removes dependencies in the inner-most loop.
-For instance, the dependency in Figure~\ref{lst:dep} can be removed by interchanging the loops. 
+For instance, the dependency in listing~\ref{lst:dep} can be removed by interchanging the loops. 
 This allows the compiler to unroll the inner loop efficiently, but also remove any kind of dependency between blocks.
 Even if memory dependencies can be detected using a dependence predictor~\cite{chrysos1998storesets}, it can potentially serialise memory operations when multiple iterations of a loop are live.
 Thus using loop interchange will reduce any potential data dependency and minimise core communication in a composition.
