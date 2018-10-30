@@ -83,17 +83,30 @@ The confidence of 4 is chosen as it allows for very fast deployment of predictio
 The FPC vector used in this Chapter is the same as the one in Perais et al.'s work $\{1,\frac{1}{16},\frac{1}{16},\frac{1}{16},\frac{1}{16},\frac{1}{16},\frac{1}{32},\frac{1}{32}\}$.
 This confidence rate ensured that the predictor had an accuracy of over 99\%, but at the expense of a low coverage, 20\% on average~\cite{peraisBeBop2015}.
 
-
 \begin{table}[t]
-  \small
-  \centering
- \begin{tabular} {| l | l | l |}
- \hline
-	\#Base Entry. & \#Tagged & \#Block in Spec Window\\ \hline
-	1536 & $6\times1536$ & 4 \\ \hline
-	\end{tabular}
+\small
+\centering
+\begin{tabular}{p{5.2cm} p{1.8cm}}
+\toprule
+\textbf{Parameter} & \textbf{Values} \\ \midrule
+\# Base Entry & 1536\\
+\# Tagged & $6\times1536$\\
+\# Block in Spec Window & 4 \\ \hline
+\end{tabular}
   \caption{D-VTAGE table configuration.}\label{tab:vtage-conf}
+\vspace{1em}
 \end{table}
+
+%\begin{table}[t]
+%%  \small
+ % \centering
+% \begin{tabular} {| l | l | l |}
+% \hline%
+%	\#Base Entry. & \#Tagged & \#Block in Spec Window\\ \hline
+%	1536 & $6\times1536$ & 4 \\ \hline
+%	\end{tabular}
+ % \caption{D-VTAGE table configuration.}\label{tab:vtage-conf}
+%\end{table}
 
 \begin{table}[t]
 \small
@@ -105,7 +118,6 @@ This confidence rate ensured that the predictor had an accuracy of over 99\%, bu
 Confidence Value & 4 or 7 with FPC \\ \bottomrule
 \end{tabular}
 \caption{Configurable parameters for D-VTAGE}\label{tab:vtage-params}
-\vspace{1em}
 \end{table}
 
 Table~\ref{tab:vtage-params} shows the possible values that can be taken for the two parameters.
@@ -147,8 +159,8 @@ This once again corroborates with the information from Figures~\ref{fig:totblock
 \bm{Disparity} has a higher average of reads per block, but features a very low number of unique blocks.
 Therefore having a larger entry in the table captures more values that can be predicted, but does not suffer from having entries being replaced by new blocks.
 
-Comparing the performance of the different D-VTAGE configurations to the perfect value predictor, it is apparent that most benchmarks do not achieving their maximum potential as the perfect predictor results in an average speedup of 1.88x compared to 1.32x of D-VTAGE.
-However, benchmarks \bm{Disparity} and \bm{Multi\_NCut} show how value prediction paired with RRF is a promising lead for improving the performance of core composition.
+Comparing the performance of the different configurations to the perfect value predictor, it is apparent that most benchmarks do not achieve their maximum potential as the perfect predictor results in an average speedup of 1.88x compared to 1.32x of D-VTAGE.
+However, benchmarks \bm{Disparity} and \bm{Multi\_NCut} show how value prediction with RRF is a promising lead for improving the performance of core composition.
 
 \subsubsection{Coverage and Accuracy}
 To better understand the performance of the different D-VTAGE configurations, the predictors' coverage and misprediction rates are recorded.
