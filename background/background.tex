@@ -264,7 +264,10 @@ This allows \textit{Computational} to potentially reduce the size of the predict
 
 
 \subsection{The Differential Value Tagged Geometric length Predictor}~\label{chp:bck:vtage}
-\vspace{-1em}
+
+This section covers a specific implementation of a value predictor that is used in Chapter~\ref{chp:hardchanges}.
+It covers the structure of the predictor, how predictions are generated and implemented, and how back-to-back predictions can be made.
+
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{background/graphics/valuepred.pdf}
@@ -277,6 +280,7 @@ This allows \textit{Computational} to potentially reduce the size of the predict
 The D-VTAGE predictor~\cite{peraisBeBop2015} is a Computational value predictor that operates on blocks of instructions to minimize network pressure and increase the prediction output per cycle.
 To simplify the explanation of the predictor in this chapter, the size of the block is set to 1 instruction.
 The predictor is organised in two parts, a Last Value Table (LVT) that contains the last committed values for a given set of instructions, and the second part is a set of value tables (VT) which contain strides.
+A stride is the delta between two previous values committed by the same instruction; it provides information on how the instruction's output value is modified each time the instruction executes.
 The left hand side of Figure~\ref{fig:stride_over} shows an overview of the predictor with N stride tables.
 The largest stride table is a tagless base predictor, whereas VT1 to VTN are tagged by hashing the Program Counter of the instruction with varying amounts of the branch history.
 
@@ -284,6 +288,17 @@ A predicted value does not have to be used immediately, as the instruction can b
 This means that the value predictor can be trained before a prediction is used.
 Depending on the configuration of the predictor, a prediction is only used when the confidence counter is set to a specific value.
 This allows value predictors to be very accurate~\cite{peraisVTAGE2014}, though it sacrifices coverage.
+
+\paragraph*{Confidence Counter}
+To ensure that the value predictor generates highly accurate predictions, the values are only used when their attributed confidence rate is very high.
+In both VTAGE and D-VTAGE, each entry is paired with a 3-bit saturating counter that is either incremented on a correct prediction, or set to 0 on a misprediction.
+When a prediction is made, it is only used when the  confidence counter is saturated as this means that the entry has been correctly predicted several times before use.
+
+However, a 3-bit satured counter may not be enough to ensure that all used predictions are correct.
+A method to increase accuracy without increasing the physical size of the counter is to use Forward Probabilistic Counters (FPC)~\cite{riley2006fpc}.
+FPCs are essentially a compression technique for counters; instead of incrementing the counter by 1 each time a prediction is correct, it is incremented based on a probability.
+For example, given a 3-bit counter and a probability vector  $\{1,\frac{1}{16},\frac{1}{16},\frac{1}{16},\frac{1}{16},\frac{1}{16},\frac{1}{32},\frac{1}{32}\}$, then the counter has a 100\% chance of being incremented from 0 to 1, whilst it only has a $\frac{1}{16}$ chance of incrementing from 1 to 2.
+This effectively increases the value at which predictions will be used without physically increasing the size of the counter. 
 
 \paragraph*{Making a prediction}
 All the tables of the value predictor are accessed in parallel using the Program Counter hashed with different amounts of the branch history.
@@ -415,7 +430,7 @@ Given a set of $n$ points in the training set, a new model is trained using $n-1
 The last unused datapoint is evaluated against this new model.
 This procedure is repeated for every point in the dataset, and the results of the evaluation are averaged out to produce a final result.
 This validation model works well when the number of testing and training data is small.
-\newpage
+
 \section{Early Stopping Criterion}~\label{sec:esc}
 
 When exhaustive search of an optimisation space is not feasible, a subset of the space is explored.
