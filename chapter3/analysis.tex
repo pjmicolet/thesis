@@ -8,12 +8,12 @@
 \newcommand{\nfvt}{\textit{\textbf{RFVT}}}
 \vspace{-1em}
 
-This chapter demonstrates that modifying the hardware to improve the performance of core composition requires modifying the systems.
-The modifications discussed in the chapter are better branch prediction, adding a value predictor, and modifying the block fetching scheme.
-Whilst a value predictor improves performance by allowing blocks to execute in parallel via speculating register values, value predictors are still considered a work in progress~\cite{peraisBeBop2015}.
-It is important to consider how a perfect system with the new hardware additions can improve the performance of core composition, as it gives an upper bound to the potential performance increases.
+%This chapter demonstrates that modifying the hardware to improve the performance of core composition requires modifying the systems.
+%The modifications discussed in the chapter are better branch prediction, adding a value predictor, and modifying the block fetching scheme.
+%Whilst a value predictor improves performance by allowing blocks to execute in parallel via speculating register values, value predictors are still considered a work in progress~\cite{peraisBeBop2015}.
+%It is important to consider how a perfect system with the new hardware additions can improve the performance of core composition, as it gives an upper bound to the potential performance increases.
 
-This section therefore explores how a perfect branch and value predictor, paired with the new fetching scheme, improves the performance of core composition on the SD-VBS benchmarks.
+This section explores how a perfect branch and value predictor, paired with the new fetching scheme, improves the performance of core composition on the SD-VBS benchmarks.
 To understand how each component contributes to the performance improvements, different configurations were used, they are as follows:
 \begin{itemize}
 \item Serial fetching scheme with no value prediction (\novp).

@@ -1,8 +1,8 @@
-In an EDGE block, data dependent instructions do not pass data to each other via reads and writes to registers, instead the result of an instruction is passed to the operands of instructions who depend on the data (see Chapter~\ref{chp:Background} Section~\ref{sec:edge_isa} for more information).
-Registers are primarily used to pass information between blocks.
+%In an EDGE block, data dependent instructions do not pass data to each other via reads and writes to registers, instead the result of an instruction is passed to the operands of instructions who depend on the data (see Chapter~\ref{chp:Background} Section~\ref{sec:edge_isa} for more information).
+In the EDGE architecture registers are primarily used to pass information between blocks, which can cause data dependencies.
 In a core composition the register files of each core in the composition is shared (Chapter~\ref{chp:Background} Section~\ref{chp:Background:sec:EDGE}) to ensure that each core has the same view of the current execution state.
 The register files becomes distributed and each core becomes responsible for a set of registers; for example in a 2 core composition, the even numbered registers are handled by Core 0 whilst the even number registers are handled by Core 1.
-This means that when Core 1 wants to read or write to Register 0 it must send a request via the network on chip (NoC) as this register is located on Core 0.
+%This means that when Core 1 wants to read or write to Register 0 it must send a request via the network on chip (NoC) as this register is located on Core 0.
 
 \begin{figure}[t]
 \lstset{language=C,numbersep=4pt}
@@ -19,7 +19,7 @@ This means that when Core 1 wants to read or write to Register 0 it must send a 
 \vspace{3em}
 \end{figure}
 
-The base address of the arrays in Listing~\ref{lst:basic2} are going to be passed via 3 registers in the block that represents the body of the loop.
+For example, the base address of the arrays in Listing~\ref{lst:basic2} are going to be passed via 3 registers in the block that represents the body of the loop.
 If this loop is executing on a 16 core composition, then 3 of the cores will have to issue all the reads to these 3 registers for all other cores.
 This of course will put stress on the NoC, and increase the latency of what is meant to be a relatively fast instruction.
 
@@ -28,9 +28,9 @@ If the younger block attempts to execute the read, its request is pushed back un
 Whilst the serialisation of register reads and writes between blocks ensures correct execution of speculative blocks, it effectively reduces the potential for instruction level parallelism (ILP).
 This is further exacerbated when fusing a large number of cores, as this increases the amount of blocks that may potentially have to wait on register reads and writes.
 
-For example, the loop iterator in Listing~\ref{lst:basic2} is passed between iterations of the block through a register.
-If cores are composed, and all have an iteration of the loop, they will have to wait on previous writes to be able to execute their loads; serialising execution of the loop.
-When register dependencies are a bottleneck and cannot be optimised via a compiler, core composition cannot be considered an effective method of improving performance.
+%For example, the loop iterator in Listing~\ref{lst:basic2} is passed between iterations of the block through a register.
+%If cores are composed, and all have an iteration of the loop, they will have to wait on previous writes to be able to execute their loads; serialising execution of the loop.
+%When register dependencies are a bottleneck and cannot be optimised via a compiler, core composition cannot be considered an effective method of improving performance.
 
 This chapter underlines two problems related to register reads on large compositions: the potential data dependencies caused by reads waiting for previous writes to execute, and the latency caused by having to send read requests via the NoC.
 The problem of trying to reduce register and memory dependencies to improve instruction level parallelism is not new, and is an issue found in more traditional superscalar processors~\cite{peraisVTAGE2014}.
@@ -54,15 +54,15 @@ In this chapter, the only target for value predictions is register read instruct
 This is due to the fact that other instructions do not depend on previous blocks to fire, and load/store instructions can be fired independently unless dependencies are predicted.
 Ideally, a value predictor for EDGE would function as seen in Figure~\ref{fig:bad_overview}.
 When a block is fetched, a single request is made to the value predictor to fetch all predictions for the read instructions of the block.
-At dispatch time, the predicted values would be used and forwarded to instructions depending on a read, whilst the read instructions are issued.
+At dispatch time, the predicted values are used and forwarded to dependent instructions, whilst the read instructions are issued.
 This allows the depending instructions to execute whilst the reads are still being processed.
-This section covers different features that must be considered when implementing such a value predictor.
+%This section covers different features that must be considered when implementing such a value predictor.
 
 
 \paragraph*{Prediction Latency}
 In a traditional superscalar processor, one of the main challenges value predictors face is being able to sustain the potential number of prediction requests in a short time frame~\cite{peraisBeBop2015}.
 As value predictors are designed to improve ILP performance it is important to be able to issue a predicted value quickly.
-If multiple prediction requests are made each cycle, this may require expensive hardware such as a re-order buffer to hold all predictions~\cite{peraisBeBop2015}, which may dissuade designers from using value predictors.
+If multiple prediction requests are made each cycle, this requires expensive hardware such as a re-order buffer to hold all predictions~\cite{peraisBeBop2015}.
 
 To tackle the challenge of issuing predictions quickly, research has focused on grouping instructions into prediction blocks~\cite{peraisBeBop2015}.
 Instead of fetching a single prediction, each entry in the value predictor represents a set of predictions.
@@ -76,14 +76,14 @@ As EDGE organises instructions as blocks, a block-based predictor would reduce t
 \paragraph*{Prediction generation} Another important feature when selecting a value predictor is how it generates a predicted value.
 Currently, there exist two methods: \textit{context} value prediction~\cite{peraisVTAGE2014} and \textit{computational} value prediction~\cite{peraisBeBop2015,gabbayVPOrig,goeman01dfcm}.
 More details on how these two predictors differ can be found in Chapter~\ref{chp:Background} Section~\ref{sec:valpred}.
-The \textit{context} predictor stores all the different values committed by the instruction in its tables.
-On the other hand the \textit{computational} predictor generates a prediction by adding a constant to the last committed value of the instruction.% stores the committed value of the instruction in a table called the Last Value Table (LVT), and stores the delta between the two previous values in another set of tables, this delta is called a \textit{stride}.
+%The \textit{context} predictor stores all the different values committed by the instruction in its tables.
+%On the other hand the \textit{computational} predictor generates a prediction by adding a constant to the last committed value of the instruction.% stores the committed value of the instruction in a table called the Last Value Table (LVT), and stores the delta between the two previous values in another set of tables, this delta is called a \textit{stride}.
 %When a prediction request arrives in the \textit{computational} predictor, it fetches an entry from the LVT and the stride table and sums them together to form a prediction.
 
 Whilst \textit{context} predictors are simpler to design, as there are no extra functions required to generate the predictions aside from fetching a value from a table, they are often considered less efficient when used in loops~\cite{peraisBeBop2015}.
 For example, the memory address of an item in an array that is accessed using the loop induction variable is always incremented using a fixed stride (the loop induction increment).
-In order for a \textit{context} value predictor to make a correct prediction in such a scenario, the full loop must have already executed once, and all memory address computed must be stored in its tables.
-Having a large number of values stored in the predictor for a single instruction is inefficient, unless the predictor is infinitely large.
+In order for a \textit{context} value predictor to make a correct prediction in such a scenario all memory address computed must be stored in its tables.
+Having a large number of values stored in the predictor for a single instruction is inefficient, unless the predictor is very large.
 
 On the other hand, a \textit{computational} predictor can capture how the memory address changes each iteration by determining the \textit{stride} at which the it is modified.
 This means that a \textit{computational} predictor will only have to store 2 values: one for the stride and another for the last committed value.
@@ -110,13 +110,13 @@ Full details on how such a value predictor works can be found in Chapter~\ref{ch
 To summarise, D-VTAGE is a stride based value predictor, which means that a prediction is composed of the last seen value for the instruction (found in a Last Value Table (LVT)), and a stride which represents the delta between the last two values for the instruction.
 When a prediction is made, the last seen value and stride are added together to make the predicted value.
 
-The predictor must also handle the fact that multiple blocks may be in flight, and thus the value found in the LVT may not be up to date.
-In order to handle multiple in-flight predictions, D-VTAGE also contains a speculative window that has its own LVT that is speculatively updated when new predictions are made.
-This allows the predictor to be able to handle situations where multiple iterations of a loop are in flight.
+%The predictor must also handle the fact that multiple blocks may be in flight, and thus the value found in the LVT may not be up to date.
+%In order to handle multiple in-flight predictions, D-VTAGE also contains a speculative window that has its own LVT that is speculatively updated when new predictions are made.
+%This allows the predictor to be able to handle situations where multiple iterations of a loop are in flight.
 
-Instead of issuing a single prediction per request, the block based D-VTAGE predictor issues multiple predictions for a single request.
-This is an ideal mechanism when considering EDGE is the targeted platform.
-In this case, when an EDGE block is fetched, a single request has to be made to the predictor to fetch all predictions for register reads.
+%Instead of issuing a single prediction per request, the block based D-VTAGE predictor issues multiple predictions for a single request.
+%This is an ideal mechanism when considering EDGE is the targeted platform.
+%In this case, when an EDGE block is fetched, a single request has to be made to the predictor to fetch all predictions for register reads.
 
 Finally, as EDGE blocks are single entry, multiple exits, this simplifies the update mechanism for the Speculative Window.
 In the original proposal of D-VTAGE by Perais et al.~\cite{peraisBeBop2015} they discuss the issue of how to handle updates in the Speculative Window after a flush.

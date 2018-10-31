@@ -14,20 +14,20 @@ Chapter~\ref{chp:cases} highlighted the importance of branch prediction accuracy
 To maximise core utilisation, a core can have multiple blocks in its instruction window.
 In this thesis, the instruction window is segmented into four lanes, each of which can hold a block of up to 32 instructions.
 If the program executing is composed mainly of small blocks (less than 32 instructions long), then if it is running on a 16 core composition, the branch prediction accuracy needs to be as high as 98\% to ensure that the cores are fetching blocks on the correct execution path (see Chapter~\ref{chp:cases}).
-A branch prediction accuracy that is under the requirement leads to inefficient use of the composition as cores will be flushing more often than they commit.
-More details on why this is the case can be found in Chapter~\ref{chp:cases} Section~\ref{sec:lim_study}.
+%A branch prediction accuracy that is under the requirement leads to inefficient use of the composition as cores will be flushing more often than they commit.
+%More details on why this is the case can be found in Chapter~\ref{chp:cases} Section~\ref{sec:lim_study}.
 
-The inefficiencies of core composition due to low branch prediction accuracy can clearly be illustrated by one of the benchmarks previously explored, the SD-VBS program \bm{MSER}.
-The benchmark has an average branch prediction accuracy of 86\%, and the blocks are on average less than 10 instructions long.
-With such characteristics \bm{MSER} cannot benefit greatly from core composition, as even 2 fused cores flush too often, leading to a performance improvement of only 1\%.
+%The inefficiencies of core composition due to low branch prediction accuracy can clearly be illustrated by one of the benchmarks previously explored, the SD-VBS program \bm{MSER}.
+%The benchmark has an average branch prediction accuracy of 86\%, and the blocks are on average less than 10 instructions long.
+%With such characteristics \bm{MSER} cannot benefit greatly from core composition, as even 2 fused cores flush too often, leading to a performance improvement of only 1\%.
 
-This Chapter aims to demonstrate how modifying hardware can improve the overall performance of core composition.
-As branch prediction accuracy is essential for good performance in a core composition, it is important to understand how much of a performance gain can be obtained by improving the accuracy.
-To evaluate the benefits of better branch prediction accuracy, a perfect-branch predictor is considered here.
-More details on how the perfect-branch predictor works can be found in Section~\ref{chp:chp3:sec:exp}.
+%This Chapter aims to demonstrate how modifying hardware can improve the overall performance of core composition.
+%As branch prediction accuracy is essential for good performance in a core composition, it is important to understand how much of a performance gain can be obtained by improving the accuracy.
+%To evaluate the benefits of better branch prediction accuracy, a perfect-branch predictor is considered here.
+%More details on how the perfect-branch predictor works can be found in Section~\ref{chp:chp3:sec:exp}.
 
-
-Figure~\ref{fig:mser_motiv} shows the speedup obtained when executing \bm{MSER} on core compositions of size 2, 4, 8, 16 when using perfect branch prediction.
+In Chapter~\ref{chp:cases}, \bm{MSER} had a low branch prediction accuracy of 86\%, making, leading to a performance improvement of only 1\% on a 2 core composition.
+Figure~\ref{fig:mser_motiv} shows the speedup obtained when executing the SD-VBS benchmark \bm{MSER} on core compositions of size 2, 4, 8, 16 when using perfect branch prediction.
 The speedup is obtained by comparing the performance to a single core with perfect branch prediction.
 As the figure shows, modifying the accuracy leads to a performance increase of 1.15x on a 16 core composition.
 Whilst this increase may appear small, it already demonstrates that branch prediction can help improve performance.
@@ -49,7 +49,6 @@ Throughout the rest of this chapter, this fetching scheme is referred to as Seri
     \includegraphics[width=1\textwidth]{chapter3/graphics/mser_active_16.pdf}
     \caption{Percentage of time (in cycles) cores in a composition are executing instructions compared to the overall execution time. Higher is better.}
     \label{fig:motivation_perc}
-	\vspace{-1em}
 \end{figure}
 
 A method of evaluating how the SF scheme affects performance is to analyse how often each core in a composition is used throughout the execution of a program.
@@ -156,7 +155,7 @@ Figure~\ref{fig:motivation_reg} shows how the performance of core composition is
 Once again, this is using the \bm{MSER} benchmark, with core compositions of size 1, 2, 4, 8 and 16, with perfect branch prediction and the OF scheme.
 The speedup is obtained by comparing the execution time of core compositions to a single core with perfect branch that can also immediately resolve data dependencies.
 As shown in the Figure~\ref{fig:motivation_reg}, a 16 core composition can now get a speedup of up to 3x, compared to the 2x when using only perfect branch prediction and the OF scheme.
-This is due to the fact that register dependencies are no longer serialising some of the computation between blocks, and thus blocks can be executed entirely in parallel.
+This is due to the fact that register dependencies are no longer serialising some of the computation between blocks, and thus blocks can be executed in parallel.
 
 Serialised execution due to data dependencies is a common problem for superscalar processors~\cite{peraisVTAGE2014}.
 One solution to the problem is adding a value predictor to the processor, which is able to predict the value of a register.

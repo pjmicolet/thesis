@@ -40,11 +40,11 @@
 \end{figure}
 
 \begin{figure}[t]
-    \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/normfetch.pdf}
-    \caption{Example of the current fetching model on a 2 core composition. Each core has 4 segments, the arrows represent the block generating the predictions.}
-    \label{fig:old_fetch}
-\vspace{1em}
+ %   \centering
+ %   \includegraphics[width=1\textwidth]{chapter3/graphics/normfetch.pdf}
+ %   \caption{Example of the current fetching model on a 2 core composition. Each core has 4 segments, the arrows represent the block generating the predictions.}
+ %   \label{fig:old_fetch}
+%\vspace{1em}
     \centering
     \includegraphics[width=1\textwidth]{chapter3/graphics/4fetchnorm2.pdf}
     \caption{Trace of when cores fetch blocks when executing Listing~\ref{lst:basic} on a 4 core composition. Y axis represents a core in the composition, X axis represents time.}
@@ -53,11 +53,6 @@
 \end{figure}
 \subsection{Current fetching scheme}
 	
-The current block fetching scheme, Serial Fetch (SF) requires that a core fills its instruction window before another core in the composition can fetch a block.
-Figure~\ref{fig:old_fetch} illustrates how a two core composition fetches blocks in SF when blocks only take up a single lane of the instruction window.
-Once Core 0 is full, it submits a fetch request to Core 1 as seen in Figure~\ref{fig:old_fetch} and stops fetching.
-As the figure shows, Core 1 is not active until the 5th fetch request.
-
 The main issue with the SF scheme is that cores in a composition depend on each other in order to fetch blocks.
 For example, if Listing~\ref{lst:basic} is compiled without unrolling and executed on a 4 core composition, each core would have to fetch 4 iterations of the loop before sending the next fetch request to another core.
 To illustrate how fetching can be a bottleneck in this situation, instrumentation is added to the simulator to track when cores fetch blocks in order to be able to visualise how long it takes to fill up a core composition.
@@ -197,21 +192,21 @@ If the next core in line does not yet have $block_{i+1}$ due to no prediction ha
 As previously stated, if the core has a PC in its buffer, it immediately starts fetching a new block.
 However, if it has no PC in its buffer, it must wait on another core to send it a request.
 
-%\subsubsection{Two core example}
+\paragraph*{Two core example}
 	
-%\begin{figure}[t]
-%    \centering
-%    \includegraphics[width=1\textwidth]{chapter3/graphics/fetching-model.pdf}
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{chapter3/graphics/fetching-model.pdf}
 
-%    \caption{Example of RRF on a 2 core composition. Each core has 4 segments, the arrows represent the block generating the predictions. This figure shows the first 3 steps of a new core composition fetching blocks.}
-%    \label{fig:new_fetch_ex}
-%\vspace{1em}%
-%	\end{figure}
+    \caption{Example of RRF on a 2 core composition. Each core has 4 segments, the arrows represent the block generating the predictions. This figure shows the first 3 steps of a new core composition fetching blocks.}
+    \label{fig:new_fetch_ex}
+\vspace{1em}%
+	\end{figure}
 %Given a 2 core-fusion \{$Core_0$,$Core_1$\} using a ITTAGE~\cite{SeznecITTAGE} multi-block ahead branch predictor described by A. Seznec et al in~\cite{SeseznecMultipleBlock} the cores can make two predictions in a single cycle: one for itself and one for the next core.
-%Figure~\ref{fig:new_fetch_ex} gives an overview of the first few cycles of using RRF with two cores fused.
-%When $Core_0$ starts the composition and fetches the first block, $block_0$, if it is able to predict $block_2$ will submit a fetch request for $block_1$ on $Core_1$ whilst also attempting to fetch $block_2$ for itself.
-%On the next cycle	e $Core_1$ receives the request for $block_1$ and starts fetching the block.
-%Once $Core_1$ can make a branch prediction it will attempt to predict for $block_3$ instead of $block_2$; this is because $block_2$ was already predicted and fetched on $Core_0$.
+Figure~\ref{fig:new_fetch_ex} gives an overview of the first few cycles of using RRF with two cores fused.
+When $Core_0$ starts the composition and fetches the first block, $block_0$, if it is able to predict $block_2$ will submit a fetch request for $block_1$ on $Core_1$ whilst also attempting to fetch $block_2$ for itself.
+On the next cycle	e $Core_1$ receives the request for $block_1$ and starts fetching the block.
+Once $Core_1$ can make a branch prediction it will attempt to predict for $block_3$ instead of $block_2$; this is because $block_2$ was already predicted and fetched on $Core_0$.
 
 %In this new fetch mechanism, when a core is in fetching mode, it does not attempt to predict $block_{n+1}$ but rather $block_{n+numberOfCoresInComposition}$; the reason behind this will be clarified shortly.
 %If $Core_0$ or $Core_1$ attempts to fetch a block when it is full, it can submit the new block's PC to a buffer; the core then stops attempting to allocate new blocks.
@@ -257,7 +252,6 @@ Assuming, for this architecture, that a hop takes a single cycle, a block can th
     \includegraphics[width=1\textwidth]{chapter3/graphics/motivation_fetch.pdf}
     \caption{Speedup obtained when executing the synthetic block with varying execution times (facets) with the current fetching technique and new fetching technique. Higher is better.}
     \label{fig:motiv_res}
-\vspace{1em}
 \end{figure}
 \begin{figure}[t]
     \centering
