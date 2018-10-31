@@ -67,9 +67,7 @@ Each tagged entry has a tag of varying size (first table is 12 bits, second 13 b
 The total number of values for the D-VTAGE predictor is taken from Perais et al's original paper which introduced the predictor~\cite{peraisBeBop2015}.\
 The adopted size for this chapter is the medium predictor as it provides a good compromise between performance and memory footprint.
 It is important to note that the values represent single entries in the table, they can be grouped up into any number of blocks.
-
-The blocks in the speculative window represents the total number of in-flight blocks that can be handled by the speculative window.
-As each core can only have up to four blocks live, the speculative window is set to have four block.
+The blocks in the speculative window represents the total number of in-flight blocks that can be handled by the speculative window, which is 4.
 %For the size of the stride, 64 bit values are used throughout the experiments to maximise the reach of the predictor.
 %However, different stride sizes are considered: the simulator tracks the size of the strides used in valid predictions to detect how small they can be made for each of the benchmarks.
 %The analysis of the stride size is discussed later on in this section.
@@ -165,6 +163,7 @@ However, benchmarks \bm{Disparity} and \bm{Multi\_NCut} show how value predictio
 
 \subsubsection{Coverage and Accuracy}
 To better understand the performance of the different D-VTAGE configurations, the predictors' coverage and misprediction rates are recorded.
+The coverage is measured by comparing the number of correct register read values to the total number of executed register reads.
 Since EDGE is a block based architecture, it is important to study the coverage and accuracy on both a per-instruction level and per-block level.
 This is due to the fact that a single read misprediction leads to flushing the block and all younger blocks in the chain.
 Thus whilst the misprediction rate for predicted instructions may be low, it can have a large impact as up to 64 blocks may be in flight, and may all need to be flushed.
@@ -178,7 +177,6 @@ Also a single accurate register prediction may not necessarily improve performan
 	\vspace{1em}
 \end{figure}
 
-Before looking at the accuracy of the predictors, it's important to study the coverage as it gives an overall view of how active the value predictor is during the execution of a program.
 In this chapter, only blocks that are committed count towards the predicted blocks, as flushes caused by LSQ violations, for example, may artificially inflate the coverage count, as a flushed block may have issued a prediction.
 Figure~\ref{fig:vtag_cov_block} displays the number of blocks which have at least one prediction, relative to the total number of committed blocks and the number of predicted register reads relative to the total executed register reads.
 The figure shows similar patterns for both coverages: the predictors with lower confidence counters have a higher coverage, 65\% compared to 31\% for the high confidence counter.
@@ -200,7 +198,6 @@ As blocks require multiple executions to train the predictor (if the values in t
 Thus, these benchmarks will naturally have a harder time to benefit from value prediction.
 
 Figure~\ref{fig:vtag_cov_block} shows that a lower confidence allows for higher coverage, yet the speedups seen in Figure~\ref{fig:vtage_perf} indicate that a higher confidence leads to better performance.
-Intuitively, this must mean that the lower confidence leads to a higher misprediction rate.
 To confirm this, Figure~\ref{fig:vtag_accuracy_block} presents the prediction accuracy rate for each benchmark at a per-block and per-instruction base respectively.
 The D-VTAGE predictor maintains a 99\% accuracy, whether at the block level or instruction level.
 However, for \bm{Localization}, \bm{MSER}, \bm{SVM}, \bm{Texture\_Synthesis} and \bm{Tracking}, the block level accuracy for a confidence of 4 is under 98\%, and even down to 93\% for \bm{MSER}.
@@ -214,6 +211,32 @@ This explains why the low confidence counter sometimes performs worse than the h
     \caption{Accuracy of the different D-VTAGE predictors at a block and instruction level. Higher is better.}
     \label{fig:vtag_accuracy_block}
 \end{figure}
+
+\subsection{Performance with non-perfect branch prediction}
+
+\begin{table}[t]
+  \small
+  \centering
+ \begin{tabular} { | l | l | l | l | l | }
+ \hline
+   \cellcolor[gray]{0.7}Disparity & \cellcolor[gray]{0.7} Localization& \cellcolor[gray]{0.7} MSER& \cellcolor[gray]{0.7} Multi\_NCut& \cellcolor[gray]{0.7} Sift\\ \hline
+	98\%  & 95\% & 85\%  & 100\%& 99\%\\ \hline
+	 \cellcolor[gray]{0.7} Stitch & \cellcolor[gray]{0.7} SVM & \cellcolor[gray]{0.7} Text. Synth & \cellcolor[gray]{0.7} Tracking&\\ \hline
+	  95\%& 93\%& 98\%& 98 \%&\\ \hline
+	\end{tabular}
+  \caption{Branch prediction accuracy in percentage for each of the benchmarks.}\label{tab:sd-vbsbpred2}
+  \vspace{1em}
+\end{table}
+
+Finally, this section studies how non-perfect branch prediction affects the performance of the applications with RRF and value prediction.
+To conduct this analysis, the perfect branch predictor was modified to randomly mis-predict given a certain accuracy requirement.
+For each of the benchmarks, the branch prediction accuracies recorded in Chapter~\ref{chp:cases} are used.
+These accuracies can be found in Table~\ref{tab:sd-vbsbpred2}.
+
+Figure~\ref{fig:vtage_perf} reports the speedup obtained with the different configurations of the D-VTAGE predictor with RRF.
+In this scenario, the baseline is still a 16 core composition with SF and no value prediction, however the branch predictor is not perfect and uses the previously defined accuracies for each benchmark.
+As the figure shows, the new configuration still performs well, as the benchmarks, aside from \bm{MSER}, have a good branch prediction accuracy.
+
 %\subsubsection{Size of stride}
 
 %\begin{figure}[t]
