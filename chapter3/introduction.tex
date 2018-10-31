@@ -1,17 +1,15 @@
 %replace the ref with actual latex ref
 The previous chapter showed how reconfiguring a dynamic multicore processor at runtime can improve the efficiency of core composition as it is able to adapt to different phases of instructions per cycle (IPC).
-It also demonstrated that there are certain limiting factors to how performant core composition can be.
-The limiting factors discussed were branch prediction requirements and cost of synchronising cores.
+It also discussed limiting factors of performance such as branch prediction requirements and cost of synchronising cores.
 To improve the performance of core composition, Chapters~\ref{chp:streamit} and ~\ref{chp:cases} showed that source level modifications are a good method.
 These source-level modifications are often used to increase the size of the block which enables better utilisation of large core compositions.
 
-Whilst source-level modifications do in fact improve the performance of large core compositions, they may not always be applicable.
 In situations where source or compiler optimisations cannot increase the size of a block, core composition cannot improve the performance of the application.
 To increase the viability of core composition, other solutions must therefore be explored.
-Instead of solely focusing on improving the source code, analysing how a composition functions at a hardware level can help determine other potential bottlenecks in the system.
+Instead of only focusing on improving the source code, analysing how a composition functions at a hardware level can help determine other potential bottlenecks in the system.
 
-By modifying how core composition behaves, this can improve the performance on large compositions.
-For example, modifying how blocks are fetched amongst cores can potentially increase the fairness of work distribution, increasing the efficiency of the composition.
+By modifying how core composition behaves, this can improve the performance of large compositions.
+For example, modifying how blocks are fetched amongst cores can potentially increase the work distribution fairness, increasing the efficiency of the composition.
 This chapter explores the hardware bottlenecks that reduce the efficiency of core composition, and how to address these concerns.
 
 There are two features of the processor that have a large impact on performance that are explored: first the block fetching mechanism in a composition, and data dependencies resolution between blocks can be handled.
@@ -21,10 +19,10 @@ Thus, exploring how the fetching model can be modified to prioritise using all t
 
 Secondly register dependencies can reduce block level paralellism which in turn makes core composition less useful.
 Reduced block level parallelism due to data dependencies is similar to an issue found in superscalar processors~\cite{peraisBeBop2015}.
-If register values could be predicted, instructions could fire speculatively which in turn would improve block level parallelism.
+If register values could be predicted, instructions could fire speculatively improving block level parallelism.
 This chapter therefore explores how a value predictor, which predicts register values to reduce the data dependencies, can be used to improve performance in core composition.
 
-This chapter is organised as follows: first a benchmark previously described in Chapter~\ref{chp:cases} is re-analysed to underline how current hardware does not suffice to ensure performance improvements.
+This chapter is organised as follows: first a benchmark previously explored in Chapter~\ref{chp:cases} is re-analysed to underline how current hardware does not suffice to ensure performance improvements.
 Then a new fetching mechanism called Round Robin Fetch is introduced: cores are able to fetch blocks independently in a round robin fashion to improve fairness.
 Then a current state-of-the art value predictor is discussed and shown to be applicable for the EDGE architecture.
 This is followed by an exploration of how these hardware modifications affect performance of core composition under an idealistic scenario, where perfect value prediction is enabled.
