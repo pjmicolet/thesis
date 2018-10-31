@@ -60,7 +60,7 @@ This section demonstrates how the block based D-VTAGE value predictor improves t
 Serial fetch is not explored since previous section showed that when using value prediction, RRF always provides the best results.
 The results reported in this section represent the culmination of hardware modifications for core composition discussed in this chapter.
 
-The objective of this section is to demonstrate that a state of the art value predictor, paired with a new fetching scheme, can be used to improve the performance of large core compositions, and to show the difference between a real predictor and the perfect predictor.
+%The objective of this section is to demonstrate that a state of the art value predictor, paired with a new fetching scheme, can be used to improve the performance of large core compositions, and to show the difference between a real predictor and the perfect predictor.
 The D-VTAGE size configuration can be found in Table~\ref{tab:vtage-conf}.
 The Last-Value Table shares the same number of values as the Base Entry and uses a 5-bit tag.
 Each tagged entry has a tag of varying size (first table is 12 bits, second 13 bits so on and so forth).
@@ -70,18 +70,19 @@ It is important to note that the values represent single entries in the table, t
 
 The blocks in the speculative window represents the total number of in-flight blocks that can be handled by the speculative window.
 As each core can only have up to four blocks live, the speculative window is set to have four block.
-For the size of the stride, 64 bit values are used throughout the experiments to maximise the reach of the predictor.
-However, different stride sizes are considered: the simulator tracks the size of the strides used in valid predictions to detect how small they can be made for each of the benchmarks.
-The analysis of the stride size is discussed later on in this section.
+%For the size of the stride, 64 bit values are used throughout the experiments to maximise the reach of the predictor.
+%However, different stride sizes are considered: the simulator tracks the size of the strides used in valid predictions to detect how small they can be made for each of the benchmarks.
+%The analysis of the stride size is discussed later on in this section.
 
 Two features of the predictor can be modified: the number of values per entry and at what confidence a prediction is used.
 Modifying the required confidence explores the trade-off between high coverage and low misprediction.
 The original D-VTAGE uses Forward Probabilistic Counters (FPC)~\cite{riley2006fpc} to increment the confidence, and only used predictions once the counter was set to 7.
-To briefly summarise FPC: when a value is correctly predicted, its confidence is incremented based on a probability, rather than always incrementing the counter by one.
-This section explores two counter scenarios: using a prediction when the confidence is set to 4 (without FPC), and using confidence when the counter is set to 7 (with FPC).
+This confidence rate ensured that the predictor had an accuracy of over 99\%, but at the expense of a low coverage, 20\% on average~\cite{peraisBeBop2015}.
 The confidence of 4 is chosen as it allows for very fast deployment of predictions, whilst still ensuring that the values have been trained at least a few times.
 The FPC vector used in this Chapter is the same as the one in Perais et al.'s work $\{1,\frac{1}{16},\frac{1}{16},\frac{1}{16},\frac{1}{16},\frac{1}{16},\frac{1}{32},\frac{1}{32}\}$.
-This confidence rate ensured that the predictor had an accuracy of over 99\%, but at the expense of a low coverage, 20\% on average~\cite{peraisBeBop2015}.
+
+%This section explores two counter scenarios: using a prediction when the confidence is set to 4 (without FPC), and using confidence when the counter is set to 7 (with FPC).
+%To briefly summarise FPC: when a value is correctly predicted, its confidence is incremented based on a probability, rather than always incrementing the counter by one.
 
 \begin{table}[t]
 \small
@@ -190,8 +191,7 @@ The coverage may be slightly higher due to the fact that the values being predic
 
 The register coverage helps explain why the high block coverage does not lead to better performance: whilst most blocks may have a valid prediction, some of the register reads cannot be predicted.
 This may be due to data being carried over which is unpredictable; for instance a loop which sums all values of an array into a single integer will pass that integer via a register.
-This register will cause a data dependency between loop iterations and cannot be predicted unless the values in the array are highly predictable.
-Even if the register coverage is low, any correct prediction can help improve performance as blocks can use the values as they wait to receive the real value from the NoC.
+This register will cause a data dependency between loop iterations and will be difficult to predict.
 
 \bm{Localization}, \bm{MSER}, \bm{SVM} and \bm{Texture\_Synthesis} often have much lower coverage than the rest of the programs.
 Recalling Figure~\ref{fig:totblock} which shows the number of unique blocks executed throughout the programs, these benchmarks had a higher count of unique blocks.
@@ -213,28 +213,27 @@ This explains why the low confidence counter sometimes performs worse than the h
     \includegraphics[width=1\textwidth]{chapter3/graphics/predAcc.pdf}
     \caption{Accuracy of the different D-VTAGE predictors at a block and instruction level. Higher is better.}
     \label{fig:vtag_accuracy_block}
-	\vspace{1em}
 \end{figure}
-\subsubsection{Size of stride}
+%\subsubsection{Size of stride}
 
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/strides.pdf}
-    \caption{Distribution of the size of strides for each benchmark.}
-    \label{fig:strides}
-	\vspace{1em}
-\end{figure}
+%\begin{figure}[t]
+%    \centering
+%    \includegraphics[width=1\textwidth]{chapter3/graphics/strides.pdf}
+%    \caption{Distribution of the size of strides for each benchmark.}
+%    \label{fig:strides}%
+%	\vspace{1em}
+%\end{figure}
 
-Whilst 64 bit strides are used throughout the experiments to capture all the potential performance, 64 bits per entries may not be necessary.
-Figure~\ref{fig:strides} shows the average number of valid predictions whose strides could fit in either an 8, 16, 32 or 64 bit signed integer for each of the benchmarks.
-The data was taken from the D-VTAGE configuration that led to the highest performance overall for each of the benchmarks.
-In Perais' et al'.s work they recommend that a medium-sized D-VTAGE predictor use 8-bit strides.
-Overall, Figure~\ref{fig:strides} shows that using 8 bit strides should be sufficient for most benchmarks, however \bm{Disparity}, one of the benchmarks which benefits most from value prediction, would lose almost 25\% of its coverage.
-Therefore, for these set of applications, a stride of at least 16 bits is necessary, as it captures 91\% of the total strides found in all the benchmarks.
+%Whilst 64 bit strides are used throughout the experiments to capture all the potential performance, 64 bits per entries may not be necessary.
+%Figure~\ref{fig:strides} shows the average number of valid predictions whose strides could fit in either an 8, 16, 32 or 64 bit signed integer for each of the benchmarks.
+%The data was taken from the D-VTAGE configuration that led to the highest performance overall for each of the benchmarks.
+%In Perais' et al'.s work they recommend that a medium-sized D-VTAGE predictor use 8-bit strides.
+%Overall, Figure~\ref{fig:strides} shows that using 8 bit strides should be sufficient for most benchmarks, however \bm{Disparity}, one of the benchmarks which benefits most from value prediction, would lose almost 25\% of its coverage.
+%Therefore, for these set of applications, a stride of at least 16 bits is necessary, as it captures 91\% of the total strides found in all the benchmarks.
 
-\subsection{Putting it all together}
-This section has demonstrated that a real value predictor can sometimes perform as well as a perfect predictor, resulting in a speedup of up to 2.7x for \bm{MSER} and 2x \bm{Disparity}, when paired with the round robin fetching scheme.
-The section also showed that whilst a lower confidence rate does increase the coverage, it does lead to a higher misprediction.
-As core composition is sensitive to any kind of misprediction that causes a flush, the predictor with confidence value 4 performs less well than confidence value 7 with FPC.
-Finally, the analysis of stride size shows that for this set of benchmarks, a 16 bit stride is sufficient to capture 91\% of the strides for the benchmarks.
-Using this information, a recommended D-VTAGE configuration for the dynamic multicore processor would take up 39kB of memory, which is slightly larger than an L1 cache.
+%\subsection{Putting it all together}
+%This section has demonstrated that a real value predictor can sometimes perform as well as a perfect predictor, resulting in a speedup of up to 2.7x for \bm{MSER} and 2x \bm{Disparity}, when paired with the round robin fetching scheme.
+%The section also showed that whilst a lower confidence rate does increase the coverage, it does lead to a higher misprediction.
+%As core composition is sensitive to any kind of misprediction that causes a flush, the predictor with confidence value 4 performs less well than confidence value 7 with FPC.
+%Finally, the analysis of stride size shows that for this set of benchmarks, a 16 bit stride is sufficient to capture 91\% of the strides for the benchmarks.
+%Using this information, a recommended D-VTAGE configuration for the dynamic multicore processor would take up 39kB of memory, which is slightly larger than an L1 cache.

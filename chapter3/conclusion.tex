@@ -3,7 +3,7 @@ Due to the fact that blocks are fetched in a serial fashion, when a large number
 Therefore, finding a way of allowing cores to fetch in parallel can help increase the effectiveness of a composition.
 However, another issue arises, inter-block communication via register reads and writes can cause potential data-dependencies, which serialises the execution of blocks.
 As register files are shared between cores when they are composed, cores may have to send read requests to cores that are physically far away, increasing the latency of read instructions.
-Finding a way to predict data can potentially alleviate data dependencies and reduce the effect of high latency reads, thus further improve the performance of core composition.
+Finding a way to predict data can potentially alleviate data dependencies and reduce the effect of high latency reads, improving the performance of core composition.
 
 This chapter proposed a round-robin fetching mechanism, where cores do not fetch sequential blocks, but rather fetch blocks in strides.
 This enables cores to fetch independently from one another, without having to submit fetch requests to other cores.

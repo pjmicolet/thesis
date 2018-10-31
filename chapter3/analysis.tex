@@ -105,8 +105,8 @@ Figure~\ref{fig:lsqvio} shows the number of blocks that cause an LSQ violation, 
 For example 3\% of fetched blocks caused an LSQ violation in the benchmark \bm{MSER}.
 For every LSQ violation, the entire composition may need to be flushed, and given the fact that \bm{MSER} features small blocks, refilling the entire composition may take some time, even with RRF.
 Even though the percentage is quite small, it still has an impact on how efficient the composition may be, due to the fact that compositions rely on heavy speculation to obtain any performance improvements.
-A store-set dependency predictor is implemented in the processor~\cite{chrysos1998storesets}, however it is sometimes hard to predict load-store dependencies across multiple blocks, which is why LSQ violations occur.
-Store-set dependency predictors are not discussed in more detail in this chapter, however researching how store-set dependencies could be applied to core-composition is an interesting subject for future work.
+%A store-set dependency predictor is implemented in the processor~\cite{chrysos1998storesets}, however it is sometimes hard to predict load-store dependencies across multiple blocks, which is why LSQ violations occur.
+%Store-set dependency predictors are not discussed in more detail in this chapter, however researching how store-set dependencies could be applied to core-composition is an interesting subject for future work.
 
 \subsection{Round robin fetching scheme bottleneck Analysis}
 
@@ -159,13 +159,13 @@ Thus blocks 5 and 7 cannot be dispatched on Core 1 before block 2 has finished e
 
 Figure~\ref{fig:variance} shows the variance of block sizes in the SD-VBS benchmarks.
 This was obtained by counting the different block sizes each benchmark fetched, and grouping them into 4 distinct buckets: blocks that occupy 1, 2, 3 or 4 lanes in the window.
-The Figure shows that benchmarks \bm{Multi\_NCut} features a very low variance; this partially explains why RRF has a similar fetch to dispatch latency as SF without value prediction.
+The Figure shows that the benchmark \bm{Multi\_NCut} features a very low variance; which is why RRF has a similar fetch to dispatch latency as SF without value prediction.
 
-The issue of variance is not only specific to RRF, as SF will also suffer from this issue as well.
-The difference is that with SF, Core 1 would not fetch blocks 3, 5 and 7, instead it would wait for Core 2 to commit its block and submit a fetch request.
-Of course, variance only partially provides an insight as to why core composition may be less efficient; as it does not take into account data dependencies between blocks.
-Also, the variance does not take into account that blocks of different sizes may belong to different phases.
-Nevertheless, it is an important factor to take into consideration.
+%The issue of variance is not only specific to RRF, as SF will also suffer from this issue as well.
+%The difference is that with SF, Core 1 would not fetch blocks 3, 5 and 7, instead it would wait for Core 2 to commit its block and submit a fetch request.
+%Of course, variance only partially provides an insight as to why core composition may be less efficient; as it does not take into account data dependencies between blocks.
+%Also, the variance does not take into account that blocks of different sizes may belong to different phases.
+%Nevertheless, it is an important factor to take into consideration.
 
 \begin{figure}[t]
     \centering
@@ -177,46 +177,9 @@ Nevertheless, it is an important factor to take into consideration.
 
 %Explain how different blcok sizes may mess up the new fetching scheme
 
-
-\paragraph*{Considering an oracle fetching scheme}
-
-RRF aims to parallelise block fetches by having cores fetch blocks in a fixed stride.
-As Figure~\ref{fig:av_time} shows, this increases the average time between a core fetching a block and dispatching it as cores may fetch blocks too far into the speculative chain, that must wait for previous blocks to dispatch.
-This issue is caused by the fact that cores are fetching in fixed strides which are determined ahead of time (the stride is equal to the number of cores in the composition).
-If RRF did not have a fixed stride, and attempted to allocate sequential blocks to cores that are available, this could potentially improve the performance. 
-
-To evaluate how much the added time between fetch and dispatch impacts the speedup obtained through RRF, an Oracle Fetching Scheme is devised.
-This scheme assumes that any core in the composition can fetch and dispatch a block immediately.
-It is an optimistic scheme that provides an upper limit on the performance that can be gained through modifying the fetching scheme. 
-It works similarly to RRF, except that the fetch stride is not fixed.
-However a core cannot fetch two sequential blocks; sequential blocks must still be found on separate cores.
-This is to ensure that all cores are being used equally.
-To generate the results for the oracle fetching scheme, the execution time of \nfvp{} is taken and the average latency between fetch and dispatch is averaged out amongst all cores and subtracted to the total execution time.
-This can be summarised using this equation:
-\begin{equation}
-CycleCount = RRFVP CycleCount - AverageLatency
-\end{equation}
-
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/optres4.pdf}
-    \caption{Comparing the performance of an optimal fetching scheme with \vp{} and \nfvp{}, baseline is \novp. Higher is better.}
-    \label{fig:opt_scheme}
-	\vspace{1em}
-\end{figure}
-This latency is only present RRF, as the serial fetching scheme can always dispatch a block is has fetched as blocks are fetched in order.
-Removing this latency provides an estimate as to how the system would perform if any block could dispatch at any point.
-The latency is averaged out as multiple cores can increment their latency counter for a single cycle.
-This configuration is named Oracle Fetching with Value Prediction (\optvp).
-
-Figure~\ref{fig:opt_scheme} shows how \optvp{} compares to \vp{} and \nfvp{}, with \novp{} as a baseline.
-The figure shows that most applications benefit from \optvp{}, averaging at a speedup of 2.74 compared to \nfvp's 1.88x which is a 45\% increase.
-This increase is optimistic, however it shows that some modifications to the new fetching scheme can potentially improve performance further.
-
 \subsubsection{Summary}
 
-This section shows that a perfect branch predictor, paired with perfect value prediction and the round robin fetching scheme can outperform the current configuration by a factor of up to 3x.
-On average, new configuration obtains a speedup of 1.87x, and can potentially be improved to 2.35x with further modifications to the fetching scheme.
+This section shows that a perfect branch predictor, paired with perfect value prediction and the round robin fetching scheme can outperform the current configuration by a factor of up to 3x and on average a speedup of 1.87x.%, and can potentially be improved to 2.35x with further modifications to the fetching scheme.
 This section also showed that without value prediction RRF only obtains a 1.09x speedup compared to the serial fetching scheme.
 This is due to the fact that the benchmarks all display a certain amount of data-dependencies between blocks and that spreading blocks across cores more evenly can put pressure on the NoC; thus reduce the performance improvements of fetching blocks quicker.
 

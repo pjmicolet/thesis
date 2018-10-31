@@ -29,8 +29,8 @@ Whilst the serialisation of register reads and writes between blocks ensures cor
 This is further exacerbated when fusing a large number of cores, as this increases the amount of blocks that may potentially have to wait on register reads and writes.
 
 For example, the loop iterator in Listing~\ref{lst:basic2} is passed between iterations of the block through a register.
-If multiple cores are composed, and all have an iteration of the loop, they may have to wait on previous writes to be able to execute their loads; serialising execution of the loop.
-In situations where register dependencies are a bottleneck and cannot be optimised via a compiler, core composition cannot be considered an effective method of improving performance as the data dependencies serialise execution of blocks.
+If cores are composed, and all have an iteration of the loop, they will have to wait on previous writes to be able to execute their loads; serialising execution of the loop.
+When register dependencies are a bottleneck and cannot be optimised via a compiler, core composition cannot be considered an effective method of improving performance.
 
 This chapter underlines two problems related to register reads on large compositions: the potential data dependencies caused by reads waiting for previous writes to execute, and the latency caused by having to send read requests via the NoC.
 The problem of trying to reduce register and memory dependencies to improve instruction level parallelism is not new, and is an issue found in more traditional superscalar processors~\cite{peraisVTAGE2014}.
@@ -61,7 +61,7 @@ This section covers different features that must be considered when implementing
 
 \paragraph*{Prediction Latency}
 In a traditional superscalar processor, one of the main challenges value predictors face is being able to sustain the potential number of prediction requests in a short time frame~\cite{peraisBeBop2015}.
-As value predictors are designed to improve ILP performance of out-of-order (OoO) superscalars, it is important to be able to issue a predicted value quickly.
+As value predictors are designed to improve ILP performance it is important to be able to issue a predicted value quickly.
 If multiple prediction requests are made each cycle, this may require expensive hardware such as a re-order buffer to hold all predictions~\cite{peraisBeBop2015}, which may dissuade designers from using value predictors.
 
 To tackle the challenge of issuing predictions quickly, research has focused on grouping instructions into prediction blocks~\cite{peraisBeBop2015}.
@@ -77,12 +77,11 @@ As EDGE organises instructions as blocks, a block-based predictor would reduce t
 Currently, there exist two methods: \textit{context} value prediction~\cite{peraisVTAGE2014} and \textit{computational} value prediction~\cite{peraisBeBop2015,gabbayVPOrig,goeman01dfcm}.
 More details on how these two predictors differ can be found in Chapter~\ref{chp:Background} Section~\ref{sec:valpred}.
 The \textit{context} predictor stores all the different values committed by the instruction in its tables.
-On the other hand the \textit{computational} predictor stores the committed value of the instruction in a table called the Last Value Table (LVT), and stores the delta between the two previous values in another set of tables, this delta is called a \textit{stride}.
-When a prediction request arrives in the \textit{computational} predictor, it fetches an entry from the LVT and the stride table and sums them together to form a prediction.
+On the other hand the \textit{computational} predictor generates a prediction by adding a constant to the last committed value of the instruction.% stores the committed value of the instruction in a table called the Last Value Table (LVT), and stores the delta between the two previous values in another set of tables, this delta is called a \textit{stride}.
+%When a prediction request arrives in the \textit{computational} predictor, it fetches an entry from the LVT and the stride table and sums them together to form a prediction.
 
 Whilst \textit{context} predictors are simpler to design, as there are no extra functions required to generate the predictions aside from fetching a value from a table, they are often considered less efficient when used in loops~\cite{peraisBeBop2015}.
 For example, the memory address of an item in an array that is accessed using the loop induction variable is always incremented using a fixed stride (the loop induction increment).
-If this is the first time the loop is executed, none of the memory address can be predicted at any given iteration of the loop as the predictor does not have the addresses already stored in its tables.
 In order for a \textit{context} value predictor to make a correct prediction in such a scenario, the full loop must have already executed once, and all memory address computed must be stored in its tables.
 Having a large number of values stored in the predictor for a single instruction is inefficient, unless the predictor is infinitely large.
 

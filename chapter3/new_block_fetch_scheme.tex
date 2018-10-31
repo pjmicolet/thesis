@@ -67,16 +67,16 @@ The figure shows that there are 50 cycles between the first block fetched by Cor
 Given that a block in Listing~\ref{lst:basic} takes only 10 cycles to execute, this means that Core 0 is inactive when Core 3 fetches.
 This is due to the fact that once Core 0 submits a fetch request to Core 1, it will have to wait for Core 3 to send it a fetch request.
 
-Having a serialised block fetching scheme for core composition is one of the main bottlenecks for performance when the compiler cannot produce large blocks.
-This means that core composition is not an efficient method of executing small blocks in parallel, compared to using multithreading.
-When using multithreading, cores fetch blocks independently, thus maximizing throughput easily; the size of the block will not have the same impact on performance.
-A mechanism that alleviates fetch dependencies between cores is a first step in improving block throughput for core-compositions.
+%Having a serialised block fetching scheme for core composition is one of the main bottlenecks for performance when the compiler cannot produce large blocks.
+%This means that core composition is not an efficient method of executing small blocks in parallel, compared to using multithreading.
+%When using multithreading, cores fetch blocks independently, thus maximizing throughput easily; the size of the block will not have the same impact on performance.
+%A mechanism that alleviates fetch dependencies between cores is a first step in improving block throughput for core-compositions.
 
 \subsection{Round Robin Fetching Scheme}
 
-Fetching blocks in a serial fashion currently makes large core compositions more difficult to use efficiently when blocks are small.
-Whilst serialising fetches aims to improve the efficiency of a single core by ensuring that its instruction window is full, it makes populating large core compositions a challenging task.
-If cores can fetch blocks independently, this allows larger core compositions to populate cores much quicker.
+%Fetching blocks in a serial fashion currently makes large core compositions more difficult to use efficiently when blocks are small.
+%Whilst serialising fetches aims to improve the efficiency of a single core by ensuring that its instruction window is full, it makes populating large core compositions a challenging task.
+%If cores can fetch blocks independently, this allows larger core compositions to populate cores much quicker.
 
 This section demonstrates how the fetching mechanism can be modified to allow for cores to fetch blocks in parallel.
 It starts with a generalised version of the fetching algorithm for \textit{n} cores in a composition.
@@ -90,7 +90,7 @@ The new fetching scheme has two design objectives: reduce the number of times co
 Sequential blocks should not be found on the same core, instead they should all be on separate cores and fetched in a round robin fashion.
 This ensures a more equal distribution of work amongst all the cores in the composition, and reduces the overhead of ensuring each core has a block.
 
-Currently, if a core does not have a block in its instruction window, it waits until another core in the composition sends it a fetch request.
+%Currently, if a core does not have a block in its instruction window, it waits until another core in the composition sends it a fetch request.
 If blocks are distributed equally amongst all cores using a round robin model, this new model still requires that each core must submit a fetch request to the next core.
 This means that changing the fetching scheme to a round robin scheme does not necessarily stop cores from depending from one another to fetch blocks.
 However, once a core has a block it can use branch prediction to predict the next block it must fetch, rather than waiting for another fetch request from a core.
@@ -188,6 +188,7 @@ In the SF scheme, when a core is full, it submits a fetch request to another cor
 To ensure cores are always fetching blocks in RRF, the buffer is used when a core has filled up its instruction window and can no longer fetch blocks.
 Instead of sending the fetch request to another core, a core saves the block address in its own buffer, and will handle that fetch request once it has committed a block.
 In this chapter, a core can only have one buffered PC at a time.
+
 \paragraph*{Committing mechanism}
 Algorithm~\ref{alg:commit} shows how blocks are committed in RRF.
 When committing $block_i$, the core sets the next core in line to be the non-speculative core.
@@ -195,21 +196,22 @@ This is due to the fact that the next core in line will always have $block_i+1$.
 If the next core in line does not yet have $block_{i+1}$ due to no prediction having been made, then the committing core will submit the resolved PC to the next core, rather than fetching it for itself.
 As previously stated, if the core has a PC in its buffer, it immediately starts fetching a new block.
 However, if it has no PC in its buffer, it must wait on another core to send it a request.
-\subsubsection{Two core example}
-	
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/fetching-model.pdf}
 
-    \caption{Example of RRF on a 2 core composition. Each core has 4 segments, the arrows represent the block generating the predictions. This figure shows the first 3 steps of a new core composition fetching blocks.}
-    \label{fig:new_fetch_ex}
-\vspace{1em}
-	\end{figure}
+%\subsubsection{Two core example}
+	
+%\begin{figure}[t]
+%    \centering
+%    \includegraphics[width=1\textwidth]{chapter3/graphics/fetching-model.pdf}
+
+%    \caption{Example of RRF on a 2 core composition. Each core has 4 segments, the arrows represent the block generating the predictions. This figure shows the first 3 steps of a new core composition fetching blocks.}
+%    \label{fig:new_fetch_ex}
+%\vspace{1em}%
+%	\end{figure}
 %Given a 2 core-fusion \{$Core_0$,$Core_1$\} using a ITTAGE~\cite{SeznecITTAGE} multi-block ahead branch predictor described by A. Seznec et al in~\cite{SeseznecMultipleBlock} the cores can make two predictions in a single cycle: one for itself and one for the next core.
-Figure~\ref{fig:new_fetch_ex} gives an overview of the first few cycles of using RRF with two cores fused.
-When $Core_0$ starts the composition and fetches the first block, $block_0$, if it is able to predict $block_2$ will submit a fetch request for $block_1$ on $Core_1$ whilst also attempting to fetch $block_2$ for itself.
-On the next cycle	e $Core_1$ receives the request for $block_1$ and starts fetching the block.
-Once $Core_1$ can make a branch prediction it will attempt to predict for $block_3$ instead of $block_2$; this is because $block_2$ was already predicted and fetched on $Core_0$.
+%Figure~\ref{fig:new_fetch_ex} gives an overview of the first few cycles of using RRF with two cores fused.
+%When $Core_0$ starts the composition and fetches the first block, $block_0$, if it is able to predict $block_2$ will submit a fetch request for $block_1$ on $Core_1$ whilst also attempting to fetch $block_2$ for itself.
+%On the next cycle	e $Core_1$ receives the request for $block_1$ and starts fetching the block.
+%Once $Core_1$ can make a branch prediction it will attempt to predict for $block_3$ instead of $block_2$; this is because $block_2$ was already predicted and fetched on $Core_0$.
 
 %In this new fetch mechanism, when a core is in fetching mode, it does not attempt to predict $block_{n+1}$ but rather $block_{n+numberOfCoresInComposition}$; the reason behind this will be clarified shortly.
 %If $Core_0$ or $Core_1$ attempts to fetch a block when it is full, it can submit the new block's PC to a buffer; the core then stops attempting to allocate new blocks.
@@ -237,16 +239,16 @@ Assuming, for this architecture, that a hop takes a single cycle, a block can th
 %To achieve this, a record of the last dispatched block number is kept in a shared counter.
 %When a block tries to dispatch instructions it checks the counter, if its block number is sequentially next then it atomically updates the counter to the value of its block number and dispatches its block.
 
-This mainly impacts the performance of large compositions when the system is not in a steady-state of fetching and dispatching blocks and the blocks are small.
-This is due to the fact that the fetch stride is larger and thus cores will have to wait longer for blocks on other cores to dispatch.
-For example, when starting a composition of 16 cores, the first core will have blocks 1 and 17 in its instruction window.
-However, it will have to wait on all other cores to fetch a block before dispatching block 17, which may take 60 or more cycles.
+%This mainly impacts the performance of large compositions when the system is not in a steady-state of fetching and dispatching blocks and the blocks are small.
+%This is due to the fact that the fetch stride is larger and thus cores will have to wait longer for blocks on other cores to dispatch.
+%For example, when starting a composition of 16 cores, the first core will have blocks 1 and 17 in its instruction window.
+%However, it will have to wait on all other cores to fetch a block before dispatching block 17, which may take 60 or more cycles.
 
-This limitation could be alleviated by creating a more complex fetching scheme that takes into account which cores are available to fetch and dispatch blocks immediately, rather than having a stride that is fixed ahead of time.
-Such a scheme may require to centralise the fetching though, as it would require more awareness of what each core is executing.
-Centralising the fetching mechanism increases the pressure on the network as each core will have to send a block PC to the scheduler, and the scheduler will then have to re-submit that PC to an available core.
-This is twice as many network messages per block compared to SF and RF.
-The implementation of a centralised fetching scheme is not explored throughout this Chapter, yet it is suggested as future work.
+%This limitation could be alleviated by creating a more complex fetching scheme that takes into account which cores are available to fetch and dispatch blocks immediately, rather than having a stride that is fixed ahead of time.
+%Such a scheme may require to centralise the fetching though, as it would require more awareness of what each core is executing.
+%Centralising the fetching mechanism increases the pressure on the network as each core will have to send a block PC to the scheduler, and the scheduler will then have to re-submit that PC to an available core.
+%This is twice as many network messages per block compared to SF and RF.
+%The implementation of a centralised fetching scheme is not explored throughout this Chapter, yet it is suggested as future work.
 
 \subsection{Evaluating the round robin fetch scheme on a synthetic block}
 
