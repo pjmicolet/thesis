@@ -2,7 +2,6 @@ This section evaluates a real implementation of a value predictor, using the blo
 Before conducting the performance analysis, it is important to understand how the predictor must be configured.
 This section therefore starts with a block analysis of the SD-VBS benchmarks, to determine how large the blocks in the predictor must be.
 
-
 \subsection{Block analysis}
 \begin{figure}[t]
     \centering
@@ -13,12 +12,12 @@ This section therefore starts with a block analysis of the SD-VBS benchmarks, to
 	\vspace{1em}
 \end{figure}
 
-One of the defining factors of the block based D-VTAGE predictor is that a single prediction fetches a fixed set of values rather than a single prediction.
+In a block based D-VTAGE predictor a single prediction request fetches multiple values.
 Due to the fact that the block size is fixed ahead of time~\cite{peraisBeBop2015}, determining the correct size is important.
 Having a block with many values means that the D-VTAGE predictor can predict a higher amount of register reads in the EDGE block, however this comes at the expense of having less blocks in the predictor tables.
 On the other hand, a small block size allows to have multiple blocks stored at a time but means that not all instructions can have their values predicted in the EDGE block.
 
-In this chapter, the value predictor can only predict register reads rather than predicting values for any instruction.
+In this chapter, the value predictor only predicts register reads.
 This is due to the fact that register reads create data dependencies amongst blocks, as discussed in Section~\ref{chp3:sec:val}.
 Focusing only on register reads also reduces the the block size requirements as there is often only a few reads in an EDGE block.
 To determine the size, all the EDGE blocks of the SD-VBS benchmarks are anaylsed to find out the what the average register read and write count is per block.
@@ -66,7 +65,7 @@ The Last-Value Table shares the same number of values as the Base Entry and uses
 Each tagged entry has a tag of varying size (first table is 12 bits, second 13 bits so on and so forth).
 The total number of values for the D-VTAGE predictor is taken from Perais et al's original paper which introduced the predictor~\cite{peraisBeBop2015}.\
 The adopted size for this chapter is the medium predictor as it provides a good compromise between performance and memory footprint.
-It is important to note that the values represent single entries in the table, they can be grouped up into any number of blocks.
+It is important to note that the values represent single entries in the table, they can be grouped up into blocks of any size.
 The blocks in the speculative window represents the total number of in-flight blocks that can be handled by the speculative window, which is 4.
 %For the size of the stride, 64 bit values are used throughout the experiments to maximise the reach of the predictor.
 %However, different stride sizes are considered: the simulator tracks the size of the strides used in valid predictions to detect how small they can be made for each of the benchmarks.
@@ -78,6 +77,7 @@ The original D-VTAGE uses Forward Probabilistic Counters (FPC)~\cite{riley2006fp
 This confidence rate ensured that the predictor had an accuracy of over 99\%, but at the expense of a low coverage, 20\% on average~\cite{peraisBeBop2015}.
 The confidence of 4 is chosen as it allows for very fast deployment of predictions, whilst still ensuring that the values have been trained at least a few times.
 The FPC vector used in this Chapter is the same as the one in Perais et al.'s work $\{1,\frac{1}{16},\frac{1}{16},\frac{1}{16},\frac{1}{16},\frac{1}{16},\frac{1}{32},\frac{1}{32}\}$.
+ 
 
 %This section explores two counter scenarios: using a prediction when the confidence is set to 4 (without FPC), and using confidence when the counter is set to 7 (with FPC).
 %To briefly summarise FPC: when a value is correctly predicted, its confidence is incremented based on a probability, rather than always incrementing the counter by one.
@@ -85,14 +85,16 @@ The FPC vector used in this Chapter is the same as the one in Perais et al.'s wo
 \begin{table}[t]
 \small
 \centering
-\begin{tabular}{p{5.2cm} p{1.8cm}}
+\begin{tabular}{p{5.2cm} p{3cm}}
 \toprule
 \textbf{Parameter} & \textbf{Values} \\ \midrule
 \# Base Entry & 1536\\
 \# Tagged & $6\times1536$\\
-\# Block in Spec Window & 4 \\ \hline
+\# Block in Spec Window & 4 \\ \hline \midrule
+\# of values per entry & 8, 16\\
+Confidence Value & 4 or 7 with FPC \\ \bottomrule
 \end{tabular}
-  \caption{D-VTAGE table configuration.}\label{tab:vtage-conf}
+  \caption{D-VTAGE table configuration and configurable parameters.}\label{tab:vtage-conf}
 \vspace{1em}
 \end{table}
 
@@ -107,21 +109,21 @@ The FPC vector used in this Chapter is the same as the one in Perais et al.'s wo
  % \caption{D-VTAGE table configuration.}\label{tab:vtage-conf}
 %\end{table}
 
-\begin{table}[t]
-\small
-\centering
-\begin{tabular}{p{5.2cm} p{1.8cm}}
-\toprule
-\textbf{Parameter} & \textbf{Values} \\ \midrule
-\# of values per entry & 8, 16\\
-Confidence Value & 4 or 7 with FPC \\ \bottomrule
-\end{tabular}
-\caption{Configurable parameters for D-VTAGE}\label{tab:vtage-params}
-\end{table}
+%\begin{table}[t]
+%\small
+%\centering
+%\begin{tabular}{p{5.2cm} p{1.8cm}}
+%\toprule
+%\textbf{Parameter} & \textbf{Values} \\ \midrule
+%\# of values per entry & 8, 16\\
+%Confidence Value & 4 or 7 with FPC \\ \bottomrule
+%\end{tabular}
+%\caption{Configurable parameters for D-VTAGE}\label{tab:vtage-params}
+%\end{table}
 
-Table~\ref{tab:vtage-params} shows the possible values that can be taken for the two parameters.
+Table~\ref{tab:vtage-conf} also shows the possible values that can be taken for the two parameters.
 Whilst this section previously showed that most applications only have 5 reads per block, this section explores block sizes of 8 and 16 to ensure that all register reads are potentially covered. 
-Once again, all benchmarks are executed using a 16 core composition.
+All benchmarks are executed using a 16 core composition.
 
 \subsection{Results}
 
@@ -141,7 +143,7 @@ The lack of value prediction and use of serial fetching represents the current i
 To better understand the performance of the predictors, each configuration is compared to the perfect predictor, which can predict every register value at any instance.
 Throughout this section, the configurations of D-VTAGE are labeled: \textbf{D-VTAGE\_\textit{Confidence}\_\textit{BlockSize}}.
 
-On average, using a D-VTAGE value predictor with the Round Robin Fetch scheme results in an average speedup of 1.32x.
+On average, using a D-VTAGE value predictor with the RRF scheme results in an average speedup of 1.32x.
 When comparing the performance between the different configurations, the main observation is that using a higher confidence results in better performance, however slight, 1.35x for D-VTAGE\_7\_16 compared to 1.31x for D-VTAGE\_4\_16.
 However, for the benchmark \bm{Disparity} using a higher confidence leads to less of a performance increase 1.75x speedup compared to 2.0x for a confidence counter of 4.
 This is due to the fact that \bm{Disparity} is composed of loops with highly predictable values, and thus deploying predictions faster results in better performance improvements without risking a higher misprediction rate.
@@ -177,10 +179,10 @@ Also a single accurate register prediction may not necessarily improve performan
 	\vspace{1em}
 \end{figure}
 
-In this chapter, only blocks that are committed count towards the predicted blocks, as flushes caused by LSQ violations, for example, may artificially inflate the coverage count, as a flushed block may have issued a prediction.
+In this chapter, only blocks that are committed count towards the predicted blocks as any flush will artificially inflate the coverage count.
 Figure~\ref{fig:vtag_cov_block} displays the number of blocks which have at least one prediction, relative to the total number of committed blocks and the number of predicted register reads relative to the total executed register reads.
 The figure shows similar patterns for both coverages: the predictors with lower confidence counters have a higher coverage, 65\% compared to 31\% for the high confidence counter.
-This is normal, as lower confidence causes predictions to be used with less training, and thus increases the number of predictions used during the execution of the program.
+This is normal: lower confidence allowes predictions to be used with faster, which will increase coverage.
 
 Whilst the block coverage is high, the coverage for registers reveals that not all registers are being predicted.
 Once again, lower confidence equates to higher coverage, however this time it's 30\% for a confidence of 4 and under 25\% for a confidence of 7.
@@ -236,6 +238,7 @@ These accuracies can be found in Table~\ref{tab:sd-vbsbpred2}.
 Figure~\ref{fig:vtage_perf} reports the speedup obtained with the different configurations of the D-VTAGE predictor with RRF.
 In this scenario, the baseline is still a 16 core composition with SF and no value prediction, however the branch predictor is not perfect and uses the previously defined accuracies for each benchmark.
 As the figure shows, the new configuration still performs well, as the benchmarks, aside from \bm{MSER}, have a good branch prediction accuracy.
+Overall this demonstrates that 
 
 %\subsubsection{Size of stride}
 
