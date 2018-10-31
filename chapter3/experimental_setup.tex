@@ -1,7 +1,6 @@
 \subsection{Benchmarks}
 To evaluate how the hardware modifications improve the performance of core composition; the same benchmarks used in Chapter~\ref{chp:cases} are used here.
 These benchmarks are all from the San-Diego Vision Benchmark Suite (SD-VBS)~\cite{sdvbs}, which is composed of a set of vision and image analysis applications.
-
 The previous chapter showed that even with code optimisations, core compositions do not perform optimally when executing the benchmarks.
 Some of the programs, such as \bm{MSER} or \bm{Multi\_NCut} features an average block size of under 10 instructions per block, making it difficult to use core composition efficiently.
 They are therefore a perfect candidate to explore how the hardware modifications can improve the performance of core composition.
@@ -21,8 +20,8 @@ Input&	VGA  & VGA & CIF  & SIM\_FAST& CIF\\ \hline
   \caption{Datasets used for each of the benchmarks.}\label{tab:sd-data2}
 \end{table}
 \subsection{Evaluation} 
-The previous chapter showed that the SD-VBS benchmarks feature phases of IPC, and that these phases often repeat.
-These benchmarks are structured as pipelines with distinct passes; often times the execution of a benchmark will iterate over the pipeline multiple times.
+The previous chapter showed that the SD-VBS benchmarks feature repeating phases of IPC.
+These benchmarks are structured as pipelines with distinct passes that are often times repeated.
 This means that performance improvements can be analysed without having to fully execute the program.
 
 As this chapter is only concerned with demonstrating that the new hardware modifications outperform the current implementation, the benchmarks are executed long enough to capture all the phases.
