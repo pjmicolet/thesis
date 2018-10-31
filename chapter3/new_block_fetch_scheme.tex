@@ -33,13 +33,14 @@
 	
 \end{lstlisting}
 \end{center}
-\vspace{-1em}
+\vspace{-2em}
 \captionof{lstlisting}{Example of small loop.}
+\vspace{-1em}
 \label{lst:basic}
 \vspace{1em}
-\end{figure}
+%\end{figure}
 
-\begin{figure}[t]
+%\begin{figure}[t]
  %   \centering
  %   \includegraphics[width=1\textwidth]{chapter3/graphics/normfetch.pdf}
  %   \caption{Example of the current fetching model on a 2 core composition. Each core has 4 segments, the arrows represent the block generating the predictions.}
@@ -192,16 +193,17 @@ If the next core in line does not yet have $block_{i+1}$ due to no prediction ha
 As previously stated, if the core has a PC in its buffer, it immediately starts fetching a new block.
 However, if it has no PC in its buffer, it must wait on another core to send it a request.
 
-\paragraph*{Two core example}
-	
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{chapter3/graphics/fetching-model.pdf}
+\vspace{-1em}
 
     \caption{Example of RRF on a 2 core composition. Each core has 4 segments, the arrows represent the block generating the predictions. This figure shows the first 3 steps of a new core composition fetching blocks.}
     \label{fig:new_fetch_ex}
-\vspace{1em}%
+	
 	\end{figure}
+\paragraph*{Two core example}
+	
 %Given a 2 core-fusion \{$Core_0$,$Core_1$\} using a ITTAGE~\cite{SeznecITTAGE} multi-block ahead branch predictor described by A. Seznec et al in~\cite{SeseznecMultipleBlock} the cores can make two predictions in a single cycle: one for itself and one for the next core.
 Figure~\ref{fig:new_fetch_ex} gives an overview of the first few cycles of using RRF with two cores fused.
 When $Core_0$ starts the composition and fetches the first block, $block_0$, if it is able to predict $block_2$ will submit a fetch request for $block_1$ on $Core_1$ whilst also attempting to fetch $block_2$ for itself.
@@ -250,13 +252,15 @@ Assuming, for this architecture, that a hop takes a single cycle, a block can th
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{chapter3/graphics/motivation_fetch.pdf}
-    \caption{Speedup obtained when executing the synthetic block with varying execution times (facets) with the current fetching technique and new fetching technique. Higher is better.}
+    \caption{Speedup when executing the synthetic block with varying execution times (facets) with SF and RRF. Higher is better.}
     \label{fig:motiv_res}
 \end{figure}
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{chapter3/graphics/sdvbsav.pdf}
-    \caption{Average execution time (in cycles) of blocks for each of the SD-VBS benchmarks. Each benchmark was executed on a single core with a single lane with perfect branch prediction.}
+    
+	\caption{Average execution time (in cycles) of blocks for each of the SD-VBS benchmarks. Each benchmark was executed on a single core with a single lane with perfect branch prediction.}
+	
     \label{fig:svdbs_av}
 \vspace{1em}
 \end{figure}
