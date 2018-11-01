@@ -26,8 +26,7 @@ The writes are tracked as it provides information on the potential amount of reg
 The left hand side of figure~\ref{fig:edge_reg_read} shows the average number of register read and writes for each of the benchmarks.
 On average, there are 5 register reads and 3 register writes per block.
 Whilst \bm{Disparity} \bm{Localization}, \bm{Texture\_Synthesis} and \bm{Tracking} have higher register read counts than the average, most of them only have 5 writes per block.
-This means that having a D-VTAGE block size of 5 would capture all dependencies.
-However this would require some detection of which reads are data-dependent, which is beyond the scope of this thesis.
+This means that having a D-VTAGE block size of 5 could capture all dependencies; however this would require some detection of which reads are data-dependent, which is beyond the scope of this thesis.
 Since Section~\ref{chp:chp3:sec:analysis} showed these benchmarks benefit from value prediction, to ensure that most blocks have all their register reads captured, a block size of at least 8 is required.
 
 \paragraph*{Block variation analysis}
@@ -123,6 +122,8 @@ The FPC vector used in this Chapter is the same as the one in Perais et al.'s wo
 
 Table~\ref{tab:vtage-conf} also shows the possible values that can be taken for the two parameters.
 Whilst this section previously showed that most applications only have 5 reads per block, this section explores block sizes of 8 and 16 to ensure that all register reads are potentially covered. 
+The block size of 8 is chosen as it allows to capture the maximum average number of reads determined in Figure~\ref{fig:edge_reg_read}, since \bm{Disparity} and \bm{Localization} have at least 8 reads and they both benefit from value prediction as seen in Section~\ref{chp:chp3:sec:analysis}.
+On the other hand a block size of 16 is explored to see how capturing a higher number than the average number of reads can affect the performance of the predictor. 
 All benchmarks are executed using a 16 core composition.
 
 \subsection{Results}
@@ -201,7 +202,7 @@ This register will cause a data dependency between loop iterations and will be d
 \end{figure}
 
 \bm{Localization}, \bm{MSER}, \bm{SVM} and \bm{Texture\_Synthesis} often have much lower coverage than the rest of the programs.
-Recalling Figure~\ref{fig:totblock} which shows the number of unique blocks executed throughout the programs, these benchmarks had a higher count of unique blocks.
+Recalling Figure~\ref{fig:edge_reg_read} which shows the number of unique blocks executed throughout the programs, these benchmarks had a higher count of unique blocks.
 This explains why the coverage will be lower: there's a higher chance of encountering a new block than executing a known one.
 As blocks require multiple executions to train the predictor (if the values in the register are indeed predictable), than the higher diversity of blocks makes it harder.
 Thus, these benchmarks will naturally have a harder time to benefit from value prediction.
