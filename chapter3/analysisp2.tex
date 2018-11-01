@@ -1,13 +1,13 @@
 This section evaluates a real implementation of a value predictor, using the block based D-VTAGE predictor.
 Before conducting the performance analysis, it is important to understand how the predictor must be configured.
-This section therefore starts with a block analysis of the SD-VBS benchmarks, to determine how large the blocks in the predictor must be.
+This section therefore starts with a block analysis of the SD-VBS benchmarks.
 
 \subsection{Block analysis}
 \begin{figure}[t]
     \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/averageRegRead.pdf}
+    \includegraphics[width=1\textwidth]{chapter3/graphics/joint.pdf}
 
-    \caption{Average number of register reads and writes per EDGE block.}
+    \caption{Average number of register reads and writes per EDGE block and the number of unique blocks comprising different percentages of the total execution (in blocks) of each of the benchmarks.}
     \label{fig:edge_reg_read}
 	\vspace{1em}
 \end{figure}
@@ -20,34 +20,33 @@ On the other hand, a small block size allows to have multiple blocks stored at a
 In this chapter, the value predictor only predicts register reads.
 This is due to the fact that register reads create data dependencies amongst blocks, as discussed in Section~\ref{chp3:sec:val}.
 Focusing only on register reads also reduces the the block size requirements as there is often only a few reads in an EDGE block.
-To determine the size, all the EDGE blocks of the SD-VBS benchmarks are anaylsed to find out the what the average register read and write count is per block.
+To determine the size, all the EDGE blocks of the SD-VBS benchmarks are anaylsed to determine the average register read and write count is per block.
 The writes are tracked as it provides information on the potential amount of register dependencies found in each of the applications.
 
-Figure~\ref{fig:edge_reg_read} shows the average number of register read and writes for each of the benchmarks.
+The left hand side of figure~\ref{fig:edge_reg_read} shows the average number of register read and writes for each of the benchmarks.
 On average, there are 5 register reads and 3 register writes per block.
 Whilst \bm{Disparity} \bm{Localization}, \bm{Texture\_Synthesis} and \bm{Tracking} have higher register read counts than the average, most of them only have 5 writes per block.
-This potentially means that having a D-VTAGE block size of 5 would capture all dependencies.
-However this would require either compiler support to mark register reads that potentially need value prediction, or have hardware to detect register reads that lead to data-dependencies to figure out which register read instructions should be in the predictor; this work is left for future endeavors.
-Therefore, to ensure that most blocks have all their register reads captured, a block size of at least 8 is required.
-More details on how block size affects performance can be found later on in this section.
+This means that having a D-VTAGE block size of 5 would capture all dependencies.
+However this would require some detection of which reads are data-dependent, which is beyond the scope of this thesis.
+Since Section~\ref{chp:chp3:sec:analysis} showed these benchmarks benefit from value prediction, to ensure that most blocks have all their register reads captured, a block size of at least 8 is required.
 
-\subsubsection{Block variation analysis}
+\paragraph*{Block variation analysis}
 
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/unique_blocks.pdf}
+%\begin{figure}[t]
+%    \centering
+%    \includegraphics[width=1\textwidth]{chapter3/graphics/unique_blocks.pdf}%
 
-    \caption{Number of unique blocks comprising different percentages of the total execution (in blocks) of each of the benchmarks.}
-    \label{fig:totblock}
-	\vspace{1em}
-\end{figure}
+%    \caption{Number of unique blocks comprising different percentages of the total execution (in blocks) of each of the benchmarks.}
+%    \label{fig:totblock}
+%	\vspace{1em}
+%\end{figure}
 
 One method of understanding how the block based D-VTAGE predictor will perform is to study the number of unique blocks found in each of the benchmarks.
 Benchmarks that feature a smaller number of unique blocks can potentially benefit more from value prediction as the predictor cannot hold many blocks at a time.
 Reporting all unique blocks executed is not a proper evaluation of the variety of blocks found in the benchmark, as some will most certainly be executed more times than other.
 To account for this, blocks are sorted by number of occurrences in descending order, and then added to the unique block counter as long the number of occurrences of visited blocks is under a percentage of total number of blocks executed.
 
-Figure~\ref{fig:totblock} shows the number of unique blocks found in each benchmark that account for 50,80,90 and 99\% of the total number of executed blocks.
+The right hand side of figure~\ref{fig:edge_reg_read} shows the number of unique blocks found in each benchmark that account for 50,80,90 and 99\% of the total number of executed blocks.
 As can be seen, applications \bm{Disparity}, \bm{Multi\_NCut} and \bm{Sift} \bm{Stitch} and \bm{Tracking} execute less than 50 unique blocks during 90\% of its total execution.
 This is promising as it means that there is a high chance that the predictor requires less entries to capture all possible blocks in the application.
 On the other hand, \bm{Localization}, and \bm{SVM} execute over 100 blocks throughout 90\% of their execution, twice as many as the previously mentioned benchmarks.
@@ -55,6 +54,23 @@ For these applications, it might be harder to predict values as new blocks may o
 
 
 \subsection{Setup}
+
+\begin{table}[t]
+\small
+\centering
+\begin{tabular}{p{5.2cm} p{3cm}}
+\toprule
+\textbf{Parameter} & \textbf{Values} \\ \midrule
+\# Base Entry & 1536\\
+\# Tagged & $6\times1536$\\
+\# Block in Spec Window & 4 \\ \hline \midrule
+\# of values per entry & 8, 16\\
+Confidence Value & 4 or 7 with FPC \\ \bottomrule
+\end{tabular}
+  \caption{D-VTAGE table configuration and configurable parameters.}\label{tab:vtage-conf}
+\vspace{1em}
+\end{table}
+
 This section demonstrates how the block based D-VTAGE value predictor improves the performance of core composition using the round-robin fetch scheme (RRF).
 Serial fetch is not explored since previous section showed that when using value prediction, RRF always provides the best results.
 The results reported in this section represent the culmination of hardware modifications for core composition discussed in this chapter.
@@ -63,7 +79,7 @@ The results reported in this section represent the culmination of hardware modif
 The D-VTAGE size configuration can be found in Table~\ref{tab:vtage-conf}.
 The Last-Value Table shares the same number of values as the Base Entry and uses a 5-bit tag.
 Each tagged entry has a tag of varying size (first table is 12 bits, second 13 bits so on and so forth).
-The total number of values for the D-VTAGE predictor is taken from Perais et al's original paper which introduced the predictor~\cite{peraisBeBop2015}.\
+The total number of values for the D-VTAGE predictor is taken from Perais et al's work ~\cite{peraisBeBop2015}.
 The adopted size for this chapter is the medium predictor as it provides a good compromise between performance and memory footprint.
 It is important to note that the values represent single entries in the table, they can be grouped up into blocks of any size.
 The blocks in the speculative window represents the total number of in-flight blocks that can be handled by the speculative window, which is 4.
@@ -81,22 +97,6 @@ The FPC vector used in this Chapter is the same as the one in Perais et al.'s wo
 
 %This section explores two counter scenarios: using a prediction when the confidence is set to 4 (without FPC), and using confidence when the counter is set to 7 (with FPC).
 %To briefly summarise FPC: when a value is correctly predicted, its confidence is incremented based on a probability, rather than always incrementing the counter by one.
-
-\begin{table}[t]
-\small
-\centering
-\begin{tabular}{p{5.2cm} p{3cm}}
-\toprule
-\textbf{Parameter} & \textbf{Values} \\ \midrule
-\# Base Entry & 1536\\
-\# Tagged & $6\times1536$\\
-\# Block in Spec Window & 4 \\ \hline \midrule
-\# of values per entry & 8, 16\\
-Confidence Value & 4 or 7 with FPC \\ \bottomrule
-\end{tabular}
-  \caption{D-VTAGE table configuration and configurable parameters.}\label{tab:vtage-conf}
-\vspace{1em}
-\end{table}
 
 %\begin{table}[t]
 %%  \small
@@ -127,12 +127,12 @@ All benchmarks are executed using a 16 core composition.
 
 \subsection{Results}
 
-\subsubsection{Performance}
+\paragraph*{Performance}
 
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{chapter3/graphics/vtage_speed2.pdf}
-    \caption{Comparing the performance of the standard fetching scheme to the new fetching scheme, with and without perfect value prediction. Higher is better.}
+    \caption{Speedup obtained using a D-VTAGE value predictor and RRF with 16 cores composed. Baseline is 16 cores composed with SF and without value prediction. Both use perfect branch prediction. Higher is better.}
     \label{fig:vtage_perf}
 	\vspace{1em}
 \end{figure}
@@ -150,20 +150,20 @@ This is due to the fact that \bm{Disparity} is composed of loops with highly pre
 On the other hand, \bm{Localization} and \bm{MSER} performs worse with a lower confidence counter, and result in a slowdown.
 Benchmarks \bm{Sift} and \bm{Tracking} perform better with a higher confidence, but the results of using a 4 bit counter never negatively impact performance.
 
-When it comes to the size of a block, often the 16 values does not lead to better performance than 8 values but stays on par with it.
+The 16 values per block does not lead to better performance than 8 values but stays on par with it.
 The only noticeable difference is with \bm{MSER} where the smaller block performs better.
-As previously mentioned, a lower number of values per block allows the predictor to capture a higher variety of executed blocks.
-Figure~\ref{fig:totblock} shows that \bm{MSER} has at least 50 different blocks throughout 99\% of its execution, and Figure~\ref{fig:edge_reg_read} shows that the benchmark has, on average, only 3 register reads per block.
+A lower number of values per block allows the predictor to capture a higher variety of executed blocks.
+Figure~\ref{fig:edge_reg_read} shows that \bm{MSER} has at least 50 different blocks throughout 99\% of its execution, and on average, only 3 register reads per block.
 Therefore, for \bm{MSER}, a predictor with less values per entry can capture more of the variation.
 On the other hand, for \bm{Disparity}, 16 values per entry is required to get the best performance.
-This once again corroborates with the information from Figures~\ref{fig:totblock} and ~\ref{fig:edge_reg_read}.
+This once again corroborates with the information from Figure~\ref{fig:edge_reg_read}.
 \bm{Disparity} has a higher average of reads per block, but features a very low number of unique blocks.
 Therefore having a larger entry in the table captures more values that can be predicted, but does not suffer from having entries being replaced by new blocks.
 
 Comparing the performance of the different configurations to the perfect value predictor, it is apparent that most benchmarks do not achieve their maximum potential as the perfect predictor results in an average speedup of 1.88x compared to 1.32x of D-VTAGE.
 However, benchmarks \bm{Disparity} and \bm{Multi\_NCut} show how value prediction with RRF is a promising lead for improving the performance of core composition.
 
-\subsubsection{Coverage and Accuracy}
+\paragraph*{Coverage and Accuracy}
 To better understand the performance of the different D-VTAGE configurations, the predictors' coverage and misprediction rates are recorded.
 The coverage is measured by comparing the number of correct register read values to the total number of executed register reads.
 Since EDGE is a block based architecture, it is important to study the coverage and accuracy on both a per-instruction level and per-block level.
@@ -193,6 +193,13 @@ The register coverage helps explain why the high block coverage does not lead to
 This may be due to data being carried over which is unpredictable; for instance a loop which sums all values of an array into a single integer will pass that integer via a register.
 This register will cause a data dependency between loop iterations and will be difficult to predict.
 
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{chapter3/graphics/predAcc.pdf}
+    \caption{Accuracy of the different D-VTAGE predictors at a block and instruction level. Higher is better.}
+    \label{fig:vtag_accuracy_block}
+\end{figure}
+
 \bm{Localization}, \bm{MSER}, \bm{SVM} and \bm{Texture\_Synthesis} often have much lower coverage than the rest of the programs.
 Recalling Figure~\ref{fig:totblock} which shows the number of unique blocks executed throughout the programs, these benchmarks had a higher count of unique blocks.
 This explains why the coverage will be lower: there's a higher chance of encountering a new block than executing a known one.
@@ -207,13 +214,6 @@ The effect of a value misprediction is similar to a branch misprediction: it cau
 Just like branch prediction, large core compositions are very sensitive to mispredictions, thus an accuracy rate of 93\% will impact performance if the blocks are small.
 This explains why the low confidence counter sometimes performs worse than the higher confidence as it mispredicts more often.
 
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/predAcc.pdf}
-    \caption{Accuracy of the different D-VTAGE predictors at a block and instruction level. Higher is better.}
-    \label{fig:vtag_accuracy_block}
-\end{figure}
-
 \subsection{Performance with non-perfect branch prediction}
 
 \begin{table}[t]
@@ -227,18 +227,28 @@ This explains why the low confidence counter sometimes performs worse than the h
 	  95\%& 93\%& 98\%& 98 \%&\\ \hline
 	\end{tabular}
   \caption{Branch prediction accuracy in percentage for each of the benchmarks.}\label{tab:sd-vbsbpred2}
-  \vspace{1em}
 \end{table}
 
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{chapter3/graphics/with_bpred.pdf}
+
+    \caption{Speedup obtained using a D-VTAGE value predictor and RRF with 16 cores composed. Baseline is 16 cores composed with SF and without value prediction. Both use a non-perfect branch predictor. Higher is better.}
+	\vspace{1em}
+    \label{fig:bpred}
+\end{figure}
 Finally, this section studies how non-perfect branch prediction affects the performance of the applications with RRF and value prediction.
 To conduct this analysis, the perfect branch predictor was modified to randomly mis-predict given a certain accuracy requirement.
 For each of the benchmarks, the branch prediction accuracies recorded in Chapter~\ref{chp:cases} are used.
 These accuracies can be found in Table~\ref{tab:sd-vbsbpred2}.
 
-Figure~\ref{fig:vtage_perf} reports the speedup obtained with the different configurations of the D-VTAGE predictor with RRF.
-In this scenario, the baseline is still a 16 core composition with SF and no value prediction, however the branch predictor is not perfect and uses the previously defined accuracies for each benchmark.
-As the figure shows, the new configuration still performs well, as the benchmarks, aside from \bm{MSER}, have a good branch prediction accuracy.
-Overall this demonstrates that 
+Figure~\ref{fig:bpred} reports the speedup obtained with the different configurations using a non-perfect branch predictor.
+In this scenario, the baseline is a 16 core composition with SF and no value prediction, using the branch prediction accuracies defined in Table~\ref{tab:sd-vbsbpred2}.
+The figure shows an extra configuration that shows the results of the perfect value prediction with perfect branch prediction, to give perspective of how branch prediction affects performance.
+As the figure shows, the new configuration still performs well, due to the fact that most benchmarks had either high enough branch prediction accuracies, or blocks large enough to sustain 16 composed cores.
+This confirms that even without perfect branch and value prediction, performance can be improved by up to 2.8x, with an average of 1.30x.
+
+
 
 %\subsubsection{Size of stride}
 
