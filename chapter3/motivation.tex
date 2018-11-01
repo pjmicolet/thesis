@@ -1,6 +1,5 @@
-This section explores three aspects on which core composition performance depends on and demonstrates how modifications can improve performance.
-These three aspects are branch prediction, fetching mechanism, and data dependencies between blocks.
-
+This section explores how core composition performance depends on branch prediction, fetching mechanism, and data dependencies between blocks and how modifications to certain mechanisms can improve performance.
+\vspace{-1em}
 \subsection{Branch prediction}
 \begin{figure}[t]
     \centering
@@ -8,10 +7,6 @@ These three aspects are branch prediction, fetching mechanism, and data dependen
     \caption{Left: Speedup obtained when executing the MSER benchmark on different compositions and branch prediction accuracies.
 	Right: Percentage of time (in cycles) cores in a composition execute instructions compared to the overall execution time. Higher is better for both.}
     \label{fig:mser_motiv}
-	\vspace{1em}
-\end{figure}
-
-\begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{chapter3/graphics/perfect_fetch_motiv2.pdf}
     \caption{Speedup obtained when on the MSER benchmark with different core composition with an oracle fetching scheme and perfect branch prediction. Higher is better. }

@@ -168,6 +168,7 @@ branches = prediction[i+1, i+n]\\
 }
 \caption{Overview of commit stage for \textit{n} cores fused}~\label{alg:commit}
 \end{algorithm}
+
 \paragraph*{Fetching mechanism}
 Algorithm~\ref{alg:fetch} explains how the new fetching scheme, named Round Robin Fetch (RRF) works for \textit{n} cores in a composition.
 In the general case, when a core composition is created, each core, aside from the core that initiated the composition, is empty.
@@ -188,20 +189,20 @@ In this chapter, a core can only have one buffered PC at a time.
 \paragraph*{Committing mechanism}
 Algorithm~\ref{alg:commit} shows how blocks are committed in RRF.
 When committing $block_i$, the core sets the next core in line to be the non-speculative core.
-This is due to the fact that the next core in line will always have $block_i+1$.
+This is due to the fact that that core will always have $block_i+1$.
 If the next core in line does not yet have $block_{i+1}$ due to no prediction having been made, then the committing core will submit the resolved PC to the next core, rather than fetching it for itself.
-As previously stated, if the core has a PC in its buffer, it immediately starts fetching a new block.
+If the core has a PC in its buffer, it immediately starts fetching a new block.
 However, if it has no PC in its buffer, it must wait on another core to send it a request.
 
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{chapter3/graphics/fetching-model.pdf}
-\vspace{-1em}
-
-    \caption{Example of RRF on a 2 core composition. Each core has 4 segments, the arrows represent the block generating the predictions. This figure shows the first 3 steps of a new core composition fetching blocks.}
+\vspace{-2em}
+    \caption{Example of RRF on a 2 core composition. Each core has 4 segments, the arrows represent the block generating the predictions.}
     \label{fig:new_fetch_ex}
+	\vspace{1em}
+\end{figure}
 	
-	\end{figure}
 \paragraph*{Two core example}
 	
 %Given a 2 core-fusion \{$Core_0$,$Core_1$\} using a ITTAGE~\cite{SeznecITTAGE} multi-block ahead branch predictor described by A. Seznec et al in~\cite{SeseznecMultipleBlock} the cores can make two predictions in a single cycle: one for itself and one for the next core.
@@ -223,7 +224,7 @@ Once $Core_1$ can make a branch prediction it will attempt to predict for $block
 %The request will happen once $Core_1$ commits $block_1$ and the PC of $block_2$ is resolved.
 %Whilst this case may impact overall throughput, it is no different than the current model as the current model would also stop fetching after $block_1$ and wait for $block_2$'s PC to be resolved.
 
-\subsubsection{Limitation}
+\paragraph*{Limitation}
 
 Whilst RRF allows for cores to fetch out of order in parallel, blocks must still be dispatched in order.
 This is to ensure that blocks do not execute data-dependent register reads out of order, when dependencies are not yet determined.
@@ -251,14 +252,14 @@ Assuming, for this architecture, that a hop takes a single cycle, a block can th
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/motivation_fetch.pdf}
-    \caption{Speedup when executing the synthetic block with varying execution times (facets) with SF and RRF. Higher is better.}
+    \includegraphics[width=1\textwidth]{chapter3/graphics/motivation_fetch2.pdf}
+   	\vspace{-0.5em}
+ \caption{Speedup when executing the synthetic block with varying execution times (facets) with SF and RRF. Higher is better.}
     \label{fig:motiv_res}
-\end{figure}
-\begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{chapter3/graphics/sdvbsav.pdf}
     
+	\vspace{-0.5em}
 	\caption{Average execution time (in cycles) of blocks for each of the SD-VBS benchmarks. Each benchmark was executed on a single core with a single lane with perfect branch prediction.}
 	
     \label{fig:svdbs_av}
