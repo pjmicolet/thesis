@@ -1,26 +1,36 @@
 \chapter{Setup}\label{chp:setup}
 
 \begin{table}[ht]
-\centering
+\begin{minipage}{0.5\textwidth}
 \begin{singlespace}
-\begin{tabular} { p{5cm}  p{5cm} }
+\begin{tabular} { cc }
       \toprule
       \textbf{Parameter} & \textbf{Values} \\ \midrule
 	  Issue Width & 4  \\
 	  Number of Lanes & 4 \\
       L1D cache size & 32kB \\
       L1I cache size & 32kB \\
-	  L2 cache size & 2MB \\
+	  
+	  \end{tabular}
+	  \end{singlespace}
+\end{minipage}\hfill
+\begin{minipage}{0.5\textwidth}
+\begin{singlespace}
+\begin{tabular} {cc }
+      \toprule
+      \textbf{Parameter} & \textbf{Values} \\ \midrule
+L2 cache size & 2MB \\
 	  \# of MSHR & 8 \\
 	  LSQ Organisation & Out of Order \\
 	  
 	  \end{tabular}
 	  \end{singlespace}
-  \caption{Hardware characteristics of a single core of the processor.}
-  \label{tab:processor}
+\end{minipage}
+\caption{Hardware characteristics of a single core of the processor.}\label{tab:processor}
+\vspace{-3em}
 \end{table}
 
-\subsection{Dynamic Multicore Processor Simulator}\label{chp:setup:conf}
+\section{Dynamic Multicore Processor Simulator}\label{chp:setup:conf}
 
 To evaluate the work a customizable cycle-level simulator for the EDGE architecture is used.
 The simulator is verified against RTL implementation of an EDGE core and is within 5\% from that implementation.
@@ -33,7 +43,75 @@ Whilst no current processor on the market features 16 cores, it is not outside t
 Also, previous studies on dynamic multicore processors for EDGE have explored processors with up to 32 cores~\cite{kim2007tflex, gulati2008multitaskingdmc}.
 Having 16 cores available increases the number of possible configurations of the processor which in turn allows for a more impactfull exploration of core composition.
 
-\subsection{Compiler}
+\section{Benchmarks}
+\begin{table}[t]
+% The FFT need are variable
+  \small
+ \begin{tabular} { | l | l | l | l | l | }
+ \hline
+  Audiobeam&   Beamformer&  Bitonic-Sort  &  BubbleSort & CFAR \\ \hline
+  ChannelVocoder &  FFT& FFT3 & FFT6&  FilterBank \\ \hline
+  FIR &  FMRadio &   InsertionSort &   Matmul-Block &  RadixSort\\ \hline
+ \end{tabular}
+  \caption{StreamIt benchmarks.}\label{tab:streamwl}
+\end{table}
+
+\subsection{Streaming applications}\label{chp:setup:streamit}
+
+
+Chapter~\ref{chp:streamit} explores 15 StreamIt benchmark, shown in Table~\ref{tab:streamwl} all taken from the official StreamIt repository~\cite{streamitrepo}.
+There exist other benchmarks in the repository, however at the time of writing these benchmarks did not execute correctly on the provided simulator.
+These applications represent a variety of embedded applications and kernels, from digital signal processing to a matrix-multiplication kernel or band pass filters.
+They can be found in a multitude of devices from digital radios to HDTVs and smartphones (audio/video streaming applications).
+
+\subsection{San-Diego Vision Benchmark Suite}\label{chp:setup:sdvbs}
+\begin{table}[t]
+  \small
+  \centering
+ \begin{tabular} { | l | l | }
+ \hline
+   \cellcolor[gray]{0.7}Characteristic & \cellcolor[gray]{0.7} Benchmarks\\ \hline
+    Memory Intensive & Disparity, Tracking\\ \hline
+	Computation Intensive & MSER, SVM, SIFT, Localization,Multi NCut\\\hline
+	Memory and Computation Intensive & Stitch\\ \hline
+   \end{tabular}
+  \caption{Characteristics of the benchmarks~\cite{sdvbs}.}\label{tab:sd-vbschar}
+\vspace{1em}
+  \end{table}
+
+Chapters~\ref{chp:cases} and \ref{chp:hardchanges} explore a set of Vision Benchmarks designed for hardware and compiler research~\cite{sdvbs}.
+The San Diego Vision Benchmark suite (SD-VBS) is composed of nine single-threaded C benchmarks ranging from image analysis to motion tracking.
+These benchmarks represent state-of-the-art applications in image and vision recognition which are prevalent in embedded systems.
+The domain of image analysis and vision recognition is prevalent in multiple commercial and research fields, such as robotics, self-driving cars and even facial recognition in smartphones.
+
+Vision applications are usually designed as software pipelines featuring different passes which will naturally form phases throughout the execution of the program.
+The programs typically have regular and simple control flow which enables the formation of large blocks of instructions.
+The processor relies on the ability to form large blocks to exploit block level parallelism (BLP) which makes these applications particularly well suited.
+As the results will show, the phase length has minimal impact on energy savings when the reconfiguration overhead is low.
+
+The 9 benchmarks are described here:
+\begin{itemize}
+\item \textbf{Disparity} Computes depth information for a given pair of images.
+\vspace{-1em}
+\item \textbf{Localization} Estimates position of robot based on its surroundings.
+\vspace{-1em}
+\item \textbf{MSER} Maximally Stable Extremal Regions, a method used for blob detection in images.
+\vspace{-1em}
+\item \textbf{Multi NCut} Partitions images into conceptual regions.
+\vspace{-1em}
+\item \textbf{Sift} Scale invariant feature transform is used to extract and describe items found in an image.
+\vspace{-1em}
+\item \textbf{Stitch} Combines multiple photographs into a single image.
+\vspace{-1em}
+\item \textbf{SVM} Support Vector Machine.
+\vspace{-1em}
+\item \textbf{Texture Synthesis} Creates larger image out of a small sample.
+\vspace{-1em}
+\item \textbf{Tracking} Extracts motion information from a set of images.
+\end{itemize}
+
+and their characteristics in terms of memory/computation intensity are shown in Table~\ref{tab:sd-vbschar}.
+\section{Compiler}
 
 All the benchmarks explored in this thesis are compiled using a closed-source EDGE compiler provided by Microsoft.
 The benchmarks are compiled with \textit{-O2} optimisations as this is the highest level of optimisations available with hyperblock formation also turned on.

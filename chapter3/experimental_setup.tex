@@ -1,6 +1,6 @@
 \subsection{Benchmarks}
 To evaluate how the hardware modifications improve the performance of core composition; the same benchmarks used in Chapter~\ref{chp:cases} are used here.
-These benchmarks are all from the San-Diego Vision Benchmark Suite (SD-VBS)~\cite{sdvbs}, which is composed of a set of vision and image analysis applications.
+These benchmarks are all from the San-Diego Vision Benchmark Suite (SD-VBS)~\cite{sdvbs}, which is composed of a set of vision and image analysis applications, and are described in detail in Chapter~\ref{chp:setup} Section~\ref{chp:setup:sdvbs}.
 The previous chapter showed that even with code optimisations, core compositions do not perform optimally when executing the benchmarks.
 Some of the programs, such as \bm{MSER} or \bm{Multi\_NCut} features an average block size of under 10 instructions per block, making it difficult to use core composition efficiently.
 They are therefore a perfect candidate to explore how the hardware modifications can improve the performance of core composition.

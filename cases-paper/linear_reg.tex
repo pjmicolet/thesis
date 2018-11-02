@@ -8,9 +8,9 @@ Once trained, the model predicts the optimal number of cores based on the perfor
 \begin{figure}[t]
     \centering
 	\includegraphics[width=1\textwidth]{cases-paper/graphics/other/model3.pdf}
+	\vspace{-2em}
     \caption{Linear Model.}
     \label{fig:linmod}
-	\vspace{1em}
 \end{figure}
 \subsection{Model}
 
@@ -32,7 +32,7 @@ The training consists of finding the weights that minimise the error when predic
 Since only core configurations which use a power of two number of cores are considered, the linear model is built to predict the logarithm (base 2) of the number of cores.
 The prediction is rounded up to the nearest integer in the interval $[0,4]$.
 The following equation represents the trained linear model which can be used to make prediction:
-
+\vspace{-1em}
 \begin{align*}
   log_2(\textbf{\#cores}) = & -7.7\ +\ 0.028 \cdot \textbf{avgBlkSze}\ +\ 0.075 \cdot \textbf{\%int\_ops}\ +\\
  &0.069 \cdot \textbf{\%fp\_ops}\ +\ 0.21 \cdot \textbf{\%ld\_ops}

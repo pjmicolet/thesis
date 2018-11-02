@@ -37,11 +37,6 @@ For example in Figure~\ref{fig:examplestream}, once the graph is coloured, the m
 
 \subsection{Design Space}
 
-This chapter explores 15 StreamIt benchmark all taken from the official StreamIt repository~\cite{streamitrepo}.
-There exist other benchmarks in the repository, however at the time of writing these benchmarks did not execute correctly on the provided simulator.
-These applications represent a variety of embedded applications and kernels, from digital signal processing to a matrix-multiplication kernel or band pass filters.
-They can be found in a multitude of devices from digital radios to HDTVs and smartphones (audio/video streaming applications).
-
 Table~\ref{tab:instancefilt} shows the number of filter instances and SplitJoins for each of the benchmarks.
 As a refresher from Chapter~\ref{chp:Background}, SplitJoin filters are functions which distribute and collect data from parallel filters.
 The applications feature a different number of SplitJoins which determine the task-level parallelism.

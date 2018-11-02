@@ -190,20 +190,7 @@ while( nvisited-- ) {
 \end{center}
 \captionof{lstlisting}{Example of MSER loops (lines 27-30, 31-33).}
 \label{lst:mser-ex}\vspace{1em}
-
-\end{figure}
-
-It's also important to note that the average branch-prediction accuracy of \bm{MSER} is of 85\%, as shown in Table~\ref{tab:sd-vbsbpred}.
-Recalling Figure~\ref{fig:req_pred} and the fact that the average block size of \bm{MSER} is under 32 instructions, this means that no composition can be fully efficiently used.
-Some speedup can still be obtained, as cores in a composition do not need to have all the instruction window full to be able to obtain performance improvements.
-However these improvements are minor, and come at a high energy cost.
-
-To get performance out of \bm{MSER}, this major phase would have to be re-written to use less while loops with complex termination conditions so that larger blocks can be extracted.
-Even with compiler optimisations, due to the fact that the loops are never executing for a long time, and their bodies are small and hard to unroll, it will be difficult to get performance improvements using core composition.
-
-\paragraph*{Multi-NCut}
-
-\begin{figure}[t]
+\vspace{-2em}
 \lstset{language=C,numbersep=4pt}
 \begin{center}
 \begin{lstlisting}[firstnumber=49]
@@ -226,6 +213,16 @@ Even with compiler optimisations, due to the fact that the loops are never execu
 \label{lst:multi_loop}
 \vspace{1em}
 \end{figure}
+
+It's also important to note that the average branch-prediction accuracy of \bm{MSER} is of 85\%, as shown in Table~\ref{tab:sd-vbsbpred}.
+Recalling Figure~\ref{fig:req_pred} and the fact that the average block size of \bm{MSER} is under 32 instructions, this means that no composition can be fully efficiently used.
+Some speedup can still be obtained, as cores in a composition do not need to have all the instruction window full to be able to obtain performance improvements.
+However these improvements are minor, and come at a high energy cost.
+
+To get performance out of \bm{MSER}, this major phase would have to be re-written to use less while loops with complex termination conditions so that larger blocks can be extracted.
+Even with compiler optimisations, due to the fact that the loops are never executing for a long time, and their bodies are small and hard to unroll, it will be difficult to get performance improvements using core composition.
+
+\paragraph*{Multi-NCut}
 
 \bm{Multi\_NCut} is faced with a similar situation to \bm{MSER}.
 Figure~\ref{fig:block_sizes} shows that once again, the majority of the blocks are less than 32 instructions long, in fact, over 50\% of the blocks are of 12 instructions or less.
