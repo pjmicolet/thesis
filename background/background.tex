@@ -15,12 +15,6 @@ k Nearest Neighbors explained in subsection~\ref{sec:kNN} is used in Chapter~\re
 Leave-one cross validation described in subsection~\ref{sec:valid} is used in Chapter~\ref{chp:streamit} and \ref{chp:cases}.
 \item Finally, Section~\ref{sec:esc} explains the Early Stopping Criterion used in Chapter~\ref{chp:streamit}.
 \end{itemize}
-%Sections~\ref{sec:cmp} and \ref{sec:hcmp} cover Chip Multicore Processors and Heterogeneous Chip Multicore Processors to motivate the existence and research conducted in Dynamic Multicore Processors (DMP).
-%This is followed by Section~\ref{sec:dmp} that describes of the three types of Dynamic Multicore Processors that currently exists.
-%Then the Explicit Data Graph Execution (EDGE) instruction set architecture (ISA) is described in section~\ref{sec:edge_isa}; this is the ISA used by the DMP explored throughout this thesis.
-%Specific features of an EDGE Processor, including the ability to fuse cores is then explained in detail (section~\ref{sec:edge_arch}).
-%Value prediction, and more specifically the differential value TAGE (D-VTAGE) value predictor is described in section~\ref{
-%Finally, streaming programming languages, which are used in Chapter~ref{}, and the different machine learning techniques utilised in the thesis are explained.
 
 \section{Chip Multicore Processors}~\label{sec:cmp}
 
@@ -65,15 +59,19 @@ As all the cores are homogeneous, if the parallel fraction is low, then this cau
 \vspace{-1em}
 
 Unlike CMPs, Heterogeneous Chip Multicore Processors (HCMPs) bring a variety of cores onto a single package.
-This variety may come in different forms, such as having multiple instruction set architectures (ISA) on the same system on chip (MPSoCs)~\cite{venkat2014harnessingisa,venkatHipstr2016}, different size cores on an SoC~\cite{armbig,jeff2012big}.
+This variety may come in different forms, such as having multiple instruction set architectures (ISA) on the same system on chip (SoCs)~\cite{venkat2014harnessingisa,venkatHipstr2016}, different size cores on an SoC~\cite{armbig,jeff2012big}.
 Figure~\ref{fig:blarm} shows a schemata for ARM's big.LITTLE HCMP, where a high-performance Cortex-A15 is paired with a simpler, power efficient Cortex-A7.
-The two cores are connected via a cache coherent interconnect which provides data coherence at the bus-level, allowing the cores to make reads to its neighbor~\cite{armbig}.
+The two cores are connected via a cache coherent interconnect which provides data coherence at the bus-level, allowing the cores to make reads to its neighbour~\cite{armbig}.
 Software is then executed on one of the cores depending on the user's requirement.
 
-This example demonstrates an advantage of HCMPs; unlike CMPs, the variety of cores provide a flexibility to the hardware.
-This can be used for different purposes, such as security~\cite{venkatHipstr2016}, energy/power savings~\cite{venkat2014harnessingisa} and speeding up applications~\cite{venkat2014harnessingisa}.
-In their 2014 paper, Venkat et al.~\cite{venkat2014harnessingisa} demonstrate that a multi-ISA HCMP can improve performance by up to 1.4x and achieve energy savings of up to 40\% compared to a CMP on a peak-power budget of 40W.
-They motivate the idea that HCMPs with heterogeneous ISAs even improve over the performance of single-ISA HCMPs with speedups around 15\% and energy savings of 21.5\%.
+Unlike CMPs, the variety of cores provide a flexibility to the hardware.
+This can be used for different purposes, such as security~\cite{venkatHipstr2016}, energy/power savings and speeding up applications~\cite{venkat2014harnessingisa}.
+Whilst the hardware diversity in HCMPs is an advantage compared to CMPs, it increases the complexity of the optimisation space.
+For example, Gupta et al. in ~\cite{Gupta2017Dypo} show that a single-ISA octa-core big.LITTLE architecture can have 20 different CPU core configurations, combined with the ability to dynamically modify the voltage, this leads to 4000 unique possible hardware configurations to choose from at runtime.
+This highly increases the complexity of obtaining the correct settings for different programs.
+MPSoCs also face a similar issue as having more than a single ISA not only adds design challenges, but program migration between different cores may in fact deteriorate performance~\cite{DeVuystMigration2012}.
+%In their 2014 paper, Venkat et al.~\cite{venkat2014harnessingisa} demonstrate that a multi-ISA HCMP can improve performance by up to 1.4x and achieve energy savings of up to 40\% compared to a CMP on a peak-power budget of 40W.
+%They motivate the idea that HCMPs with heterogeneous ISAs even improve over the performance of single-ISA HCMPs with speedups around 15\% and energy savings of 21.5\%.
 
 \begin{figure}[t]
     \centering
@@ -83,10 +81,7 @@ They motivate the idea that HCMPs with heterogeneous ISAs even improve over the 
     \label{fig:dynmulticore}
 	\vspace{-0.5em}
 \end{figure}
-Whilst the hardware diversity in HCMPs is an advantage compared to CMPs, it increases the complexity of the optimisation space.
-For example, Gupta et al. in ~\cite{Gupta2017Dypo} show that a single-ISA octa-core big.LITTLE architecture can have 20 different CPU core configurations, combined with the ability to dynamically modify the voltage, this leads to 4000 unique possible hardware configurations to choose from at runtime.
-This highly increases the complexity of obtaining the correct settings for different programs.
-MPSoCs also face a similar issue as having more than a single ISA not only adds design challenges, but program migration between different cores may in fact deteriorate performance~\cite{DeVuystMigration2012}.
+
 \vspace{-1em}
 \section{Dynamic Multicore Processors}~\label{sec:dmp}
 \vspace{-1em}
@@ -98,7 +93,7 @@ Mitall's survey ~\cite{MittalSurv2016} defines three types of modifiable resourc
 \paragraph*{Core Composition Dynamic Multicore Processors}
 
 
-A DMP that can modify its core count is composed of homogeneous cores with a reconfigurable fabric.
+A DMP that can modify its core count is built out of homogeneous cores with a reconfigurable fabric on top.
 Physical cores can function either on their own or as a group.
 Figure~\ref{fig:dynmulticore} provides an high level view of a DMP: the physical cores \textit{P}, are composed into 3 separate compositions of sizes 2, 8 and 4.
 Each of the compositions executes a single thread, leveraging the power of the cores that are grouped together.
@@ -114,7 +109,7 @@ On parallel workloads the DMP can be reconfigured by de-composing the compositio
 A more fine-grained DMP technique is resource-sharing.
 For example in the WiDGET DMP by Watanabe et al. \cite{Watanabe2010Widget}, cores are built out of Instruction Engine front-ends which function similarly to Out of Order (OoO) cores' front and back end pipeline functions.
 They then are connected to Execution Units which they can choose to use.
-Each core in WiDGET also has access to their neighbors Execution Units, allowing for more variation.
+Each core in WiDGET also has access to their neighbours Execution Units, allowing for more variation.
 Another example of resource sharing is Rodrigues et al.'s work~\cite{rodrigues2014perf} where a core can use resources such as Arithmetic Logic Units (ALUs) from other cores.
 
 \paragraph*{Microarchitectural Reconfigurable Dynamic Multicore Processors}
@@ -125,15 +120,15 @@ These DMPs can therefore modify microarchitecural features, such as in-order or 
 
 \section{EDGE}\label{chp:bg:sec:edge}
 
-This section describes the Explicit Data Graph (EDGE) architecture.
+This section describes the Explicit Data Graph (EDGE) architecture which is the architecture used in this thesis.
 First the ISA is covered, with an example of how source code is transformed into blocks of instructions.
 Then the features of an EDGE processor are described, such as the ability of executing multiple blocks on a core and how core composition works with EDGE.
 
 \subsection{EDGE Instruction Set Architecture}~\label{sec:edge_isa}
 
 The Explicit Data Graph Execution (EDGE) architecture~\cite{burger04edge} is a dataflow architecture aimed at improving concurrency whilst being energy and power efficient \cite{smith2006edge,burger04edge}.
-Similar to very long instruction word (VLIW) architectures that pack multiple sub-instructions into a single instruction, EDGE requires that the compiler structure instructions as blocks.
-Unlike VLIW that uses static placement and static issue which puts high pressure on the compiler, EDGE allows for dynamic issue which distributes responsibility between the hardware and the compiler more evenly.
+Similar to very long instruction word (VLIW) architectures that pack multiple sub-instructions into a single instruction, EDGE requires that the compiler pack instructions into blocks.
+Unlike VLIW that uses static placement and static issue -- which high pressure on the compiler -- EDGE allows for dynamic issue which distributes responsibility between the hardware and the compiler more evenly.
 
 \begin{figure}[t]
     \centering
@@ -143,7 +138,7 @@ Unlike VLIW that uses static placement and static issue which puts high pressure
 \end{figure}
 \paragraph*{Block Formation}
 In EDGE, instructions are organised into blocks, which are fetched as single units by the processor.
-Figure~\ref{fig:EdgeHigh} shows a high-level overview of how EDGE creates the blocks of instructions.
+Figure~\ref{fig:EdgeHigh} shows a high-level overview of how EDGE creates the blocks of instructions; this is a summary of the work by Smith et al.~\cite{smith2006edge}. 
 The first pass (Code Generation) transforms source code into a control flow graph (CFG), performing optimisations such as loop unrolling and inlining.
 Then, each node of the CFG is turned into an EDGE block given a set of restrictions.
 These restrictions are:
@@ -156,12 +151,12 @@ These restrictions are:
 \end{itemize}
 If a block does not meet these requirements, it is broken down into smaller blocks.
 
-Unlike traditional ISAs such as x86 or ARM's ISAs, instructions in a block do not communicate via registers, but rather the output targets of instructions are encoded to instruction inputs~\cite{smith2006edge}.
+Unlike traditional ISAs such as x86 or ARM, instructions in a block do not communicate via registers, but rather the output targets of instructions are encoded to instruction inputs~\cite{smith2006edge}.
 Loads and stores in each EDGE block are assigned unique identifiers which are used resolve load-store dependencies.
 Thus, the EDGE architecture encode dependencies between instructions at the ISA level.
 Registers are only used for inter-communication between blocks.
 
-An EDGE block also contains a header that will inform the hardware about the number of stores and register writes contained in the block~\cite{smith2006edge}.
+An EDGE block also contains a header that will inform the hardware about the number of stores and register writes contained in the block.
 This information is used to detect data-dependencies between blocks if multiple blocks are executed in parallel.
 For example, if two blocks write to the same register, then the register-file can detect which one must fire the write first based on the header information. 
 
@@ -177,13 +172,12 @@ To increase the size of EDGE blocks, multiple blocks can be combined together to
 This is achieved through the use of instruction predication~\cite{smith2006edge}.
 For example, the \textit{if/else} statement in the C code found in Figure~\ref{fig:EdgeHigh} normally generates two blocks, one for each statement.
 However, using predication, the two blocks can be fused together and appended to the block that precedes the \textit{if/else}, reducing the number of blocks from 3 to 1.
-Figure~\ref{fig:EdgeHB} shows the organisation of the new block, the box colour representing where the instructions originated.
+Figure~\ref{fig:EdgeHB} shows the organisation of the new block, where the colour represent where the instructions originated.
 
 As the compiler needs to declare stores and which registers are written to in the block header, extra instructions may need to be generated to ensure the block always executes the same amount of stores.
 In the case of Figure~\ref{fig:EdgeHB}, the last instruction is generated to ensure that a write to the register \textit{g71} always happens regardless of the predicate.
 This adds some complexity to hyperblock formation, as the size of the block may be artificially inflated if the merging blocks write to different registers or have a different number of stores.
 Even so hyperblocks allow for increased instruction level parallelism (ILP) as  which in turn improves the performance of the application being executed~\cite{smith2006edge}.
-
 Overall, the EDGE ISA enables the architecture to dispatch blocks speculatively, with low overhead~\cite{putnam2010e2,kim2007tflex}, therefore, increasing exploitation of ILP.
 
  \begin{figure}[t]
@@ -196,8 +190,8 @@ Overall, the EDGE ISA enables the architecture to dispatch blocks speculatively,
 
 \subsection{EDGE Processor features}~\label{sec:edge_arch}
 
-This section covers two important features of an implementation of EDGE processor called E2~\cite{putnam2010e2}.
-The two features are the segmentation of the instruction window, and the core-composition mechanism used throughout this thesis.
+This section covers two important features of an implementation of EDGE processor called E2~\cite{putnam2010e2} which is used throughout the thesis.
+These are the segmentation of the instruction window, and the core-composition mechanism used in later chapters.
 
 \subsubsection{Core Lanes} 
 
@@ -215,9 +209,9 @@ A segmented instruction window therefore allows EDGE cores to be more flexible t
 
 \subsubsection{Core Composition Functionality}\label{chp:Background:sec:EDGE}
 
-Core Composition is achieved by fusing a set of \textit{physical} cores to create a larger \textit{logical} cores.
-This does not modify the physical structure of the processor, instead it provides a unified view of a group of physical cores to the software.
-In the processor used throughout the thesis, the micro-architecture is distributed: register files, Load Store Queues (LSQs), L1 caches and ALUs all look like nodes on a network.
+Core Composition is achieved by fusing a set of \textit{physical} cores to create a larger core composition.
+In the processor used throughout the thesis this does not modify the physical structure of the processor, instead it provides a unified view of a group of physical cores to the software.
+The micro-architecture is distributed: register files, Load Store Queues (LSQs), L1 caches and ALUs all look like nodes on a network.
 This means that when cores are composed together, this is similar to adding an extra node to the network.
 Core composition is a dynamic modification and may occur during the execution of a program to better fit the workload.
 Unlike traditional CMPs, composed cores operate on the same thread and extract Instruction Level Parallelism (ILP) rather than Thread Level Parallelism (TLP)~\cite{micolet2016dmpstream,pricopi2012bahurupi}.
@@ -313,8 +307,9 @@ br loop2
 
 \section{Value Prediction}~\label{sec:valpred}
 %This will go in the background most likely
-In Out of Order (OoO) superscalar processors, instructions can be executed out of order to improve ILP.
-However, some instructions may depend on results from previous instructions, or memory system responses, such as an L1 cache response.
+In superscalar processors, instructions can be executed out of order (OoO) to improve ILP.
+However, some instructions may depend on results from previous instructions, or the memory system, such as an L1 cache response.
+In such a case, the instruction will be stalled until the data is available.
 These data dependencies reduce the potential ILP, which in turn limits performance.
 
 Value Prediction aims to provide a hardware solution to reducing latencies caused by memory dependencies in OoO superscalar processors~\cite{gabbayVPOrig} by predicting the values produced by instructions.
@@ -322,8 +317,8 @@ Instructions can be speculatively executed with predicted values as they wait fo
 This is similar to branch prediction, where instructions from a predicted branch path are executed before the branch is resolved.
 As long as the accuracy of the prediction is high, then executing the data-dependent instructions with speculative data increases ILP.
 
-Until recently the benefits of using value prediction has been overshadowed by the potential power consumption and design complexity required to implement them \cite{peraisVTAGE2014}.
-However, recent work by Perais et al.~\cite{peraisVTAGE2014,peraisBeBop2015} shows that by adopting the prediction and update scheme of the ITTAGE branch predictor~\cite{SeznecITTAGE}, and grouping predictions into blocks, value predictors be efficiently implemented.
+%Until recently the benefits of using value prediction has been overshadowed by the potential power consumption and design complexity required to implement them \cite{peraisVTAGE2014}.
+%However, recent work by Perais et al.~\cite{peraisVTAGE2014,peraisBeBop2015} shows that by adopting the prediction and update scheme of the ITTAGE branch predictor~\cite{SeznecITTAGE}, and grouping predictions into blocks, value predictors be efficiently implemented.
 
 \begin{figure}[t]
 \begin{tabular}{|c|c|}
@@ -333,28 +328,33 @@ However, recent work by Perais et al.~\cite{peraisVTAGE2014,peraisBeBop2015} sho
 \hline
 \end{tabular}
 \captionof{lstlisting}{Small C example, with the second loop's assembly in the right pane}~\label{lst:bg:lst}
-\vspace{-1em}
+\vspace{-2em}
+\end{figure}
+
+\paragraph*{Type of predictors}
+There exist two categories of value predictors: \textit{Context} predictors and \textit{Computational} predictors.
+To illustrate the difference between the two, Figure~\ref{fig:pred_examples} depicts how both generate a prediction for the load instruction at line 17 in Listing~\ref{lst:bg:lst}.
+In Figure~\ref{fig:pred_examples}, the colour of an entry in the tables represents a value for a specific instruction based on its program counter (PC).
+The context box represents some information that is used by the predictor, such as global history, or dataflow history.
+
+\begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{background/graphics/predic.pdf}
     \caption{Depiction of how predictions are made in a context and computational value predictor. The colours of the cells represent values for different instructions.}
     \label{fig:pred_examples}
 	\vspace{-1em}
 \end{figure}
-
-\paragraph*{Type of predictors}
-There exist two categories of value predictors \textit{Context} predictors and \textit{Computational} predictors.
-To illustrate the difference between the two predictors, Figure~\ref{fig:pred_examples} depicts how both generate a prediction for the load instruction at line 17 in Listing~\ref{lst:bg:lst}.
-In Figure~\ref{fig:pred_examples}, the colour of an entry in the tables represents a value for a specific instruction based on its program counter (PC).
-
 A \textit{Context} predictor relies on the history of values an instruction outputs to generate a prediction.
 This means that a single instruction can occupy multiple entries of the predictor as each new value must be recorded.
 This is why, in Figure~\ref{fig:pred_examples}, the specific load instruction has multiple entries in the predictor, as the value generated by the load is different for each iteration of the loop.
 The \textit{Context} predictor can only predict the value the instruction if the specific value is already stored in the predictor as it does not have any ability to \textit{infer} the value.
 The predicted value depens on the context, which can either be captured by dataflow information or branch history~\cite{peraisVTAGE2014}.
+Overall, whilst predictions may be simpler to generate they are considered space-inefficient~\cite{peraisBeBop2015}.
+
 %This makes \textit{Context} predictors less efficient for predicting values that are incremented at a constant rate, as each increment occupies a new entry~\cite{peraisBeBop2015}.
 
 On the other hand \textit{Computational} predictors make a prediction by computing the value.
-This can be achieved by detecting the delta between two successive values for an instruction, also known as the \textit{stride}.
+This can be achieved by determining the delta between two successive values for an instruction, also known as the \textit{stride}.
 Instead of storing each observed value for an instruction, a \textit{Computational} predictor stores the \textit{stride}, and the last committed value of an instruction.
 When a prediction is requested, the \textit{Computational} predictor fetches the last committed value and the stride and adds them together to produce the prediction.
 For example, the value of the array in listing~\ref{lst:bg:lst} is always equal to the previous load value $+$ 1.
@@ -366,7 +366,11 @@ This allows \textit{Computational} to potentially reduce the size of the predict
 \subsection{The Differential Value Tagged Geometric length Predictor}~\label{chp:bck:vtage}
 
 This section covers a specific implementation of a value predictor that is used in Chapter~\ref{chp:hardchanges}.
-It covers the structure of the predictor, how predictions are generated and implemented, and how back-to-back predictions can be made.
+The Differential Value Tagged Geometric length Predictor (D-VTAGE)~\cite{peraisBeBop2015} is a Computational value predictor that operates on blocks of instructions to minimize network pressure and increase the prediction output per cycle.
+To simplify the explanation of the predictor, the size of the block is set to 1 instruction.
+D-VTAGE is organised in two parts, a Last Value Table (LVT) that contains the last committed values for a given set of instructions, and a set of value tables (VT) which contain the strides.
+The left hand side of Figure~\ref{fig:stride_over} shows an overview of the predictor with N stride tables.
+The largest stride table is a tagless base predictor that is directly indexed, whereas VT1 to VTN are tagged by hashing the Program Counter of the instruction with varying amounts of the branch history.
 
 \begin{figure}[t]
     \centering
@@ -376,25 +380,14 @@ It covers the structure of the predictor, how predictions are generated and impl
     \label{fig:stride_over}
 	\vspace{-1em}
 \end{figure}
-\subsubsection{Predictor mechanisms}
-The D-VTAGE predictor~\cite{peraisBeBop2015} is a Computational value predictor that operates on blocks of instructions to minimize network pressure and increase the prediction output per cycle.
-To simplify the explanation of the predictor in this chapter, the size of the block is set to 1 instruction.
-The predictor is organised in two parts, a Last Value Table (LVT) that contains the last committed values for a given set of instructions, and the second part is a set of value tables (VT) which contain strides.
-A stride is the delta between two previous values committed by the same instruction; it provides information on how the instruction's output value is modified each time the instruction executes.
-The left hand side of Figure~\ref{fig:stride_over} shows an overview of the predictor with N stride tables.
-The largest stride table is a tagless base predictor, whereas VT1 to VTN are tagged by hashing the Program Counter of the instruction with varying amounts of the branch history.
-
-A predicted value does not have to be used immediately, as the instruction can be dispatched normally.
-This means that the value predictor can be trained before a prediction is used.
-Depending on the configuration of the predictor, a prediction is only used when the confidence counter is set to a specific value.
-This allows value predictors to be very accurate~\cite{peraisVTAGE2014}, though it sacrifices coverage.
 
 \paragraph*{Confidence Counter}
-To ensure that the value predictor generates highly accurate predictions, the values are only used when their attributed confidence rate is very high.
-In both VTAGE and D-VTAGE, each entry is paired with a 3-bit saturating counter that is either incremented on a correct prediction, or set to 0 on a misprediction.
-When a prediction is made, it is only used when the  confidence counter is saturated as this means that the entry has been correctly predicted several times before use.
-
+A predicted value does not have to be used immediately, as the instruction can still be dispatched normally.
+This means that the value predictor can be trained before a prediction is used.
+In D-VTAGE, each entry is paired with a 3-bit saturating counter that is either incremented on a correct prediction, or set to 0 on a misprediction.
+When a prediction is made, it is only used when the confidence counter is saturated to ensure high accuracy.
 However, a 3-bit satured counter may not be enough to ensure that all used predictions are correct.
+
 A method to increase accuracy without increasing the physical size of the counter is to use Forward Probabilistic Counters (FPC)~\cite{riley2006fpc}.
 FPCs are essentially a compression technique for counters; instead of incrementing the counter by 1 each time a prediction is correct, it is incremented based on a probability.
 For example, given a 3-bit counter and a probability vector  $\{1,\frac{1}{16},\frac{1}{16},\frac{1}{16},\frac{1}{16},\frac{1}{16},\frac{1}{32},\frac{1}{32}\}$, then the counter has a 100\% chance of being incremented from 0 to 1, whilst it only has a $\frac{1}{16}$ chance of incrementing from 1 to 2.
@@ -402,25 +395,25 @@ This effectively increases the value at which predictions will be used without p
 
 \paragraph*{Making a prediction}
 All the tables of the value predictor are accessed in parallel using the Program Counter hashed with different amounts of the branch history.
-The base predictor is directly indexed, whereas the tables VT1 to VTN are tagged.
-The prediction used will come from the table that has the longest branch history.
-If the confidence counter of the entry is equal to the firing value then the prediction is used, it not then the prediction is kept alive until the instruction is committed to validate it.
+The prediction will fetch values from the LVT and the stride tables.
+The base predictor and LVT are directly indexed, whereas the tables VT1 to VTN are tagged.
+The stride information will come from the table that has the longest branch history.
+The prediction is then generated by adding the stride to the value in the LVT.
+If the confidence counter of the entry is equal to the firing value then the prediction is used, it not then the prediction is kept alive until the instruction is committed to train the predictor.
 
 \paragraph*{Updating the predictor}
 Predictions are validated at the commit phase of the instruction to simplify the hardware~\cite{peraisVTAGE2014}.
 On a correct prediction, the entry that generated the prediction has its confidence counter incremented by one.
 If the predictor mispredicts, the entry's confidence counter is reset to 0 and the entry is propagated to tables that use longer branch histories.
+If the entries are propagated to tables with tags, then the PC and branch prediction history are hashed together to form the tag.
 The prediction and update schemes are directly inherited from the Tagged Geometric (TAGE) branch predictor~\cite{SeznecITTAGE}.
 
 \subsubsection{Speculative Window}
-Another consideration is that multiple blocks of the same PC may be speculatively executing at the same time, which could cause data mis-predictions if the predictor is not updated.
-As predictions are updated at commit time, this requires current live predictions to be in a speculative window so that new predictions may use the last predicted data and stride.
+As predictions are updated at commit time, if multiple blocks with the same PC are live, this can potentially cause multiple value mis-predictions as the information in the value predictor may be stale.
+To ensure this is not the case, current live predictions must be held in a speculative window so that new predictions may use the last predicted values.
 The right hand side of figure~\ref{fig:stride_over} demonstrates how the speculative window works. 
 Instead of directly querying the value predictor, the last value table and speculative window are searched in parallel for a matching tag which in this case is the Program Counter (PC) of the block.
-If there is a live prediction, then the data from that prediction is used instead of the predictor.
-
-
-%Also check this~\ref{sheikLVP2017}
+If there is a live prediction, then the value from the speculative window is used instead of the predictor.
 
 \section{Streaming Programming Languages}~\label{sec:bg:stream}
 
@@ -446,6 +439,8 @@ However, the main challenge consists of deciding how to map the different tasks 
     \includegraphics[width=1\textwidth]{streamit-paper/graphics/streamit_types.pdf}
     \caption{Visual representation of the three different StreamIt structures.}
     \label{fig:streamittypes}
+		\vspace{-1em}
+
 \end{figure}
 
 \subsection{StreamIt Programming Language}
@@ -471,6 +466,7 @@ The three techniques discussed are: linear regression, k-Means Clustering and k-
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.45\textwidth]{background/graphics/lin_reg_ex.pdf}
+	\vspace{-1em}
     \caption{Example of linear regression. The inputs are represented by the circles, and the generated linear regression is represented by the red line.}
     \label{fig:linregex}
 \end{figure}
@@ -509,20 +505,20 @@ This is repeated until the centroids no longer move.
 Figure~\ref{fig:kmeanex} provides a visual example of a running k-Means on a toy dataset, with k set to two.
 Each colour in the graph represents a cluster, the squares represent the n observations, whilst the circles represent the centroids.
 
-\subsection{k Nearest Neighbors}~\label{sec:kNN}
+\subsection{k Nearest Neighbours}~\label{sec:kNN}
 
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{background/graphics/knn1.pdf}
-    \caption{Small example of k Nearest Neighbors classification on a toy dataset with two clusters and k = 4. The squares represent datapoints of the trained kNN dataset. The figure shows a new point (circle) being classified.}
+    \caption{Small example of k Nearest Neighbours classification on a toy dataset with two clusters and k = 4. The squares represent datapoints of the trained kNN dataset. The figure shows a new point (circle) being classified.}
     \label{fig:knn}
 \end{figure}
-k Nearest Neighbors (kNN) can be used for both regression and classification.
-In both situations an output is generated by averaging the \textit{k} nearest neighbors to the input from the training data.
-The average is often obtained by a weighted sum of the features of the k neighbors.
+k Nearest Neighbours (kNN) can be used for both regression and classification.
+In both situations an output is generated by averaging the \textit{k} nearest neighbours to the input from the training data.
+The average is often obtained by a weighted sum of the features of the k neighbours.
 Figure~\ref{fig:knn} shows an example of a kNN classification on a new point.
 The squares represent the trained kNN dataset, the colours represent the different classifications.
-When a new point is added (as seen on the right hand graph), the four closest neighbors are found, and the new point is classified under the same category.
+When a new point is added (as seen on the right hand graph), the four closest neighbours are found, and it is classified under the same category.
 
 \subsection{Leave One Out Cross Validation}~\label{sec:valid}
 The process of leave one out cross validation involves using the training dataset as the evaluation dataset.
@@ -536,7 +532,7 @@ This validation model works well when the number of testing and training data is
 When exhaustive search of an optimisation space is not feasible, a subset of the space is explored.
 The early stopping criterion (ESC)~\cite{vuduc2003AutomaticPerf} provides a method of determining when new points added in the subspace no longer provide new information, and thus the currently evaluated subspace is representative of the total space.
 Given $N$ possible number of implementations, if $i$ is a single implementation and $x_i$ is its performance normalised between 0 and 1, then $S=\{x_1,...,x_N\}$ is the set of all performances for all possible implementations.
-If $X$ is a random variable corresponding to a randomly selected performance from the set S then there is a cummulative distribution function (CDF) $F(x) = Pr[X \le x]$ which is equal to the number of items in S that are less than or equal to $x$ ($n(x)$) over all possible items $N$.
+If $X$ is a random variable corresponding to a randomly selected performance from the set S then there is a cummulative distribution function (CDF) $F(x) = Pr[X \le x]$ which is equal to the number of items in S that are less than or equal to $x$ (the function $n(x)$) over all possible items $N$.
 If, for a number of time steps, a performance from S is randomly chosen and not replaced, then at time step $t$ $M_t$ is maximum performance observed $max_{1\le i \le t} Xi$ up to time t.
 ESC posits that, that if the probability that $M_t$ is within a distance of the maximum performance found in S then the space exploration can stop at time t.
 Formally, ESC is:
