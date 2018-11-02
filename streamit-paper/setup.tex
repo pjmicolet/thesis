@@ -27,7 +27,7 @@ Then, static code features such as the program's graph structure are extracted f
 These features are used as an input to the first machine-learning model that determines how many threads will be required based on an estimate of Thread Level Parallelism (TLP) found in the program.
 This information is used to partition the program into threads which is done by the StreamIt compiler which produces a C++ program using pthreads.
 This is exemplified in Figure~\ref{fig:examplestream}, the colours filling in the nodes represent the threads each node has been assign to.
-This C++ program is then compiled using the compiler for EDGE described in Chapter~\ref{chp:setup}.
+This C++ program is then compiled using the compiler for EDGE described in Chapter~\ref{chp:setup} Section~\ref{chp:setup:comp}.
 
 Then, a second machine-learning model is deployed which also analyses static code features extracted from the SteamIt code, once again provided by the source-to-source compiler.
 This model decides on the number of cores each thread will have.
