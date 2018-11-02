@@ -75,7 +75,7 @@ Serial fetch is not explored since previous section showed that when using value
 The results reported in this section represent the culmination of hardware modifications for core composition discussed in this chapter.
 All benchmarks are executed using a 16 core composition.
 
-%The objective of this section is to demonstrate that a state of the art value predictor, paired with a new fetching scheme, can be used to improve the performance of large core compositions, and to show the difference between a real predictor and the perfect predictor.
+\paragraph*{Predictor size}
 The D-VTAGE size configuration can be found in Table~\ref{tab:vtage-conf}.
 The Last-Value Table shares the same number of values as the Base Entry and uses a 5-bit tag.
 Each tagged entry has a tag of varying size (first table is 12 bits, second 13 bits so on and so forth).
@@ -83,6 +83,7 @@ The total number of values for the D-VTAGE predictor is taken from Perais et al'
 The adopted size for this chapter is the medium predictor as it provides a good compromise between performance and total size of the predictor.
 The blocks in the speculative window represents the total number of in-flight blocks that can be handled by the speculative window, which is 4.
 
+\paragraph*{Parameter tuning}
 Two features of the predictor can be modified: the number of values per entry and at what confidence a prediction is used.
 Modifying the required confidence explores the trade-off between high coverage and low misprediction.
 The original D-VTAGE uses Forward Probabilistic Counters (FPC)~\cite{riley2006fpc} to increment the confidence, and only used predictions once the counter was set to 7.
@@ -116,7 +117,7 @@ The FPC vector used in this Chapter is the same as the one in Perais et al.'s wo
 %\end{tabular}
 %\caption{Configurable parameters for D-VTAGE}\label{tab:vtage-params}
 %\end{table}
-
+\paragraph*{Block size}
 Table~\ref{tab:vtage-conf} also shows the possible values that can be taken for the two parameters.
 Whilst this section previously showed that most applications only have 5 reads per block, this section explores block sizes of 8 and 16 to ensure that all register reads are potentially covered. 
 The block size of 8 is chosen as it allows to capture the maximum average number of reads determined in Figure~\ref{fig:edge_reg_read}, since \bm{Disparity} and \bm{Localization} have at least 8 reads and they both benefit from value prediction as seen in Section~\ref{chp:chp3:sec:analysis}.
@@ -228,6 +229,7 @@ This explains why the low confidence counter sometimes performs worse than the h
 	  95\%& 93\%& 98\%& 98 \%&\\ \hline
 	\end{tabular}
   \caption{Branch prediction accuracy in percentage for each of the benchmarks.}\label{tab:sd-vbsbpred2}
+  \vspace{-1em}
 \end{table}
 
 \begin{figure}[t]
