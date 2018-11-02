@@ -160,7 +160,7 @@ Therefore, for \bm{MSER}, a predictor with less values per entry can capture mor
 On the other hand, for \bm{Disparity}, 16 values per entry is required to get the best performance.
 This once again corroborates with the information from Figure~\ref{fig:edge_reg_read}.
 \bm{Disparity} has a higher average of reads per block, but features a very low number of unique blocks.
-Therefore having a larger entry in the table captures more values that can be predicted, but does not suffer from having entries being replaced by new blocks.
+Therefore having a larger entry in the table captures more values, but does not suffer from having entries being replaced by new blocks.
 
 Comparing the performance of the different configurations to the perfect value predictor, it is apparent that most benchmarks do not achieve their maximum potential as the perfect predictor results in an average speedup of 1.88x compared to 1.32x of D-VTAGE.
 However, benchmarks \bm{Disparity} and \bm{Multi\_NCut} show how value prediction with RRF is a promising lead for improving the performance of core composition.
