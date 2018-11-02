@@ -16,7 +16,7 @@ The design choices behind the value predictor match some of the architectural fe
 To understand how these two modification can impact performance, the same set of benchmarks have been used in Chapter~\ref{chp:cases} are explored here.
 First, the performance of a perfect value predictor with the round robin fetching scheme is explored and shows that it can improve the performance of core composition by up to 3x, with an average of 1.88x.
 The analysis demonstrated that without value prediction, the new round robin fetching scheme cannot improve performance on its own, due to the higher stress on the NoC and data-dependencies not resolving quickly enough.
-This was followed by an analysis of the performance of using different configurations of the D-VTAGE value predictor.
+This was followed by an analysis of the performance of using different configurations of the D-VTAGE value predictor with and without perfect branch prediction.
 Overall, using state-of-the art value prediction with round-robin fetching scheme leads to a performance improvement of up to 2.7x with an average of 1.3x.
 To summarise, the main contributions of the chapter are:
 

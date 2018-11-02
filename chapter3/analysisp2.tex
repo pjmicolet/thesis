@@ -73,18 +73,15 @@ Confidence Value & 4 or 7 with FPC \\ \bottomrule
 This section demonstrates how the block based D-VTAGE value predictor improves the performance of core composition using the round-robin fetch scheme (RRF).
 Serial fetch is not explored since previous section showed that when using value prediction, RRF always provides the best results.
 The results reported in this section represent the culmination of hardware modifications for core composition discussed in this chapter.
+All benchmarks are executed using a 16 core composition.
 
 %The objective of this section is to demonstrate that a state of the art value predictor, paired with a new fetching scheme, can be used to improve the performance of large core compositions, and to show the difference between a real predictor and the perfect predictor.
 The D-VTAGE size configuration can be found in Table~\ref{tab:vtage-conf}.
 The Last-Value Table shares the same number of values as the Base Entry and uses a 5-bit tag.
 Each tagged entry has a tag of varying size (first table is 12 bits, second 13 bits so on and so forth).
 The total number of values for the D-VTAGE predictor is taken from Perais et al's work ~\cite{peraisBeBop2015}.
-The adopted size for this chapter is the medium predictor as it provides a good compromise between performance and memory footprint.
-It is important to note that the values represent single entries in the table, they can be grouped up into blocks of any size.
+The adopted size for this chapter is the medium predictor as it provides a good compromise between performance and total size of the predictor.
 The blocks in the speculative window represents the total number of in-flight blocks that can be handled by the speculative window, which is 4.
-%For the size of the stride, 64 bit values are used throughout the experiments to maximise the reach of the predictor.
-%However, different stride sizes are considered: the simulator tracks the size of the strides used in valid predictions to detect how small they can be made for each of the benchmarks.
-%The analysis of the stride size is discussed later on in this section.
 
 Two features of the predictor can be modified: the number of values per entry and at what confidence a prediction is used.
 Modifying the required confidence explores the trade-off between high coverage and low misprediction.
@@ -124,7 +121,10 @@ Table~\ref{tab:vtage-conf} also shows the possible values that can be taken for 
 Whilst this section previously showed that most applications only have 5 reads per block, this section explores block sizes of 8 and 16 to ensure that all register reads are potentially covered. 
 The block size of 8 is chosen as it allows to capture the maximum average number of reads determined in Figure~\ref{fig:edge_reg_read}, since \bm{Disparity} and \bm{Localization} have at least 8 reads and they both benefit from value prediction as seen in Section~\ref{chp:chp3:sec:analysis}.
 On the other hand a block size of 16 is explored to see how capturing a higher number than the average number of reads can affect the performance of the predictor. 
-All benchmarks are executed using a 16 core composition.
+In the original D-VTAGE proposal, they suggest that the predictor can generate \textit{x} values per cycle where \textit{x} is the issue width of the core.
+This means that 4 values can be generated per cycle, as this is the issue width of a core (see Chapter~\ref{chp:setup} Section~\ref{chp:setup:conf}.
+In Section~\ref{chp:chp3:sec:analysis}, Figure~\ref{fig:av_time} showed that, when using RRF, the minimum cycles from fetch to dispatch was 10, meaning that the predictor can issue 8 to 16 predictions before dispatching any block.
+
 
 \subsection{Results}
 

@@ -58,6 +58,8 @@ As all the cores are homogeneous, if the parallel fraction is low, then this cau
 \begin{figure}[t]
  \center
  \includegraphics[width=1\textwidth]{background/graphics/biglittle.png}
+ 	\vspace{-3em}
+
  \caption{Example of a heterogeneous multicore processor~\cite{armbig}}\label{fig:blarm}
 \end{figure}
 \vspace{-1em}
@@ -76,6 +78,7 @@ They motivate the idea that HCMPs with heterogeneous ISAs even improve over the 
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{background/graphics/cmp_new.pdf}
+	\vspace{-3em}
     \caption{High-level view of a DMP that can modify its core count.}
     \label{fig:dynmulticore}
 	\vspace{-0.5em}
@@ -168,6 +171,7 @@ For example, if two blocks write to the same register, then the register-file ca
     \includegraphics[width=1\textwidth]{background/graphics/hyperblock.pdf}
     \caption{High-level view of hyperblock formation. The three top blocks can be fused into a single block using instruction predication.}
     \label{fig:EdgeHB}
+	\vspace{-1em}
 \end{figure}
 To increase the size of EDGE blocks, multiple blocks can be combined together to form one large block called a hyperblock.
 This is achieved through the use of instruction predication~\cite{smith2006edge}.
@@ -185,8 +189,9 @@ Overall, the EDGE ISA enables the architecture to dispatch blocks speculatively,
  \begin{figure}[t]
  \center
  \includegraphics[width=1\textwidth]{background/graphics/edge_lanes.pdf}
+ \vspace{-4em}
  \caption{Example of a 4 lane core on an EDGE processor taken from~\cite{putnam2010e2}. The instruction window is split into 4 lanes, each can fetch a block of up to 32 instructions.}\label{fig:e2segment}
-\vspace{-0.5em}
+\vspace{-1em}
  \end{figure}
 
 \subsection{EDGE Processor features}~\label{sec:edge_arch}
@@ -235,6 +240,77 @@ When a composition fetches multiple blocks, it executes them out of order.
 However instructions that modify memory or registers pass through the LSQ and register-file respectively and are executed in order to ensure memory and register value consistency.
 In case of a memory violation caused by undetected dependencies a flush of all blocks younger than the violator, including the violating block, is performed.
 
+\lstset{
+	backgroundcolor=\color{lbcolor},
+	tabsize=2,
+	rulecolor=,
+	language=matlab,
+        basicstyle=\tiny,
+        upquote=true,
+        aboveskip={1\baselineskip},
+        columns=fixed,
+        showstringspaces=false,
+        extendedchars=true,
+        breaklines=true,
+        prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+        frame=single,
+        showtabs=false,
+        showspaces=false,
+        showstringspaces=false,
+        identifierstyle=\ttfamily,
+        keywordstyle=\color[rgb]{0,0,1},
+        commentstyle=\color[rgb]{0.133,0.545,0.133},
+        stringstyle=\color[rgb]{0.627,0.126,0.941},
+		numbers=left,
+}
+
+
+\setbox0=\hbox{%
+\begin{minipage}{2.5in}
+\begin{lstlisting}[
+basicstyle={\tiny\ttfamily},
+identifierstyle={\color{black}},
+tabsize=2,
+language={[AspectJ]Java},
+numbersep=8pt,
+numbers=left,
+xleftmargin=0.5cm,frame=tlbr,framesep=2pt,framerule=0pt]
+for(int i =0; i < max_num;i++)
+	b[i] = i;
+for(int i =0 ; i < max_num ; i++)
+	a[i] = b[i];
+\end{lstlisting}
+\end{minipage}
+}
+\savestack{\listingA}{\box0}
+
+\setbox0=\hbox{%
+\begin{minipage}{2.5in}
+\begin{lstlisting}[
+basicstyle={\tiny\ttfamily},
+identifierstyle={\color{black}},
+tabsize=2,
+language={[AspectJ]Java},
+numbersep=8pt,
+numbers=left,
+xleftmargin=0.5cm,frame=tlbr,framesep=2pt,framerule=0pt,
+morekeywords ={class,run}
+]
+loop2:
+cmp r1, max_num
+beq exit
+lsli r7, r1, 2
+add r3, r2, r7
+add r5, r4, r7 
+load r6, r3
+store r6, r5
+addi r1, r1, 1
+br loop2
+\end{lstlisting}
+\end{minipage}
+}
+\savestack{\listingB}{\box0}
+
 \section{Value Prediction}~\label{sec:valpred}
 %This will go in the background most likely
 In Out of Order (OoO) superscalar processors, instructions can be executed out of order to improve ILP.
@@ -249,17 +325,41 @@ As long as the accuracy of the prediction is high, then executing the data-depen
 Until recently the benefits of using value prediction has been overshadowed by the potential power consumption and design complexity required to implement them \cite{peraisVTAGE2014}.
 However, recent work by Perais et al.~\cite{peraisVTAGE2014,peraisBeBop2015} shows that by adopting the prediction and update scheme of the ITTAGE branch predictor~\cite{SeznecITTAGE}, and grouping predictions into blocks, value predictors be efficiently implemented.
 
+\begin{figure}[t]
+\begin{tabular}{|c|c|}
+\hline
+\stackinset{l}{-5pt}{t}{13\llength}{}{\listingA} &
+\stackinset{l}{-5pt}{t}{ 7\llength}{}{\listingB} \\
+\hline
+\end{tabular}
+\captionof{lstlisting}{Small C example, with the second loop's assembly in the right pane}~\label{lst:bg:lst}
+\vspace{-1em}
+    \centering
+    \includegraphics[width=1\textwidth]{background/graphics/predic.pdf}
+    \caption{Depiction of how predictions are made in a context and computational value predictor. The colours of the cells represent values for different instructions.}
+    \label{fig:pred_examples}
+	\vspace{-1em}
+\end{figure}
+
 \paragraph*{Type of predictors}
 There exist two categories of value predictors \textit{Context} predictors and \textit{Computational} predictors.
-In a \textit{Context} predictor, the predicted value of an instruction is based on capturing the history of values of the instruction.
-This means that in a \textit{Context} predictor, a single instruction can occupy multiple entries of the predictor as each new value must be recorded.
-The predicted value will then depend on the current context, which can either be captured by dataflow information or branch history~\cite{peraisVTAGE2014}.
-This makes \textit{Context} predictors less efficient for predicting values that are incremented at a constant rate, as each increment occupies a new entry~\cite{peraisBeBop2015}.
+To illustrate the difference between the two predictors, Figure~\ref{fig:pred_examples} depicts how both generate a prediction for the load instruction at line 17 in Listing~\ref{lst:bg:lst}.
+In Figure~\ref{fig:pred_examples}, the colour of an entry in the tables represents a value for a specific instruction based on its program counter (PC).
 
-On the other hand \textit{Computational} based predictors make a prediction by computing the value.
-This can be achieved by detecting the delta between two commits of a value for an instruction, also known as the \textit{stride}.
+A \textit{Context} predictor relies on the history of values an instruction outputs to generate a prediction.
+This means that a single instruction can occupy multiple entries of the predictor as each new value must be recorded.
+This is why, in Figure~\ref{fig:pred_examples}, the specific load instruction has multiple entries in the predictor, as the value generated by the load is different for each iteration of the loop.
+The \textit{Context} predictor can only predict the value the instruction if the specific value is already stored in the predictor as it does not have any ability to \textit{infer} the value.
+The predicted value depens on the context, which can either be captured by dataflow information or branch history~\cite{peraisVTAGE2014}.
+%This makes \textit{Context} predictors less efficient for predicting values that are incremented at a constant rate, as each increment occupies a new entry~\cite{peraisBeBop2015}.
+
+On the other hand \textit{Computational} predictors make a prediction by computing the value.
+This can be achieved by detecting the delta between two successive values for an instruction, also known as the \textit{stride}.
 Instead of storing each observed value for an instruction, a \textit{Computational} predictor stores the \textit{stride}, and the last committed value of an instruction.
 When a prediction is requested, the \textit{Computational} predictor fetches the last committed value and the stride and adds them together to produce the prediction.
+For example, the value of the array in listing~\ref{lst:bg:lst} is always equal to the previous load value $+$ 1.
+This means that the \textit{stride} for that instruction is 1 as seen in Figure~\ref{fig:pred_examples}.
+If the last seen value for that instruction was 5, then the next prediction will fetch the value 5 from the last value table, and then add the stride (1), to generate the prediction.
 This allows \textit{Computational} to potentially reduce the size of the predictor as it only requires a single copy of the value to make a prediction. 
 
 
@@ -271,8 +371,8 @@ It covers the structure of the predictor, how predictions are generated and impl
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{background/graphics/valuepred.pdf}
-
-    \caption{VTAGE stride-based value predictor and Speculative Window.}
+	\vspace{-3em}
+    \caption{VTAGE computational value predictor and Speculative Window.}
     \label{fig:stride_over}
 	\vspace{-1em}
 \end{figure}
