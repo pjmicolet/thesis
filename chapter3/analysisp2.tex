@@ -119,9 +119,12 @@ The FPC vector used in this Chapter is the same as the one in Perais et al.'s wo
 %\end{table}
 \paragraph*{Block size}
 Table~\ref{tab:vtage-conf} also shows the possible values that can be taken for the two parameters.
-Whilst this section previously showed that most applications only have 5 reads per block, this section explores block sizes of 8 and 16 to ensure that all register reads are potentially covered. 
-The block size of 8 is chosen as it allows to capture the maximum average number of reads determined in Figure~\ref{fig:edge_reg_read}, since \bm{Disparity} and \bm{Localization} have at least 8 reads and they both benefit from value prediction as seen in Section~\ref{chp:chp3:sec:analysis}.
-On the other hand a block size of 16 is explored to see how capturing a higher number than the average number of reads can affect the performance of the predictor. 
+Whilst this section showed that most applications only have 5 reads per block,  \bm{Disparity} and \bm{Localization} have at least 8 reads and they both benefit from value prediction as seen in Section~\ref{chp:chp3:sec:analysis}.
+Since there is currently no method of determining which reads may have data-dependencies, it is important to have a block size that captures the largest register read average for the set of benchmarks which is 8.
+This section explores block sizes of 8 and 16 to ensure that all register reads are potentially covered. 
+The block size of 16 is explored to see how capturing a higher number than the average number of reads affects the performance of the predictor. 
+
+\paragraph*{Prediction Delay}
 In the original D-VTAGE proposal, they suggest that the predictor can generate \textit{x} values per cycle where \textit{x} is the issue width of the core.
 This means that 4 values can be generated per cycle, as this is the issue width of a core (see Chapter~\ref{chp:setup} Section~\ref{chp:setup:conf}.
 In Section~\ref{chp:chp3:sec:analysis}, Figure~\ref{fig:av_time} showed that, when using RRF, the minimum cycles from fetch to dispatch was 10, meaning that the predictor can issue 8 to 16 predictions before dispatching any block.
@@ -133,7 +136,7 @@ In Section~\ref{chp:chp3:sec:analysis}, Figure~\ref{fig:av_time} showed that, wh
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/vtage_speed2.pdf}
+    \includegraphics[width=1\textwidth]{chapter3/graphics/vtage_speed3.pdf}
     \caption{Speedup obtained using a D-VTAGE value predictor and RRF with 16 cores composed. Baseline is 16 cores composed with SF and without value prediction. Both use perfect branch prediction. Higher is better.}
     \label{fig:vtage_perf}
 	\vspace{1em}
@@ -175,7 +178,7 @@ Also a single accurate register prediction may not necessarily improve performan
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/coverageFull.pdf}
+    \includegraphics[width=1\textwidth]{chapter3/graphics/coverageFull2.pdf}
     \caption{Prediction coverage at a block and instruction level. Higher is better}
     \label{fig:vtag_cov_block}
 	\vspace{1em}
@@ -197,9 +200,10 @@ This register will cause a data dependency between loop iterations and will be d
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/predAcc.pdf}
+    \includegraphics[width=1\textwidth]{chapter3/graphics/predAcc2.pdf}
     \caption{Accuracy of the different D-VTAGE predictors at a block and instruction level. Higher is better.}
     \label{fig:vtag_accuracy_block}
+	\vspace{1em}
 \end{figure}
 
 \bm{Localization}, \bm{MSER}, \bm{SVM} and \bm{Texture\_Synthesis} often have much lower coverage than the rest of the programs.
