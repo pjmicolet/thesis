@@ -248,6 +248,9 @@ WaveScript on the other hand is developed for embedded systems~\cite{newton2008w
 Unlike StreamIt, WaveScript uses an asynchronous streaming model, where the input and output rates of functions are not known at compile time.
 %Programs are not defined as graphs, instead 
 
+Bosboom et al. demonstrate how a streaming language can be directly embedded into a more common host-language in ~\cite{bosboom2014streamjit}.
+They present StreamJIT which inherits StreamIt's programming structure, however the language is embedded inside of Java.
+This allows the new StreamJIT language to benefit from the front-end compiler optimisations developed for Java; a method they call \textit{commensal} compilation.
 
 \section{Partitioning streaming programs on multicore chip}
 
