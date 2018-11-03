@@ -207,8 +207,9 @@ Depending on the architectural setup, lanes may either share ALUs or they may ha
 As the instruction window is segmented, a core can continue fetching blocks until all its lanes are filled, allowing the processor to have multiple blocks in flight per core.
 A segmented instruction window therefore allows EDGE cores to be more flexible to block size variability.
 
-\subsubsection{Core Composition Functionality}\label{chp:Background:sec:EDGE}
+\subsubsection{Core Composition for EDGE}\label{chp:Background:sec:EDGE}
 
+\paragraph*{Hardware implementation}
 Core Composition is achieved by fusing a set of \textit{physical} cores to create a larger core composition.
 In the processor used throughout the thesis this does not modify the physical structure of the processor, instead it provides a unified view of a group of physical cores to the software.
 The micro-architecture is distributed: register files, Load Store Queues (LSQs), L1 caches and ALUs all look like nodes on a network.
@@ -219,9 +220,10 @@ Unlike traditional CMPs, composed cores operate on the same thread and extract I
 \begin{figure}
  \center
  \includegraphics[width=1\textwidth]{cases-paper/graphics/background/proc_test.pdf}
- \caption{Core Composition Mechanisms for our EDGE-based architecture.}\label{fig:dmp}
+ \caption{Core Composition Mechanisms for the EDGE-based architecture.}\label{fig:dmp}
  \end{figure}
  
+\paragraph*{Core composition mechanism}
 Figure~\ref{fig:dmp} shows the different stages and mechanisms of core composition for a four core EDGE system.
 When creating a new composition a master core informs all other cores about the fusion and sends the predicted next block address to an available fused core.
 When a new thread is started on a fused core the OS and runtime write the new core mapping to a system register.
@@ -230,8 +232,25 @@ When a core mispredicts a branch in a composition, it informs the other cores wh
 When un-fusing, the master core informs the other cores, which then commit or flush their blocks and power down while the master core continues to fetch and execute blocks from the thread.
 The extra hardware required to support dynamic reconfiguration is very minimal~\cite{kim2007tflex} since most of the machinery already in place can be reused such as the cache coherence protocol when fusing and un-fusing the cores.
 
-When a composition fetches multiple blocks, it executes them out of order.
-However instructions that modify memory or registers pass through the LSQ and register-file respectively and are executed in order to ensure memory and register value consistency.
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{chapter3/graphics/normfetch.pdf}
+    \caption{Example of the fetching model on a 2 core composition. Each core has 4 segments, the arrows represent the block generating the predictions.}
+   \label{fig:old_fetch}
+%\vspace{1em}
+\end{figure}
+
+\paragraph*{Fetching on a composition}
+Cores in a composition do not fetch blocks independently; instead a core will only start fetching if it is told to do so by another core in a composition.
+Figure~\ref{fig:old_fetch} illustrates the fetching mechanism on a 2 core composition where each core has its instruction window segmented into four lanes.
+The first core, \textit{C0} initiates the composition and starts fetching blocks until it is full.
+Once this happens, it will send a fetch request to \textit{C1}, which then, and only then, will start fetching blocks.
+Core \textit{C0} stops fetching blocks after this request, and will have to wait on \textit{C1} to send it a request before it can restart fetching.
+
+\paragraph*{Memory and register consistency} 
+When a core composition has multiple blocks on different cores, it can execute the instructions out of order.
+However instructions that modify memory or registers pass through the load store queue (LSQ) and register-file respectively and are executed in order to ensure memory and register value consistency.
+Register reads from younger blocks that depend on a register write from an older block will be stalled until the write is executed.
 In case of a memory violation caused by undetected dependencies a flush of all blocks younger than the violator, including the violating block, is performed.
 
 \lstset{
