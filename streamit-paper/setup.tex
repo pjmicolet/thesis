@@ -33,14 +33,14 @@ Then, a second machine-learning model is deployed which also analyses static cod
 This model decides on the number of cores each thread will have.
 This is achieved by estimating the amount of Instruction Level Parallelism (ILP) that can be possibly extracted in each thread and by determining how many physical cores should be fused for that thread.
 Finally, the processor is reconfigured to fuse the requested resources ahead of time and execute the partitioned program.
-For example in Figure~\ref{fig:examplestream}, once the graph is coloured, the machine learning model will estimate the potential ILP in each group of coloured nodes and then assign a number of cores each thread will execute on.
+For example in Figure~\ref{fig:examplestream}, once the graph is coloured, the machine learning model estimates the potential ILP in each group and assigns a number of cores each thread will execute on.
 
 \subsection{Design Space}
 
 The benchmarks used throughout this chapter are described in Chapter~\ref{chp:setup} Section~\ref{chp:setup:streamit}.
 These applications represent a variety of embedded applications and kernels, from digital signal processing to a matrix-multiplication kernel or band pass filters.
 Table~\ref{tab:instancefilt} shows the number of filter instances and SplitJoins for each of the benchmarks.
-As a refresher from Chapter~\ref{chp:Background}, SplitJoin filters are functions which distribute and collect data from parallel filters.
+As a refresher from Chapter~\ref{chp:Background} Section~\ref{chp:bckg:streamit}, SplitJoin filters are functions which distribute and collect data from parallel filters.
 The applications feature a different number of SplitJoins which determine the task-level parallelism.
 This is to include a variety of situations to test the flexibility of the dynamic multicore processor.
 Whilst SplitJoins often facilitate the decision of how to partition the programs into threads, they are not the only way to exploit thread level parallelism.
@@ -100,21 +100,20 @@ For each benchmark the default inputs provided in the repository~\cite{streamitr
 \end{table}
 
 The parameters and size of the space are given in Table~\ref{tab:space}.
-In this study a 16 core DMP is used.
+In this study the 16 core DMP defined in Chapter~\ref{chp:setup} Section~\ref{chp:setup:conf} is used.
 Having 16 cores allows for a larger variety of configurations, this also represents a processor similar to a tiled embedded system such as Tilera or Raw.
 All cores in the DMP are utilised; Core 0 is assigned to the main thread and for runtime management.
 This leaves 15 cores available for each application.
 Each core is restricted to running only a single thread, as no context switching is supported, which leads to a possible number of threads between 1 and 15.
 The core-composition is not used on the master core, leaving 15 physical cores to be distributed to each of the worker threads.
-Cores can be fused together to form a logical core with up to 15 physical cores, making the total number of cores assigned to a thread between 1 and 15.
+Cores can be composed together to form a composition with up to 15 physical cores, making the total number of cores assigned to a thread between 1 and 15.
 Of course, not all cores have to be assigned to a thread, in this case all remaining cores that aren't in a composition or a thread are turned off.
 Overall, this leads to a total space size of 32,767 unique combination per benchmark as previously described in Section~\ref{sec:motivation}.
 
 \subsection{Sample Space}
 
-
-Given a partition, any benchmark that is split into 15 threads requires 32,767 executions to cover the entire space.
-Running an exhaustive exploration of the space for a single benchmark requires approximately a week of simulation on a 572+ node supercomputer.
+Given a partition, any benchmark that can be split into 15 threads requires 32,767 executions to cover the entire space.
+Running the exhaustive exploration of the space for a benchmark requires approximately a week of simulation on a 572+ node supercomputer.
 For this reason, a sample of 1,316 random points from the entire space is utilised.
 This roughly corresponds to 100 core compositions for each number of threads; the actual number, 1,316 is smaller than 1,500 since for low and high thread counts there are less than 100 possible different core composition.
 For example, a single thread can have only up to 15 different core-compositions (1 through 15) whilst 15 threads can only have a single core given to each thread.
@@ -129,7 +128,7 @@ Overall, the space exploration required one week of simulation on the supercompu
 
 %Define stopping criterion?
 To gain confidence that the best configuration from the sample space is indeed close to the real best in the entire space, a statistical model based on the Early Stopping Criterion defined in~\cite{vuduc2003AutomaticPerf} is deployed.
-This statistical model estimates, given a sample of the total space, if the best observed performance of that sample space is within a percentage of the statistical best performance, a more detailed explanation can be found in Chapter~\ref{chp:bg}.
+This statistical model estimates, given a sample of the total space, if the best observed performance of that sample space is within a percentage of the statistical best performance, a more detailed explanation can be found in Chapter~\ref{chp:Background} Section~\ref{sec:esc}.
 The results demonstrate that the sample space selected is representative of the whole space.
 
 Figure~\ref{fig:prox} shows, for each of the benchmarks, the proximity to the statistical best when increasing the sub-sample space given a maximal uncertainty of 5\%  (\ie minimum 95\% confidence).
@@ -154,7 +153,7 @@ To summarize, it can be concluded that the best point found in the sample space 
  \caption{Data on the synthetic benchmarks compared to the selected benchmarks}~\label{tab:synthvsreal}
  \end{table}
 
-One of the difficulties of building a machine learning based model for StreamIt is the lack of benchmarks available~\cite{wang2013partitionstreamit}.
+One of the difficulties of building a machine learning based model for StreamIt is the lack of a large amount benchmarks available~\cite{wang2013partitionstreamit}.
 To overcome this problem generating synthetic benchmarks can be a solution~\cite{cumminsopencl2017}.
 Thus synthetic StreamIt benchmarks are generated and statistics are gathered from them in a similar style as in~\cite{wang2013partitionstreamit}.
 In this chapter, the synthetic benchmarks are used to build a model for predicting the number of threads, which will be described later in section~\ref{sec:ml}
@@ -163,7 +162,6 @@ In this chapter, the synthetic benchmarks are used to build a model for predicti
 To ensure that the synthetic benchmarks are representative of realistic benchmarks they are created using filters from a set of example StreamIt programs found in the example directory in the repository.
 30 different possible filters with different incoming and outgoing rates and different inputs and outputs types are used to increase the variety of the dataset.
 To ensure that the synthetic benchmarks are similar to real benchmarks, the total number of filters and split joins are within the average of the realistic benchmarks.
-
 Table~\ref{tab:synthvsreal} gives the average number of SplitJoins and filter instances for the synthetic benchmarks vs the real benchmarks used in this chapter.
 As can be seen, the synthetic benchmarks, on average, have more SplitJoins than the real benchmarks; this is due to the fact that a few of the benchmarks presented in the chapter don't have SplitJoins at all which can quickly reduce the average.
 %Maybe say a bit more here.
