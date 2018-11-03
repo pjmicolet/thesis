@@ -27,24 +27,22 @@ Design points are executed on the dynamic multicore simulator, the exact details
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{streamit-paper/graphics/filterbank_motivation_4.pdf}
-    \caption{Distribution of the runtime for FilterBank with different core composition and thread pairings. The dots on the X-axis represent specific configurations and their cycle counts.}
+    \caption{Distribution of speedups for FilterBank when using different core composition and thread pairings compared to single-core single thread. The dots on the X-axis represent specific configurations.}
      \label{fig:threadcoremotiv}
 \end{figure}
 
-Figure~\ref{fig:threadcoremotiv} presents the execution time distribution, displayed as a cycle count, from a subset of the co-design space of \bench{FilterBank} as a density graph.
+Figure~\ref{fig:threadcoremotiv} presents the speedup distribution from a subset of the co-design space of \bench{FilterBank} as a density graph.
+The speedup is measured by comparing the performance of the configuration to a single-core single thread.
 For this Figure, 1316 different thread/core combinations are explored, the reason this number is chosen will be explained later on in section~\ref{chp:stream:sec:setup}.
-For the sake of clarity, the execution time of running a single core with a single thread is marked by the rightmost bar with the title "1 thread".
-First, as can be seen in Figure~\ref{fig:threadcoremotiv}, the majority of the different combinations are found at around 250K cycles.
-The worst point for \bench{FilterBank} can be found at the single core execution, which is a single core, single thread, resulting in an execution time of about 700K cycles, which is over 2x slower than the average case.
-It is important to note that as the execution time gets faster, the number of points grows smaller.
-For the best execution points, which are far fewer than the average case (4x smaller density than the average case) the execution time can be as small as 125K cycles, which is 2x faster than the average case and 4x faster than the single core version.
+First, as can be seen in Figure~\ref{fig:threadcoremotiv}, the majority of the different combinations result in a speedup of 2.7x.
+It is important to note that as the speedup gets more important, the number of points grows smaller.
+For the best speedups, which are far fewer than the average case (4x smaller density than the average case) performance can be improved by up to almost 6x.
 Thus, if a good configuration is found, this can yield an important speedup compared to the average configuration.
 However, the number of good configurations is low, this underlines the notion that finding a combination of threads and cores is a non-trivial endeavor, as randomly choosing a configuration will result in a sub-optimal performance.
-Indeed, whilst the average case is 2x faster than a single core, Figure~\ref{fig:threadcoremotiv} shows that there exists a good number of configurations that can lead to execution times that are slower than average case.
+Indeed, even if the average case is 2.7x faster than a single core, Figure~\ref{fig:threadcoremotiv} shows that there exists a good number of configurations that can lead to less than average speedups.
 
 
 \subsection{Minimizing the search space}
-%Insert an example to show that it's a mix of threads and cores that matters.
 Whilst there exists a large variety of thread-core combinations, certain design choices can be used to try and minimise the space.
 For example, choosing to only do multithreading reduces the search space to 15 possible solutions whilst only combinations that lead to homogeneous core compositions reduces the search space to:
 
@@ -70,8 +68,6 @@ Using the optimal number of threads, which is the number of threads that leads t
 In this case only 2 homogeneous pairings exist: 2 cores fused for each of the 4 threads or 3 cores fused for each of the 4 threads.
 Figure~\ref{fig:threadcoremotiv} shows that homogeneous core-composition will outperform only using multithreading by 1.3x, however it is not the optimal solution.
 In the end, using a heterogeneous configuration leads to a 1.5x speedup compared to the fastest homogeneous configuration.
-%It's also important to note that the best heterogeneous core-composition requires a different number of threads than the optimal number of threads previously describe.
-%Whilst this is the case in this example, section~\ref{sec:streamit:dse} will show that the optimal number of threads with and without core-composition are often the same +/- 1.
 Therefore, it is important to consider all possible configurations to ensure the possibility of obtaining the best performance.
 
 \subsection{Summary}
