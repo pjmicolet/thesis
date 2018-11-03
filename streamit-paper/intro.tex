@@ -11,27 +11,26 @@ Second, using information from both the hardware and software, automate the part
 In most parallel programming models such as OpenMP~\cite{openmp}, the user is directly responsible for mapping parallelism to the hardware; a difficult and time consuming task~\cite{prabhu2011LanguagePar}.
 This is due to the fact that these models extend programming languages that do not consider parallelism as a defining design factor~\cite{pingaliTao2011}.
 On the other-hand dataflow programming models such as StreamIt~\cite{theis2002streamit} and Lime \cite{auerbach2012lime} make data and paralleism a first class citizen.
-In dataflow languages, applications are expressed as data oriented graphs and --- ideally --- the compiler or runtime determines the mapping of parallelism onto the available hardware and controls the grouping of hardware resources.
+In these languages, applications are expressed as data oriented graphs and --- ideally --- the compiler or runtime determines the mapping of parallelism onto the available hardware and controls the grouping of hardware resources.
 Thus using such a model can be a potential solution to the first part of the problem.
 
 However, optimally mapping parallelism and managing hardware resources remains an open problem given the sheer complexity of the resulting design space.
-For example, given a 16 core DMP with up to 15 threads, a single program can have over 32,000 different configurations of thread to logical-core pairings.
-Rather than exhaustively searching the space, which is a very time consuming task, finding a way to automate the configuration of the processor makes the use of DMPs more attractive.
-The number of program features that may influence how to partition dataflow programs is large, for example it could depend on the number of tasks, the parallelism made explicit by the language and/or different compiler optimisations.
-Therefore manually determining a set of heuristics to create a model that selects thread count and core configurations is not recommended as important information may potentially be disregarded.
-Instead, a machine learning model paired with correlation analysis, can extract all the features that correlate the most with deciding a good partition and generate an appropriate model.
+For example, given a 16 core DMP with up to 15 threads, a program can have over 32,000 different configurations of thread to core composition pairings.
+Rather than exhaustively searching the space, which is a very time consuming task, finding a way to automate the configuration of the processor makes using DMPs more attractive.
+The number of program features that may influence how to partition programs is large, for example it could depend on the number of tasks, the parallelism made explicit by the language and/or different compiler optimisations.
+Therefore manually determining a set of heuristics to create a model that selects thread count and core compositions is not recommended as important information may potentially be disregarded.
+Instead, a machine learning model paired with correlation analysis can extract all the features that correlate the most with deciding a good partition and generate an appropriate model.
 
-This chapter analyses how static ahead-of-time reconfiguration of a dynamic multicore processor can improve performance of a set of streaming applications.
-These streaming applications include audio signal processing algorithms, image processing algorithms and sorting algorithms.
+This chapter analyses how static ahead-of-time reconfiguration of a DMP can improve performance of a set of streaming applications.
+These streaming applications include audio signal processing, image processing and sorting algorithms.
 Streaming programs are ubiquitous in the embedded systems space~\cite{theis2002streamit} and their mix of parallelism and computation make them an interesting domain for DMPs.
 
-An analysis of the design space exploration is performed and shows the impact of modifying resources and thread mapping.
-This analysis is conducted using a set of StreamIt programs that are ran on a verified cycle-level simulator for a tiled reconfigurable architecture with support for core composition.
+An analysis of the design space exploration is performed and shows the impact of modifying resources and thread mapping and is conducted using a set of StreamIt programs.
 A machine learning model is developed using the information gathered from the exploration.
 This model predicts the best number of threads for a given application and an optimal number of cores to allocate to each thread.
 
 To demonstrate the viability of the approach the results of the predictive model are compared to the best sampled thread and core composition pairing in a space of more than 32,000 design points.
-The model can match the performance of the best sampled points in the space, with speedups of up to 9x on a 16 core processor compared to single threaded execution on a single core. 
+The model can match the performance of the best sampled points, with speedups of up to 9x on a 16 core processor compared to single threaded execution on a single core. 
 
 % contributions
 The main contributions of this chapter are:
@@ -46,10 +45,10 @@ The main contributions of this chapter are:
 \end{itemize}
 
 
-The rest of the chapter is structured as follow.
+The chapter is structured as follow,
 Section~\ref{sec:motiviation} motivates this work by showing the complexity of the design space.
 Section~\ref{chp:stream:sec:setup} describes the methodology and section~\ref{sec:streamit:dse} presents an in-depth analysis of the design space.
-Section~\ref{sec:ml} develops a machine-learning model to predict the best thread mapping and core composition while Section~\ref{sec:results} shows the performance achieved by the model.
+Section~\ref{sec:ml} develops a machine-learning model to predict the best thread mapping and core composition whilst section~\ref{sec:results} shows the performance of the model.
 Section~\ref{sec:conclusion} concludes this chapter.
 
 %In most parallel programming models such as OpenMP, the user is directly responsible for mapping parallelism to the hardware; a difficult and time consuming task.
