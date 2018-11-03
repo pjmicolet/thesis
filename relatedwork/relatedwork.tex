@@ -2,17 +2,17 @@
 Whilst dynamic multicore processors (DMPs) are relatively new in terms of processor design they are still a solution to a well researched set of problems.
 These problems include improving performance of single-threaded applications and reducing energy consumption.
 This chapter covers the related work relevant and adjacent to this thesis.
-The topics covered are:
-\begin{itemize}
-\item The different dynamic multicore processors using core composition proposed in recent research.
-\item Work on determining when to change the size of a core composition either ahead of time or at runtime.
-\item Research on different hardware techniques for saving energy such as dynamic voltage and frequency scaling or using heterogeneous chip multicore processors.
-\item Research in optimising code for core composition and EDGE.
-\item Other models of speculative execution.
-\item Work on streaming programming languages.
-\item Current research in value prediction and data pre-fetching.
-\item Work on machine learning guided optimisations for both hardware and software.
-\end{itemize}
+%The topics covered are:
+%\begin{itemize}
+%\item The different dynamic multicore processors using core composition proposed in recent research.
+%\item Work on determining when to change the size of a core composition either ahead of time or at runtime.
+%\item Research on different hardware techniques for saving energy such as dynamic voltage and frequency scaling or using heterogeneous chip multicore processors.
+%\item Research in optimising code for core composition and EDGE.
+%\item Other models of speculative execution.
+%\item Work on streaming programming languages.
+%\item Current research in value prediction and data pre-fetching.
+%\item Work on machine learning guided optimisations for both hardware and software.
+%\end{itemize}
 
 \section{Reconfigurable Processors}
 
@@ -87,7 +87,7 @@ This work focuses on maximising speedup for a set of workloads in a multi-taskin
 The offline model uses profiling data to make decisions whereas the online model measures the current performance of a task being executed and switches the size of the composition based on a threshold.
 In their results they show that the offline profiling tool outperforms the online algorithm.
 As the threshold is set ahead of time, the online model is not able to fully utilise the system when applications do not meet the required threshold.
-Overall they demonstrate that a DMP that can adapt to workloads can result in faster response times than a tradition CMP, between 21\% to 13 times faster.
+They demonstrate that a DMP that can adapt to workloads can result in faster response times than a tradition CMP, between 21\% to 13x faster.
 
 %In~\cite{santos2013nocdmc} they use information provided by the application to determine how to reconfigure some components of the processor.
 %This initial information then assists the rest of the reconfiguration, this process still requires input from the programmer.
@@ -129,7 +129,7 @@ They suggest an online algorithm at the OS level that collects data from perform
 %write more
 %However this approach is orthogonal to DMPs~\cite{sibi2014}, whilst both techniques (DVFS and core composition) adapt to programs phases, DMPs can also be used to speed up the execution of programs.
 
-\subsection{Heterogeneous Chip Multicore Processors}
+\subsection{Thread migration in HCMPs}
 ARM big.LITTLE~\cite{armbig} is an example of a heterogeneous chip multicore processor (HCMP) that provides two different types of cores to allow the programmer to choose between energy efficiency and performance.
 A program can be migrated from one core to another depending on the requirements, however this comes at the cost of a very high migration overhead, over 10,000 cycles~\cite{armbig}.
 However Gutpa et al. show that by selecting the correct core configuration at runtime this can lead to an energy reduction of up to 46\%
@@ -139,11 +139,10 @@ Haque et al. show that an HCMP is able to reduce energy consumption and improve 
 They highlight that service provides receive requests of different lengths of computation.
 By successfully scheduling the different lengths to the correct cores in an HCMP, they can reduce the energy consumption of short requests by a factor of 50\% compared to DVFS.
 
-
 Adileh et al. argue that current proposals for scheduling tasks on small or large cores are inadequate when operating on a power-constrained HCMPs in a multi-tasking environment~\cite{adileh2016power}.
 Using linear programming they determine that applications can be ranked based on their delta performance/delta power (DPDP) which is defined as the ratio of performance and power difference between executing an application on a small or large core.
-Applications that ranked highly are to be executed on the large core whilst those that ranked lower are executed on the smaller cores.
-After defining five schemes that used DPDP to schedule tasks within a power budget of 1W per second per application they show that DPDP outperforms other schemes by 16\% on average and up to 40\%.
+Applications that ranked highly are executed on the large core whilst others are executed on the smaller cores.
+After defining five schemes that used DPDP to schedule tasks within a power budget of 1W per second per application they show that it outperforms other schemes by 16\% on average and up to 40\%.
  
 Gupta et al. tackle the issue of the high number of configurations possible in an HCMP by characterising workloads offline~\cite{Gupta2017Dypo}.
 Applications are executed and their performance is recorded on the different available cores, with different parameters tuned such as the core's clock frequency.
