@@ -13,10 +13,10 @@ This section explores how core composition performance depends on branch predict
     \label{fig:motivation_fetch}
 	\vspace{1em}
 \end{figure}
-Chapter~\ref{chp:cases} highlighted the importance of branch prediction accuracy when fusing a high amount of cores.
-To maximise core utilisation, a core can have multiple blocks in its instruction window.
+Chapter~\ref{chp:cases} section~\ref{sec:lim_study} highlighted the importance of branch prediction accuracy when fusing a high amount of cores.
+To maximise utilisation, a core can have multiple blocks in its instruction window.
 In this thesis, the instruction window is segmented into four lanes, each of which can hold a block of up to 32 instructions.
-If the program executing is composed mainly of small blocks (less than 32 instructions long), then if it is running on a 16 core composition, the branch prediction accuracy needs to be as high as 98\% to ensure that the cores are fetching blocks on the correct execution path (see Chapter~\ref{chp:cases}).
+If the program executing mainly has small blocks, then if it is running on a 16 core composition, the branch prediction accuracy needs to be as high as 98\% to ensure that the cores are fetching blocks on the correct execution path (see Chapter~\ref{chp:cases} section~\ref{sec:lim_study}).
 
 In Chapter~\ref{chp:cases}, \bm{MSER} had a low branch prediction accuracy of 85\%, leading to a performance improvement of only 1\% on a 2 core composition.
 To see how difference accuracies affect performance, a branch predictor that can predict at different accuracy levels is used.
@@ -32,7 +32,7 @@ As cores only submit fetch requests to other cores in the composition if they ar
 In this situation, cores in a composition may remain inactive during the execution of a program as they are not prompted to fetch blocks.
 Throughout the rest of this chapter, this fetching scheme is referred to as Serial Fetch (SF).% (see Chapter~\ref{chp:Background} for more details).
 
-To understand how the fetching scheme can affect performance, the simulator records the number of cycles each core was actively executing code.
+To understand how the fetching scheme can affect performance, the simulator records the number of cycles each core is actively executing code.
 The right hand side of figure~\ref{fig:mser_motiv} plots the average \textit{active cycles} of cores in a 1, 2, 4, 8 and 16 core composition, compared to the total execution time in cycles using SF, with different branch prediction accuracies.
 The figure shows that increasing the size of a core composition when executing \bm{MSER} will reduce the average time a core is executing a block.
 On a 16 core composition, each core is only actively executing a block 12.5\% of the time.
@@ -46,8 +46,7 @@ The figure shows that by modifying the fetching scheme a 16 core composition can
 \subsection{Data dependencies between blocks}
 
 In the EDGE architecture, physical registers are used for inter-block communication.
-For example, the code found in Listing~\ref{lst:mser_snipet} shows a loop found in the \bm{MSER} benchmark.
-The value of the variable \textit{nvisited} which is used in both the header and loop body, will be passed from one block to another via a register read and write.
+For example, in the code found in Listing~\ref{lst:mser_snipet} shows a loop found in the \bm{MSER} benchmark the value of the variable \textit{nvisited} which is used in both the header and loop body will be passed from one block to another via a register read and write.
 
 \lstset{
 	backgroundcolor=\color{lbcolor},
