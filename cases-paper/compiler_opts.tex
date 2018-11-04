@@ -1,19 +1,3 @@
-This section describes optimisations focused on reducing control flow and expanding block sizes which is necessary for high performance as seen in section~\ref{sec:lim_study}.
-
-\subsection{Loop Unrolling}
-As seen in Chapter~\ref{chp:streamit}, loop unrolling can be used to reduce the overhead of the loop header and to better expose Instruction Level Parallelism (ILP).
-When dealing with tightly-knit loops, logical cores may perform poorly due to the fact that they execute many small blocks, thus increasing the Synchronization Cost and increasing the branch prediction requirements.
-Unrolling loops both reduces the number of blocks required to execute the loop and increases the size of the blocks, thus reducing the Synchronisation Cost and increasing ILP.
-For example, the innermost loop in Listing~\ref{lst:small} should be completely unrolled and its outer loop unrolled partially to increase the block size.
-
-There are certain factors limit the usefulness of loop unrolling.
-In the evaluated EDGE architecture, blocks may not have more than 32 load or store instructions.
-This is due to the fact that the EDGE architecture restricts each block to have only up to 32 load/store instructions~\cite{putnam2010e2,smith2006edge}.
-Therefore unrolling memory intensive loops will not always drastically increase the size of a block if the block is composed mainly of load and store instructions, as the EDGE compiler will have to split blocks if they contain more than 32 load/store instructions.
-However as it will generate blocks with fixed branches it reduces the strain on branch prediction.
-Another issue is that unrolling loops with conditional statements may not help improve the size of the block as the conditional branches might still segment the new blocks.
-So these loops should not be unrolled as they will lead to an increase in code size.
-
 \lstset{
 	backgroundcolor=\color{lbcolor},
 	tabsize=2,
@@ -48,10 +32,38 @@ for(int i = 0; i < 1000; i++)
          a[i][j] = a[i][j] * b[k][j];
 \end{lstlisting}
 \end{center}
-\vspace{-1em}
+\vspace{-2em}
 \captionof{lstlisting}{Example of an inner-most loop which should be completely unrolled.}
 \label{lst:small}
 \vspace{-2em}
+\end{figure}
+
+This section describes optimisations focused on reducing control flow and expanding block sizes which is necessary for high performance as seen in section~\ref{sec:lim_study}.
+
+\subsection{Loop Unrolling}
+As seen in Chapter~\ref{chp:streamit} Section~\ref{sec:streamit:dse}, loop unrolling can be used to reduce the overhead of the loop header and to better expose Instruction Level Parallelism (ILP).
+When dealing with tightly-knit loops, compositions may perform poorly due to the fact that they execute many small blocks, increasing the Synchronization Cost and the branch prediction accuracy requirements.
+Unrolling loops reduces the number of blocks required to execute the loop and increases the size of the blocks, thus reducing the Synchronisation Cost and increasing ILP.
+For example, the innermost loop in Listing~\ref{lst:small} should be completely unrolled and its outer loop unrolled to increase the block size.
+
+There are certain factors limit the usefulness of loop unrolling.
+In the evaluated EDGE architecture, blocks may not have more than 32 load or store instructions as described in Chapter~\ref{chp:Background} section~\ref{sec:edge_isa}.
+Therefore unrolling memory intensive loops will not always drastically increase the size of a block if the block is composed mainly of load and store instructions, as the EDGE compiler will have to split blocks if they contain more than 32 load/store instructions.
+However as it will generate blocks with fixed branches it reduces the strain on branch prediction.
+Another issue is that unrolling loops with conditional statements may not help improve the size of the block as the conditional branches might still segment the new blocks.
+So these loops should not be unrolled as they will lead to an increase in code size.
+
+
+\subsection{Loop Interchange}
+When dealing with nested loops there is one reason for interchanging the loops.
+The case arises when interchanging the loop removes dependencies in the inner-most loop.
+For instance, the dependency in listing~\ref{lst:dep} can be removed by interchanging the loops. 
+This allows the compiler to unroll the inner loop efficiently, but also remove any kind of dependency between blocks.
+Even if memory dependencies can be detected using a dependence predictor~\cite{chrysos1998storesets}, it can potentially serialise memory operations when multiple iterations of a loop are live.
+Thus using loop interchange will reduce any potential data dependency and minimise core communication in a composition.
+
+
+\begin{figure}[t]
 \lstset{language=C,numbersep=4pt}
 \begin{center}
 \begin{lstlisting}
@@ -65,15 +77,6 @@ for(int i = 0; i < 1000; i++)
 \label{lst:dep}
 \vspace{1em}
 \end{figure}
-
-
-\subsection{Loop Interchange}
-When dealing with nested loops there is one reason for interchanging the loops.
-The case arises when interchanging the loop removes dependencies in the inner-most loop.
-For instance, the dependency in listing~\ref{lst:dep} can be removed by interchanging the loops. 
-This allows the compiler to unroll the inner loop efficiently, but also remove any kind of dependency between blocks.
-Even if memory dependencies can be detected using a dependence predictor~\cite{chrysos1998storesets}, it can potentially serialise memory operations when multiple iterations of a loop are live.
-Thus using loop interchange will reduce any potential data dependency and minimise core communication in a composition.
 
 \subsection{Predication and Hyperblock Formation}
 EDGE compilers must split blocks whenever control-flow is present~\cite{smith2006edge} as seen in Section~\ref{chp:bg:sec:edge} of Chapter~\ref{chp:Background}.
@@ -110,9 +113,9 @@ The source code modifications are then verified to have the intended effect by d
 On average there are between 0 and 12 loops modifications depending on the benchmark.
 
 \subsection{Results}
-First the best static core fusion using the optimised code is compared with the unmodified code, both version compiled with \texttt{-O2} which is the highest optimisation setting for the EDGE compiler.
-Figure~\ref{fig:ipccom} shows the resulting IPC for the baseline case and the optimised benchmarks when run on a core with the optimal number of fused core to maximise performance.
-The IPC of the baseline is very low for the majority of the benchmarks which might give the impression that core fusion is rather inefficient.
+First the best static core composition using the optimised code is compared with the unmodified code, both version compiled with \texttt{-O2} which is the highest optimisation setting for the EDGE compiler.
+Figure~\ref{fig:ipccom} shows the resulting IPC for the baseline case and the optimised benchmarks when run on a core with the optimal number of composed core to maximise performance.
+The IPC of the baseline is very low for the majority of the benchmarks which might give the impression that core composition is rather inefficient.
 However, after applying the simple optimisations described above, the average IPC is significantly increased in many cases.
 
 Since optimisations change the total number of instructions, the actual speedup obtained using cycle count is also shown in Figure~\ref{fig:speedcomp}.
@@ -125,5 +128,5 @@ These benchmarks benefit from other source code modifications such as forced inl
 
 \paragraph*{Summary}
 
-Overall, this section shows that classical loop transformations can have a large impact on the performance of fused cores.
+Overall, this section shows that classical loop transformations can have a large impact on the performance of composed cores.
 Without these optimisations, it would be more difficult to motivate the use of core fusion even at a static-level as the IPC does not deviate enough from a single core.
