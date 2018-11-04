@@ -66,7 +66,7 @@ Since each phase is a cluster of similar IPC values, having two or more clusters
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{cases-paper/graphics/Exploration/stddev3.pdf}
-    \caption{Comparing average, minimum and maximum IPC for each SD-VBS benchmark using logical-core size of 16.}
+    \caption{Comparing average, minimum and maximum IPC for each SD-VBS benchmark using composition size of 16.}
     \label{fig:stddev}
 		\vspace{5mm}
 \end{figure}
@@ -74,6 +74,7 @@ Since each phase is a cluster of similar IPC values, having two or more clusters
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{cases-paper/graphics/Exploration/SizeBuckets.pdf}
+	\vspace{-1em}
     \caption{Distribution of block sizes for each benchmark. The sizes are clustered in buckets equivalent to number of lanes occupied.}
     \label{fig:block_sizes}
 	\vspace{5mm}
@@ -98,11 +99,11 @@ For example, running the \bm{Disparity} benchmark on a composition of 16 cores, 
 The variation for 16 cores shows that the performance can drop down to 2.5.
 An IPC of 2.5 when using 16 cores is very inefficient as this represents 0.1 of an instruction per cycle for each core and this performance can be achieved by using smaller core compositions.
 Using a composition of size 4 for the \bm{Disparity} benchmark an average of 4.1 with a standard deviation of 1.2 is achieved.
-Thus, if the logical-core could change size, there is a possibility that this could reduce the overall energy consumption of the system by switching from 16 to 4.
+Thus, if the composition could change size, there is a possibility that this could reduce the overall energy consumption of the system by switching from 16 to 4.
 
 Figure~\ref{fig:block_sizes} shows the distribution of block-sizes for each of the benchmarks.
 As two blocks cannot occupy the same lane, which is a segment of the instruction window (see Chapter~\ref{chp:Background}), the block sizes are clustered into groups which represent how ever many number of lanes will be occupied (one lane may execute a block of up to 32 instructions).
-Using the information previously discussed in Section~\ref{sec:lim_study}, the size of blocks is a determining factor of whether or not a program may benefit from core composition.
+Using the information discussed in Section~\ref{sec:lim_study}, the size of blocks is a determining factor of whether or not a program may benefit from core composition.
 
 Figure~\ref{fig:block_sizes} helps explain why benchmarks \bm{MSER} and \bm{Multi\_NCut} do not perform any better with core-composition.
 For both cases, not only do they have a single detected phase, but both are predominantly formed of blocks that will occupy a single lane.
@@ -117,7 +118,7 @@ Hence, in this case, \bm{MSER} would be wasting a lot of energy trying to use 16
 This explains the lack of scaling for these two benchmarks.
 The source-code of \bm{MSER} and \bm{Multi\_NCut} is explored later on, to demonstrate how such small blocks are generated and why it cannot be improved.
 
-Overall, most benchmarks that benefit from large logical-cores will also be met with an important difference in IPC performance.
+Overall, most benchmarks that benefit from large composition will also be met with an important difference in IPC performance.
 The high difference in IPC performance is evidence of performance phases found in each application which are likely to benefit from dynamic adaptation.
 
 %Need a better name for this
@@ -168,12 +169,11 @@ This subsection focuses on understanding why this is the case and explores the c
 \paragraph*{MSER}
 \bm{MSER} has five IPC phases according to Figure~\ref{fig:clust}; the two dominant phases represent the computation of the extremal regions tree.
 As seen in Figure~\ref{fig:block_sizes}, the majority of the blocks in MSER are 8 instructions long, meaning that core-compositions will have to load the maximum amount of blocks (4 in this thesis) to fill each core.
-%The listing shows how this phase is made out of small tight knit loops.
 The majority of \bm{MSER} is composed of tightly knit loops.
 For example Listing~\ref{lst:mser-ex} shows two loops found in \bm{MSER's} main phase.
 The rest of the source code of this phase can be found in the Appendix with Listing~\ref{lsting:mser}.
 The while loops from the listing, alongside other while loops found in the phase (lines 36-39, 40-42 and 71-75) never run for more than a few iterations.
-Due to the fact that these loops have small bodies, the fact that they do not run for many iterations would not make them likely candidates for unrolling.
+Due to the fact that these loops have small bodies, the fact that they do not run for many iterations would not make them candidates for unrolling.
 
 \begin{figure}[t]
 \lstset{language=C,numbersep=4pt}
@@ -188,24 +188,28 @@ while( nvisited-- ) {
 }
 \end{lstlisting}
 \end{center}
+\vspace{-1em}
 \captionof{lstlisting}{Example of MSER loops (lines 27-30, 31-33).}
 \label{lst:mser-ex}\vspace{1em}
-\vspace{-2em}
+\vspace{-3em}
 \lstset{language=C,numbersep=4pt}
 \begin{center}
-\begin{lstlisting}[firstnumber=49]
- for (i = 0; i < num_edges; i++) {
-        edge *pedge = &edges[ asubsref(indices,i) ];
-		a = find(u, pedge->a);
-        b = find(u, pedge->b);
-        if (a != b) {
-            if ((pedge->w <= arrayref(threshold,a)) && (pedge->w <= arrayref(threshold,b))) {
-	            join(u, a, b);
-	            a = find(u, a);
-	            arrayref(threshold,a) = pedge->w + THRESHOLD(u->elts[a].size, c);
+\begin{lstlisting}[firstnumber=17]
+for(k=0; k<rows; k++) {
+        for(i=0; i<cols; i++) {
+            float localMax = subsref(in,k,i);
+            int localIndex = i;
+            subsref(ind,k,i) = i;
+            for(j=0; j<cols; j++) {
+                if(localMax < subsref(in,k,j)) {
+                    subsref(ind,k,i) = j;
+                    localMax = subsref(in,k,j);
+                    localIndex = j;
+                }
             }
+            subsref(in,k,localIndex) = 0;
         }
-    }
+}
 \end{lstlisting}
 \end{center}
 \vspace{-1em}
@@ -215,7 +219,7 @@ while( nvisited-- ) {
 \end{figure}
 
 It's also important to note that the average branch-prediction accuracy of \bm{MSER} is of 85\%, as shown in Table~\ref{tab:sd-vbsbpred}.
-Recalling Figure~\ref{fig:req_pred} and the fact that the average block size of \bm{MSER} is under 32 instructions, this means that no composition can be fully efficiently used.
+Recalling Figure~\ref{fig:req_pred} and the fact that the average block size of \bm{MSER} is under 32 instructions, this means that no composition can be efficiently used.
 Some speedup can still be obtained, as cores in a composition do not need to have all the instruction window full to be able to obtain performance improvements.
 However these improvements are minor, and come at a high energy cost.
 
@@ -227,10 +231,8 @@ Even with compiler optimisations, due to the fact that the loops are never execu
 \bm{Multi\_NCut} is faced with a similar situation to \bm{MSER}.
 Figure~\ref{fig:block_sizes} shows that once again, the majority of the blocks are less than 32 instructions long, in fact, over 50\% of the blocks are of 12 instructions or less.
 Table~\ref{tab:sd-vbsbpred} shows that the branch prediction is always correct, yet, with blocks this small, the synchronization cost of executing the blocks on large compositions outdoes any benefit that can be obtained via core-composition.
-Listing~\ref{lst:multi_loop} shows the main loop of \bm{Multi\_NCut}; the rest of the source code can be found in Listing~\ref{lsting:multi}.%Listing~\ref{lsting:multi} in the Apendix shows the source code of the main phase of \bm{Multi\_NCut}, the main loop found at lines 49 to 58, also found in Listing~\ref{lst:multi_loop}.
-
-Once again, this loop cannot be efficiently unrolled as the \textit{find} and \textit{join} functions are comprised of small control heavy while loops.
-Even by inlining those function calls, the while loops will cause the blocks to be small, and unrolling the while loops will generate more checks which wont help increase the size of the blocks.
+Listing~\ref{lst:multi_loop} shows the main loop of \bm{Multi\_NCut}; the rest of the source code can be found in Listing~\ref{lsting:multi}.%Listing~\ref{lsting:multi} in the Apendix shows the source code of the main phase of \bm{Multi\_NCut}, the main loop found at lines 17 to 31, also found in Listing~\ref{lst:multi_loop}.
+Once again, this loop cannot be efficiently unrolled as the if statement can only be turned into a single hyperblock once.
 For \bm{Multi\_NCut} the problem is that the blocks are too small which will cause the overhead of dispatching multiple blocks across a core-composition inefficient.
 This is why the benchmark does not perform significantly better with core-composition without a high increase in energy consumption.
 
