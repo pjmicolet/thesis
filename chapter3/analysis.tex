@@ -8,12 +8,7 @@
 \newcommand{\nfvt}{\textit{\textbf{RFVT}}}
 \vspace{-1em}
 
-%This chapter demonstrates that modifying the hardware to improve the performance of core composition requires modifying the systems.
-%The modifications discussed in the chapter are better branch prediction, adding a value predictor, and modifying the block fetching scheme.
-%Whilst a value predictor improves performance by allowing blocks to execute in parallel via speculating register values, value predictors are still considered a work in progress~\cite{peraisBeBop2015}.
-%It is important to consider how a perfect system with the new hardware additions can improve the performance of core composition, as it gives an upper bound to the potential performance increases.
-
-This section explores how a perfect branch and value predictor, paired with the new fetching scheme (RRF), improves the performance of core composition on the SD-VBS benchmarks.
+This section explores how a perfect branch and value predictor, paired with the new fetching scheme (RRF), improves the performance of core composition.
 To understand how each component contributes to the performance improvements, different configurations were used, they are as follows:
 \begin{itemize}
 \item Serial fetching scheme with no value prediction (\novp).
@@ -25,14 +20,14 @@ To understand how each component contributes to the performance improvements, di
 \item Round robin fetching scheme with value prediction (\nfvp).
 \end{itemize}
 
-All configurations use perfect branch prediction as to ensure that core composition is always on the correct execution path.
+All configurations use perfect branch prediction  to ensure that core composition is always on the correct execution path.
 All benchmarks are executed with 16 cores composed as this is the maximum number of cores that can be fused.
 No dynamic adaptation is done as Chapter~\ref{chp:cases} showed that the primary advantage of dynamic core composition is energy savings, whereas this chapter focuses on speedup.
 
 
 \subsection{Analysing the performance of the different configurations}
 Figure~\ref{fig:perf_pred} shows the speedup obtained on the SD-VBS benchmarks using the different configurations.
-The baseline for this section is normal fetching scheme (SF) with no value prediction (\novp) with perfect branch prediction.
+The baseline for this section is 16 cores composed with serial fetch (SF) no value prediction (\novp) and perfect branch prediction.
 This baseline is chosen as this chapter is focused on improving the performance of core composition.
 
 First, it is clear that using RRF with value prediction (\nfvp) always results in the best speedup compared to the baseline.
@@ -48,12 +43,11 @@ On average, \nfvp{} outperforms the baseline by a factor of 1.88x.
 \end{figure}
 
 \subsubsection{Performance without value prediction}
-The results in Figure~\ref{fig:perf_pred} show that without value prediction the performance improvements brought by RRF on its own are almost non-existant, or in fact detrimental to performance.
+The results in Figure~\ref{fig:perf_pred} show that without value prediction the performance improvements brought by RRF on its own are low, or in fact detrimental to performance.
 For example, \bm{Multi\_NCut} only has a 1.10x speedup when using the \nfnovp{} configuration, compared to the 3x of \nfvp{}.
 This is due to the fact that whilst more blocks are now spread across cores, the register dependencies between blocks limit the performance of the composition. 
 In fact, the more even distribution is the reason why some benchmarks perform worse: \bm{Disparity}, \bm{Texture\_Synthesis} and \bm{Tracking} see a slight performance decrease.
 The even distribution of blocks amongst cores increases the stress on the network on chip (NoC) as more cores will make accesses in parallel.
-This means that not only are data dependencies not resolved, but register read responses may take slightly longer to arrive as the network is saturated.
 Without value prediction, RRF suffers due to NoC stress and data dependencies.
 %In fact, \vp{} outperforms \nfnovp{} on \bm{Localization}, which shows that register dependencies between blocks can make the new fetching scheme less performant than the currently implemented.
 
@@ -64,7 +58,7 @@ Without value prediction, RRF suffers due to NoC stress and data dependencies.
 The performance improvements brought by RRF are more apparent when taking value prediction into account.
 \nfvp{} has a 54\% performance increase compared to \vp{} (1.88x vs 1.22x).
 The difference in performance comes from the fact that with value prediction, blocks can potentially execute faster, and thus a faster fetching scheme is required to keep up.
-Since the SF scheme focuses on filling a single core, it is less likely going to benefit from parallel execution.
+Since the SF scheme is slower, it is less likely going to benefit from parallel execution.
 Even so, \vp{} results in a 1.5x speedup for \bm{Localization} which shows that value prediction is valuable for composition regardless of the scheme.
 
 \begin{figure}[t]
@@ -93,10 +87,8 @@ This means that during most of the execution of an application, all cores are ex
 It is interesting to see that \nfvp{} has a lower average time than \nfnovp{} for some benchmarks such as \bm{MSER} and \bm{Texture\_Synthesis}.
 Also, whilst RRF aims to evenly distribute blocks amongst the cores, the average core utilisation for \bm{Localization} with the configurations \nfnovp{} and \nfvp{} is of 62\%.
 This reduced average time is due to flushes caused by Load-Store-Queue (LSQ) violations, which causes cores to flush their instruction windows, and thus increases the number of times that cores will not be executing code.
-
-%Yet, whilst cores may always have blocks to execute with RRF, it is important to remember that data dependencies and the NoC will impact performance.
-
-
+Figure~\ref{fig:lsqvio} shows the number of blocks that cause an LSQ violation, normalised by the number of fetched blocks for each of the benchmarks.
+Even though the percentage of violations is small, it still has an impact on how efficient the composition is, due to the fact that compositions rely on heavy speculation to obtain any performance improvements.
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{chapter3/graphics/lsqViol4.pdf}
@@ -105,10 +97,6 @@ This reduced average time is due to flushes caused by Load-Store-Queue (LSQ) vio
 	\vspace{1em}
 \end{figure}
 
-Figure~\ref{fig:lsqvio} shows the number of blocks that cause an LSQ violation, normalised by the number of fetched blocks for each of the benchmarks.
-For example 3\% of fetched blocks caused an LSQ violation in the benchmark \bm{MSER}.
-For every LSQ violation, the entire composition may need to be flushed, and given the fact that \bm{MSER} features small blocks, refilling the entire composition may take some time, even with RRF.
-Even though the percentage is quite small, it still has an impact on how efficient the composition may be, due to the fact that compositions rely on heavy speculation to obtain any performance improvements.
 %A store-set dependency predictor is implemented in the processor~\cite{chrysos1998storesets}, however it is sometimes hard to predict load-store dependencies across multiple blocks, which is why LSQ violations occur.
 %Store-set dependency predictors are not discussed in more detail in this chapter, however researching how store-set dependencies could be applied to core-composition is an interesting subject for future work.
 
@@ -150,9 +138,12 @@ Even with the extra latency, RRF still ensures that every core is full, cores mu
     \includegraphics[width=1\textwidth]{chapter3/graphics/fetch_ex.pdf}
     \caption{Two core composition where cores fetch blocks of varying size. Green blocks represent blocks that can be dispatched, whilst the red blocks cannot.}
     \label{fig:var_ex}
+    \centering
+    \includegraphics[width=1\textwidth]{chapter3/graphics/variance.pdf}
+    \caption{Standard deviation of block sizes per benchmark.}
+    \label{fig:variance}
 	\vspace{1em}
 \end{figure}
-
 \paragraph*{Block size variance}
 Another issue that can arise when fetching with a fixed stride is that if cores are fetching blocks of different sizes this may increase the fetch to dispatch latency.
 For example, in the two core composition seen in Figure~\ref{fig:var_ex} the second core fetches Block 2 that is 128 instructions.
@@ -170,13 +161,7 @@ The Figure shows that the benchmark \bm{Multi\_NCut} features a very low varianc
 %Also, the variance does not take into account that blocks of different sizes may belong to different phases.
 %Nevertheless, it is an important factor to take into consideration.
 %. Blocks are grouped up in buckets (occupy 1, 2, 3 or 4 segments).
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/variance.pdf}
-    \caption{Standard deviation of block sizes per benchmark.}
-    \label{fig:variance}
-	\vspace{1em}
-\end{figure}
+
 
 %Explain how different blcok sizes may mess up the new fetching scheme
 
