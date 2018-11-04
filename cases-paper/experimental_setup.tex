@@ -1,11 +1,9 @@
-The previous section studied the performance potential for core fusion using an analytical model.
-This section now presents the experimental setup used for the remaining parts of the chapter where a thorough evaluation of core fusion is conducted with a cycle-level simulator described in Chapter~\ref{chp:setup} Section~\ref{chp:setup:conf}.
+This section now presents the experimental setup used for the remaining parts of the chapter where a thorough evaluation of core composition is conducted with the cycle-level simulator described in Chapter~\ref{chp:setup} Section~\ref{chp:setup:conf}.
 
 \subsection{Benchmarks}
 
-For this chapter the performance of the Dynamic Multicore Processor (DMP) is studied on a set of Vision Benchmarks designed for hardware and compiler research~\cite{sdvbs}.
+For this chapter the performance of the Dynamic Multicore Processor (DMP) is studied on a set of Vision Benchmarks designed for hardware and compiler research~\cite{sdvbs} described in Chapter~\ref{chp:setup} Section~\ref{chp:setup:conf}.
 The San Diego Vision Benchmark suite (SD-VBS) is composed of nine single-threaded C benchmarks ranging from image analysis to motion tracking.
-For more information on the benchmarks, a detailed description can be found in Chapter~\ref{chp:setup} Section~\ref{chp:setup:conf}.
 
 \begin{table}[t]
   \small
@@ -56,10 +54,10 @@ The objective of the chapter is to explore how adapting the DMP to the phases of
 To evaluate dynamic adaptation, it is compared to different static ahead of time configurations.
 
 Five simulations per benchmark are ran, one for each core composition size: 1, 2, 4, 8 and 16.
-For each core composition the IPC of the core composition at an interval of 640 committed blocks is recorded.
+For each the IPC is recorded at an interval of 640 committed blocks.
 640 committed blocks is chosen as it allows each core in a core composition to execute enough blocks before taking the measurement.
 This is due to the fact that the highest core composition of 16 cores can execute up to 64 blocks at a time, thus recording performance after 640 blocks allows each core to have executed at least 10 blocks.
-Using committed blocks as an interval allows us to easily compare each simulation as the total number of committed blocks does not change even if the core compositions are different.
+Using committed blocks allows us to easily compare each simulation as the total number of committed blocks does not change even if the core compositions are different.
 
 The EDGE architecture is fundamentally different from the traditional CISC/RISC paradigm and thus, McPAT~\cite{mcpat} cannot be used to model power consumption as it differs from traditional CISC/RISC cores modeled in McPAT.
 Instead a coarse grained power model is used where power gating is applied; when a core is not currently being used, it is assumed to be turned off and therefore does not consume energy.
