@@ -49,7 +49,7 @@ When it comes to execution time, loads may take from 3 to 128 cycles depending o
 Whether it is a cache hit or miss, a block that takes longer to execute will often minimise the \textit{SynchronisationCost} penalty.
 A block composed mainly of integer or floating point operations will often result in shorter execution rates; thus may execute faster, making it harder for large logical cores to improve performance.
 
-More discussion on how the time it takes to execute a block influences the performance of core compositions is discussed in Chapter~\ref{chp3}.
+More discussion on how the time it takes to execute a block influences the performance of core compositions is discussed in Chapter~\ref{chp:hardchanges}.
 The other reason loads have the largest weight is due to the fact that loads can be fired independently to the Load-Store Queue.
 Unlike stores that depend on previous memory instructions blocks being committed, loads can be fired with less overhead.
 As data can be speculatively fetched, load instructions can receive data from other cores before the data is stored, speeding up executions.
