@@ -1,25 +1,25 @@
-This chapter has introduced the problem of partitioning both software and hardware for a Dynamic Multicore Processor.
+This chapter has introduced the problem of partitioning both software and hardware for a Dynamic Multicore Processor (DMP).
 Given the ability to execute up to 15 threads, a DMP can have up to 32767 different configurations, making exhaustive search a prohibitive task.
-Whilst certain design choices, such as restricting the space to scenarios such as only using multithreading or homogeneous core composition may appear as a solution, it may reduce performance by up to 1.5x.
+Whilst certain design choices, such as restricting the space to scenarios such as only using multithreading or homogeneous core composition appear as a solution, it reduces performance by up to 1.5x.
 Thus it is important to look at heterogeneous core-composition with multithreading to get the best performance.
 
-In order quickly find a good configuration, the chapter uses machine learning and a set of 15 StreamIt benchmarks are explored.
-Using the early-stopping criterion, it is determined that exploring 1300 different configurations of the processor is able to represent the performance space for each of the applications.
-By running each benchmark under 1300 different configurations, each benchmark was analysed to understand how much performance can be obtained through the best configuration.
-This chapter showed that, on average, finding the optimal configuration and using the appropriate loop optimisations can lead to a performance increase of 3x compared to running the program on a single core.
+In order quickly find a good configuration, machine learning is used and a set of 15 StreamIt benchmarks were explored.
+Using the early-stopping criterion, it is determined that exploring 1300 different configurations of the processor is a good represantation of the performance space for each of the applications.
+By running each benchmark under the different configurations, each benchmark was analysed to evaluate how much performance can be obtained through the best configuration.
+On average, finding the optimal configuration and using the appropriate loop optimisations can lead to a performance increase of 3x compared to running the program on a single core.
 
-Using the data gathered from the analysis, two models are created, one that predicts the number of threads via a k Nearest Neighbors model, whilst the other predicts the number of cores to fuse per thread using a linear regression.
-The two models are able to predict configurations close to the performance of the best design points from the sampled space; on average within 16\% of the best.
-This demonstrates that by analysing features of the programs, the decision of how to configure a dynamic multicore processor can be fully automated.
+Using the data from the analysis, two models were created, one that predicted the number of threads via k Nearest Neighbors, and the other predicted the number of cores to compose per thread using linear regression.
+The two models were able to predict configurations close to the performance of the best design points from the sampled space; on average within 16\% of the best.
+This demonstrated that by analysing program features, the decision of how to configure a DMP can be fully automated.
 
 %Add some more details
-To summarize, the contributions of the chapter are:
+To summarise, the contributions of the chapter are:
 \begin{itemize}
-\item An analysis of the co-design space of thread partitioning and core composition which shows how applications always perform best when the dynamic multicore processor has a heterogeneous configuration, leading to a 1.50x speedup compared to only multithreading.
+\item An analysis of the co-design space of thread partitioning and core composition which shows how applications always perform best when using a heterogeneous configuration, leading to a 1.50x speedup compared to only multithreading.
 \vspace{-0.5em}
-\item A study on the impact of loop unrolling on performance, allowing for core-composition to be better utilised by increasing block size and reduced branching, resulting in up to 3x performance increases compared to no unrolling.
+\item A study on the impact of loop unrolling on performance, allowing for core composition to be better utilised by increasing block size, resulting in up to 3x performance increases compared to no unrolling.
 \vspace{-0.5em}
-\item An analysis of which static code features in StreamIt can be used to determine a good configuration of a dynamic multicore processor.
+\item An analysis of which static code features in StreamIt can be used to determine a good configuration of a DMP.
 \vspace{-0.5em}
 \item A demonstration that the space can be learned, and thus machine learning can be used to determine the optimal core composition and thread partitioning which results in an average performance within 16\% of the best of the space.
 \end{itemize}
