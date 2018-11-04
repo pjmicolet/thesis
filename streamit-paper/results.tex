@@ -8,8 +8,7 @@ This section describes the performance achieved by the model when predicting the
 
 \subsection{Machine Learning Model Evaluation Methodology}
 
-Leave-one-out cross-validation is used for testing the linear model.
-This means that when testing the model on one application, this application is removed from the training set, the model is trained with the remaining application and finally the model is tested on the application; this process is repeated for each application.
+Leave-one-out cross-validation defined in Chapter~\ref{chp:Background} Section~\ref{sec:valid} is used for testing the linear model.
 This is standard methodology in the machine-learning community ensuring that the training data is never used for testing.
 For the kNN model, the training data consists of all the generated synthetic benchmarks and it is only tested on the real StreamIt applications as they are not used for training.
 To obtain the speedup the performance of the machine learning based result are compared to the best from the sample space to running the StreamIt benchmark on a single core, single thread, using O2 compiler optimisations. 
@@ -29,6 +28,11 @@ For ~\bench{ChannelVocoder} the model predicts only 8 threads rather than the op
 Referring back to Figure~\ref{fig:threadtrend} and Figure~\ref{fig:overviewhist} from Section~\ref{sec:streamit:dse} \bench{ChannelVocoder} always performs better when adding more threads rather than increasing the size of a core composition.
 This is the cause of the performance penalty, for ~\bench{ChannelVocoder} it is more important to allocate a higher number of threads rather than compose cores.
 Aside from this case, the machine learning model obtains similar speedups to the best sample.
+
+For other applications such as ~\bench{Beamformer} and ~\bench{FMRadio}, the model is able to get very close to the optimal performance.
+Both benchmarks obtain at least an 8x speedup when using the model.
+This is an encouraging result as it shows that static-ahead of time partitioning of a DMP is an effective way of getting a good configuration.
+In fact, the difference of configurations for ~\bench{FMRadio} between the best point from the space and the machine learning model's is only of two cores which is small.
 
 \begin{table*}[t]
 \centering
@@ -86,7 +90,5 @@ Aside from this case, the machine learning model obtains similar speedups to the
 
  \subsection{Summary}
 
-This section has demonstrated that it is possible to build a machine-learning model that achieves high level of performance using simple source code static features.
-In many applications, the model even comes very close to the best from the sampled space, showing that the features used by the model contain enough information to inform the model about the best decision.
-
-\vspace{5mm}
+This section has shown that it is possible to build a machine-learning model that achieves high level of performance using source code features.
+In many applications, the model comes very close to the best from the sampled space, showing that the features used contain enough information to inform the model about the best decision.
