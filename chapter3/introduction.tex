@@ -6,13 +6,13 @@ These source-level modifications are often used to increase the size of the bloc
 
 In situations where source or compiler optimisations cannot increase the size of a block, core composition cannot improve the performance of the application.
 To increase the viability of core composition, other solutions must therefore be explored.
-Instead of only focusing on improving the source code, analysing how a composition functions at a hardware level can help determine other potential bottlenecks in the system.
+Instead of only focusing on improving the source code, analysing how a composition functions at a hardware level can help determine other potential bottlenecks.
 
-By modifying how core composition behaves, this can improve the performance of large compositions.
+In order to improve the performance of larger core compositions, some of the mechanisms of core composition may need to be modified.%By modifying how core composition behaves, this can improve the performance of large compositions.
 For example, modifying how blocks are fetched amongst cores can potentially increase the work distribution fairness, increasing the efficiency of the composition.
-This chapter explores the hardware bottlenecks that reduce the efficiency of core composition, and how to address these concerns.
+This chapter explores the hardware bottlenecks that reduce the efficiency of core composition, and how to address these concerns by modifying the hardware.
 
-There are two features of the processor that have a large impact on performance that are explored: first the block fetching mechanism in a composition, and data dependencies resolution between blocks can be handled.
+This chapter explores two features of the processor that have a large impact on performance: first the block fetching mechanism in a composition, and data dependencies resolution between blocks can be handled.
 The current fetching model focuses on filling the instruction window of a single core before activating another core in the composition.
 Without modifications, this fetching model requires large blocks to reduce the time required to activate multiple cores in a composition.
 Thus, exploring how the fetching model can be modified to prioritise using all the cores in the composition over filling a single core can lead to better utilisation of the composition.
