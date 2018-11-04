@@ -1,29 +1,30 @@
 This chapter has investigated how the current hardware used for core composition can be modified in order to improve performance.
 Due to the fact that blocks are fetched in a serial fashion, when a large number of cores is composed this can severely reduce the amount of time that all cores are actively executing blocks.
 Therefore, finding a way of allowing cores to fetch in parallel can help increase the effectiveness of a composition.
-However, another issue arises, inter-block communication via register reads and writes can cause potential data-dependencies, which serialises the execution of blocks.
-As register files are shared between cores when they are composed, cores may have to send read requests to cores that are physically far away, increasing the latency of read instructions.
+However, another issue arises: inter-block communication via register reads and writes can cause potential data-dependencies which serialises block execution.
+As register files are distributed when cores are composed, cores may have to send read requests to cores that are physically far away, increasing the latency of read instructions.
 Finding a way to predict data can potentially alleviate data dependencies and reduce the effect of high latency reads, improving the performance of core composition.
 
 This chapter proposed a round-robin fetching mechanism, where cores do not fetch sequential blocks, but rather fetch blocks in strides.
 This enables cores to fetch independently from one another, without having to submit fetch requests to other cores.
 Using such a scheme can potentially increase the performance of large core compositions on small blocks by a factor of 2 to 3x.
-
-After covering the fetching scheme, the idea of using a block-based value predictor was covered.
+Then the idea of using a block based value predictor was covered.
 This value predictor was initially designed by Perais. et al. in ~\cite{peraisVTAGE2014, peraisBeBop2015}.
 The design choices behind the value predictor match some of the architectural features of EDGE, mainly to do predictions at the granularity of a block.
 
 To understand how these two modification can impact performance, the same set of benchmarks have been used in Chapter~\ref{chp:cases} are explored here.
 First, the performance of a perfect value predictor with the round robin fetching scheme is explored and shows that it can improve the performance of core composition by up to 3x, with an average of 1.88x.
-The analysis demonstrated that without value prediction, the new round robin fetching scheme cannot improve performance on its own, due to the higher stress on the NoC and data-dependencies not resolving quickly enough.
 This was followed by an analysis of the performance of using different configurations of the D-VTAGE value predictor with and without perfect branch prediction.
-Overall, using state-of-the art value prediction with round-robin fetching scheme leads to a performance improvement of up to 2.7x with an average of 1.3x.
+Overall, using state-of-the art value prediction with round-robin fetching scheme leads to a performance improvement of up to 2.7x with an average of 1.3x even without perfect branch prediction.
+This motivates further research in value prediction for core composition as it is an effective way of improving performance.
 To summarise, the main contributions of the chapter are:
 
 \begin{itemize}
 \item The proposal of a round robin fetching scheme where cores fetch in parallel, out of order, and dispatch in order, allowing for an average improvement of 50\% over the serial fetching scheme when considering value prediction.
-\item Demonstration that by only predicting register read instructions, the performance of compositions can be improved by up to 1.5x with serial fetching and 3x with round robin as it alleviates data dependencies between blocks and reduces the impact of the network on chip.
-\item An exploration of different configurations for a block based D-VTAGE value predictor with the new round robin fetching scheme, resulting in an average 1.33x speedup compared to the current composition mechanism, and up to a 2.7x performance increase.
+\vspace{-0.5em}
+\item Demonstration that by only predicting register read instructions, performance can be improved by up to 1.5x with serial fetching and 3x with round robin as it alleviates data dependencies between blocks and reduces the impact of the network on chip.
+\vspace{-0.5em}
+\item An exploration of different configurations for a block based D-VTAGE value predictor with the new fetching scheme, resulting in an average 1.33x speedup compared to the current system, and up to a 2.7x performance increase.
 \end{itemize}
 
 This Chapter demonstrates that there is potential for more hardware support to make dynamic multicore processors more practical.
