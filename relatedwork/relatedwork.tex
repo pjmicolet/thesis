@@ -43,12 +43,12 @@ As each core can be responsible for a single block, the total number of blocks i
 In their work~\cite{kim2007tflex} Kim et al. show that a 32 core composition can outperform a single TFlex core by 3x on a set of EEMBC benchmarks and SPEC2000 microbenchmarks.
 
 The E2 processor is another EDGE based processor that can dynamically compose its cores~\cite{putnam2010e2}.
-Unlike TFlex, when cores are fused in the E2 processor, each core is responsible for the blocks they fetch.
+Unlike TFlex, when cores are composed in the E2 processor, each core is responsible for the blocks they fetch.
 E2 introduces the concept of segmenting the instruction window into lanes, allowing cores to fetch multiple blocks.
 The processor explored throughout this thesis is based on the E2 processor.
 
 Watanabe et al. propose a different type of dynamic multicore processor, where cores share execution units ~\cite{Watanabe2010Widget}.
-The Wisconsin Decoupled Grid Execution Tiles (WidGET) architecture's design is based on a sea of resources, where a core is composed of a simple Instruction Engine (IE) that can send instructions to a set of available Execution Units (EU) that execute instructions in order.
+The Wisconsin Decoupled Grid Execution Tiles (WidGET) architecture's design is based on a sea of resources, where a core is composed of a simple Instruction Engine (IE) that can send instructions to a set of available in order Execution Units (EU).
 This allows for fine-grained reconfiguration of the cores: depending on the available ILP, an IE can increase the number of EUs it needs if there's a high amount of ILP available, or inversely reduce it.
 Watanabe et al. compare the performance of their processor to that of an Intel Atom and Intel Xeon using the SPEC2006 benchmark suite.
 They show that using in-order cores with a fine-grained reconfiguration can reduce power consumption by 21\% compared to the Xeon whilst achieving the same performance.
@@ -106,7 +106,7 @@ Using the optimisations previously defined improves the performance of hyperbloc
 
 \section{Hardware techniques for power and energy efficiency}
 
-This section covers different hardware techniques used for energy efficiency that do not use core composition or other reconfigurable system.
+%This section covers different hardware techniques used for energy efficiency that do not use core composition or other reconfigurable system.
 
 \subsection{Dynamic Voltage and Frequency Scaling}
 Dynamic Voltage and Frequency scaling (DVFS) is a method of modifying the power and energy consumption~\cite{paganiEECHM2017} by modifying the voltage or the clock rate of the processor.
@@ -122,6 +122,7 @@ Pagani et al. consider the use of VFIs in a heterogeneous system in ~\cite{pagan
 Their objective is to ensure that tasks are running on the most energy efficient core whilst satisfying the time constraints of the task.
 Once a task is partitioned and dispatched onto a core in a VFI cluster, Pagani et al. use Single Frequency Approximation (SFA)~\cite{sfaScheme} as the DVFS strategy.
 SFA determines a single voltage/frequency that satisfies timing constrains of a task.
+This technique results in an average reduction of energy consumption of 25\% and still ensures all tasks finish on time.
 
 
 Vega et al. in ~\cite{vega2013crank} underline that whilst DVFS is an effective way of reducing power and energy consumption, the fact that it is decoupled from other techniques such as per core power-gating (PCPG) reduces the overall benefits.
@@ -136,7 +137,7 @@ However Gutpa et al. show that by selecting the correct core configuration at ru
 
 %More on HAQUE
 Haque et al. show that an HCMP is able to reduce energy consumption and improve throughput for applications with high-percentile latencies~\cite{tailAMP2017}.
-They highlight that service provides receive requests of different lengths of computation.
+They highlight that service providers receive requests of different lengths of computation.
 By successfully scheduling the different lengths to the correct cores in an HCMP, they can reduce the energy consumption of short requests by a factor of 50\% compared to DVFS.
 
 Adileh et al. argue that current proposals for scheduling tasks on small or large cores are inadequate when operating on a power-constrained HCMPs in a multi-tasking environment~\cite{adileh2016power}.
@@ -178,7 +179,7 @@ Each task can access any data and has the ability to generate new tasks, also kn
 All tasks are maintained by a task-queue, and can be executed out of order.
 
 Swarm is extended by Abeydeera et al. in their speculation-ware multithreading policy SAM~\cite{Abeydeera2017SpecMulti}.
-According to Abeydeera et al. having a high number of speculative threads often leads to a large amount of aborted tasks which impacts performance
+According to Abeydeera et al. having a high number of speculative threads often leads to a large amount of aborted tasks which impacts performance.
 SAM extends Swarm by ensuring that tasks with lower timestamps are prioritised as they are most likely to commit, thus reducing the number of aborted tasks.
 This is achieved by performing issue stage prioritisation.
 They also relax conflict resolution by using a similar technique to Wait-n-GoTM~\cite{waitNGo2013}.
@@ -193,10 +194,10 @@ By allowing tasks to generate domains, Fractal is able to exploit nested paralle
 \section{Value Prediction}
 %The value predictor used in Chapter~\ref{chp:hardchanges} is the block based D-VTAGE predictor \cite{peraisBeBop2015}.
 %It is a \textit{computational} value predictor that is adapted from the VTAGE value predictor also presented by Perais et al~\cite{peraisVTAGE2014}.
-The earliest works can be retraced to Mikko et al. where they propose a \textit{Load Value Predictor} \cite{lipasti96valpred} that is able to predict the value of load instructions.
-They show that performance can be improved by up to 27\% by only predicting load values.
+The earliest work on value prediction can be retraced to Mikko et al. where they propose a \textit{Load Value Predictor} \cite{lipasti96valpred} that predicts the value of load instructions.
+They show that performance can be improved by up to 27\%.
 
-Perais et al propose the VTAGE \textit{context} value predictor ~\cite{peraisVTAGE2014}, that by adopts the same prediction scheme as the ITTAGE branch predictor~\cite{SeznecITTAGE}.
+Perais et al propose the VTAGE \textit{context} value predictor ~\cite{peraisVTAGE2014}, that adopts the same prediction scheme as the ITTAGE branch predictor~\cite{SeznecITTAGE}.
 Using global branch history, which is easier to maintain that data-flow history~\cite{peraisVTAGE2014}, VTAGE can improve performance of some SPEC applications by up to 65\%.
 
 The block based D-VTAGE predictor~\cite{peraisBeBop2015} can quickly issue multiple predictions grouping up predictions as a single block.
