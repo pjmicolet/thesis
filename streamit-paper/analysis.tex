@@ -98,8 +98,12 @@ On average, the information shown in Figure~\ref{fig:unroll_bars} and Figure~\re
   \includegraphics[width=1\textwidth]{streamit-paper/graphics/unroll_speed_bars.pdf}
    \vspace{-2em}
  \caption{Speedup obtained when executing on a single core with and without loop unrolling. Higher is better.}\label{fig:unroll_bars}
-\end{figure}
+\vspace{-0.5em}
+  \includegraphics[width=1\textwidth]{streamit-paper/graphics/unrolling_size.pdf}  \vspace{-2em}
 
+  \caption{Average size (in instructions) of blocks executed with and without unrolling for each benchmark .}\label{fig:unroll_size}  \vspace{-1em}
+
+\end{figure}
 For the benchmarks that do not scale with unrolling; this is most certainly due to the for loops containing conditional statements which may keep the blocks size small.
 When a loop that holds multiple conditional statements is unrolled, conditional statements may not be fused into a single block; thus the block size does not change.
 This is due to the fact that the compiler cannot generate multiple instruction predicates per block.
@@ -109,15 +113,6 @@ For the \bench{FFT6} benchmark, unrolling loops will actually cause the single-c
 This is due to the fact that for \bench{FFT6}, the source to source unrolling adds intermediate variables in the loop which increase the number of loads and stores.
 Whilst it may be slower on a single core, as seen in Figure~\ref{fig:unroll_bars}, having a core-composition running the thread will still result in faster execution that without loop-unrolling.
 
-\begin{figure}[t]
-  \includegraphics[width=1\textwidth]{streamit-paper/graphics/unrolling_size.pdf}  \vspace{-2em}
-
-  \caption{Average size (in instructions) of blocks executed with and without unrolling for each benchmark .}\label{fig:unroll_size}  \vspace{-1em}
-
-\end{figure}
-
-
-
 Figure~\ref{fig:unroll_size} shows the influence of loop unrolling on the average size of an EDGE block for each of the benchmarks.
 The size represents the number of instructions executed in each of the blocks.
 The data for \bench{Beamformer} and \bench{FFT6} in Figure~\ref{fig:unroll_size} corroborate the idea that larger block sizes results in better performance when composing cores.
@@ -125,7 +120,7 @@ For these benchmarks, unrolling increases the average size of the block by at le
 Benchmarks \bench{ChannelVocoder}, \bench{FilterBank} and \bench{FMRadio} also see an increase in block size yet it is not as important and averages out at a 1.22x increase.
 That said, even a small increase improves the ability of using core composition more efficiently.
 
-Overall, this section has shown that loop unrolling can improve performance by increasing the size of blocks for the benchmarks which helps improve the efficiency of core-compositions.
+Overall, this section has shown that unrolling can improve performance by increasing the size of blocks which helps improve the efficiency of core-compositions.
 
 %\begin{landscape}
 \begin{figure}[t]%\hspace{-1em}
