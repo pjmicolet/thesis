@@ -1,8 +1,8 @@
 This section studies how block size and branch prediction limit the performance of core composition.
 An analytical model is defined to estimate the performance of a core composition, shown in Equation~\ref{form:wcetMath}.
 The variables in Equation~\ref{form:wcetMath} are the average block size \textit{ABS},  the size of the composition \textit{CS} and branch prediction accuracy \textit{BPredAcc} that ranges from 0 to 1.
-The constant 2 in Equation~\ref{form:wcetMath} derives from the hardware constraint that a core can execute up to 2 instructions per cycle.
-\textit{SyncCost} represents the cost (in cycles) of having to commit blocks sequentially in a core composition, this is covered in more details later on.
+For this study, a dual issue core is used, thus the constant 2 in Equation~\ref{form:wcetMath} derives from the hardware constraint that a core can execute up to 2 instructions per cycle.
+\textit{SyncCost} represents the cost (in cycles) of having to commit blocks sequentially in a composition, this is covered in more details later on.
 This analytical model enables a better understanding of what leads to good performance and how to determine regions of code that benefit from core composition.
 The limit study explains why each component of Equation~\ref{form:wcetMath} are important to predict the performance of a core composition.
 
@@ -13,16 +13,17 @@ IPC(ASB,CS,BPredAcc) &= \bigg(\frac{ABS}{SyncCost(ABS,CS) + {\frac{ABS}{2}}}\big
 
 \subsection{Branch Prediction}
 
-As discussed in Chapter~\ref{chp:Background} Section~\ref{chp:Background:sec:EDGE}, an EDGE based DMP accelerates a single thread by executing blocks of instructions from the same thread speculatively across several fused cores. 
-In a core composition, the fetching scheme dictates that a core must fetch blocks until its instruction window is either full or cannot accommodate the newest block.
+As discussed in Chapter~\ref{chp:Background} Section~\ref{chp:Background:sec:EDGE}, an EDGE based DMP accelerates a single thread by executing blocks of instructions from the same thread speculatively across several composed cores. 
+In a composition, the fetching scheme dictates that a core must fetch blocks until its instruction window is either full or cannot accommodate the newest block.
 Once this requirement is met, the following block is sent to the next core in the composition.
 If a core mispeculates a block, this can cause the entire composition to be flushed.
 Thus core composition puts a strain on the branch predictor since efficiently using the cores depends on the prediction accuracy.
 
 Depending on the sizes of the blocks and the number of cores in the composition, the branch predictor has to meet a different accuracy requirement in order to ensure that all cores are being used efficiently.
 In this case, efficiency is defined by cores in a composition fetching blocks from the correct branch path, meaning cores in the composition are executing useful code.
-Given a core-composition of size \textit{CompSize} and average block size \textit{ABS}, the minimum branch prediction accuracy required to ensure efficient use of the composition can be determined using Formula~\ref{form:minpred} where \textit{BlocksInFlight} can be calculated using the equation~\ref{form:blocks}.
+Given a composition of size \textit{CompSize} and average block size \textit{ABS}, the minimum branch prediction accuracy required to ensure efficient use of the composition can be determined using Formula~\ref{form:minpred} where \textit{BlocksInFlight} can be calculated using the equation~\ref{form:blocks}.
 The groups in the Equation are derived from hardware limitations: the instruction window is divided into 4 lanes that can take a block of up to 32 instructions each.
+The -1 is due to the fact that when a program is executing the first block does not depend on a branch prediction, thus at any point during the execution of a program, there is a non-speculative block that does not need to predicted.
 
 \begin{equation}\label{form:blocks}
 BlocksInFlight(AverageBlockSize) = \begin{cases}
@@ -38,9 +39,6 @@ RequiredAccuracy(ABS,CompSize)= \frac{BlocksInFlight(ABS) \times CompSize- 1}{Bl
 \vspace{1em}
 \end{equation}
 
-
-Given an average size of a block being executed in a program (\textit{ABS}) and a core composition of size (\textit{CompSize}), the branch prediction accuracy required to ensure that each core in the composition is executing a block on the correct branch path can be calculated using Equation~\ref{form:minpred}.
-In Equation~\ref{form:minpred}, the -1 is due to the fact that when a program is executing the first block does not depend on a branch prediction, thus at any point during the execution of a program, there is a non-speculative block that does not need to predicted.
 
 \begin{figure}[t]
     \centering
@@ -69,14 +67,14 @@ SyncCos(ABS,CompSize) = \frac{\sum_{CoreID=0}^{CompSize-1}\left(BlocksInFlight(A
 
 Blocks commit in a sequential fashion with the non-speculative block committing first and the most recent speculative block committing last.
 If a core's instruction window is full then it must commit a block before it fetches a new one.
-The Synchronisation Cost, in cycles, is defined in equation~\ref{form:synccost} and is measured by averaging the overall number of cycles each fused core waits until it can continue to fetch and execute new blocks.
+The Synchronisation Cost, in cycles, is defined in equation~\ref{form:synccost} and is measured by averaging the overall number of cycles each core in a composition waits until it can continue to fetch and execute new blocks.
 \textit{AvBlocksInFlight} represents the average number of blocks in flight on a single core in the composition.
 This is a worst-case estimate as block sizes will fluctuate during the execution of a program.
 
 Figure~\ref{fig:sync_cost} shows how many cycles the Synchronisation Cost will be for a given core composition size and average block size.
 The larger the block size the lower the Synchronisation Cost is since cores fetch fewer blocks and wait less for other fused cores to finish committing.
-Large LCs executing small blocks have a high Synchronisation Cost. 
-This indicates that large LCs should be avoided when dealing with smaller blocks as the Synchronisation Cost outweighs the code execution.
+Large compositions executing small blocks have a high Synchronisation Cost. 
+This indicates that large compositions should be avoided when dealing with smaller blocks as the Synchronisation Cost outweighs the code execution.
 
 \begin{figure}[t]
     \centering
