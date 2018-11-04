@@ -63,7 +63,7 @@ This performance is in the highest peak of the density curve, which means that f
 However, using too many threads, such as 15 threads, leads to a degraded performance compared to the average.
 This is due to the fact that the communication overhead between threads will be too high.
 
-To explore homogeneous core composition, the optimal number of threads, which is the number of threads that leads to the fastest execution time without core-composition as a baseline is used.
+To explore homogeneous core composition, the optimal number of threads, which is the number of threads that leads to the fastest execution time without core-composition is used as a baseline.
 In this case only 2 homogeneous pairings exist: 2 cores fused for each of the 4 threads or 3 cores fused for each of the 4 threads.
 Figure~\ref{fig:threadcoremotiv} shows that homogeneous core-composition will outperform only using multithreading by 1.3x, however it is not the optimal solution.
 In the end, using a heterogeneous configuration leads to a 1.5x speedup compared to the fastest homogeneous configuration.

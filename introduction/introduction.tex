@@ -21,7 +21,7 @@ This thesis demonstrates that different techniques can help improve the ease-of-
 This section covers the different problems that are considered a limiting factor of DMPs in terms of their practicality.
 \paragraph*{Reconfiguration}
 Whilst there exists a multitude of proposed dynamic multicore processor architectures ~\cite{MittalSurv2016} work on understanding when to compose cores, or what type of programs can benefit the most out of core composition is scarce.
-A 16 core DMP for example has over 15,000 configurations when executing multi-threaded programs, making exhaustive search of the space impractical.
+A 16 core DMP for example has over 32,000 configurations when executing multi-threaded programs, making exhaustive search of the space impractical.
 Therefore, without some method of automating the reconfiguration of the processor the programmer must have intimate knowledge of both the architecture and the programs that will execute on them in order to determine a good configuration.
 
 Previous work on determining how many cores must be composed for a given program focus on using profiling information~\cite{pricopiSchedCoreComp2014} or heuristics based on observations~\cite{gulati2008multitaskingdmc}.

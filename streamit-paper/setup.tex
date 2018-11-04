@@ -1,8 +1,6 @@
-
-This section presents the design exploration of a set of streaming applications being executed on a DMP.
-The section describes how changing the thread mapping and core composition affect the benchmarks and what can be learned from this.
-In addition, the impact of loop unrolling and how it helps exploit larger fused cores is investigated.
-
+This section describes the setup used throughout this chapter to conduct the design space exploration.
+It starts by presenting the overall workflow and then explores briefly some of the features of the benchmarks.
+Finally the section explains how the number of design points used throughout the exploration were determined.
 
 \begin{figure}[t]
     \centering
@@ -32,7 +30,7 @@ This C++ program is then compiled using the compiler for EDGE described in Chapt
 Then, a second machine-learning model is deployed which also analyses static code features extracted from the SteamIt code, once again provided by the source-to-source compiler.
 This model decides on the number of cores each thread will have.
 This is achieved by estimating the amount of Instruction Level Parallelism (ILP) that can be possibly extracted in each thread and by determining how many physical cores should be fused for that thread.
-Finally, the processor is reconfigured to fuse the requested resources ahead of time and execute the partitioned program.
+Finally, the processor is reconfigured to compose the requested resources ahead of time and execute the partitioned program.
 For example in Figure~\ref{fig:examplestream}, once the graph is coloured, the machine learning model estimates the potential ILP in each group and assigns a number of cores each thread will execute on.
 
 \subsection{Design Space}

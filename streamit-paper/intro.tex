@@ -6,7 +6,7 @@ Without deep knowledge of the architecture, knowing how to configure the process
 This can be further complicated if the programming model does not provide any insights on how the program may be partitioned into threads.
 The problem of optimising multithreaded software for DMPs can therefore be split into two distinct tasks.
 First, finding a programming model that makes software partitioning into threads explicit.
-Second, using information from both the hardware and software, automate the partitioning of both the software into threads, and the hardware into logical cores.
+Second, using information from both the hardware and software, automate the partitioning of both the software into threads, and the hardware into compositions.
 
 In most parallel programming models such as OpenMP~\cite{openmp}, the user is directly responsible for mapping parallelism to the hardware; a difficult and time consuming task~\cite{prabhu2011LanguagePar}.
 This is due to the fact that these models extend programming languages that do not consider parallelism as a defining design factor~\cite{pingaliTao2011}.

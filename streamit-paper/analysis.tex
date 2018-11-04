@@ -53,17 +53,17 @@ Whilst only \bench{FilterBank} is shown here, a figure for each of the benchmark
 The width of each of the curves represents the influence of composition on the \bench{FilterBank}'s performance for a given number of threads.
 For this benchmark, the impact of having core-composition enabled often leads to a 1.5x speedup compared to running only in multi-threaded mode; this can be seen for 1 to 4 threads.
 Interestingly, as more threads are used, performance worsens, echoing the results shown in the previous section.
-This is due to the fact that when the number of threads is increased, synchonization between threads will increase whilst the potential number of cores which can be fused decreases.
+This is due to the fact that when the number of threads is increased, synchronisation between threads will increase whilst the potential number of cores which can be fused decreases.
 In the case where the application does not feature highly parallel tasks, de-prioritising core compositions can negatively impact performance.
 This signifies that for the benchmark \bench{FilterBank}, it is more important to compose cores with a small amount of threads rather than add more threads to the application.
 
 
 
 \subsection{Impact of Loop Transformation}
-As seen in Chapter~\ref{chp:Background} Section~\ref{chp:bg:sec:edge}, composing cores exploits block-level parallelism by running multiple EDGE blocks on a composition.
+Composing cores exploits instruction parallelism by running multiple EDGE blocks on a composition.
 As physical cores in a core composition must communicate to submit block address predictions, and commit information to each other, having a small number of blocks will reduce the communication overhead.
 Since physical cores can fetch more than a single block when the blocks are small, if the program being executed is comprised of mainly small blocks this will cause a composition to fetch very frequently.
-Thus finding methods to increase the average size of the blocks can lead to reduced overhead which improves the core composition's ability to exploit block-level parallelism (BLP) and instruction level parallelism (ILP).
+Thus finding methods to increase the average size of the blocks can lead to reduced overhead which improves the core composition's ability to exploit instruction level parallelism (ILP).
 One method of increasing the size of the blocks is through loop unrolling, and thus the impact of loop unrolling is studied on the benchmarks.
 
 \begin{figure}[t]
@@ -83,6 +83,7 @@ Figure~\ref{fig:fbunroll} shows that unrolling loops for \bench{FilterBank} can 
 
 \begin{figure}[t]
   \includegraphics[width=1\textwidth]{streamit-paper/graphics/unroll_speed_bars2.pdf}
+  \vspace{-1em}
   \caption{Effect of unrolling on performance via core-composition on the single-threaded versions of each benchmarks. The baseline is single core single thread.}\label{fig:unroll_summary}
   \vspace{-1em}
 \end{figure}
@@ -133,7 +134,7 @@ Overall, this section has shown that unrolling can improve performance by increa
 
 
 This section  presents the results of the entire co-design space exploration.
-Figure~\ref{fig:overviewhist} characterizes how much of a performance increase, over a baseline of a single-core single-thread with O2 optimisations, can be obtained with and without unrolling.
+Figure~\ref{fig:overviewhist} characterises how much of a performance increase, over a baseline of a single-core single-thread with O2 optimisations, can be obtained with and without unrolling.
 For each benchmark, the \textit{THREAD} bar represents the maximal speedup obtained by dividing the program into threads and assigning one core per thread.
 The \textit{CORE} bar represents the best speedup when the benchmark is executed on a single thread and fuse all cores.
 \textit{BOTH} represents the best speedup obtained for each benchmark using a combination of \textit{THREAD} and \textit{CORE}.
