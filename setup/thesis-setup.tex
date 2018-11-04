@@ -44,16 +44,18 @@ Also, previous studies on dynamic multicore processors for EDGE have explored pr
 Having 16 cores available increases the number of possible configurations of the processor which in turn allows for a more impactfull exploration of core composition.
 
 \section{Benchmarks}
+This thesis covers the different benchmark suites used throughout the thesis.
 \begin{table}[t]
+\centering
 % The FFT need are variable
-  \small
+  \smaller
  \begin{tabular} { | l | l | l | l | l | }
  \hline
   Audiobeam&   Beamformer&  Bitonic-Sort  &  BubbleSort & CFAR \\ \hline
   ChannelVocoder &  FFT& FFT3 & FFT6&  FilterBank \\ \hline
   FIR &  FMRadio &   InsertionSort &   Matmul-Block &  RadixSort\\ \hline
  \end{tabular}
-  \caption{StreamIt benchmarks.}\label{tab:streamwl}
+  \caption{StreamIt benchmarks used in this thesis.}\label{tab:streamwl}
 \end{table}
 
 \subsection{Streaming applications}\label{chp:setup:streamit}
@@ -66,7 +68,7 @@ They can be found in a multitude of devices from digital radios to HDTVs and sma
 
 \subsection{San-Diego Vision Benchmark Suite}\label{chp:setup:sdvbs}
 \begin{table}[t]
-  \small
+  \smaller
   \centering
  \begin{tabular} { | l | l | }
  \hline
