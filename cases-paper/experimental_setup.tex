@@ -35,19 +35,6 @@ For this chapter, the aim is to have a dataset that leads to executing at least 
 The execution time for each of the programs, using a single core, can be found in Table~\ref{tab:sd-data}.
 %Multi_NCut would take 10x time longer on anything else
 
-
-%\subsection{Architecture and Simulator}
-
-%A cycle-level simulator of an EDGE-based Dynamic Multicore Processor~\cite{e2} is used, whose core pipeline is verified against an RTL implementation within 5\%. 
-%This validation is done by running workloads on RTL and comparing the traces cycle-by-cycle with the software simulator.
-%The architecture and core fusion mechanics are similar to the work described in~\cite{kim2007tflex,putnam2010e2}.
-%he simulator is configured to model a 16 core multiprocessor, with 32 KB private L1 caches, and allow each core to fetch up to 4 blocks of instructions, 
-%and issue up to 2 instructions per block for a maximum of 64 blocks in flight.
-
-
-%\subsection{Compiler}
-%Each benchmark is compiled with the Microsoft C++ compiler for EDGE~\cite{e2}, with -O2 optimisations and using instruction predication for hyperblock formation~\cite{smith2006edge}.
-
 \subsection{Measuring Performance and Power}
 
 The objective of the chapter is to explore how adapting the DMP to the phases of an application can affect performance.
