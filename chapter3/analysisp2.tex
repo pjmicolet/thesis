@@ -17,17 +17,12 @@ Due to the fact that the block size is fixed ahead of time~\cite{peraisBeBop2015
 Having a block with many values means that the D-VTAGE predictor can predict a higher amount of register reads in the EDGE block, however this comes at the expense of having less blocks in the predictor tables.
 On the other hand, a small block size allows to have multiple blocks stored at a time but means that not all instructions can have their values predicted in the EDGE block.
 
-In this chapter, the value predictor only predicts register reads.
-This is due to the fact that register reads create data dependencies amongst blocks, as discussed in Section~\ref{chp3:sec:val}.
-Focusing only on register reads also reduces the the block size requirements as there is often only a few reads in an EDGE block.
 To determine the size, all the EDGE blocks of the SD-VBS benchmarks are anaylsed to determine the average register read and write count is per block.
 The writes are tracked as it provides information on the potential amount of register dependencies found in each of the applications.
-
 The left hand side of figure~\ref{fig:edge_reg_read} shows the average number of register read and writes for each of the benchmarks.
-On average, there are 5 register reads and 3 register writes per block.
 Whilst \bm{Disparity} \bm{Localization}, \bm{Texture\_Synthesis} and \bm{Tracking} have higher register read counts than the average, most of them only have 5 writes per block.
-This means that having a D-VTAGE block size of 5 could capture all dependencies; however this would require some detection of which reads are data-dependent, which is beyond the scope of this thesis.
-Since Section~\ref{chp:chp3:sec:analysis} showed these benchmarks benefit from value prediction, to ensure that most blocks have all their register reads captured, a block size of at least 8 is required.
+This means that having a D-VTAGE block size of 5 could capture all dependencies; however this would require detection of which reads are data-dependent, which is beyond the scope of this thesis.
+As Section~\ref{chp:chp3:sec:analysis} showed these benchmarks benefit from value prediction, to ensure that most blocks have all their register reads captured, a block size of at least 8 is required.
 
 \paragraph*{Block variation analysis}
 
@@ -55,7 +50,7 @@ For these applications, it might be harder to predict values as new blocks may o
 \subsection{Setup}
 
 \begin{table}[t]
-\small
+\smaller
 \centering
 \begin{tabular}{p{5.2cm} p{3cm}}
 \toprule
@@ -127,7 +122,7 @@ The block size of 16 is explored to see how capturing a higher number than the a
 \paragraph*{Prediction Delay}
 In the original D-VTAGE proposal, they suggest that the predictor can generate \textit{x} values per cycle where \textit{x} is the issue width of the core.
 This means that 4 values can be generated per cycle, as this is the issue width of a core (see Chapter~\ref{chp:setup} Section~\ref{chp:setup:conf}.
-In Section~\ref{chp:chp3:sec:analysis}, Figure~\ref{fig:av_time} showed that, when using RRF, the minimum cycles from fetch to dispatch was 10, meaning that the predictor can issue 8 to 16 predictions before dispatching any block.
+In Section~\ref{chp:chp3:sec:analysis}, Figure~\ref{fig:av_time} showed that, when using RRF, there is a minimum latency of 10 cycles from fetch to dispatch, meaning that the predictor can issue 8 to 16 predictions before dispatching any block.
 
 
 \subsection{Results}
@@ -144,7 +139,6 @@ In Section~\ref{chp:chp3:sec:analysis}, Figure~\ref{fig:av_time} showed that, wh
 
 Figure~\ref{fig:vtage_perf} reports the speedup obtained with the different configurations of the D-VTAGE predictor with RRF.
 The baseline is a 16 core composition that uses the serial fetching (SF) scheme without any value prediction and using perfect branch prediction.
-The lack of value prediction and use of serial fetching represents the current implementation of core composition.
 To better understand the performance of the predictors, each configuration is compared to the perfect predictor, which can predict every register value at any instance.
 Throughout this section, the configurations of D-VTAGE are labeled: \textbf{D-VTAGE\_\textit{Confidence}\_\textit{BlockSize}}.
 
@@ -173,7 +167,6 @@ To better understand the performance of the different D-VTAGE configurations, th
 The coverage is measured by comparing the number of correct register read values to the total number of executed register reads.
 Since EDGE is a block based architecture, it is important to study the coverage and accuracy on both a per-instruction level and per-block level.
 This is due to the fact that a single read misprediction leads to flushing the block and all younger blocks in the chain.
-Thus whilst the misprediction rate for predicted instructions may be low, it can have a large impact as up to 64 blocks may be in flight, and may all need to be flushed.
 Also a single accurate register prediction may not necessarily improve performance as other un-predicted registers in the block may be data-dependent with other blocks, reducing ILP.
 
 \begin{figure}[t]
@@ -182,15 +175,19 @@ Also a single accurate register prediction may not necessarily improve performan
     \caption{Prediction coverage at a block and instruction level. Higher is better}
     \label{fig:vtag_cov_block}
 	\vspace{1em}
+    \centering
+    \includegraphics[width=1\textwidth]{chapter3/graphics/predAcc2.pdf}
+    \caption{Accuracy of the different D-VTAGE predictors at a block and instruction level. Higher is better.}
+    \label{fig:vtag_accuracy_block}
+	\vspace{1em}
 \end{figure}
-
 In this chapter, only blocks that are committed count towards the predicted blocks as any flush will artificially inflate the coverage count.
 Figure~\ref{fig:vtag_cov_block} displays the number of blocks which have at least one prediction, relative to the total number of committed blocks and the number of predicted register reads relative to the total executed register reads.
 The figure shows similar patterns for both coverages: the predictors with lower confidence counters have a higher coverage, 65\% compared to 31\% for the high confidence counter.
 This is normal: lower confidence allowes predictions to be used with faster, which will increase coverage.
 
 Whilst the block coverage is high, the coverage for registers reveals that not all registers are being predicted.
-Once again, lower confidence equates to higher coverage, however this time it's 30\% for a confidence of 4 and under 25\% for a confidence of 7.
+Once again, lower confidence equates to higher coverage, however this time it's 30\% for a confidence of 4 and under 25\% for a confidence of 7 with FPC.
 The register coverage for a confidence of 7 is in line with the coverage reported in Perais. et al's work ~\cite{peraisBeBop2015, peraisVTAGE2014} if not slightly higher.
 The coverage may be slightly higher due to the fact that the values being predicted are often either loop increments or memory increments which can easily be predicted.
 
@@ -198,17 +195,9 @@ The register coverage helps explain why the high block coverage does not lead to
 This may be due to data being carried over which is unpredictable; for instance a loop which sums all values of an array into a single integer will pass that integer via a register.
 This register will cause a data dependency between loop iterations and will be difficult to predict.
 
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=1\textwidth]{chapter3/graphics/predAcc2.pdf}
-    \caption{Accuracy of the different D-VTAGE predictors at a block and instruction level. Higher is better.}
-    \label{fig:vtag_accuracy_block}
-	\vspace{1em}
-\end{figure}
 
 \bm{Localization}, \bm{MSER}, \bm{SVM} and \bm{Texture\_Synthesis} often have much lower coverage than the rest of the programs.
-Recalling Figure~\ref{fig:edge_reg_read} which shows the number of unique blocks executed throughout the programs, these benchmarks had a higher count of unique blocks.
-This explains why the coverage will be lower: there's a higher chance of encountering a new block than executing a known one.
+Recalling Figure~\ref{fig:edge_reg_read} which shows the number of unique blocks executed throughout the programs, these benchmarks had a higher count of unique blocks and thus a higher chance of encountering a new block.
 As blocks require multiple executions to train the predictor (if the values in the register are indeed predictable), than the higher diversity of blocks makes it harder.
 Thus, these benchmarks will naturally have a harder time to benefit from value prediction.
 
@@ -223,7 +212,7 @@ This explains why the low confidence counter sometimes performs worse than the h
 \subsection{Performance with non-perfect branch prediction}
 
 \begin{table}[t]
-  \small
+  \smaller
   \centering
  \begin{tabular} { | l | l | l | l | l | }
  \hline
@@ -233,7 +222,7 @@ This explains why the low confidence counter sometimes performs worse than the h
 	  95\%& 93\%& 98\%& 98 \%&\\ \hline
 	\end{tabular}
   \caption{Branch prediction accuracy in percentage for each of the benchmarks.}\label{tab:sd-vbsbpred2}
-  \vspace{-1em}
+  \vspace{1em}
 \end{table}
 
 \begin{figure}[t]
@@ -254,7 +243,8 @@ In this scenario, the baseline is a 16 core composition with SF and no value pre
 The figure shows an extra configuration that shows the results of the perfect value prediction with perfect branch prediction, to give perspective of how branch prediction affects performance.
 As the figure shows, the new configuration still performs well, due to the fact that most benchmarks had either high enough branch prediction accuracies, or blocks large enough to sustain 16 composed cores.
 This confirms that even without perfect branch and value prediction, performance can be improved by up to 2.8x, with an average of 1.30x.
-
+This is to be expected as branch prediction has a long history of research whilst value prediction has only recently seen a resurgence in interest.
+The results encourage more development in value prediction, as the perfect value predictors show there is still a lot of performance to be gained.
 
 
 %\subsubsection{Size of stride}
