@@ -55,7 +55,7 @@
 \subsection{Current fetching scheme}
 	
 The main issue with the SF scheme is that cores in a composition depend on each other in order to fetch blocks.
-For example, if Listing~\ref{lst:basic} is compiled without unrolling and executed on a 4 core composition, each core has to fetch 4 iterations of the loop before sending the next fetch request to another core.
+For example, if Listing~\ref{lst:basic} is compiled without unrolling and executed on a core composition, each core has to fetch 4 iterations of the loop before sending the next fetch request to another core.
 To illustrate how fetching can be a bottleneck in this situation, instrumentation is added to the simulator to track when cores fetch blocks in order to be able to visualise how long it takes to fill up a core composition.
 Figure~\ref{fig:fetch_norm} plots the when cores fetch blocks for a 4 core composition executing the code in Listing~\ref{lst:basic}.
 Each point represents a block fetch, the X-axis represents the time (in cycles) whilst the Y axis represents which core has started fetching a block.
@@ -80,14 +80,14 @@ This is followed by a more in-detail example using a two core composition.
 Finally it compares the performance of the new fetching scheme with the current fetching scheme on a synthetic benchmark.
 
 \subsubsection{Generalised form}
-The advantage of core composition is that multiple cores can execute the same thread.
+The advantage of core composition is that multiple cores can execute the same thread in parallel.
 Thus, the fact that the SF scheme prioritises filling a single core before using another core in the composition is counter-intuitive as it reduces the chance that all the cores are in use.
 The new fetching scheme has two design objectives: reduce the number of times core's depend on each other to fetch blocks and ensure that each core in the composition is always executing at least one block.
 Sequential blocks should not be found on the same core, instead they should all be on separate cores and fetched in a round robin fashion.
-This ensures a more equal distribution of work amongst all the cores in the composition, and reduces the overhead of ensuring each core has a block.
+This ensures a more equal distribution of work amongst all the cores in the composition.
 
 %Currently, if a core does not have a block in its instruction window, it waits until another core in the composition sends it a fetch request.
-If blocks are distributed equally amongst all cores using a round robin model, this new model still requires that each core must submit a fetch request to the next core.
+If blocks are distributed equally amongst all cores using a round robin model, this may still require that each core must submit a fetch request to the next core.
 This means that changing the fetching scheme to a round robin scheme does not necessarily stop cores from depending from one another to fetch blocks.
 However, once a core has a block it can use branch prediction to predict the next block it must fetch, rather than waiting for another fetch request from a core.
 As this new fetching mechanism employs a round robin scheme, the branch predictor must predict a block that is multiple steps into the future rather than the immediate branch.
@@ -190,7 +190,7 @@ In this chapter, a core can only have one buffered PC at a time.
 \paragraph*{Committing mechanism}
 Algorithm~\ref{alg:commit} shows how blocks are committed in RRF.
 When committing $block_i$, the core sets the next core in line to be the non-speculative core.
-This is due to the fact that that core will always have $block_i+1$.
+This is due to the fact that the next core will always have $block_i+1$.
 If the next core in line does not yet have $block_{i+1}$ due to no prediction having been made, then the committing core will submit the resolved PC to the next core, rather than fetching it for itself.
 If the core has a PC in its buffer, it immediately starts fetching a new block.
 However, if it has no PC in its buffer, it must wait on another core to send it a request.
@@ -209,7 +209,7 @@ However, if it has no PC in its buffer, it must wait on another core to send it 
 %Given a 2 core-fusion \{$Core_0$,$Core_1$\} using a ITTAGE~\cite{SeznecITTAGE} multi-block ahead branch predictor described by A. Seznec et al in~\cite{SeseznecMultipleBlock} the cores can make two predictions in a single cycle: one for itself and one for the next core.
 Figure~\ref{fig:new_fetch_ex} gives an overview of the first few cycles of using RRF with two cores fused.
 When $Core_0$ starts the composition and fetches the first block, $block_0$, if it is able to predict $block_2$ will submit a fetch request for $block_1$ on $Core_1$ whilst also attempting to fetch $block_2$ for itself.
-On the next cycle	e $Core_1$ receives the request for $block_1$ and starts fetching the block.
+On the next cycle $Core_1$ receives the request for $block_1$ and starts fetching the block.
 Once $Core_1$ can make a branch prediction it will attempt to predict for $block_3$ instead of $block_2$; this is because $block_2$ was already predicted and fetched on $Core_0$.
 
 %In this new fetch mechanism, when a core is in fetching mode, it does not attempt to predict $block_{n+1}$ but rather $block_{n+numberOfCoresInComposition}$; the reason behind this will be clarified shortly.
@@ -274,7 +274,7 @@ Therefore, evaluating the new fetching scheme on a synthetic benchmark can provi
 For this section the synthetic block is only four instructions long using a custom instruction whose execution time is defined ahead of the simulation.
 The reason a four instruction block was chosen is due to the fact that it allows for four blocks to be fetched on each core, which is the worst-case scenario for the SF scheme.
 Whilst the SF scheme is susceptible to small blocks, the main issue is when these blocks execute quickly, as it means that the composition cannot be filled.
-On the other hand, if a block is small yet hundreds of cycles to execute, for example due to multiple cache misses, then the SF scheme would still perform fine, as filling cores would take less time than executing blocks.
+On the other hand, if a block is small yet takes hundreds of cycles to execute, for example due to multiple cache misses, then the SF scheme would still perform fine, as filling cores would take less time than executing blocks.
 This is why the execution time of the block is variable, as it allows to cover different cases.
 For this experiment, six different execution times are explored: $Exec=\{10,20,40,80,160,320\}$.
 
