@@ -19,29 +19,30 @@ For example, given a 16 core DMP with up to 15 threads, a program can have over 
 Rather than exhaustively searching the space, which is a very time consuming task, finding a way to automate the configuration of the processor makes using DMPs more attractive.
 The number of program features that may influence how to partition programs is large, for example it could depend on the number of tasks, the parallelism made explicit by the language and/or different compiler optimisations.
 Therefore manually determining a set of heuristics to create a model that selects thread count and core compositions is not recommended as important information may potentially be disregarded.
-Instead, a machine learning model paired with correlation analysis can extract all the features that correlate the most with deciding a good partition and generate an appropriate model.
+Instead, correlation analysis is used to extract all the features that correlate the most with deciding a good partition and generate an appropriate machine learning model.
 
 This chapter analyses how static ahead-of-time reconfiguration of a DMP can improve performance of a set of streaming applications.
-These streaming applications include audio signal processing, image processing and sorting algorithms.
+In this setting, static defines a core composition that does not change during the execution of a program, whilst ahead of time means the configuration is set before execution.
+These streaming applications include audio signal and image processing and sorting algorithms.
 Streaming programs are ubiquitous in the embedded systems space~\cite{theis2002streamit} and their mix of parallelism and computation make them an interesting domain for DMPs.
 
 An analysis of the design space exploration is performed and shows the impact of modifying resources and thread mapping and is conducted using a set of StreamIt programs.
 A machine learning model is developed using the information gathered from the exploration.
 This model predicts the best number of threads for a given application and an optimal number of cores to allocate to each thread.
-
 To demonstrate the viability of the approach the results of the predictive model are compared to the best sampled thread and core composition pairing in a space of more than 32,000 design points.
 The model can match the performance of the best sampled points, with speedups of up to 9x on a 16 core processor compared to single threaded execution on a single core. 
 
 % contributions
 The main contributions of this chapter are:
+\vspace{-1em}
 \begin{itemize}
 \item An analysis of the co-design space of thread partitioning and core composition;
 \vspace{-1em}
 \item A study on the impact of a loop transformation on the optimal core composition;
+\vspace{-2em}
+\item A machine-learning model that determines the optimal core composition and thread partitioning ahead of time in order to get the optimal performance;
 \vspace{-1em}
-\item A machine-learning model to determine the optimal core composition and thread partitioning ahead of time in order to get the optimal performance;
-\vspace{-1em}
-\item An analysis of the most static code features that are considered the most important for determining a correct configuration of the system by the model.
+\item An analysis of the static code features that are considered the most important for determining a correct configuration of the system by the model.
 \end{itemize}
 
 
