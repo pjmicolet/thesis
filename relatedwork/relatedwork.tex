@@ -32,12 +32,13 @@ They show that, on average this introduces a 24\% code size increase for SPEC in
 Another important piece of information contained in this instruction is the size of a block.
 Cores in a composition fetch basic blocks in a similar fashion to the one described in Chapter~\ref{chp:Background} Section~\ref{chp:Background:sec:EDGE}.
 However, cores must execute global register renaming in the sequential order of blocks.
-To ensure sequential renaming, a Global Program Counter (GPC) is introduced, and each core in the composition must lock the GPC before fetching a block and doing the renaming; this makes Baharupi less efficient at fetching blocks than EDGE.
+To ensure sequential renaming, a Global Program Counter (GPC) is introduced, and each core in the composition must lock the GPC before fetching a block and doing the renaming.%; this makes Baharupi less efficient at fetching blocks than EDGE.
 Using a 4 core composition they report a performance improvement of 2x on SPECINT,3x on SPECFP and 4x on Mibench/Mediabench compared to a 2 issue core. 
 
 TFlex~\cite{kim2007tflex} proposed by Kim et al. is an EDGE processor that also deploys core composition.
 The mechanism is similar to the one described in Chapter~\ref{chp:Background} Section~\ref{chp:Background:sec:EDGE}.
 They motivate that EDGE simplifies distributing instructions across cores as EDGE itself is designed for distributed microarchitectures.
+Since instruction dependency orders are determined at compile time and encoded at the ISA level, the Tflex instruction fetching can be decentralised, as there is no need for centralised analysis like in a traditional ISA (such as register renaming or instruction number assignment).
 Unlike the model used throughout this thesis, a block's instructions can be distributed amongst the cores in the composition, with one of the cores being the block owner.
 As each core can be responsible for a single block, the total number of blocks in flight is equal to the number of cores in the composition.
 In their work~\cite{kim2007tflex} Kim et al. show that a 32 core composition can outperform a single TFlex core by 3x on a set of EEMBC benchmarks and SPEC2000 microbenchmarks.
@@ -45,7 +46,9 @@ In their work~\cite{kim2007tflex} Kim et al. show that a 32 core composition can
 The E2 processor is another EDGE based processor that can dynamically compose its cores~\cite{putnam2010e2}.
 Unlike TFlex, when cores are composed in the E2 processor, each core is responsible for the blocks they fetch.
 E2 introduces the concept of segmenting the instruction window into lanes, allowing cores to fetch multiple blocks.
-The processor explored throughout this thesis is based on the E2 processor.
+This allows E2 to be more adaptible to different block sizes; if the compiler can only generate small blocks, a core can have multiple blocks in its instruction window executing in parallel.
+For example, if E2 has four lanes, then if the program executing is composed only of 20 instructions, a four core composition on E2 can have up to 4 blocks $\times$ 20 instructions $\times$ 4 cores $=$ 320 instructions in flight, whilst Tflex will only have 4 blocks $\times$ 20 instructions $=$ 80 instructions in flight.
+This means E2 can potentially extract more instruction level parallelism (ILP) from each core in the composition than Tflex can at any point.
 
 Watanabe et al. propose a different type of dynamic multicore processor, where cores share execution units ~\cite{Watanabe2010Widget}.
 The Wisconsin Decoupled Grid Execution Tiles (WidGET) architecture's design is based on a sea of resources, where a core is composed of a simple Instruction Engine (IE) that can send instructions to a set of available in order Execution Units (EU).
@@ -53,7 +56,8 @@ This allows for fine-grained reconfiguration of the cores: depending on the avai
 Watanabe et al. compare the performance of their processor to that of an Intel Atom and Intel Xeon using the SPEC2006 benchmark suite.
 They show that using in-order cores with a fine-grained reconfiguration can reduce power consumption by 21\% compared to the Xeon whilst achieving the same performance.
 It is even able to outperform it by 26\% whilst still reducing power consumption by 6\%.
- 
+
+
 \subsection{Reconfigurable microarchitectures}
 
 MorphCore~\cite{khubaibMorphCore2012} focuses on reconfiguring a core for thread level parallelism.
@@ -69,6 +73,15 @@ Having all the resources on the single core allows adaptation to be quicker than
 This is similar to the work proposed by Dubach et al. in ~\cite{dubach13dynamic} where microarchitectural features can be modified for better performance or energy efficiency.
 They provide extensive analysis of SPEC 2000 benchmarks and demonstrate that machine learning and dynamic adaptation can double the energy/performance efficiency compared to a static configuration.
 
+\paragraph*{Summary}
+Whilst CoreFusion and Bahurupi use traditional ISAs, they must either support a limited version of composition where a single 8 eight word block is distributed amongst cores (CoreFusion), or add extra instructions which increases code block size by up to 24\% (Bahurupi).
+In the EDGE architecture, instructions are naturally formed into blocks, and instructions in a block do not communicate via registers, this simplifies the fetching of multiple blocks.
+Thus Tflex does not need a centralised structures for fetching instructions~\cite{kim2007tflex}, however, it does not support the ability of fetching multiple blocks on a single core.
+Instead, each core can fetch a single block and dispatch instructions on all other cores in the composition.
+If blocks are small, then the instruction window of each core will never be filled, which in turn reduces the potential performance of core composition.
+E2 addresses this problem by segmenting the instruction window into separate lanes and allowing each core to fetch multiple blocks.
+This makes it more flexible than Tflex as each core will have more instructions to execute on average, allowing each core to extract more ILP.
+Thus, the processor used in this thesis is based on the E2.
 
 \section{Automated processor reconfiguration}
 
@@ -84,19 +97,29 @@ They do not discuss what software characteristics help determine when to reconfi
 
 Gulati et al. propose an offline and online scheduling algorithms for Tflex \cite{gulati2008multitaskingdmc}. 
 This work focuses on maximising speedup for a set of workloads in a multi-tasking environment.
-The offline model uses profiling data to make decisions whereas the online model measures the current performance of a task being executed and switches the size of the composition based on a threshold.
+The offline model uses profiling data to make decisions whereas the online model measures the current performance of a task being executed and switches the size of the composition by +/- 1 based on a threshold.
 In their results they show that the offline profiling tool outperforms the online algorithm.
 As the threshold is set ahead of time, the online model is not able to fully utilise the system when applications do not meet the required threshold.
 They demonstrate that a DMP that can adapt to workloads can result in faster response times than a tradition CMP, between 21\% to 13x faster.
 
-%In~\cite{santos2013nocdmc} they use information provided by the application to determine how to reconfigure some components of the processor.
-%This initial information then assists the rest of the reconfiguration, this process still requires input from the programmer.
+\paragraph*{Summary}
+The main contributions in automatic reconfiguration rely on profiling information to make a decision.
+This means that new applications will need to be executed multiple times in order to generate a profile which is then used by the DMP to know how to reconfigure itself.
+This procedure which can be costly if the number of ways the processor can be reconfigured is high (for example when a programmer must choose between multithreading and core composition).
+Whilst Gulati et al. propose a runtime solution~\cite{gulati2008multitaskingdmc}, this does not \textit{directly} infer a correct composition, instead it changes the composition size by +/- 1 at each reconfiguration interval.
+They admit that this system is less efficient than profiling.
+
+These contributions lack the ability of determining a how to configure the DMP without the use of profiling information.
+If a model that can predict how the DMP should be configured to maximise either speedup or energy efficiency without requiring multiple executions of the program, then this would make using DMPs easier.
+This is why this thesis examines how machine learning can be used to reconfigure the DMP.
+Machine learning can be used to generate models that \textit{learn} from how programs are affected by core composition to determine the correct configuration of the DMP for any new program.
+Through this method, the procedure of finding a good configuration can be reduced to a single analysis of the application at hand.
 
 \section{Code optimisation for EDGE}
 
 Whilst there exists no literature on code optimisations geared towards improving the performance of core compositions, some previous work exists on studying how block sizes affect the performance of the EDGE architecture.
-Smith et al. highlight the importance of block size in their work on an EDGE compiler ~\cite{smith2006edge} stating that larger blocks will lead to better performance.
-They suggest the use of instruction predication~\cite{smith2006dataflowpred} that allows multiple EDGE blocks to be fused into a single block, also known as a hyperblock.
+Smith et al. highlight the importance of block size in their work~\cite{smith2006edge}, stating that larger blocks will lead to better performance.
+They suggest the use of instruction predication~\cite{smith2006dataflowpred} that allows EDGE blocks to be fused into a single block, called hyperblock.
 
 Since EDGE instructions pass their results directly to an instruction's input operands, some optimisations are required to ensure that predicates are efficiently broadcasted to all depending instructions.
 The optimisations are predicate fanout reduction, path-sensitive predicate removal and instruction merging~\cite{smith2006dataflowpred}.
@@ -106,7 +129,8 @@ Using the optimisations previously defined improves the performance of hyperbloc
 
 \section{Hardware techniques for power and energy efficiency}
 
-%This section covers different hardware techniques used for energy efficiency that do not use core composition or other reconfigurable system.
+Chapter~\ref{chp:cases} focusses on changing the size of a core composition at runtime to the energy consumption of single threaded applications whilst still maintaining the same execution times as the fastest static core compositions.
+This section covers the different techniques for reducing energy consumption using hardware techniques.
 
 \subsection{Dynamic Voltage and Frequency Scaling}
 Dynamic Voltage and Frequency scaling (DVFS) is a method of modifying the power and energy consumption~\cite{paganiEECHM2017} by modifying the voltage or the clock rate of the processor.
@@ -151,6 +175,10 @@ Then, for different optimisation goals they found the Pareto-optimal configurati
 This information is then used to build a classifier that can determine the correct core configuration for a given snippet of an application.
 Using this classifier Gupta et al. are able to improve performance per watt of a set of single and multithreaded benchmarks by 93\%, 81\% and 6\% compared to an interactive, on demand and powersave governor respectively.
 
+\paragraph*{Summary}
+These different techniques show that either dynamically changing some parameters of the hardware (DVFS) or moving where a program is executing (thread migration) is an effective way of reducing energy consumption.
+However, all these techniques rely on fixed configurations of the processor, such as an HCMP where the core configurations are determined at design time. 
+
 \section{Speculative Execution}
 Core composition is able to improve performance of applications by executing many instructions speculatively from the same thread.
 This section covers work on speculative parallelism, where performance improvements are obtained by speculatively executing multiple tasks in parallel, rather than through deep branch prediction.
@@ -191,9 +219,17 @@ Fractal introduces the concept of grouping tasks into hierarchies of nested \tex
 Tasks in a domain can either execute in order or out of order relative to their timestamps and appear to execute as a single atomic unit to other domains.
 By allowing tasks to generate domains, Fractal is able to exploit nested parallelism without complicating the software, and can lead to a performance increase of up to 88x compared to Swarm on some graph algorithms.
 
+\paragraph*{Summary}
+This section has shown how an alternative form of speculation can be used to improve the performance of applications.
+This is supported both at the hardware and software level.
+As seen throughout the section, speculative parallelism requires both hardware and software support to function (SWARM).
+This is more involved than supporting core composition on an EDGE processor, where the ISA naturally lends itself to deep single-threaded execution speculation.
+
+
 \section{Value Prediction}
-%The value predictor used in Chapter~\ref{chp:hardchanges} is the block based D-VTAGE predictor \cite{peraisBeBop2015}.
-%It is a \textit{computational} value predictor that is adapted from the VTAGE value predictor also presented by Perais et al~\cite{peraisVTAGE2014}.
+Value prediction is a technique used to speculatively resolve data dependencies between instructions and is used in Chapter~\ref{chp:hardchanges}.
+This section covers the different proposed techniques, including the one used in that chapter. 
+
 The earliest work on value prediction can be retraced to Mikko et al. where they propose a \textit{Load Value Predictor} \cite{lipasti96valpred} that predicts the value of load instructions.
 They show that performance can be improved by up to 27\%.
 
@@ -216,6 +252,11 @@ If the address is not contained in the cache, then a data prefetch is issued.
 Their new approach to value prediction generates a 4.8\% speedup on a set of SPEC, EEMBC and Octane applications.
 This is almost 2x more than the VTAGE predictor used in the paper (2.1\%).
 
+\paragraph*{Summary}
+Most of the predictors described in this section focus on value prediction for load instructions.
+Whilst loads are most often going to be the cause of data-dependencies, the EDGE architecture's reliance on registers for intra-block communication is also a prime suspect.
+Overall, the D-VTAGE predictor is the most adequate solution for this thesis, as will be explained in greater detail in Chapter~\ref{chp:hardchanges} Section~\ref{chp3:sec:val}.
+
 \section{Data Prefetching}
 Whilst value prediction is used to mask data dependencies or long latencies caused by cache misses by predicting values, data prefetching attempts to make data available in L1 caches before it is needed.
 This can be achieved both in software by inserting instructions that trigger a data fetch-request ahead of time, or in hardware by analysing memory access patterns.
@@ -231,11 +272,19 @@ Once the loads have been detected, the prefetches are scheduled based on a formu
 The formula takes into account the number of loads found in the prefetch sequence for the loop, the position of the real load, and a constant that is based on architectural features such as memory-latencies and the possible IPC.
 Using their compiler pass they are able to improve the average performance of memory intensive benchmarks by 1.1x to 2.7x on different processors.
 
+\paragraph*{Summary}
+Data prefetching can help alleviate the effect of data-dependencies by ensuring that the instructions fire quicker.
+Unlike value predictors, data prefetching is a technique that is actually implemented in both compilers and real commercial processors~\cite{intelmanual}.
+Yet it does not allow for instructions to execute with speculative data, which, as will be seen in Chapter~\ref{chp:hardchanges} increases ILP in large core compositions.
+
 \section{Dataflow Programming Languages}
+
+Chapter~\ref{chp:streamit} explores how a DMP can be used to improve the performance of applications written in a dataflow programming language.
+This section describes a set of data flow programming languages and what hardware they target.
 
 StreamIt~\cite{theis2002streamit} is one of the first programming languages directed towards streaming applications.
 As previously described in Chapter~\ref{chp:Background} Section~\ref{sec:bg:stream}, StreamIt defines a set of constructs to build scalable parallel streaming applications.
-StreamIt was originally intended for the RAW ~\cite{waingold1997raw} tile-based architecture, but can be used in other settings as well.
+StreamIt was originally intended for the RAW~\cite{waingold1997raw} tile-based architecture, but can be used in other settings as well.
 
 Brook~\cite{buck2004brook} is another streaming programming language geared towards Graphical Processing Units (GPUs).
 Unlike StreamIt, Brook extends the C language by providing a new datatype and function types.
@@ -245,7 +294,7 @@ To operate on streams in parallel, Brook defines a subset of stream functions ca
 These functions do not have access to global values, cannot call functions that aren't kernel functions as well, and are only allowed to access streams in a read-only \textit{OR} write-only way.
 This is to facilitate the compiler generation of dataflow graphs for the program.
 
-WaveScript on the other hand is developed for embedded systems~\cite{newton2008wavescript}.
+WaveScript on the other hand is developed for embedded systems that are low powered \cite{newton2008wavescript}.
 Unlike StreamIt, WaveScript uses an asynchronous streaming model, where the input and output rates of functions are not known at compile time.
 %Programs are not defined as graphs, instead 
 
@@ -253,23 +302,38 @@ Bosboom et al. demonstrate how a streaming language can be directly embedded int
 They present StreamJIT which inherits StreamIt's programming structure, however the language is embedded inside of Java.
 This allows the new StreamJIT language to benefit from the front-end compiler optimisations developed for Java; a method they call \textit{commensal} compilation.
 
-\section{Partitioning streaming programs on multicore chip}
+\paragraph*{Summary}
+Brook and WaveScript are both domain specific languages for architectures not explored in this thesis (low powered embedded systems and GPUs).
+As the StreamIt programming language was designed to be used for tiled-based architectures which closely resemble the processor used in this thesis.
+As StreamIt is used to construct scalable parallel streaming applications it makes it a perfect candidate for exploring how to partition multi-threaded applications on a DMP, as seen in chapter~\ref{chp:streamit}.
+Since the current system used does not have a Java Virtual Machine (JVM) it cannot support the commensal compilation technique described by Bosboom et al.
 
-Previous work on scheduling streaming applications onto DMPs or heterogenous multicore chips focuses on finding mathematical ways of partitioning the graph onto the chip ~\cite{carpenter2009streammap,kudlur2008orchestratingstreamprog}.  
+
+\section{Partitioning streaming programs on multicore chip}
+Chapter~\ref{chp:streamit} explores how partitioning streaming applications on a DMP improves performance.
+This involves determining which number of threads leads to the best execution time, and how many cores each thread needs.
+This section covers work on partitioning streaming applications. 
+
+Previous work on scheduling streaming applications focuses on finding mathematical ways of partitioning the graph onto the chip ~\cite{carpenter2009streammap,kudlur2008orchestratingstreamprog}.  
 In Carpenter et al.'s work~\cite{carpenter2009streammap} they restrain themselves to partitioning a StreamIt application maintaining connectedness.
 Connectedness can be defined as a subgraph where the filters are connected. 
 This restriction reduces the number of potential partitions that can be generated by their algorithm and will put TLP in favour of ILP. 
 
 Kudlur et al. in~\cite{kudlur2008orchestratingstreamprog} choose to represent the partitioning problem as an integer linear programming problem.
 They start by fissionioning stateless filters to obtain the optimal load balance across all cores and assign the filters to a core using a modulo scheduler.
-
 Farhad et al. also use integer linear programming in~\cite{farhad2012streamilp} to schedule StreamIt programs on multicore.
 They profile the communication costs of the streaming programs by running the program using different multicore allocations and feed that information into their integer linear programming model.
 
 Using a machine learning model to partition StreamIt programs was previously explored in the work of Wang et al. in ~\cite{wang2013partitionstreamit}.
-They use a k nearest neighbor model to determine the perfect partitioning of a StreamIt program for a multicore system. 
+They use a k nearest neighbor (kNN) model to determine the perfect partitioning of a StreamIt program for a multicore system. 
 Their model is used to find ways of fusing and fissioning filters to discover a new graph that can then be mapped onto a multicore system.
 
+\paragraph*{Summary}
+Whilst this previous work focusses on determining a partition of streaming applications through mathematical models or integer linear programming, Wang et al. in ~\cite{wang2013partitionstreamit} show that machine learning can be used.
+However, none of these proposals explore DMPs, instead focussing on processors with fixed designs.
+This means that whilst some techniques such as kNN can be used to automate the partitioning decision, there still lacks any exploration of how the thread/core composition design space affects the performance of streaming applications.
+This thesis therefore conducts that exploration to generate a new model for partitioning streaming applications on DMPs.
+ 
 
 \section{Machine-learning guided performance optimisations}
 
@@ -287,3 +351,36 @@ Cummins et al. developed a deep learning model that takes source-code and is abl
 Their deep learning model ingests source-code and through a set of transformations, and through training the model, it is able to also generate optimisation heuristics.
 They train their deep learning model for two scenarios: GPU thread-coarsening and CPU/GPU task partitioning.
 Compared to state of the art hand-crafted heuristics, the deep learning model is able to outperform both scenarios by 12\% and 14\% respectively.
+
+\section{Summary}
+This chapter covered the related work relevant to the research conducted throughout this thesis.
+The section underlined that EDGE based processors benefit from the fact that instruction dependencies are determined by the compiler and encoded in the ISA, meaning that fetching does not require a centralised unit for register renaming or instruction numbering.
+This makes EDGE a more attractive architecture to use for core composition as it lends itself better to the technique~\cite{kim2007tflex}.
+The fact that E2 has a segmented instruction window means that when the program executing features small blocks, it can have more blocks in flight than a TFlex processor given the same number of cores composed, thus allowing for more ILP to be exploited.
+This makes E2 the more attractive processor to explore, and it is used as a base in this thesis.
+
+Then the different techniques for automatically configuring a DMP were explained.
+Overall, they rely on profiling applications in order to make decisions.
+This means that programs will need to be executed multiple times in order to create a profile which is then used to configure the processor later on.
+This can be an expensive procedure if the number of configurations is large.
+This thesis tackles this issue by presenting models that use machine learning to determine the correct configuration of the DMP without requiring multiple executions of the program; making DMPs more practical to use.
+
+This was followed by exploring different hardware techniques used to reduce the energy consumption of applications.
+Techniques to determine when to migrate threads to different cores and when to use DVFS were described and whilst they are effective ways of increasing energy efficiency, they rely on the processor cores to be designed ahead of time, and often sacrifice some speed to reduce energy consumption.
+This thesis will show how a DMP can be dynamically reconfigured to reduce energy consumption whilst obtaining the best execution time of a static composition.
+
+Another method of speculative execution was then described: hardware and software techniques that exploit thread-level speculation.
+These techniques are described to show the breadth of performance optimisations via speculative execution.
+Whilst thread level speculation can improve the perfromance of some applications, they require considerable architectural modifications and software-level support.
+
+Value prediction and data-prefetching then shown to be two methods of reducing the impact of data-dependencies between instructions.
+Even though data-prefetching is successfully applied in commercial products, it does not allow instructions to execute with speculative data.
+As value prediction allows multiple instructions to execute with speculative data, this is a more promising approach for increasing ILP in large core compositions, as will be explained in Chapter~\ref{chp:hardchanges}.
+
+Then, dataflow programming languages, and the different methods used to partition applications written in these languages on multicore processors was explained.
+The StreamIt programming language is explored in Chapter~\ref{chp:streamit} as it was designed for architectures similar to the one used in this thesis.
+The work of Wang et al.~\cite{wang2013partitionstreamit} motivated the use of machine learning for streaming applications however it focussed on homogeneous multicore processors.
+This thesis pushes this work further by providing a model that can determine both thread count and nubmer of cores composed.
+
+Finally, two examples of how machine learning has been used for performance optimisations were described.
+This is to demonstrate that machine learning is becoming a promising method for this domain.
