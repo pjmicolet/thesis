@@ -325,6 +325,10 @@ br loop2
 \savestack{\listingB}{\box0}
 
 \section{Value Prediction}~\label{sec:valpred}
+
+This section covers the principles of value prediction, which is used in Chapter~\ref{chp:hardchanges} to resolve data-dependencies at runtime.
+The different types of predictors are described, and then, the value predictor used in the chapter is explained in detail.
+
 %This will go in the background most likely
 In superscalar processors, instructions can be executed out of order (OoO) to improve ILP.
 However, some instructions may depend on results from previous instructions, or the memory system, such as an L1 cache response.
@@ -385,7 +389,7 @@ This allows \textit{Computational} to potentially reduce the size of the predict
 \subsection{The Differential Value Tagged Geometric length Predictor}~\label{chp:bck:vtage}
 
 This section covers a specific implementation of a value predictor that is used in Chapter~\ref{chp:hardchanges}.
-The Differential Value Tagged Geometric length Predictor (D-VTAGE)~\cite{peraisBeBop2015} is a Computational value predictor that operates on blocks of instructions to minimize network pressure and increase the prediction output per cycle.
+The Differential Value Tagged Geometric length Predictor (D-VTAGE) \cite{peraisBeBop2015} is a Computational value predictor that operates on blocks of instructions to minimize network pressure and increase the prediction output per cycle.
 To simplify the explanation of the predictor, the size of the block is set to 1 instruction.
 D-VTAGE is organised in two parts, a Last Value Table (LVT) that contains the last committed values for a given set of instructions, and a set of value tables (VT) which contain the strides.
 The left hand side of Figure~\ref{fig:stride_over} shows an overview of the predictor with N stride tables.
@@ -440,6 +444,8 @@ If there is a live prediction, then the value from the speculative window is use
 % General purpose programming languages often propose very little support for programs that handle with a continuous flow of data.
 % This results in having to design a set of complicated for loops to manage the streams of data.
 % Having to deal with different rates of incoming and outcoming data also increases the complexity of writing these applications using a standard language.
+This section covers streaming programming languages, one of which is used in Chapter~\ref{chp:streamit}.
+The features of the language used in that chapter are also described here.
 
 Streaming programming languages are a branch of dataflow programming that focus on applications that deal with a constant stream of data.
 These applications, such as audio or video decoding can be commonly found in mobile devices.
@@ -477,14 +483,14 @@ Finally a Feedback Loop (Figure~\ref{fig:streamittypes}(b)) provides a way for f
 The resulting program written in StreamIt represents a graph where the nodes are filters and their edges represent the incoming and outgoing data streams.
 
 \section{Machine-learning techniques and evaluation}~\label{sec:ml}
-This section covers the different machine learning techniques and evaluation model used throughout the thesis.
+This section covers the different machine learning techniques and evaluation methodology used throughout the thesis.
 The three techniques discussed are: linear regression, k-Means Clustering and k-Nearest Neighbours, whilst the evaluation technique is "leave-one out" cross validation.
 
 \subsection{Linear Regression}~\label{sec:lr}
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=0.45\textwidth]{background/graphics/lin_reg_ex.pdf}
+    \includegraphics[width=0.40\textwidth]{background/graphics/lin_reg_ex.pdf}
 	\vspace{-1em}
     \caption{Example of linear regression. The inputs are represented by the circles, and the generated linear regression is represented by the red line.}
     \label{fig:linregex}
@@ -499,7 +505,6 @@ Linear Regression assumes a linear relationship between a set of inputs and the 
 \begin{equation}
 y = \beta_0 + \beta_1X_1 + \beta_2X_2 + ... + \beta_nX_n
 \end{equation}
-
 where y is the predicted output, $X_{1..n}$ are the inputs and $\beta_{0.n}$ are weighted regression coefficients.
 When training a linear regression, it generates the $\beta$ weights as to minimise the square-error between the training inputs and predicted outputs.
 Once a model has been generated from input data, it can be implemented as a set of sums in hardware, making it an efficient way of making predictions.
@@ -507,10 +512,10 @@ Figure~\ref{fig:linregex} shows an example of a linear regression on a small dat
 The linear regression takes the form of $y=4.77 + 0.88 \times x$ and is represented by the red line.
 
 \subsection{k-Means Clustering}~\label{sec:kMeans}
-
+\vspace{-1em}
 \begin{figure}[t]
     \centering
-    \includegraphics[width=0.45\textwidth]{background/graphics/smallest_clust_example.pdf}
+    \includegraphics[width=0.5\textwidth]{background/graphics/smallest_clust_example.pdf}
 	\vspace{-1em}
     \caption{Small example of k-Means clustering with two clusters. The squares represent datapoints whilst the circles represent the centroids of the clusters.}
     \label{fig:kmeanex}
@@ -518,7 +523,7 @@ The linear regression takes the form of $y=4.77 + 0.88 \times x$ and is represen
 \end{figure}
 
 k-Means is a clustering technique that groups \textit{n} observations into \textit{k} clusters such that $k < n$.
-The original algorithm presented by Lloyd in ~\cite{kMeans} first randomly places \textit{k} centroids \textit{c} at random locations in the space.
+The original algorithm presented by Lloyd in~\cite{kMeans} first randomly places \textit{k} centroids \textit{c} at random locations in the space.
 Then, each point \textit{$x_{i}$} in the space of \textit{n} observations is assigned to a cluster who's centroid \textit{$c_{j}$} is closest to it.
 Once each point has been assigned to a cluster, each centroid is recomputed by re-centering itself around the datapoints in the cluster.
 This is repeated until the centroids no longer move.
@@ -549,6 +554,9 @@ This procedure is repeated for every point in the dataset, and the results of th
 This validation model works well when the number of testing and training data is small.
 
 \section{Early Stopping Criterion}~\label{sec:esc}
+This section covers the Early Stopping Criterion used in Chapter~\ref{chp:streamit}, where a design space of 32,000 different configurations of the processor can be explored.
+Since this space is too large to fully cover, as will be explained in Chapter~\ref{chp:streamit} Section~\ref{chp:stream:sec:setup}, only a sub-sample of the space is used.
+The early stopping criterion is therefore used to determine when the number of points explored in the sub-sample space is representative of the total space.
 
 When exhaustive search of an optimisation space is not feasible, a subset of the space is explored.
 The early stopping criterion (ESC)~\cite{vuduc2003AutomaticPerf} provides a method of determining when new points added in the subspace no longer provide new information, and thus the currently evaluated subspace is representative of the total space.
