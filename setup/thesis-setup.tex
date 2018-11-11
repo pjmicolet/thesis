@@ -33,18 +33,17 @@ L2 cache size & 2MB \\
 \section{Dynamic Multicore Processor Simulator}\label{chp:setup:conf}
 
 To evaluate the work a customizable cycle-level simulator for the EDGE architecture is used.
-The simulator is verified against RTL implementation of an EDGE core and is within 5\% from that implementation.
+The simulator is verified against RTL implementation of an EDGE core~\cite{putnam2010e2} and is within 5\% from that implementation.
 This validation is done by running workloads on RTL and comparing the traces cycle-by-cycle with the software simulator.
 
 To maintain a homogeneous view of the system, the same core configuration was used throughout the thesis.
 The features of the core can be found in table~\ref{tab:processor}, and the processor is composed of 16 cores connected via a mesh network, with the L2 Cache being the shared last level cache.
 The number of lanes represents how many blocks a single core can hold in its instruction window at a time, and is chosen to be 4 similar to the original work on the E2 EDGE processor~\cite{putnam2010e2}.
-Whilst no current processor on the market features 16 cores, it is not outside the realm of possibility, as state-of-the art flagship system on chips (SoCs) already feature up to 8 cores.
-Also, previous studies on dynamic multicore processors for EDGE have explored processors with up to 32 cores~\cite{kim2007tflex, gulati2008multitaskingdmc}.
 Having 16 cores available increases the number of possible configurations of the processor which in turn allows for a more impactfull exploration of core composition.
+Whilst previous studies on dynamic multicore processors for EDGE have explored processors with up to 32 cores~\cite{kim2007tflex, gulati2008multitaskingdmc}, in Kim et al.'s work, they determine that 16 cores composed leads to the best average performance.
 
 \section{Benchmarks}
-This thesis covers the different benchmark suites used throughout the thesis.
+This section covers the different benchmark suites used throughout the thesis.
 \begin{table}[t]
 \centering
 % The FFT need are variable
@@ -91,7 +90,7 @@ The programs typically have regular and simple control flow which enables the fo
 The processor relies on the ability to form large blocks to exploit block level parallelism (BLP) which makes these applications particularly well suited.
 As the results will show, the phase length has minimal impact on energy savings when the reconfiguration overhead is low.
 
-The 9 benchmarks are described here:
+All the benchmarks in the suite are described here:
 \begin{itemize}
 \item \textbf{Disparity} Computes depth information for a given pair of images.
 \vspace{-1em}
