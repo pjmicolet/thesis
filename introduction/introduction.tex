@@ -9,29 +9,31 @@ This improves hardware scalability and enables multi-threaded applications to ex
 Yet, workloads that require high single threaded performance are penalized by the simple nature of each core~\cite{eyerman2010amdahl}.
 One solution to this problem is heterogeneous multicores which utilize cores with different levels of power and performance.
 Although heterogeneous multicores are common place in mobile devices, they have little reconfiguration or adaptive capabilities (\eg only two type of cores available for ARM big.LITTLE).
-Dynamic multicore processors (DMPs) offer a solution to this problem by allowing cores to compose (or fuse) together~\cite{ipek2007CoreFusion} into larger logical cores to accelerate single threads.
+Dynamic multicore processors (DMPs) offer a solution to this problem by allowing cores to compose (or fuse) together~\cite{ipek2007CoreFusion} into larger compositions to accelerate single threads.
 This produces ``on-demand'' heterogeneity where cores are grouped to adapt to the workload's demand.
 
-Whilst the flexibility of a DMP is an advantage, it does increase the complexity of obtaining the optimal performance out of applications.
-If the processor cannot automatically reconfigure itself, then it is up to the programmer to determine how it must be partitioned, adding extra development work.
+Whilst the flexibility of a DMP is an advantage, it increases the complexity of obtaining the optimal performance out of applications.
+If it cannot automatically determine when to reconfigure itself, then it is up to the programmer to decide how it must be partitioned, adding extra development work.
 In order to motivate further development of DMPs, it is important to demonstrate that they can be practical.
-This thesis demonstrates that different techniques can help improve the ease-of-use and performance of DMPs, making them an attractive approach towards processor design. 
+This thesis demonstrates that different techniques can improve the usability and performance of DMPs, making them an attractive approach towards processor design. 
 
 \section{The Problem}
 This section covers the different problems that are considered a limiting factor of DMPs in terms of their practicality.
 \paragraph*{Reconfiguration}
-Whilst there exists a multitude of proposed dynamic multicore processor architectures ~\cite{MittalSurv2016} work on understanding when to compose cores, or what type of programs can benefit the most out of core composition is scarce.
+Whilst there exists a multitude of proposed dynamic multicore processor architectures as seen in Mittal's survey~\cite{MittalSurv2016}; work on understanding when to compose cores, or what type of programs can benefit the most out of core composition is scarce.
 A 16 core DMP for example has over 32,000 configurations when executing multi-threaded programs, making exhaustive search of the space impractical.
 Therefore, without some method of automating the reconfiguration of the processor the programmer must have intimate knowledge of both the architecture and the programs that will execute on them in order to determine a good configuration.
 
 Previous work on determining how many cores must be composed for a given program focus on using profiling information~\cite{pricopiSchedCoreComp2014} or heuristics based on observations~\cite{gulati2008multitaskingdmc}.
 They consider core composition to be a \textit{black box}: instead of trying to understand what features of a program lead to good performance, they evaluate it on different core composition sizes and determine the best one.
+The best configuration can be the one that leads to the fastest execution time, or the most efficient one based on a specific metric such as energy/power efficiency.
 This approach makes DMPs less practical as it increases the amount of work required to ensure that workloads benefit from core composition.
 
-If a correct configuration of the processor could automatically be determined without requiring multiple executions of the program at hand, then this would make the process of getting the best performance lightweight.
+If a configuration of the processor that fits the user's requirements could automatically be determined without requiring multiple executions of the program at hand, then this would make the process of getting the best performance lightweight.
 This would allow programmers to modify their programs without having to extensively re-profile their applications, making dynamic multicore processors more approachable.
+There are two possible methods of achieving this: either by having the hardware reconfigure itself automatically by analysing the executing program, or by having the compiler determine the configuration via an analysis of the program.
 
-\paragraph*{Benefiting from core composition}
+\paragraph*{Maximising performance through software optimisations}
 Not all applications benefit from executing on a core composition, reducing the attractiveness of implementing the feature in a processor.
 The lack of performance may be due to the fact that the programs are not designed to be executed on a system that supports core composition.
 Programmers may have to re-write their code to ensure that a program that currently does not perform any better could not be re-written to benefit from the new hardware.
@@ -44,7 +46,8 @@ By underlining which optimisations will lead to performance improvements, this e
 \paragraph*{Core composition mechanisms} 
 Finally, as the concept of dynamic multicore processors is still relatively new compared to other processor designs, the currently proposed techniques may not be enough to maximise performance.
 For example, core composition exploits instruction level parallelism by executing a single thread through the use of aggressive speculation.
-Yet, the architectures proposed in research do not discuss how data-dependencies, that often occur when many instructions are executing in parallel, can be resolved quickly.
+Yet, the proposed architectures do not discuss how data-dependencies, that often occur when many instructions are executing in parallel, can be resolved quickly.
+As DMPs improve performance by extracting more instruction level parallelism out of a single thread, unresolved data-dependencies will reduce the potential performance improvements.
 This means that dynamic multicore processors will not improve performance to the fullest of their capacities.
 
 It is therefore crucial to critically analyse where the current bottlenecks of core composition are from a hardware perspective.
@@ -55,22 +58,28 @@ Modifications to the hardware can even help dynamic multicore processors become 
 \section{Contributions}
 This thesis tackles the three problems that were previously described through the use of different techniques.
 
-In order to provide a more general solution towards automating the reconfiguration of a DMP, both at runtime and ahead of time, a set of machine learning models that are able to automatically make configuration decisions based on features of the software are proposed.
-This thesis presents a design methodology for generating these models that use either program features extracted at the source level or features that can be extracted at runtime, to determine when and how to configure the cores.
+\paragraph*{Reconfiguration}
+First, this thesis looks at the problem of how to automatically reconfigure the processor using techniques that learn from previous executions of programs.
+A set of machine learning models that are able to automatically make configuration decisions based on features of the software are proposed.
+This thesis presents a design methodology for generating these models that use either program features extracted at the source code level or features that can be extracted at runtime, to determine when and how to configure the cores.
 These models are not influenced by hand-picked heuristics, but instead are generated by exploring how different configurations affect performance, and analysing how different programs' features affect the performance and feeding this information to a machine learning model.
-By using machine learning, the processor can automatically be reconfigured ahead of time to improve the performance of multithreaded applications, or at runtime to reduce energy consumption.
+By using machine learning, the processor can automatically be reconfigured ahead of time to improve the performance of multithreaded applications, speeding up execution by 2.5x on average compared to a single core and up to 10x in the best case.
+The thesis demonstrates that the processor can also be reconfigured at runtime to reduce energy consumption by 37\% on average whilst maintaining the speedup of the best static configuration.
 
+\paragraph*{Maximising performance through software optimisations}
 This thesis also provides an analysis of how different features of the source-code affect the speedup obtained via core composition.
 This is achieved by exploring a set of source-level optimisations and studying how this influences the performance of core composition.
 The analysis provides insights on when core composition should be used, and how programs may be modified to increase the potential speedup.
 It also motivates that the code modifications can be relatively  fast to implement; demonstrating that even without a compiler, code can be tuned to benefit from DMPs.
 
+\paragraph*{Core composition mechanisms} 
 Finally, the thesis covers some of the current short-comings of core composition from a hardware perspective.
 The two main features of the hardware that are analysed are how instructions are fetched when cores are composed and how data-dependencies affect the performance of large core compositions.
 This thesis underlines that a simple, serial fetching scheme for instructions can be a considerable bottleneck when attempting to populate large core compositions.
 It also demonstrates that whilst core composition attempts to improve performance by exploiting instruction level parallelism, data-dependencies limit this.
 By providing a new fetching scheme that parallelises instruction fetches, and a value predictor which can speculate the results of instructions, this thesis shows that the the performance of core composition can be improved.
-
+The thesis shows that in an ideal scenario, the performance (speedup) of core composition can be improved by 1.87x, and up to 3x in the best case; whereas using a state of the art value predictor leads to an average performance increase of 1.33x.
+This motivates futher research into value prediction.
 
 \section{Structure}
 The overall aim of this thesis is to provide methods of making DMPs more practical, from automated reconfiguration to new hardware that improves the performance of the DMP.
