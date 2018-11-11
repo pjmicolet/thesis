@@ -1,5 +1,5 @@
 The previous chapter explored how static ahead-of-time configuration of a dynamic multicore processor (DMP) can improve the performance of multi-threaded streaming applications and showed how a mix of core and thread partitioning leads to optimal performance.
-Static ahead-of-time configurations can improve the overall performance of programs, however it cannot adapt itself to exploit the different phases a program may have.
+Static ahead-of-time configurations can improve the overall performance of programs, however they cannot adapt themselves to exploit the different phases a program may have.
 A program phase can be used to describe multiple concepts, for example regions of code that exhibit different Instruction per cycle (IPC) performances, or variations of instruction mixes.
 When programs exhibit different phases of IPC, this can result in situations where composing multiple cores may be an inefficient solution, thus wasting resources.
 This chapter therefore focuses on how a DMP can reconfigure itself at runtime to better match phases of a set of single-threaded applications.

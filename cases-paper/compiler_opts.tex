@@ -42,7 +42,7 @@ This section describes optimisations focused on reducing control flow and expand
 
 \subsection{Loop Unrolling}
 As seen in Chapter~\ref{chp:streamit} Section~\ref{sec:streamit:dse}, loop unrolling can be used to reduce the overhead of the loop header and to better expose Instruction Level Parallelism (ILP).
-When dealing with tightly-knit loops, compositions may perform poorly due to the fact that they execute many small blocks, increasing the Synchronization Cost and the branch prediction accuracy requirements.
+When dealing with tightly-knit loops, compositions may perform poorly due to the fact that they execute many small blocks, increasing the Synchronisation Cost and the branch prediction accuracy requirements.
 Unrolling loops reduces the number of blocks required to execute the loop and increases the size of the blocks, thus reducing the Synchronisation Cost and increasing ILP.
 For example, the innermost loop in Listing~\ref{lst:small} should be completely unrolled and its outer loop unrolled to increase the block size.
 
@@ -82,7 +82,7 @@ for(int i = 0; i < 1000; i++)
 EDGE compilers must split blocks whenever control-flow is present~\cite{smith2006edge} as seen in Section~\ref{chp:bg:sec:edge} of Chapter~\ref{chp:Background}.
 If a loop contains a conditional statement, the loop body has to be split in two unless if-conversion is applied.
 Hyperblock formation aims to reduce branching and increase block size by combining two or more blocks into a single predicated block~\cite{smith2006edge}.
-Hyperblocks reduce both synchronization cost and branch prediction requirements as discussed previously.
+Hyperblocks reduce both synchronisation cost and branch prediction requirements as discussed previously.
 This is especially important in control-flow intensive loops where unrolling increases the number of conditional statements.
 Hyperblock formation can be done automatically~\cite{smith2006edge} via a compiler flag provided by the EDGE compiler.
 However, as of the writing of this thesis, a block can only support a single predication, thus hyperblock formation cannot be paired with loop unrolling for example.

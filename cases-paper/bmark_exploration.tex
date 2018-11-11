@@ -18,7 +18,7 @@ The IPC is calculated for each time tick, which is set at interval of 640 blocks
 To re-iterate, the interval of 640 blocks was chosen as the largest core composition of size 16 can potentially commit up to 64 blocks at a time.
 Thus measuring performance every 640 blocks allows to fully capture the performance of large compositions without sacrificing loss of information.
 
-Displaying the performance of the core composition of size 16 gives a performance ceiling for all the benchmarks as it is the maximum number of cores which can be fused at any point.
+Displaying the performance of the core composition of size 16 gives a performance ceiling for all the benchmarks as it is the maximum number of cores which can be composed at any point.
 Figure~\ref{fig:sxt} shows that the IPC varies a lot for some of the benchmarks such as \bm{Disparity} or \bm{Localization} where dynamic composition is expected to be especially good.
 For other, such as \bm{Multi\_NCut}, the execution is dominated by a single long phase with constant IPC, which will clearly show no benefit from using dynamic composition.
 
@@ -30,7 +30,7 @@ These basic block vectors are then analysed using a clustering technique to dete
 In this chapter the objective is to reconfigure the DMP to match the different IPC phases of a program.
 Due to the fact that the application are already being traced for their IPC, SimPoint does not have to be applied here.
 For every application the IPC results of 16,8,4,2,1 fused cores are regrouped by tick and kMeans clustering~\cite{kanungoKMeans02} is applied to detect how many IPC values can be clustered into similar groups.
-kMeans clustering is also used in SimPoint and more details on how it works can be found in Chapter~\ref{chp:Background}.
+kMeans clustering is also used in SimPoint and more details on how it works can be found in Chapter~\ref{chp:Background} Section~\ref{sec:ml}.
 Intervals that exhibit similar IPC values when run on different core counts are classified in the same cluster.
 
 \begin{figure}[t]

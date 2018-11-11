@@ -1,4 +1,4 @@
-This section discusses dynamic core composition schemes that were created by generating traces the ahead-of-time static compositions.
+This section discusses a dynamic core composition scheme that is created by generating traces the ahead-of-time static compositions.
 The section first describe how the traces are generated for the dynamic core composition schemes.
 Before the analysis two types of static core composition are defined:
 
@@ -14,7 +14,7 @@ This is better than using a single core as a baseline, as a single core will alw
 \textbf{Static Benchmark} on the other hand represents the ability to compose cores statically ahead of time; which is an extra step of flexibility compared to \textbf{Static Suite}.
 
 The static core-composition scheme \textit{SS} is compared to the results obtained for the dynamic one for the SD-VBS benchmarks.
-This is followed by a closer analysis for two dynamic core composition objectives: one that optimises speed and another that optimises for efficiency.
+This is followed by a closer analysis of the dynamic core composition objectives: optimising speed whilst reducing energy consumption.
 
 \begin{figure}[t]
     \centering
@@ -174,7 +174,7 @@ This data shows that even if the reconfiguration overhead is 1,000 cycles, avera
 
 \paragraph*{Summary}
 
-Overall, dynamic core composition will always lead to higher speedup or lower energy consumption than a fixed configuration.
+Overall, dynamic core composition will always lead to higher speedup with lower energy consumption than a fixed configuration.
 This is due to the presence of phases in applications that the dynamic scheme can exploit to reduce wasting energy in low ILP phases.
 This section has shown that maximising speed can be highly energy inefficient when using a static composition and that a dynamic scheme can help reduce energy consumption by 42\% on average.
 
