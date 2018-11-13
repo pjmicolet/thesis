@@ -25,7 +25,7 @@ The thread model used k Nearest Neighbor to classify a program based on its stru
 The core composition model uses linear regression to determine how large a composition must be by analysing the average size of an unconditional block of operations found in the thread.
 Using leave one out cross-validation, automated model leads to DMP configurations that are within 16\% of the best from the total exploration space.
 
-This proved that a machine learning model can be used to determine good configurations ahead of time by only analysing static features of an application.
+This proved that a machine learning model can be used instead of hand-crafted heuristics to determine good configurations ahead of time by only analysing static features of an application.
 This means that if obtaining the fastest execution time is important, this thesis showed that this can be achieved automatically for DMPs without having to search the exhaustive space.
 
 \subsection{Dynamic runtime adaptation for efficient execution}
@@ -42,12 +42,12 @@ Finally, a simple linear regression was used to determine when to switch the siz
 The model analysed the instruction mix of the blocks being executed to determine if the current composition was adequate.
 Using this automated adaptation scheme led to an average energy saving of 36\% which was close to the best possible results.
 
-This chapter underlined that a DMP can dynamically be reconfigured to reduce energy consumption at runtime without the need of profiling information for each application.
+This chapter underlined that a DMP can dynamically and automatically be reconfigured to reduce energy consumption at runtime without the need of profiling information for each application.
 This allows programmers to be able to immediately benefit from the DMP's flexibility without having to concern themselves with the added work of profiling their programs.
 
 
 \subsection{Adapting hardware to improve core composition performance}
-Chapter~\ref{chp:hardchanges} proposed two modifications to the DMP in order to improve performance of core composition.
+Chapter~\ref{chp:hardchanges} proposed two hardware modifications to the DMP in order to improve performance of core composition.
 The two modifications aim to reduce data-dependencies between cores in a composition and also increase the percentage of time each core in a large composition was active.
 First, it analysed how the current fetching mechanism was not adequate for large core compositions when blocks are small.
 As the current fetching mechanism focuses on filling the instruction window of a single core, many cores in the composition are left idle.
@@ -70,7 +70,7 @@ It also demonstrates that more research must be conducted on how core compositio
 \subsection{Simulation}
 
 The experiments done in this thesis use a cycle-accurate simulator for the EDGE architecture.
-This is due to the fact that there exists no processor that uses the EDGE architecture and also has core composition.
+This is due to the lack of any existing processor that uses the EDGE architecture and also has core composition.
 In fact, there exist no physical processor that implement core composition, thus simulation is the only current method of evaluating it.
 This is also an issue for value prediction, as no processor manufacturer has yet to implement one.
 
@@ -80,11 +80,11 @@ A Register-transfer level (RTL) implementation of the EDGE processor that featur
 
 \subsection{Processor configuration}
 The design exploration and results produced in this thesis all used the same core configuration.
-Naturally, this means that some of the deductions are specific to the processor that was used during the experiments.
+Naturally, this means that some of the observations are specific to the processor that was used during the experiments.
 The thesis does provide a solid methodology for creating models that can predict a good configuration for any dynamic multicore processors but it cannot provide absolute truths.
 For example, if cores can only fetch a single block at any given time, then composing cores would most likely improve performance at a faster rate, since the performance of a single core would be lower.
 This means that the analysis of what loop optimisations make software run faster on compositions is potentially tied to the configuration of the cores.
-Thus, whilst the results presented throughout this thesis demonstrate that DMPs can be made more practical, it does not provide information on when core composition should be considered a feature of the processor.
+Thus, whilst the results presented throughout this thesis demonstrate that DMPs can be made more practical, it does not provide insights on when core composition should be a feature of a processor.
 
 \subsection{Compiler}
 In chapters ~\ref{chp:streamit}, \ref{chp:cases} one of the factors that limits performance in core composition is block size.
@@ -103,7 +103,7 @@ If this is not the case and one of the statements is taken most of the time then
 Source level transformations were shown to help improve the performance of core composition, however they do not encompass all possible optimisations that can be applied to the code.
 Exploring different compiler level optimisations could potentially help make core compositions even more effective.
 For example, loops that feature a high amount of control flow currently cannot be unrolled as that still generates small blocks, as discussed in chapters ~\ref{chp:streamit} and ~\ref{chp:cases}.
-However, employing optimisation techniques such as modulo scheduling can potentially help improve instruction level parallelism for such loops.
+Employing optimisation techniques such as modulo scheduling can potentially help improve instruction level parallelism for such loops.
 As for hyperblock formation, using execution traces to determine which blocks should be merged together can help increase the usefulness of hyperblocks.
 
 On the hardware side, it is important to evaluate when core composition should be implemented in a processor.

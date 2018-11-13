@@ -15,12 +15,12 @@ The design choices behind the value predictor match some of the architectural fe
 To understand how these two modification can impact performance, the same set of benchmarks have been used in Chapter~\ref{chp:cases} are explored here.
 First, the performance of a perfect value predictor with the round robin fetching scheme is explored and shows that it can improve the performance of core composition by up to 3x, with an average of 1.88x.
 This was followed by an analysis of the performance of using different configurations of the D-VTAGE value predictor with and without perfect branch prediction.
-Overall, using state-of-the art value prediction with round-robin fetching scheme leads to a performance improvement of up to 2.7x with an average of 1.3x even without perfect branch prediction.
+Overall, using state-of-the art value prediction with round-robin fetching scheme leads to a performance improvement of up to 2.7x with an average of 1.3x even without perfect branch prediction compared to serial fetch without value prediction.
 This motivates further research in value prediction for core composition as it is an effective way of improving performance.
-To summarise, the main contributions of the chapter are:
+To summarise, the contributions of the chapter are:
 
 \begin{itemize}
-\item The proposal of a round robin fetching scheme where cores fetch in parallel, out of order, and dispatch in order, allowing for an average improvement of 50\% over the serial fetching scheme when considering value prediction.
+\item The proposal of a round robin fetching scheme where cores fetch in parallel, out of order, and dispatch in order, allowing for an average improvement of 50\% over compared to serial fetching scheme with value prediction.
 \vspace{-0.5em}
 \item Demonstration that by only predicting register read instructions, performance can be improved by up to 1.5x with serial fetching and 3x with round robin as it alleviates data dependencies between blocks and reduces the impact of the network on chip.
 \vspace{-0.5em}
