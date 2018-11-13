@@ -15,11 +15,15 @@ This demonstrated that by analysing program features, the decision of how to con
 %Add some more details
 To summarise, the contributions of the chapter are:
 \begin{itemize}
+\item Proof that dynamic multicore processors can be made practical by automating the configuration decision by using machine learning.
+\vspace{-0.5em}
 \item An analysis of the co-design space of thread partitioning and core composition which shows how applications always perform best when using a heterogeneous configuration, leading to a 1.50x speedup compared to only multithreading.
 \vspace{-0.5em}
 \item A study on the impact of loop unrolling on performance, allowing for core composition to be better utilised by increasing block size, resulting in up to 3x performance increases compared to no unrolling.
 \vspace{-0.5em}
 \item An analysis of which static code features in StreamIt can be used to determine a good configuration of a DMP.
 \vspace{-0.5em}
-\item A demonstration that the space can be learned, and thus machine learning can be used to determine the optimal core composition and thread partitioning which results in an average performance within 16\% of the best of the space.
+\item A demonstration that the process of determining a thread/core composition configuration that leads to good performance can be fully automated without profiling or hand-crafted heuristics.
+\vspace{-0.5em}
+\item Showing that machine learning can be applied to determine a good configuration and that the design space can be learned. The machine learning model is able to choose a configuration that results in an average performance within 16\% of the best of the space.
 \end{itemize}

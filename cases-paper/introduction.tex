@@ -2,9 +2,10 @@ The previous chapter explored how static ahead-of-time configuration of a dynami
 Static ahead-of-time configurations can improve the overall performance of programs, however they cannot adapt themselves to exploit the different phases a program may have.
 A program phase can be used to describe multiple concepts, for example regions of code that exhibit different Instruction per cycle (IPC) performances, or variations of instruction mixes.
 When programs exhibit different phases of IPC, this can result in situations where composing multiple cores may be an inefficient solution, thus wasting resources.
-This chapter therefore focuses on how a DMP can reconfigure itself at runtime to better match phases of a set of single-threaded applications.
+Chapter~\ref{chp:streamit} explored multi-threaded applications yet core composition is designed to improve the performance of single threaded applications~\cite{chp:ipek2007CoreFusion} as it has become harded to improve performance for these types of applications.
+Therefore this chapter focuses on how a DMP can reconfigure itself at runtime to exploit phases of a set of single-threaded applications.
 
-Core composition is a technique that allows multiple cores to work on a single thread, allowing a DMP to improve the performance of single threaded applications.
+%Core composition is a technique that allows multiple cores to work on a single thread, allowing a DMP to improve the performance of single threaded applications.
 As previously discussed the reconfiguration can happen ahead of time, especially when programs do not have a high variation in IPC.
 However, programs can benefit from different adaptations of the hardware at different phases of its execution.
 Some programs may have phases that feature high IPC whilst other phases do not perform any better on a set of composed cores.
@@ -13,17 +14,17 @@ Therefore, for programs that feature many phases, runtime reconfiguration is nec
 Whilst optimising for speed is an important method of evaluating a DMP, the ability to reconfigure the processor allows the hardware to adapt to different performance profiles.
 For example, a DMP can reconfigure itself at runtime to maximise energy efficiency, instead of only focussing on speed.
 Yet, whilst being able to adapt to different profiles is an attractive feature, determining when to reconfigure the processor is a challenging task for programmers.
-It is also difficult for compilers to determine when to compose cores without profiling information as core composition is sensitive to branch prediction and memory dependencies that may only be determined at runtime.% relying on programmers to determine when to reconfigure the processor is a challenging task.
+It is also difficult for compilers to determine when to compose cores without profiling information as core composition is sensitive to branch prediction and memory dependencies that may only be determined at runtime.% relying on programmers to determine when to reconfigure the processor is a challenging task. 
 Automating the decision of when to compose cores allows the programmer to solely focus on the software rather than decide when to modify the hardware.
 
 The previous chapter used streaming applications to explore how partitioning a DMP can improve performance.
 Through partitioning, the different computation phases of the streaming programs are essentially divided amongst those threads.
-This chapter therefore will explore a set of single-threaded C applications, where phases cannot be isolated into different threads.
-A domain that features different phases of computations and is also prominent in the embedded space is image and vision recognition~\cite{sd-vbs}.
-Since these applications are often designed as software pipelines, they naturally present different phases throughout their execution, and thus present an interesting case for dynamic adaptation of a DMP.
+This chapter explores a set of single-threaded C applications, where phases cannot be isolated into different threads.
+A domain that features different phases of computations and is also prominent in the embedded space is image and vision recognition.
+Since these applications are often designed as software pipelines, they present different phases throughout their execution, and thus are an interesting case for dynamic adaptation of a DMP.
 
 The chapter starts with an explanation of the theoretical limitations of core composition and what can be expected in terms of performance.
-Then the next section discusses the necessity of fine grained loop optimisations as they have a large impact on performance when fusing cores.
+Then the next section discusses the necessity of fine grained loop optimisations as they have a large impact on performance when composing cores.
 Using the San Diego Vision Benchmark Suite~\cite{sdvbs} (SD-VBS) as a use case, the chapter demonstrates that programs exhibit various phases with different amounts of IPC.
 This is followed by a limit study on the potential for decreasing energy consumption while maintaining performance when adapting the number of cores for each program phase.
 The results show that using dynamic core composition can save up to 42\% on average while maintaining the same level of performance as a fixed number of cores.
@@ -32,7 +33,7 @@ Finally, a linear regression model that predicts the optimal number of cores per
 This practical model leads to an average of 37\% saving in energy with no performance loss.
 
 To summarise, the contributions are:
-
+\vspace{-1em}
 \begin{itemize}
 \item Analysis of the limits of core composition using an analytical model.
 \vspace{-1em}
