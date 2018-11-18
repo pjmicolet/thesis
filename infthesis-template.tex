@@ -128,17 +128,18 @@ A model is then built using linear regression which analyses the feautres of bas
 
 Finally the hardware mechanisms that drive core composition are explored.
 A new fetching mechanism for core composition is proposed, where cores fetch code in a round robin fashion.
-The use of value prediction in the context of core composition is also motivated, as it large core compositions are more susceptible to data-dependencies.
+The use of value prediction in the context of core composition is also motivated, as large core compositions are more susceptible to data-dependencies.
 Using a perfect value predictor with perfect branch prediction and the new fetching scheme the performance of a large core composition can be improved by a factor of up to 3x, and 1.88x on average.
-On the other hand using state of the art value prediction with a normal branch predictor leads to an average performance improvement of up to 2.7x, and 1.30x on average.
+On the other hand using state of the art value prediction with a normal branch predictor leads to an average performance improvement of up to 2.7x, and 1.33x on average.
 }
 
 \layman{
 As computers become more and more powerful, the main component that drives this performance --- the central processing unit --- is becoming harder to improve on due to a multitude of reasons.
 In order to compensate for the fact processor designers cannot increase the performance of a a single processor core; the common philosophy has been to pack multiple copies of smaller cores into a single package.
-Whilst this approach has been successful to a certain degree, some applications cannot benefit from spreading their computation on multiple processor cores but instead would benefit more from larger cores.
-To compensate for this, hardware designers proposed heterogeneous processors where different types of cores are on the same package.
+Whilst this approach has been successful to a certain degree, some applications cannot benefit from spreading their computation on multiple processor cores but instead perform best on larger cores.
+To compensate for this, hardware designers propose heterogeneous processors where different types of cores are on the same package.
 However, this still requires that the design of the processor be determined before it is built.
+This reduces the flexibility of the system and thus may potentially limit performance on some applications.
 Therefore, a new processor model was created, one where the cores can be grouped together at any time in order to form larger cores: these processors are called Dynamic Multicore Processors (DMPs).
 DMPs can adapt themselves to the needs of the program at hand which helps improve the performance of the program.
 
