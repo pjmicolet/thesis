@@ -27,7 +27,7 @@ Leave-one cross validation described in subsection~\ref{sec:valid} is used in Ch
 Chip Multicore Processors (CMPs) are now ubiquitous due to the difficulty in scaling single core performance.
 In a CMP, multiple processor cores are packaged on a single die as seen in Figure~\ref{fig:i7}.
 The most commonly adopted CMP design features homogeneous cores as it reduces the design complexity from a hardware perspective~\cite{asanovic2006landscape}.
-In a CMP the performance improvement come from running multiple tasks in parallel.
+In a CMP the performance improvements come from running multiple tasks in parallel.
 These tasks can either be different programs or multiple threads from a single program executing on multiple cores.
 
 The performance benefits of executing a program on a CMP can be estimated using Amdahl's Law~\cite{amdahl1967validity}.
@@ -152,11 +152,11 @@ These restrictions are:
 If a block does not meet these requirements, it is broken down into smaller blocks.
 
 Unlike traditional ISAs such as x86 or ARM, instructions in a block do not communicate via registers, but rather the output targets of instructions are encoded to instruction inputs~\cite{smith2006edge}.
-Loads and stores in each EDGE block are assigned unique identifiers which are used resolve load-store dependencies.
-Thus, the EDGE architecture encode dependencies between instructions at the ISA level.
-Registers are only used for inter-communication between blocks.
+Loads and stores in each EDGE block are assigned unique identifiers which are used to resolve load-store dependencies.
+Thus, the EDGE architecture encodes dependencies between instructions at the ISA level.
+Registers are also only used for inter-communication between blocks.
 
-An EDGE block also contains a header that will inform the hardware about the number of stores and register writes contained in the block.
+An EDGE block contains a header that will inform the hardware about the number of stores and register writes contained in the block.
 This information is used to detect data-dependencies between blocks if multiple blocks are executed in parallel.
 For example, if two blocks write to the same register, then the register-file can detect which one must fire the write first based on the header information. 
 
@@ -324,8 +324,8 @@ br loop2
 }
 \savestack{\listingB}{\box0}
 
+\vspace{-0.5em}
 \section{Value Prediction}~\label{sec:valpred}
-
 This section covers the principles of value prediction, which is used in Chapter~\ref{chp:hardchanges} to resolve data-dependencies at runtime.
 The different types of predictors are described, and then, the value predictor used in the chapter is explained in detail.
 
@@ -515,7 +515,7 @@ The linear regression takes the form of $y=4.77 + 0.88 \times x$ and is represen
 \vspace{-1em}
 \begin{figure}[t]
     \centering
-    \includegraphics[width=0.5\textwidth]{background/graphics/smallest_clust_example.pdf}
+    \includegraphics[width=0.4\textwidth]{background/graphics/smallest_clust_example.pdf}
 	\vspace{-1em}
     \caption{Small example of k-Means clustering with two clusters. The squares represent datapoints whilst the circles represent the centroids of the clusters.}
     \label{fig:kmeanex}
@@ -530,12 +530,11 @@ This is repeated until the centroids no longer move.
  
 Figure~\ref{fig:kmeanex} provides a visual example of a running k-Means on a toy dataset, with k set to two.
 Each colour in the graph represents a cluster, the squares represent the n observations, whilst the circles represent the centroids.
-
+\vspace{-1em}
 \subsection{k Nearest Neighbours}~\label{sec:kNN}
-
 \begin{figure}[t]
     \centering
-    \includegraphics[width=1\textwidth]{background/graphics/knn1.pdf}
+    \includegraphics[width=0.8\textwidth]{background/graphics/knn1.pdf}
     \caption{Small example of k Nearest Neighbours classification on a toy dataset with two clusters and k = 4. The squares represent datapoints of the trained kNN dataset. The figure shows a new point (circle) being classified.}
     \label{fig:knn}
 \end{figure}
@@ -545,21 +544,19 @@ The average is often obtained by a weighted sum of the features of the k neighbo
 Figure~\ref{fig:knn} shows an example of a kNN classification on a new point.
 The squares represent the trained kNN dataset, the colours represent the different classifications.
 When a new point is added (as seen on the right hand graph), the four closest neighbours are found, and it is classified under the same category.
-
+\vspace{-0.5em}
 \subsection{Leave One Out Cross Validation}~\label{sec:valid}
 The process of leave one out cross validation involves using the training dataset as the evaluation dataset.
 Given a set of $n$ points in the training set, a new model is trained using $n-1$ of the points available.
 The last unused datapoint is evaluated against this new model.
 This procedure is repeated for every point in the dataset, and the results of the evaluation are averaged out to produce a final result.
 This validation model works well when the number of testing and training data is small.
+\vspace{-1em}
 
 \section{Early Stopping Criterion}~\label{sec:esc}
-This section covers the Early Stopping Criterion used in Chapter~\ref{chp:streamit}, where a design space of 32,000 different configurations of the processor can be explored.
-Since this space is too large to fully cover, as will be explained in Chapter~\ref{chp:streamit} Section~\ref{chp:stream:sec:setup}, only a sub-sample of the space is used.
-The early stopping criterion is therefore used to determine when the number of points explored in the sub-sample space is representative of the total space.
-
+This section covers the Early Stopping Criterion (ESC) used in Chapter~\ref{chp:streamit} to determine whether or not a sub-sample of the design space is representative of the total space.
 When exhaustive search of an optimisation space is not feasible, a subset of the space is explored.
-The early stopping criterion (ESC)~\cite{vuduc2003AutomaticPerf} provides a method of determining when new points added in the subspace no longer provide new information, and thus the currently evaluated subspace is representative of the total space.
+ESC~\cite{vuduc2003AutomaticPerf} provides a method of determining when new points added in the subspace no longer provide new information, and thus the currently evaluated subspace is representative of the total space.
 Given $N$ possible number of implementations, if $i$ is a single implementation and $x_i$ is its performance normalised between 0 and 1, then $S=\{x_1,...,x_N\}$ is the set of all performances for all possible implementations.
 If $X$ is a random variable corresponding to a randomly selected performance from the set S then there is a cummulative distribution function (CDF) $F(x) = Pr[X \le x]$ which is equal to the number of items in S that are less than or equal to $x$ (the function $n(x)$) over all possible items $N$.
 If, for a number of time steps, a performance from S is randomly chosen and not replaced, then at time step $t$ $M_t$ is maximum performance observed $max_{1\le i \le t} Xi$ up to time t.
@@ -568,13 +565,10 @@ Formally, ESC is:
 \begin{equation}
 Pr[M_t \le 1 - \epsilon ] < \alpha
 \end{equation}
-
 Where $\epsilon$ is the proximity to the best performance in $S$ and $\alpha$ is the uncertainty factor.
 For example, if the user wants to stop the search when $M_t$ is within 5\% of the best, with an uncertainty factor of 10\% they would set $\epsilon$ to 0,05 and $\alpha$ to 0,1.
-
 As ESC is used when the exhaustive space has not been searched, the set of all performances $S$ is unknown.
-Instead, ESC uses an approximation of the space, using the set of already observed performances rather than $S$.
-The approximation is determined via this formula:
+ESC thus uses an approximation of the space, using the set of already observed performances rather than $S$, defined by:
 \begin{equation}
 \hat{G}_t(x) = \frac{ \binom{\ceil*{N \times \hat{F}_t(x)}}{t}}{\binom{N}{t}}
 \end{equation}
