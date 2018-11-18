@@ -2,7 +2,7 @@ The previous chapter explored how static ahead-of-time configuration of a dynami
 Static ahead-of-time configurations can improve the overall performance of programs, however they cannot adapt themselves to exploit the different phases a program may have.
 A program phase can be used to describe multiple concepts, for example regions of code that exhibit different Instruction per cycle (IPC) performances, or variations of instruction mixes.
 When programs exhibit different phases of IPC, this can result in situations where composing multiple cores may be an inefficient solution, thus wasting resources.
-Chapter~\ref{chp:streamit} explored multi-threaded applications yet core composition is designed to improve the performance of single threaded applications~\cite{chp:ipek2007CoreFusion} as it has become harded to improve performance for these types of applications.
+Chapter~\ref{chp:streamit} explored multi-threaded applications yet core composition is designed to improve the performance of single threaded applications~\cite{ipek2007CoreFusion} as it has become harded to improve performance for these types of applications.
 Therefore this chapter focuses on how a DMP can reconfigure itself at runtime to exploit phases of a set of single-threaded applications.
 
 %Core composition is a technique that allows multiple cores to work on a single thread, allowing a DMP to improve the performance of single threaded applications.
@@ -41,7 +41,7 @@ To summarise, the contributions are:
 %\vspace{-2.5em}
 \item An in-depth comparison of static and dynamic core composition schemes on the San Diego Vision Benchmark Suite.
 \vspace{-1em}
-\item A demonstration that core composition has the potential to offer a large reduction in energy savings.
+\item Evidence that core composition has the potential to offer a large reduction in energy savings.
 \vspace{-1em}
 \item An analysis of how the overhead of reconfiguring the processor can affect the potential benefits of core composition.
 \vspace{-1em}

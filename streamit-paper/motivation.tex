@@ -37,7 +37,7 @@ A single-core/single thread is used here as it represents the default "unmodifie
 For this experiment, 1316 different thread/core combinations are explored; the reason this number is chosen is explained later on in section~\ref{chp:stream:sec:setup}.
 
 As can be seen in figure~\ref{fig:threadcoremotiv}, the majority of the design points result in a speedup of 2.7x.
-The best speedups however are far fewer than the average case (4x smaller density) and can improve performance by up to almost 6x.
+The best speedups however are far fewer than the average case (4x smaller density) and can improve performance by up to 5.5x.
 Thus, if a good configuration is found, this can yield an important speedup compared to the average configuration.
 However since the number of good configurations is low, this underlines the notion that finding a combination of threads and cores is a non-trivial endeavor, as randomly choosing a configuration will result in a sub-optimal performance.
 Indeed, even if the average case is 2.7x faster than a single core, Figure~\ref{fig:threadcoremotiv} shows that there exists a good number of configurations that can lead to less than average speedups.
