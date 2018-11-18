@@ -2,6 +2,8 @@
 \chapter{Static ahead of time thread and core partitioning}
 This section shows the performance distribution graphs for all the benchmarks explored in Chapter~\ref{chp:streamit}.
 The curves represent the density distribution for different core compositions as a function of the number of threads.
+The performance (X-axis) is measured by comparing a specific design point to that of the single core single threaded execution.
+The reason the single-core single-thread is used as a baseline is due to the fact that it represents an "unmodified" system.
 The right hand side Y-axis represents the number of threads present in the current version of the benchmark whilst the left Y-Axis represents the density normalized by the total number of points in the design space.
 For each of the threaded versions the benchmark runs using 100 different core-compositions.
 The density curve for thread 15 is a single point as there exists only a single composition, so a line is drawn to represent where that point lies.
