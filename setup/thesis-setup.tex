@@ -60,11 +60,17 @@ This section covers the different benchmark suites used throughout the thesis.
 
 \subsection{Streaming applications}\label{chp:setup:streamit}
 
+Chapter~\ref{chp:streamit} demonstrates how configuring a dynamic multicore processor (DMP) to get the optimal performance out of multithreaded applications can be learned.
+To explore this concept, choosing a programming language that naturally exposes parallelism is important as it facilitates the process of generating threads for an application.
+As the introduction of Chapter~\ref{chp:streamit} will explain, StreamIt is one such language.
 
-Chapter~\ref{chp:streamit} explores 15 StreamIt benchmark, shown in Table~\ref{tab:streamwl} all taken from the official StreamIt repository~\cite{streamitrepo}.
-There exist other benchmarks in the repository, however at the time of writing these benchmarks did not execute correctly on the provided simulator.
+The StreamIt repository holds a set of benchmarks that can be used to evaluate the system~\cite{streamitrepo}.
+As the processor and tools used throughout this thesis are still in development, some of the applications would either not compile or execute correctly on the provided simulator; thus a subset of the applications are used.
+The 15 StreamIt benchmark that worked and are explored in Chapter~\ref{chp:streamit} are shown in Table~\ref{tab:streamwl}.
 These applications represent a variety of embedded applications and kernels, from digital signal processing to a matrix-multiplication kernel or band pass filters.
 They can be found in a multitude of devices from digital radios to HDTVs and smartphones (audio/video streaming applications).
+The benchmarks also present a varying degree of parallelism as will be shown in Chapter~\ref{chp:streamit} Section~\ref{chp:stream:sec:setup}.
+As dynamic multicore processors are intended to adapt to the program at hand, having varying amounts of parallelism in the different benchmarks is essential to demonstrate its flexibilitiy.
 
 \subsection{San-Diego Vision Benchmark Suite}\label{chp:setup:sdvbs}
 \begin{table}[t]
@@ -80,7 +86,8 @@ They can be found in a multitude of devices from digital radios to HDTVs and sma
   \caption{Characteristics of the benchmarks~\cite{sdvbs}.}\label{tab:sd-vbschar}
 \vspace{1em}
   \end{table}
-
+  
+As core composition is designed to improve the performance of single-threaded applications, it is also important to evaluate a set of serial applications.
 Chapters~\ref{chp:cases} and \ref{chp:hardchanges} explore a set of Vision Benchmarks designed for hardware and compiler research~\cite{sdvbs}.
 The San Diego Vision Benchmark suite (SD-VBS) is composed of nine single-threaded C benchmarks ranging from image analysis to motion tracking.
 These benchmarks represent state-of-the-art applications in image and vision recognition which are prevalent in embedded systems.
