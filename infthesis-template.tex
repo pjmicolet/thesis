@@ -113,11 +113,47 @@
 
 %% Specify the abstract here.
 \abstract{%
-    This doctoral thesis will present the results of my work into the
-    reanimation of lifeless human tissues.
+Heterogeneous processors such as ARM's big.LITTLE have become popular as they offer a choice between performance and energy efficiency.
+However, the core configurations are fixed at design time which offers a limited amount of adaptation. 
+Dynamic Multicore Processors (DMPs) bridge the gap between homogeneous and fully reconfigurable systems by grouping cores together (composition) to adapt to the needs of different workloads.
+There exists little research in finding out when to group cores and what hardware is required to obtain the best performance out of this technique.
+
+This thesis first demonstrates that ahead of time thread and core partitioning used to improve the performance of multithreaded programs can be automated. 
+This is done by analysing static code features to generate a machine learning model that determines a processor configuration that leads to good performance for an application. 
+The machine learning model is able to predict a configuration that is within 16\% of the performance of the best configuration from the search space.
+
+This is followed by studying how dynamically adapting the size of a composition at runtime can be used to reduce energy consumption whilst maintaining the same speedup as the fastest static core composition.
+An analysis of how much energy can be saved by adapting the size of the composition at runtime is conducted, showing that dynamic reconfiguration can reduce energy consumption by 42\% on average.
+A model is then built using linear regression which analyses the feautres of basic blocks being executed to determine if the current composition should be reconfigured; on average it reduces energy consumption by 37\%.
+
+Finally the hardware mechanisms that drive core composition are explored.
+A new fetching mechanism for core composition is proposed, where cores fetch code in a round robin fashion.
+The use of value prediction in the context of core composition is also motivated, as it large core compositions are more susceptible to data-dependencies.
+Using a perfect value predictor with perfect branch prediction and the new fetching scheme the performance of a large core composition can be improved by a factor of up to 3x, and 1.88x on average.
+On the other hand using state of the art value prediction with a normal branch predictor leads to an average performance improvement of up to 2.7x, and 1.30x on average.
 }
 
-%% Now we start with the actual document.
+\layman{
+As computers become more and more powerful, the main component that drives this performance --- the central processing unit --- is becoming harder to improve on due to a multitude of reasons.
+In order to compensate for the fact processor designers cannot increase the performance of a a single processor core; the common philosophy has been to pack multiple copies of smaller cores into a single package.
+Whilst this approach has been successful to a certain degree, some applications cannot benefit from spreading their computation on multiple processor cores but instead would benefit more from larger cores.
+To compensate for this, hardware designers proposed heterogeneous processors where different types of cores are on the same package.
+However, this still requires that the design of the processor be determined before it is built.
+Therefore, a new processor model was created, one where the cores can be grouped together at any time in order to form larger cores: these processors are called Dynamic Multicore Processors (DMPs).
+DMPs can adapt themselves to the needs of the program at hand which helps improve the performance of the program.
+
+This thesis explores how to determine ways in which the DMP can automatically reconfigure itself to adapt to the needs of the program at hand.
+Whilst previous research has looked into ways of reconfiguring the processor using hand-crafted algorithms, this is not an efficient solution as it requires intimate knowledge of the processor and is time consuming.
+Automating this process makes these types of processors more accessible, as programmers will not have to think about the underlying hardware when they write their programs.
+The reconfiguration can be used to either make the programs execute faster, or consume less energy.
+This thesis shows that reconfiguring the processor can be fully automated through the use of machine learning, thus removing the need of hand-crafting an algorithm.
+Finally, the mechanisms that determine how the processor functions once reconfigured are analysed to see if any improvements can be made.
+By modifying the way the processor behaves, the performance of programs can be improved even more.
+This motivates further research in these types of processors.
+
+
+}
+	%% Now we start with the actual document.
 \begin{document}
 
 %% First, the preliminary pages
