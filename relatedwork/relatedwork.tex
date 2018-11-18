@@ -23,7 +23,7 @@ The idea of composing physical cores was first introduced by Ipek et al. in Core
 CoreFusion employs a traditional architecture with 2 issue out of order cores.
 When cores are fused, they collectively fetch from the same thread, whenever an instruction cache miss is issued, an eight word block is delivered and distributed across all of the cores' caches.
 Fetches are aligned with the core responsible for the 2 oldest instructions.
-In the original paper, an 4 core composition obtains a 1.3x speedup on SPECINT and a 1.5x speedup on SPECFP over a 2 issue core.
+In the original paper, a 4 core composition obtains a 1.3x speedup on SPECINT and a 1.5x speedup on SPECFP over a 2 issue core.
  
 The Bahurupi~\cite{pricopi2012bahurupi} polymorphic heterogeneous multicore architecture proposed by Pricopi et al. introduces a sentinel instruction which informs the hardware about the \textit{live-in} and \textit{live-out} registers of a basic block.
 Baharupi uses the SimpleScalar ISA~\cite{burger1997simplescalar}, and the compiler adds this instruction to the top of every basic block, splitting the program up into blocks similarly to EDGE.
@@ -32,13 +32,13 @@ They show that, on average this introduces a 24\% code size increase for SPEC in
 Another important piece of information contained in this instruction is the size of a block.
 Cores in a composition fetch basic blocks in a similar fashion to the one described in Chapter~\ref{chp:Background} Section~\ref{chp:Background:sec:EDGE}.
 However, cores must execute global register renaming in the sequential order of blocks.
-To ensure sequential renaming, a Global Program Counter (GPC) is introduced, and each core in the composition must lock the GPC before fetching a block and doing the renaming.%; this makes Baharupi less efficient at fetching blocks than EDGE.
-Using a 4 core composition they report a performance improvement of 2x on SPECINT,3x on SPECFP and 4x on Mibench/Mediabench compared to a 2 issue core. 
+To ensure sequential renaming, a Global Program Counter (GPC) is introduced, and each core in the composition must lock the GPC before fetching a block and doing the renaming.%; this makes Baharupi less efficient at fetching blocks than EDGE. 
+Using a 4 core composition they report a performance improvement of 2x on SPECINT, 3x on SPECFP and 4x on Mibench/Mediabench compared to a 2 issue core. 
 
 TFlex~\cite{kim2007tflex} proposed by Kim et al. is an EDGE processor that also deploys core composition.
 The mechanism is similar to the one described in Chapter~\ref{chp:Background} Section~\ref{chp:Background:sec:EDGE}.
 They motivate that EDGE simplifies distributing instructions across cores as EDGE itself is designed for distributed microarchitectures.
-Since instruction dependency orders are determined at compile time and encoded at the ISA level, the Tflex instruction fetching can be decentralised, as there is no need for centralised analysis like in a traditional ISA (such as register renaming or instruction number assignment).
+Since instruction dependency orders are determined at compile time and encoded at the ISA level, the TFlex instruction fetching can be decentralised, as there is no need for centralised analysis like in a traditional ISA (such as register renaming or instruction number assignment).
 Unlike the model used throughout this thesis, a block's instructions can be distributed amongst the cores in the composition, with one of the cores being the block owner.
 As each core can be responsible for a single block, the total number of blocks in flight is equal to the number of cores in the composition.
 In their work~\cite{kim2007tflex} Kim et al. show that a 32 core composition can outperform a single TFlex core by 3x on a set of EEMBC benchmarks and SPEC2000 microbenchmarks.
@@ -47,8 +47,8 @@ The E2 processor is another EDGE based processor that can dynamically compose it
 Unlike TFlex, when cores are composed in the E2 processor, each core is responsible for the blocks they fetch.
 E2 introduces the concept of segmenting the instruction window into lanes, allowing cores to fetch multiple blocks.
 This allows E2 to be more adaptible to different block sizes; if the compiler can only generate small blocks, a core can have multiple blocks in its instruction window executing in parallel.
-For example, if E2 has four lanes, then if the program executing is composed only of 20 instructions, a four core composition on E2 can have up to 4 blocks $\times$ 20 instructions $\times$ 4 cores $=$ 320 instructions in flight, whilst Tflex will only have 4 blocks $\times$ 20 instructions $=$ 80 instructions in flight.
-This means E2 can potentially extract more instruction level parallelism (ILP) from each core in the composition than Tflex can at any point.
+For example, if E2 has four lanes, then if the program executing is composed only of 20 instructions, a four core composition on E2 can have up to 4 blocks $\times$ 20 instructions $\times$ 4 cores $=$ 320 instructions in flight, whilst TFlex will only have 4 blocks $\times$ 20 instructions $=$ 80 instructions in flight.
+This means E2 can potentially extract more instruction level parallelism (ILP) from each core in the composition than TFlex can at any point.
 
 Watanabe et al. propose a different type of dynamic multicore processor, where cores share execution units ~\cite{Watanabe2010Widget}.
 The Wisconsin Decoupled Grid Execution Tiles (WidGET) architecture's design is based on a sea of resources, where a core is composed of a simple Instruction Engine (IE) that can send instructions to a set of available in order Execution Units (EU).
@@ -74,9 +74,9 @@ This is similar to the work proposed by Dubach et al. in ~\cite{dubach13dynamic}
 They provide extensive analysis of SPEC 2000 benchmarks and demonstrate that machine learning and dynamic adaptation can double the energy/performance efficiency compared to a static configuration.
 
 \paragraph*{Summary}
-Whilst CoreFusion and Bahurupi use traditional ISAs, they must either support a limited version of composition where a single 8 eight word block is distributed amongst cores (CoreFusion), or add extra instructions which increases code block size by up to 24\% (Bahurupi).
+Whilst CoreFusion and Bahurupi use traditional ISAs, they must either support a limited version of composition where a single eight word block is distributed amongst cores (CoreFusion), or add extra instructions which increases code block size by up to 24\% (Bahurupi).
 In the EDGE architecture, instructions are naturally formed into blocks, and instructions in a block do not communicate via registers, this simplifies the fetching of multiple blocks.
-Thus Tflex does not need a centralised structures for fetching instructions~\cite{kim2007tflex}, however, it does not support the ability of fetching multiple blocks on a single core.
+Thus TFlex does not need a centralised structures for fetching instructions~\cite{kim2007tflex}, however, it does not support the ability of fetching multiple blocks on a single core.
 Instead, each core can fetch a single block and dispatch instructions on all other cores in the composition.
 If blocks are small, then the instruction window of each core will never be filled, which in turn reduces the potential performance of core composition.
 E2 addresses this problem by segmenting the instruction window into separate lanes and allowing each core to fetch multiple blocks.
@@ -95,7 +95,7 @@ In their work they use speedup functions determined from profile executions of a
 This means that whenever an application is modified, it must be re-analysed to benefit from dynamic composition.
 They do not discuss what software characteristics help determine when to reconfigure the cores, or how to optimise software.
 
-Gulati et al. propose an offline and online scheduling algorithms for Tflex \cite{gulati2008multitaskingdmc}. 
+Gulati et al. propose an offline and online scheduling algorithms for TFlex \cite{gulati2008multitaskingdmc}. 
 This work focuses on maximising speedup for a set of workloads in a multi-tasking environment.
 The offline model uses profiling data to make decisions whereas the online model measures the current performance of a task being executed and switches the size of the composition by +/- 1 based on a threshold.
 In their results they show that the offline profiling tool outperforms the online algorithm.
@@ -104,8 +104,8 @@ They demonstrate that a DMP that can adapt to workloads can result in faster res
 
 \paragraph*{Summary}
 The main contributions in automatic reconfiguration rely on profiling information to make a decision.
-This means that new applications will need to be executed multiple times in order to generate a profile which is then used by the DMP to know how to reconfigure itself.
-This procedure which can be costly if the number of ways the processor can be reconfigured is high (for example when a programmer must choose between multithreading and core composition).
+This means that new applications will need to be executed multiple times in order to generate a profiling information used by the DMP to decide when and how to reconfigure itself.
+This procedure can be costly if the number of ways the processor can be reconfigured is high (for example when a programmer must choose between multithreading and core composition).
 Whilst Gulati et al. propose a runtime solution~\cite{gulati2008multitaskingdmc}, this does not \textit{directly} infer a correct composition, instead it changes the composition size by +/- 1 at each reconfiguration interval.
 They admit that this system is less efficient than profiling.
 
@@ -180,7 +180,7 @@ These different techniques show that either dynamically changing some parameters
 However, all these techniques rely on fixed configurations of the processor, such as an HCMP where the core configurations are determined at design time. 
 
 \section{Speculative Execution}
-Core composition is able to improve performance of applications by executing many instructions speculatively from the same thread.
+Core composition is able to improve the performance of applications by executing many instructions speculatively from the same thread.
 This section covers work on speculative parallelism, where performance improvements are obtained by speculatively executing multiple tasks in parallel, rather than through deep branch prediction.
 
 \paragraph*{Software level}
@@ -373,7 +373,7 @@ Another method of speculative execution was then described: hardware and softwar
 These techniques are described to show the breadth of performance optimisations via speculative execution.
 Whilst thread level speculation can improve the perfromance of some applications, they require considerable architectural modifications and software-level support.
 
-Value prediction and data-prefetching then shown to be two methods of reducing the impact of data-dependencies between instructions.
+Value prediction and data-prefetching were shown to be two methods of reducing the impact of data-dependencies between instructions.
 Even though data-prefetching is successfully applied in commercial products, it does not allow instructions to execute with speculative data.
 As value prediction allows multiple instructions to execute with speculative data, this is a more promising approach for increasing ILP in large core compositions, as will be explained in Chapter~\ref{chp:hardchanges}.
 
@@ -383,4 +383,4 @@ The work of Wang et al.~\cite{wang2013partitionstreamit} motivated the use of ma
 This thesis pushes this work further by providing a model that can determine both thread count and nubmer of cores composed.
 
 Finally, two examples of how machine learning has been used for performance optimisations were described.
-This is to demonstrate that machine learning is becoming a promising method for this domain.
+This is to demonstrate that machine learning is becoming a promising method for the domain of improving the performance of programs and determining architectural parameters.
