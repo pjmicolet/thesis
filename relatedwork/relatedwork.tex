@@ -2,22 +2,11 @@
 Whilst dynamic multicore processors (DMPs) are relatively new in terms of processor design they are still a solution to a well researched set of problems.
 These problems include improving performance of single-threaded applications and reducing energy consumption.
 This chapter covers the related work relevant and adjacent to this thesis.
-%The topics covered are:
-%\begin{itemize}
-%\item The different dynamic multicore processors using core composition proposed in recent research.
-%\item Work on determining when to change the size of a core composition either ahead of time or at runtime.
-%\item Research on different hardware techniques for saving energy such as dynamic voltage and frequency scaling or using heterogeneous chip multicore processors.
-%\item Research in optimising code for core composition and EDGE.
-%\item Other models of speculative execution.
-%\item Work on streaming programming languages.
-%\item Current research in value prediction and data pre-fetching.
-%\item Work on machine learning guided optimisations for both hardware and software.
-%\end{itemize}
-
+\vspace{-3em}
 \section{Reconfigurable Processors}
 
 This section covers work on both dynamic multicore processors (DMP) and processors that can reconfigure their microarchitectures.
-
+\vspace{-1em}
 \subsection{Dynamic Multicore Processors}
 The idea of composing physical cores was first introduced by Ipek et al. in CoreFusion~\cite{ipek2007CoreFusion}.
 CoreFusion employs a traditional architecture with 2 issue out of order cores.
@@ -57,7 +46,7 @@ Watanabe et al. compare the performance of their processor to that of an Intel A
 They show that using in-order cores with a fine-grained reconfiguration can reduce power consumption by 21\% compared to the Xeon whilst achieving the same performance.
 It is even able to outperform it by 26\% whilst still reducing power consumption by 6\%.
 
-
+\vspace{-1em}
 \subsection{Reconfigurable microarchitectures}
 
 MorphCore~\cite{khubaibMorphCore2012} focuses on reconfiguring a core for thread level parallelism.
@@ -125,8 +114,23 @@ Since EDGE instructions pass their results directly to an instruction's input op
 The optimisations are predicate fanout reduction, path-sensitive predicate removal and instruction merging~\cite{smith2006dataflowpred}.
 Overall, hyperblocks are able to improve the performance of a set of EEMBC benchmarks by 29\% compared to only using basic blocks.
 Using the optimisations previously defined improves the performance of hyperblocks by up to 12\% compared to non-optimised hyperblocks.
+\vspace{-1em}
+\section{Improving instruction fetching for composition}
+Fetching instructions on core compositions can be a challenge, as will be discussed in Chapter~\ref{chp:hardchanges}.
+This section covers how this issue has been address in previous research.
 
+Robatmili et al. in~\cite{robatmili2011uniproc} discuss how to improve block fetching for the TFlex processor by selectively refreshing instructions.
+In TFlex, a single block of instructions can be distributed amongst the instruction windows of the cores in the composition, thus a core can have instructions from N blocks, where N is the number of cores in the composition.
+These instructions remain in the window until the block is committed or flushed.
+Reducign the latency of block fetching is achieved by using idle cores in the composition to store previously executed blocks in their instruction window.
+When a core fetches a block PC, it checks if other cores have a copy of the block in their instruction window, if it does, it reissues that block, if not, it selects an idle core to fetch the block from i-cache.
+Overall this technique can improve the performance of a 16 core composition on a set of SPEC benchmarks by 1.08x on average, with a maximum speedup of 1.16x.
 
+This implementation depends on the concept that cores in the composition currently hold inactive blocks in their instruction window.
+Whilst this may be the case for TFlex, due to the architecture distributing a single block on a composition, an E2 type processor will not have idle cores in its composition.
+This is due to the fact that each core can fetch multiple blocks in its instruction window and execute them in parallel, thus no core is idle.
+Therefore, another solution to improve fetching for the type of fetching used in this thesis is proposed in Chapter~\ref{chp:hardchanges}.
+\vspace{-1em}
 \section{Hardware techniques for power and energy efficiency}
 
 Chapter~\ref{chp:cases} focusses on changing the size of a core composition at runtime to the energy consumption of single threaded applications whilst still maintaining the same execution times as the fastest static core compositions.
@@ -153,7 +157,7 @@ Vega et al. in ~\cite{vega2013crank} underline that whilst DVFS is an effective 
 They suggest an online algorithm at the OS level that collects data from performance counters and makes multiple decisions based on the data gathered.
 %write more
 %However this approach is orthogonal to DMPs~\cite{sibi2014}, whilst both techniques (DVFS and core composition) adapt to programs phases, DMPs can also be used to speed up the execution of programs.
-
+\vspace{-1em}
 \subsection{Thread migration in HCMPs}
 ARM big.LITTLE~\cite{armbig} is an example of a heterogeneous chip multicore processor (HCMP) that provides two different types of cores to allow the programmer to choose between energy efficiency and performance.
 A program can be migrated from one core to another depending on the requirements, however this comes at the cost of a very high migration overhead, over 10,000 cycles~\cite{armbig}.
@@ -178,7 +182,7 @@ Using this classifier Gupta et al. are able to improve performance per watt of a
 \paragraph*{Summary}
 These different techniques show that either dynamically changing some parameters of the hardware (DVFS) or moving where a program is executing (thread migration) is an effective way of reducing energy consumption.
 However, all these techniques rely on fixed configurations of the processor, such as an HCMP where the core configurations are determined at design time. 
-
+\vspace{-1em}
 \section{Speculative Execution}
 Core composition is able to improve the performance of applications by executing many instructions speculatively from the same thread.
 This section covers work on speculative parallelism, where performance improvements are obtained by speculatively executing multiple tasks in parallel, rather than through deep branch prediction.
@@ -218,15 +222,16 @@ Subramian et al. present a new execution model that supports nested parallelism 
 Fractal introduces the concept of grouping tasks into hierarchies of nested \textit{domains}.
 Tasks in a domain can either execute in order or out of order relative to their timestamps and appear to execute as a single atomic unit to other domains.
 By allowing tasks to generate domains, Fractal is able to exploit nested parallelism without complicating the software, and can lead to a performance increase of up to 88x compared to Swarm on some graph algorithms.
-
+\vspace{-1em}
 \paragraph*{Summary}
 This section has shown how an alternative form of speculation can be used to improve the performance of applications.
 This is supported both at the hardware and software level.
 As seen throughout the section, speculative parallelism requires both hardware and software support to function (SWARM).
 This is more involved than supporting core composition on an EDGE processor, where the ISA naturally lends itself to deep single-threaded execution speculation.
-
-
-\section{Value Prediction}
+\vspace{-1em}
+\section{Tackling data-dependencies}
+This section covers the different techniques used to tackle data-dependencies that affect a processor's ability to extract instruction level parallelism, which is the main way core composition improves performance.
+\subsection{Value Prediction}
 Value prediction is a technique used to speculatively resolve data dependencies between instructions and is used in Chapter~\ref{chp:hardchanges}.
 This section covers the different proposed techniques, including the one used in that chapter. 
 
@@ -257,7 +262,7 @@ Most of the predictors described in this section focus on value prediction for l
 Whilst loads are most often going to be the cause of data-dependencies, the EDGE architecture's reliance on registers for intra-block communication is also a prime suspect.
 Overall, the D-VTAGE predictor is the most adequate solution for this thesis, as will be explained in greater detail in Chapter~\ref{chp:hardchanges} Section~\ref{chp3:sec:val}.
 
-\section{Data Prefetching}
+\subsection{Data Prefetching}
 Whilst value prediction is used to mask data dependencies or long latencies caused by cache misses by predicting values, data prefetching attempts to make data available in L1 caches before it is needed.
 This can be achieved both in software by inserting instructions that trigger a data fetch-request ahead of time, or in hardware by analysing memory access patterns.
 
@@ -271,12 +276,28 @@ The compiler pass target loads inside loops whose address depends on a loop indu
 Once the loads have been detected, the prefetches are scheduled based on a formula they devise in the paper.
 The formula takes into account the number of loads found in the prefetch sequence for the loop, the position of the real load, and a constant that is based on architectural features such as memory-latencies and the possible IPC.
 Using their compiler pass they are able to improve the average performance of memory intensive benchmarks by 1.1x to 2.7x on different processors.
+\vspace{-1em}
+\subsection{Register Bypassing and Criticality Detection}
+Whilst value prediction is used in Chapter~\ref{chp:hardchanges}, there exist previous work on trying to reduce the latencies caused by data-dependencies in core composition; this section describes the solution.
 
+Robatmili et al. in~\cite{robatmili2011uniproc} discuss the potential bottlenecks caused by data-dependencies when executing blocks on large core compositions.
+This work uses the TFlex processor and presents the Distributed Block Criticality Analyzer (DBCA) that can gather criticality information to optimise the execution of instructions at runtime.
+The DBCA is able to detect and predict which instructions are late communication edges, that is the last register writes in a block that younger blocks.
+When a block is fetched, the core calls the DBCA to get the predicted registers to determine which register writes are late communication edges.
+As these instructions are on the critical path, prioritising their execution potentially resolves the data-dependencies quicker.
+The values of these instructions are then forwarded to the successive speculative block via a register bypass.
+Using these two techniques, Robatmili et al. show that for a 16 core composition (TFlex processor), this register bypassing technique with criticality detection improves performance on a set of integer spec benchmarks by 1.08x on average and up to 1.16x at best.\
+
+The reason this technique cannot improve performance much more is due to the fact that it only attempts to smartly schedule instructions that cause dependencies.
+This model still can still involve significant latency, as the late communication edges may require data from previous instructions as well.
+On the other hand, value prediction allows instructions to execute without having to wait for their depending instructions to finish, thus allowing for potentially more instruction level parallelism.
+This is why value prediction suggested as a new approach to the data-dependency problem for core composition.
+\vspace{-1em}
 \paragraph*{Summary}
-Data prefetching can help alleviate the effect of data-dependencies by ensuring that the instructions fire quicker.
+Data prefetching and register bypassing can help alleviate the effect of data-dependencies by ensuring that the sensitive instructions fire quicker.
 Unlike value predictors, data prefetching is a technique that is actually implemented in both compilers and real commercial processors~\cite{intelmanual}.
-Yet it does not allow for instructions to execute with speculative data, which, as will be seen in Chapter~\ref{chp:hardchanges} increases ILP in large core compositions.
-
+Yet both data prefetching and register bypassing do not allow for instructions to execute with speculative data, which, as will be seen in Chapter~\ref{chp:hardchanges} is better for increasing ILP in large core compositions.
+\vspace{-1em}
 \section{Dataflow Programming Languages}
 
 Chapter~\ref{chp:streamit} explores how a DMP can be used to improve the performance of applications written in a dataflow programming language.
@@ -301,7 +322,7 @@ Unlike StreamIt, WaveScript uses an asynchronous streaming model, where the inpu
 Bosboom et al. demonstrate how a streaming language can be directly embedded into a more common host-language in ~\cite{bosboom2014streamjit}.
 They present StreamJIT which inherits StreamIt's programming structure, however the language is embedded inside of Java.
 This allows the new StreamJIT language to benefit from the front-end compiler optimisations developed for Java; a method they call \textit{commensal} compilation.
-
+\vspace{-1em}
 \paragraph*{Summary}
 Brook and WaveScript are both domain specific languages for architectures not explored in this thesis (low powered embedded systems and GPUs).
 As the StreamIt programming language was designed to be used for tiled-based architectures which closely resemble the processor used in this thesis.
@@ -351,31 +372,32 @@ Cummins et al. developed a deep learning model that takes source-code and is abl
 Their deep learning model ingests source-code and through a set of transformations, and through training the model, it is able to also generate optimisation heuristics.
 They train their deep learning model for two scenarios: GPU thread-coarsening and CPU/GPU task partitioning.
 Compared to state of the art hand-crafted heuristics, the deep learning model is able to outperform both scenarios by 12\% and 14\% respectively.
-
+\vspace{-1.5em}
 \section{Summary}
-This chapter covered the related work relevant to the research conducted throughout this thesis.
-The section underlined that EDGE based processors benefit from the fact that instruction dependencies are determined by the compiler and encoded in the ISA, meaning that fetching does not require a centralised unit for register renaming or instruction numbering.
-This makes EDGE a more attractive architecture to use for core composition as it lends itself better to the technique~\cite{kim2007tflex}.
-The fact that E2 has a segmented instruction window means that when the program executing features small blocks, it can have more blocks in flight than a TFlex processor given the same number of cores composed, thus allowing for more ILP to be exploited.
-This makes E2 the more attractive processor to explore, and it is used as a base in this thesis.
+This chapter underlined that encoding instruction dependencies at the ISA level makes EDGE a more attractive architecture for core composition~\cite{kim2007tflex}.
+It then showed that of the two EDGE based architectures discussed, the fact that E2 can support a higher number of blocks that TFlex in a composition makes it more interesting, as a higher block count means more ILP can be exploited.
+The E2 processor is therefore used as a base in this thesis.
 
 Then the different techniques for automatically configuring a DMP were explained.
-Overall, they rely on profiling applications in order to make decisions.
-This means that programs will need to be executed multiple times in order to create a profile which is then used to configure the processor later on.
+Overall, they rely on profiling applications in order to make decisions meaning that multiple executions of a program are required to create a profile that is used to configure the processor later on.
 This can be an expensive procedure if the number of configurations is large.
 This thesis tackles this issue by presenting models that use machine learning to determine the correct configuration of the DMP without requiring multiple executions of the program; making DMPs more practical to use.
 
-This was followed by exploring different hardware techniques used to reduce the energy consumption of applications.
-Techniques to determine when to migrate threads to different cores and when to use DVFS were described and whilst they are effective ways of increasing energy efficiency, they rely on the processor cores to be designed ahead of time, and often sacrifice some speed to reduce energy consumption.
+This was followed by explaining how block fetching latencies can be reduced to improve the performance of core composition.
+This work was conducted on a TFlex processor and depends on idle-cores to selectively re-issue instructions from a block.
+Whilst this is a promissing approach for a TFlex processor, E2 avoids having idle cores by allowing them to fetch multiple blocks, and thus this technique is not applicable.
+
+This was followed by exploring different hardware techniques used to reduce the energy consumption of applications, which is a topic approached in Chapter~\ref{chp:cases}.
+These techniques (DVFS and thread migration) often rely on the processor cores to be designed ahead of time to create performance models, and they can sacrifice some speed to reduce energy consumption.
 This thesis will show how a DMP can be dynamically reconfigured to reduce energy consumption whilst obtaining the best execution time of a static composition.
 
 Another method of speculative execution was then described: hardware and software techniques that exploit thread-level speculation.
 These techniques are described to show the breadth of performance optimisations via speculative execution.
-Whilst thread level speculation can improve the perfromance of some applications, they require considerable architectural modifications and software-level support.
 
-Value prediction and data-prefetching were shown to be two methods of reducing the impact of data-dependencies between instructions.
+Value prediction, data-prefetching and register bypassing were shown to be methods of reducing the impact of data-dependencies between instructions.
 Even though data-prefetching is successfully applied in commercial products, it does not allow instructions to execute with speculative data.
-As value prediction allows multiple instructions to execute with speculative data, this is a more promising approach for increasing ILP in large core compositions, as will be explained in Chapter~\ref{chp:hardchanges}.
+Also, register bypassing and critical detection does not present the best solution to the problem as it is more focused on smartly scheduling instructions and forwarding values with low overhead.
+As value prediction allows instructions to execute with speculative data, this is a more promising approach for increasing ILP in core compositions, as will be explained in Chapter~\ref{chp:hardchanges}.
 
 Then, dataflow programming languages, and the different methods used to partition applications written in these languages on multicore processors was explained.
 The StreamIt programming language is explored in Chapter~\ref{chp:streamit} as it was designed for architectures similar to the one used in this thesis.

@@ -45,18 +45,19 @@ By underlining which optimisations will lead to performance improvements, this e
 
 \paragraph*{Core composition mechanisms} 
 Finally, as the concept of dynamic multicore processors is still relatively new compared to other processor designs, the currently proposed techniques may not be enough to maximise performance.
-For example, core composition exploits instruction level parallelism by executing a single thread on multiple cores.
-Yet, the proposed architectures do not discuss how data-dependencies, that often occur when many instructions are executing in parallel, can be resolved quickly.
-As DMPs improve performance by extracting more instruction level parallelism out of a single thread, unresolved data-dependencies will reduce the potential performance improvements.
-This means that dynamic multicore processors will not improve performance to the fullest of their capacities.
+For example, core composition exploits instruction level parallelism (ILP) by executing a single thread on multiple cores.
+Unfortunately unresolved data-dependencies, that often arise when many instructions can be executed in parallel, will reduce the potential performance improvements as instructions must wait on each other to execute.
+This means that DMPs will not improve performance to the fullest of their capacities.
 
+Previous work attempts to resolve this problem by smartly scheduling instructions and applying register forwarding to try and reduce the latency caused by data-dependencies~\cite{robatmili2011uniproc}.
+However, this is only a partial solution as instructions must still wait on instructions they are dependent on, reducing the potential improvements. 
 It is therefore crucial to critically analyse where the current bottlenecks of core composition are from a hardware perspective.
-By proposing solutions to these bottlenecks, core composition can become more effective at improving the performance of programs.
+By proposing new solutions to these bottlenecks, core composition can become more effective at improving the performance of programs.
 Modifications to the hardware can even help dynamic multicore processors become more adaptable to new types of programs, making them more practical.
 
-
+\vspace{-1em}
 \section{Contributions}
-This thesis tackles the three problems that were previously described through the use of different techniques.
+This thesis tackles the three problems described through the use of different techniques.
 
 \paragraph*{Reconfiguration}
 First, this thesis looks at the problem of how to automatically reconfigure the processor using techniques that learn from previous executions of programs.
@@ -76,9 +77,9 @@ It also motivates that the code modifications can be relatively  fast to impleme
 Finally, the thesis covers some of the current short-comings of core composition from a hardware perspective.
 The two main features of the hardware that are analysed are how instructions are fetched when cores are composed and how data-dependencies affect the performance of large core compositions.
 This thesis underlines that a simple, serial fetching scheme for instructions can be a considerable bottleneck when attempting to populate large core compositions.
-It also demonstrates that whilst core composition attempts to improve performance by exploiting instruction level parallelism, data-dependencies limit this.
+It also explores how data-dependencies limit the amount of ILP that large core compositions can extract.
 By providing a new fetching scheme that parallelises instruction fetches, and a value predictor which can speculate the results of instructions, this thesis shows that the the performance of core composition can be improved.
-The thesis shows that in an ideal scenario, the performance (speedup) of core composition can be improved by 1.87x, and up to 3x in the best case; whereas using a state of the art value predictor leads to an average performance increase of 1.33x.
+The thesis shows promising results: the performance (speedup) of core composition can be improved by 1.87x, and up to 3x in the best case with perfect value and branch prediction; whereas using a state of the art value predictor still leads to an average performance increase of 1.33x and up to 2.7x.
 This motivates futher research into value prediction.
 
 \section{Structure}
