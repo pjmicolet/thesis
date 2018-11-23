@@ -9,19 +9,19 @@ This is due to the latencies introduced by fetching multiple small blocks execut
 To increase the viability of core composition, other solutions must therefore be explored.
 Instead of only focusing on improving the source code, analysing how a composition functions at a hardware level can help determine other bottlenecks.
 
-In order to improve the performance of larger core compositions, some of the mechanisms of core composition may need to be modified.%By modifying how core composition behaves, this can improve the performance of large compositions.
+In order to improve the performance of larger core compositions, some of the mechanisms may need to be modified.%By modifying how core composition behaves, this can improve the performance of large compositions.
 For example, having to fetch multiple small blocks on large core compositions introduces a fetch latency and reduces the potential speedup.
-Modifying how blocks are fetched amongst cores can potentially reduce this latency and thus increasing the efficiency of the composition.
+Introducing a new way of fetching blocks amongst cores can potentially reduce this latency and thus increasing the efficiency of the composition.
 %This chapter explores the hardware bottlenecks that reduce the efficiency of core composition, and how to address these concerns by modifying the hardware.
 
-This chapter looks at two features of the processor that have a large impact on performance: the block fetching mechanism in a composition, and data dependencies resolution between blocks can be handled.
+This chapter looks at two features of the processor that have a large impact on performance: the block fetching mechanism in a composition, and data dependencies that arise between blocks.
 The current fetching model focuses on filling the instruction window of a single core before activating another core in the composition.
 Without modifications, this fetching model requires large blocks to reduce the time required to activate multiple cores in a composition.
 Thus, exploring how the fetching model can be modified to prioritise using all the cores in the composition over filling a single core can lead to better utilisation of the composition.
 
-Secondly register dependencies cause blocks to take longer to commit, as they will have to wait on the register to become available, reducing block level parallelism.
-Reduced block level parallelism due to data dependencies is similar to an issue found in superscalar processors~\cite{peraisBeBop2015}.
-If register values could be predicted, instructions could fire speculatively improving block level parallelism.
+Secondly register dependencies cause blocks to take longer to commit, as they will have to wait on the register to become available, reducing instruction level parallelism (ILP).
+Reduced ILP due to data dependencies is similar to an issue found in superscalar processors~\cite{peraisBeBop2015}.
+If register values could be predicted, instructions could fire speculatively improving ILP.
 This chapter therefore explores how a value predictor, which predicts register values to reduce the data dependencies, can be used to improve performance in core composition.
 
 These two factors that introduce latency on large compositions have previously been discussed in the work of Robatmili et al. in~\cite{robatmili2011uniproc} for a TFlex~\cite{kim2007tflex} processor.

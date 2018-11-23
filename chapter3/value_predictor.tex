@@ -42,7 +42,7 @@ In these cases value prediction can be used to attempt to ensure that these bloc
 \subsection{Design features of a value predictor}
 
 In this chapter, the only target for value predictions is register read instructions.
-This is due to the fact that other instructions do not depend on previous blocks to fire, and load/store instructions can be fired independently unless dependencies are predicted.
+This is due to the fact that they are prime suspects for data dependencies and unlike loads, currently cannot be fired speculatively.
 Ideally, a value predictor for EDGE would function as seen in Figure~\ref{fig:bad_overview}.
 When a block is fetched, a single request is made to the value predictor to fetch all predictions for the read instructions of the block.
 At dispatch time, the predicted values are used and forwarded to dependent instructions, whilst the read instructions are issued.

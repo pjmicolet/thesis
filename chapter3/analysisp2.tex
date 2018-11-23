@@ -14,7 +14,7 @@ This section therefore starts with a block analysis of the SD-VBS benchmarks.
 
 In a block based D-VTAGE predictor a single prediction request fetches multiple values.
 Due to the fact that the block size is fixed ahead of time~\cite{peraisBeBop2015}, determining the correct size is important.
-Having a block with many values means that the D-VTAGE predictor can predict a higher amount of register reads in the EDGE block, however this comes at the expense of having less blocks in the predictor tables.
+Having a block with many values means that the D-VTAGE predictor can predict a higher number of register reads for a single EDGE block, however this comes at the expense of having less blocks in the predictor tables.
 On the other hand, a small block size allows to have multiple blocks stored at a time but means that not all instructions can have their values predicted in the EDGE block.
 
 To determine the size, all the EDGE blocks of the SD-VBS benchmarks are anaylsed to determine the average register read and write count is per block.
