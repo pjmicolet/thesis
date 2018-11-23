@@ -59,7 +59,7 @@ As all the cores are homogeneous, if the parallel fraction is low, then this cau
 \vspace{-1em}
 
 Unlike CMPs, Heterogeneous Chip Multicore Processors (HCMPs) bring a variety of cores onto a single package.
-This variety may come in different forms, such as having multiple instruction set architectures (ISA) on the same system on chip (SoCs)~\cite{venkat2014harnessingisa,venkatHipstr2016}, different size cores on an SoC~\cite{armbig,jeff2012big}.
+This variety may come in different forms, such as having multiple instruction set architectures (ISA) on the same system on chip (SoCs)~\cite{venkat2014harnessingisa,venkatHipstr2016} or different size cores on an SoC~\cite{armbig,jeff2012big}.
 Figure~\ref{fig:blarm} shows a schemata for ARM's big.LITTLE HCMP, where a high-performance Cortex-A15 is paired with a simpler, power efficient Cortex-A7.
 The two cores are connected via a cache coherent interconnect which provides data coherence at the bus-level, allowing the cores to make reads to its neighbour~\cite{armbig}.
 Software is then executed on one of the cores depending on the user's requirement.
@@ -174,7 +174,7 @@ For example, the \textit{if/else} statement in the C code found in Figure~\ref{f
 However, using predication, the two blocks can be fused together and appended to the block that precedes the \textit{if/else}, reducing the number of blocks from 3 to 1.
 Figure~\ref{fig:EdgeHB} shows the organisation of the new block, where the colour represent where the instructions originated.
 
-As the compiler needs to declare stores and which registers are written to in the block header, extra instructions may need to be generated to ensure the block always executes the same amount of stores.
+As the compiler needs to declare the number of stores and which registers are written to in the block header, extra instructions may need to be generated to ensure the block always executes the same amount of stores and register writes.
 In the case of Figure~\ref{fig:EdgeHB}, the last instruction is generated to ensure that a write to the register \textit{g71} always happens regardless of the predicate.
 This adds some complexity to hyperblock formation, as the size of the block may be artificially inflated if the merging blocks write to different registers or have a different number of stores.
 Even so hyperblocks allow for increased instruction level parallelism (ILP) as  which in turn improves the performance of the application being executed~\cite{smith2006edge}.
@@ -456,7 +456,7 @@ Rates of incoming and out-coming data can also be defined to facilitate load bal
 
 Features of streaming programming languages make them an ideal language for targeting multicore processors.
 The explicit data communication between the different tasks in the program, the ability to estimate the amount of work performed in each task and information about data rates between tasks allows the compiler to easily generate a multi-threaded application that can run on a dynamic multicore processor.
-However, the main challenge consists of deciding how to map the different tasks onto threads and how to allocate the right amount of resources to maximize performance.
+However, the main challenge consists of deciding how to map the different tasks onto threads and how to allocate the right amount of resources to maximise performance.
 
 
 \begin{figure}[t]
