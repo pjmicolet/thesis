@@ -24,6 +24,8 @@
 L2 cache size & 2MB \\
 	  \# of MSHR & 8 \\
 	  LSQ Organisation & Out of Order \\
+	  Execution Engine & Out of Order \\
+	  Reconfiguration Latency & 100 cycles\\
 	  
 	  \end{tabular}
 	  \end{singlespace}
@@ -47,12 +49,19 @@ EDGE is designed to reduce the complexity and overhead of out-of-order engines b
 The configuration of the core in table~\ref{tab:processor} represents an example of an EDGE core that could potentially be built today or in the near-future.
 This setup was in fact described as a "small" EDGE core by Burger et al. during their keynote at ISCA 2018~\cite{iscakeynote,e2thereg,twitter}.
 
+Chapter~\ref{chp:Background} Section~\ref{chp:Background:sec:EDGE} described how core composition is a lightweight procedure on an EDGE processor.
+Therefore, for this thesis the basic reconfiguration latency is set at 100 cycles, which is also a latency used in previously published work on core composition~\cite{pricopi2012bahurupi}.
+Since the length of the reconfiguration latency can affect performance, the effect of different latencies is discussed in Chapter~\ref{chp:cases} Section~\ref{sec:dynamic}.
+This is the only chapter that uses dynamic reconfiguration.
+ 
 Previous studies on dynamic multicore processors for EDGE explored chips with up to 32 cores~\cite{kim2007tflex, gulati2008multitaskingdmc}, yet in Kim et al.'s work, they determine that 16 cores composed leads to the best average performance.
 Both embedded and desktop processors are still seeing their core count rise as time goes on (Apple's A12 features 6, Huawei Mate Smartphone has an 8 core processor, and the AMD Bulldozer features 32 cores), therefore having a 16 core EDGE processor represents a near-future design.
 Also, having 16 cores available increases the number of possible configurations of the processor which in turn allows for a more impactfull exploration of core composition.
 
 \section{Benchmarks}
+This thesis explores both multi-threaded and single threaded applications to show how dynamic multicore processors (DMP) can adapt to a multitude of situations. 
 This section covers the different benchmark suites used throughout the thesis.
+
 \begin{table}[t]
 \centering
 % The FFT need are variable
@@ -68,7 +77,7 @@ This section covers the different benchmark suites used throughout the thesis.
 
 \subsection{Streaming applications}\label{chp:setup:streamit}
 
-Chapter~\ref{chp:streamit} demonstrates how configuring a dynamic multicore processor (DMP) to get the optimal performance out of multithreaded applications can be learned.
+Chapter~\ref{chp:streamit} demonstrates how configuring a DMP to get the optimal performance out of multithreaded applications can be learned.
 To explore this concept, choosing a programming language that naturally exposes parallelism is important as it facilitates the process of generating threads for an application.
 As the introduction of Chapter~\ref{chp:streamit} will explain, StreamIt is one such language.
 
