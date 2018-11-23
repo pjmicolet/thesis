@@ -1,5 +1,5 @@
 This chapter has introduced the problem of partitioning both software and hardware for a Dynamic Multicore Processor (DMP).
-Given the ability to execute up to 15 threads, a DMP can have up to 32767 different configurations, making exhaustive search a prohibitive task.
+Given the ability to execute up to 15 threads, a DMP can have up to 32,767 different configurations, making exhaustive search a prohibitive task.
 Whilst certain design choices, such as restricting the space to scenarios where only using multithreading or homogeneous core composition are used appear as a solution, it reduces performance by up to 1.5x.
 Thus it is important to look at heterogeneous core-composition with multithreading to get the best performance.
 
@@ -14,8 +14,9 @@ This demonstrated that by analysing program features, the decision of how to con
 
 %Add some more details
 To summarise, the contributions of the chapter are:
+\vspace{-0.5em}
 \begin{itemize}
-\item Proof that dynamic multicore processors can be made practical by automating the configuration decision by using machine learning.
+\item Proof that the configuration decision for DMPs can be automated without necessitating hand-crafted heuristics, making DMPs more practical
 \vspace{-0.5em}
 \item An analysis of the co-design space of thread partitioning and core composition which shows how applications always perform best when using a heterogeneous configuration, leading to a 1.50x speedup compared to only multithreading.
 \vspace{-0.5em}
@@ -23,7 +24,7 @@ To summarise, the contributions of the chapter are:
 \vspace{-0.5em}
 \item An analysis of which static code features in StreamIt can be used to determine a good configuration of a DMP.
 \vspace{-0.5em}
-\item A demonstration that the process of determining a thread/core composition configuration that leads to good performance can be fully automated without profiling or hand-crafted heuristics.
+\item A demonstration that the process of determining a thread/core composition configuration that leads to good performance can be learned.
 \vspace{-0.5em}
 \item Showing that machine learning can be applied to determine a good configuration and that the design space can be learned. The machine learning model is able to choose a configuration that results in an average performance within 16\% of the best of the space.
 \end{itemize}

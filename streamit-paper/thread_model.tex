@@ -6,7 +6,7 @@
   \caption{Visual representation of how data was collected for the threading model.}\label{fig:thread_expl}
 \end{figure}
 As seen in the previous section, selecting the right number of threads and a good combination of cores is difficult.
-This difficulty arises from trying to balance between exploiting block level parallelism (BLP) by composing a large amount of cores and exploiting TLP by generating more threads.
+This difficulty arises from trying to balance between exploiting instruction level parallelism (ILP) by composing a large amount of cores and exploiting TLP by generating more threads.
 As the design space is large, it is important to automate the decision making to alleviate the task of getting the best performance out of the streaming application at hand.
 The problem of automating this decision can be decomposed into two stages; first, determining the right number of threads and second, selecting a good core composition.
 Partitioning the program is done first as it is more natural to split the program up into threads before determining how many cores each thread requires.
@@ -64,7 +64,7 @@ According to Figure~\ref{fig:corr} the highest correlating value is Number of Di
 There are very little variables that highly correlate beyond Number of Distinct Multiplicities.
 A high number of distinct multiplicities implies that the StreamIt application features an important amount of filters with different execution rates.
 This means that certain filters may be local bottlenecks in a Pipeline for example.
-Multithreading the pipelines with local bottlenecks will help alleviate the problem of multiple distinct multiplicities.
+Multithreading the pipelines with local bottlenecks will help alleviate the problem of multiple distinct multiplicities as it can isolate the filters with longer firing rates to allow smaller filters to execute more often.
 
 For example, the benchmark \bench{ChannelVocoder} only has 66\% of its filters sharing the same average multiplicity of 50~\cite{thiesStreamit2010}, with a minimum multiplicity of 1. 
 The benchmark features a single SplitJoin yet when recalling section \ref{sec:streamit:dse}'s Figure~\ref{fig:overviewhist} \bench{ChannelVocoder}'s performance is greatly improved via multi-threading.
@@ -73,7 +73,7 @@ Yet, these variables seem to hold less influence on the number of threads a prog
 This is most certainly due to the fact that whilst SplitJoins make parallelisable areas more visible, if there is very little work in each stream, increasing the number of threads will make performance worse as it increases the communication to comptuation ratio.
 
 It is also important to understand that a high number of Pipelines implies the use of SplitJoins.
-This is due to the fact that a StreamIt application with no SplitJoins will feature only a singe Pipeline, thus a larger number of pipelines implies at least one SplitJoin.
+This is due to the fact that a StreamIt application with no SplitJoins will feature only a single Pipeline, thus a larger number of pipelines implies at least one SplitJoin.
 This is why the number of SplitJoins is not present in the correlating features; because the number of Pipeline already correlates with this feature.\\
 
 A method of determining how many threads an application requires is to build a database of programs.
