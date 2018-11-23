@@ -5,14 +5,14 @@ To improve the performance of core composition, Chapters~\ref{chp:streamit} and 
 These source-level modifications are often used to increase the size of the block which enables better utilisation of large core compositions.
 
 In situations where source or compiler optimisations cannot increase the size of a block, core composition cannot improve the performance of the application.
-This is due to the latencies introduced by having multiple small blocks execute on a composition.
+This is due to the latencies introduced by fetching multiple small blocks execute on a composition.
 To increase the viability of core composition, other solutions must therefore be explored.
 Instead of only focusing on improving the source code, analysing how a composition functions at a hardware level can help determine other bottlenecks.
 
 In order to improve the performance of larger core compositions, some of the mechanisms of core composition may need to be modified.%By modifying how core composition behaves, this can improve the performance of large compositions.
-For example, the latency caused by serially fetching small blocks on large core compositions reduces the potential speedup.
+For example, having to fetch multiple small blocks on large core compositions introduces a fetch latency and reduces the potential speedup.
 Modifying how blocks are fetched amongst cores can potentially reduce this latency and thus increasing the efficiency of the composition.
-This chapter explores the hardware bottlenecks that reduce the efficiency of core composition, and how to address these concerns by modifying the hardware.
+%This chapter explores the hardware bottlenecks that reduce the efficiency of core composition, and how to address these concerns by modifying the hardware.
 
 This chapter looks at two features of the processor that have a large impact on performance: the block fetching mechanism in a composition, and data dependencies resolution between blocks can be handled.
 The current fetching model focuses on filling the instruction window of a single core before activating another core in the composition.
@@ -23,6 +23,26 @@ Secondly register dependencies cause blocks to take longer to commit, as they wi
 Reduced block level parallelism due to data dependencies is similar to an issue found in superscalar processors~\cite{peraisBeBop2015}.
 If register values could be predicted, instructions could fire speculatively improving block level parallelism.
 This chapter therefore explores how a value predictor, which predicts register values to reduce the data dependencies, can be used to improve performance in core composition.
+
+These two factors that introduce latency on large compositions have previously been discussed in the work of Robatmili et al. in~\cite{robatmili2011uniproc} for a TFlex~\cite{kim2007tflex} processor.
+The TFlex is also an EDGE based processor (see Chapter~\ref{chp:rw} Section~\ref{chp:rw:sec:dmp}) however it lacks the ability to execute multiple blocks on a single core.
+In this work they propose two features to tackle these issues: selective re-issue of blocks and bypassing register writes for critical instructions.
+
+Selective block re-issue involves using the instruction window as a buffer: blocks can remain in the window after having been committed.
+When a core fetches a new block PC, it checks if any of the idle cores in the composition already have the block in their window and if one does, it tells that core to start executing the block instead of submitting an I-Cache request.
+An idle core can be a core that has just committed a block, and thus if it is executing a loop composed of a single block the core could simply avoid re-fetching that block by refreshing it.
+Whilst this is an interesting approach to reducing the cost of fetching blocks on a composition, it does not address the issue of populating large compositions quickly.
+In the case of the processor used in this thesis, a core can fetch and execute up to four blocks, thus the amount of blocks required to fill a large composition is higher than TFlex by 4x.
+This means that if the fetching latency is long, there's a high chance that a re-issue policy would favour populated cores in the composition that already have next-to-be-fetched block, leaving some cores that have yet to receive a fetch request empty.
+Re-issuing blocks may reduce the latency caused by fetching on the sub-set of active cores, however this will not allow the composition to be used at its fullest.
+Thus another fetching policy that focuses on ensuring each core is active to fully use the composition must be designed.
+
+As for register bypassing, they propose a distributed block criticality analyser (DBCA) that can detect instructions that cause inter-block data dependencies.
+Once these instructions are detected, whenever they finish executing, their values bypass the register file to be sent only to the successive speculative block that depends on the value.
+Whilst this technique does reduce some of the latency caused by inter-block data dependencies it still requires that cores communicate over the network on chip (NoC).
+Also if multiple blocks can be fetched and executed in parallel, but the bypassing is only done from one block to another, then there is still going to be a latency caused by multiple blocks having to produce an output before forwarding the value.
+With value prediction, cores can speculatively fetch register values without having to communicate.
+This can be done in parallel on each core, reducing the stress on the NoC and thus present an even more exciting avenue for reducing the latency caused by data dependencies.
 
 This chapter is organised as follows: first a benchmark previously explored in Chapter~\ref{chp:cases} is re-analysed to underline how current hardware does not suffice to ensure performance improvements.
 Then a new fetching mechanism called Round Robin Fetch is introduced: cores are able to fetch blocks independently in a round robin fashion to improve fairness.

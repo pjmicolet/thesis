@@ -7,7 +7,7 @@ This chapter covers the related work relevant and adjacent to this thesis.
 
 This section covers work on both dynamic multicore processors (DMP) and processors that can reconfigure their microarchitectures.
 \vspace{-1em}
-\subsection{Dynamic Multicore Processors}
+\subsection{Dynamic Multicore Processors}~\label{chp:rw:sec:dmp}
 The idea of composing physical cores was first introduced by Ipek et al. in CoreFusion~\cite{ipek2007CoreFusion}.
 CoreFusion employs a traditional architecture with 2 issue out of order cores.
 When cores are fused, they collectively fetch from the same thread, whenever an instruction cache miss is issued, an eight word block is delivered and distributed across all of the cores' caches.
@@ -119,17 +119,20 @@ Using the optimisations previously defined improves the performance of hyperbloc
 Fetching instructions on core compositions can be a challenge, as will be discussed in Chapter~\ref{chp:hardchanges}.
 This section covers how this issue has been address in previous research.
 
-Robatmili et al. in~\cite{robatmili2011uniproc} discuss how to improve block fetching for the TFlex processor by selectively refreshing instructions.
-In TFlex, a single block of instructions can be distributed amongst the instruction windows of the cores in the composition, thus a core can have instructions from N blocks, where N is the number of cores in the composition.
-These instructions remain in the window until the block is committed or flushed.
-Reducign the latency of block fetching is achieved by using idle cores in the composition to store previously executed blocks in their instruction window.
-When a core fetches a block PC, it checks if other cores have a copy of the block in their instruction window, if it does, it reissues that block, if not, it selects an idle core to fetch the block from i-cache.
+Robatmili et al. in~\cite{robatmili2011uniproc} discuss how to improve block fetching for the TFlex processor by selectively refreshing blocks.
+First, they modify TFlex so that blocks are executed locally on the core instead of dispersing the instructions of a block on multiple cores.
+The two main assumption made is that a core can only ever execute a single block at a time, and once the block is committed, it can remain in the instruction window as a temporary buffer.
+When a new block request is made, the coordinator core in charge of the new block checks to see if any inactive core has that block stored in their window.
+If it does, then that core is activated and starts re-executing the buffered block.
+If no idle core has the block in their window, then the coordinator core will ask one of those cores to fetch the block and start executing it.
+They show that cores may have to store up to 8 blocks in the instruction window to ensure that 75\% of the total executed blocks come from a refresh.
 Overall this technique can improve the performance of a 16 core composition on a set of SPEC benchmarks by 1.08x on average, with a maximum speedup of 1.16x.
 
 This implementation depends on the concept that cores in the composition currently hold inactive blocks in their instruction window.
-Whilst this may be the case for TFlex, due to the architecture distributing a single block on a composition, an E2 type processor will not have idle cores in its composition.
-This is due to the fact that each core can fetch multiple blocks in its instruction window and execute them in parallel, thus no core is idle.
+Whilst this may be the case for TFlex, as it can only execute a single block per core, an E2 type processor is designed to not have idle cores in its composition.
+This is achieved by allowing cores to fetch multiple blocks in its instruction window and execute them in parallel, thus no block can be in the instruction window purely for storage.
 Therefore, another solution to improve fetching for the type of fetching used in this thesis is proposed in Chapter~\ref{chp:hardchanges}.
+
 \vspace{-1em}
 \section{Hardware techniques for power and energy efficiency}
 
@@ -284,11 +287,10 @@ Robatmili et al. in~\cite{robatmili2011uniproc} discuss the potential bottleneck
 This work uses the TFlex processor and presents the Distributed Block Criticality Analyzer (DBCA) that can gather criticality information to optimise the execution of instructions at runtime.
 The DBCA is able to detect and predict which instructions are late communication edges, that is the last register writes in a block that younger blocks.
 When a block is fetched, the core calls the DBCA to get the predicted registers to determine which register writes are late communication edges.
-As these instructions are on the critical path, prioritising their execution potentially resolves the data-dependencies quicker.
-The values of these instructions are then forwarded to the successive speculative block via a register bypass.
-Using these two techniques, Robatmili et al. show that for a 16 core composition (TFlex processor), this register bypassing technique with criticality detection improves performance on a set of integer spec benchmarks by 1.08x on average and up to 1.16x at best.\
+Once the values of these instructions are produced they are then forwarded to the successive speculative block via a register bypass.
+Using this techniques, Robatmili et al. show that for a 16 core composition (TFlex processor), this register bypassing technique with criticality detection improves performance on a set of integer spec benchmarks by 1.08x on average and up to 1.16x at best.\
 
-The reason this technique cannot improve performance much more is due to the fact that it only attempts to smartly schedule instructions that cause dependencies.
+The reason this technique cannot improve performance much more is due to the fact that it only attempts to detect which instructions should use register bypassing.
 This model still can still involve significant latency, as the late communication edges may require data from previous instructions as well.
 On the other hand, value prediction allows instructions to execute without having to wait for their depending instructions to finish, thus allowing for potentially more instruction level parallelism.
 This is why value prediction suggested as a new approach to the data-dependency problem for core composition.
@@ -384,8 +386,8 @@ This can be an expensive procedure if the number of configurations is large.
 This thesis tackles this issue by presenting models that use machine learning to determine the correct configuration of the DMP without requiring multiple executions of the program; making DMPs more practical to use.
 
 This was followed by explaining how block fetching latencies can be reduced to improve the performance of core composition.
-This work was conducted on a TFlex processor and depends on idle-cores to selectively re-issue instructions from a block.
-Whilst this is a promissing approach for a TFlex processor, E2 avoids having idle cores by allowing them to fetch multiple blocks, and thus this technique is not applicable.
+This work was conducted on a TFlex processor and depends on idle-cores to selectively re-issue blocks on idle cores.
+Whilst this is a promising approach for a TFlex processor, E2 avoids having idle cores by allowing them to fetch multiple blocks, and thus the concept of instruction buffering is not applicable.
 
 This was followed by exploring different hardware techniques used to reduce the energy consumption of applications, which is a topic approached in Chapter~\ref{chp:cases}.
 These techniques (DVFS and thread migration) often rely on the processor cores to be designed ahead of time to create performance models, and they can sacrifice some speed to reduce energy consumption.

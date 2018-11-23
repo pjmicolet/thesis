@@ -46,7 +46,7 @@ This is promising as it means that there is a high chance that the predictor req
 On the other hand, \bm{Localization}, and \bm{SVM} execute over 100 blocks throughout 90\% of their execution, twice as many as the previously mentioned benchmarks.
 For these applications, it might be harder to predict values as new blocks may overwrite entries in the predictor.
 
-
+\vspace{-1em}
 \subsection{Setup}
 
 \begin{table}[t]
@@ -77,7 +77,7 @@ Each tagged entry has a tag of varying size (first table is 12 bits, second 13 b
 The total number of values for the D-VTAGE predictor is taken from Perais et al's work ~\cite{peraisBeBop2015}.
 The adopted size for this chapter is the medium predictor as it provides a good compromise between performance and total size of the predictor.
 The blocks in the speculative window represents the total number of in-flight blocks that can be handled by the speculative window, which is 4.
-
+\vspace{-0.5em}
 \paragraph*{Parameter tuning}
 Two features of the predictor can be modified: the number of values per entry and at what confidence a prediction is used.
 Modifying the required confidence explores the trade-off between high coverage and low misprediction.
@@ -85,44 +85,17 @@ The original D-VTAGE uses Forward Probabilistic Counters (FPC)~\cite{riley2006fp
 This confidence rate ensured that the predictor had an accuracy of over 99\%, but at the expense of a low coverage, 20\% on average~\cite{peraisBeBop2015}.
 The confidence of 4 is chosen as it allows for very fast deployment of predictions, whilst still ensuring that the values have been trained at least a few times.
 The FPC vector used in this Chapter is the same as the one in Perais et al.'s work $\{1,\frac{1}{16},\frac{1}{16},\frac{1}{16},\frac{1}{16},\frac{1}{16},\frac{1}{32},\frac{1}{32}\}$.
- 
-
-%This section explores two counter scenarios: using a prediction when the confidence is set to 4 (without FPC), and using confidence when the counter is set to 7 (with FPC).
-%To briefly summarise FPC: when a value is correctly predicted, its confidence is incremented based on a probability, rather than always incrementing the counter by one.
-
-%\begin{table}[t]
-%%  \small
- % \centering
-% \begin{tabular} {| l | l | l |}
-% \hline%
-%	\#Base Entry. & \#Tagged & \#Block in Spec Window\\ \hline
-%	1536 & $6\times1536$ & 4 \\ \hline
-%	\end{tabular}
- % \caption{D-VTAGE table configuration.}\label{tab:vtage-conf}
-%\end{table}
-
-%\begin{table}[t]
-%\small
-%\centering
-%\begin{tabular}{p{5.2cm} p{1.8cm}}
-%\toprule
-%\textbf{Parameter} & \textbf{Values} \\ \midrule
-%\# of values per entry & 8, 16\\
-%Confidence Value & 4 or 7 with FPC \\ \bottomrule
-%\end{tabular}
-%\caption{Configurable parameters for D-VTAGE}\label{tab:vtage-params}
-%\end{table}
+\vspace{-0.5em}
 \paragraph*{Block size}
-Table~\ref{tab:vtage-conf} also shows the possible values that can be taken for the two parameters.
-Whilst this section showed that most applications only have 5 reads per block,  \bm{Disparity} and \bm{Localization} have at least 8 reads and they both benefit from value prediction as seen in Section~\ref{chp:chp3:sec:analysis}.
-Since there is currently no method of determining which reads may have data-dependencies, it is important to have a block size that captures the largest register read average for the set of benchmarks which is 8.
+Whilst most applications only have 5 reads per block, \bm{Disparity} and \bm{Localization} have at least 8 reads and they both benefit from value prediction as seen in Section~\ref{chp:chp3:sec:analysis}.
+Since there is no method of determining which reads may have data-dependencies, it is important to have a block size that captures the largest register read average for the set of benchmarks which is 8.
 This section explores block sizes of 8 and 16 to ensure that all register reads are potentially covered. 
 The block size of 16 is explored to see how capturing a higher number than the average number of reads affects the performance of the predictor. 
 
 \paragraph*{Prediction Delay}
 In the original D-VTAGE proposal, they suggest that the predictor can generate \textit{x} values per cycle where \textit{x} is the issue width of the core.
-This means that 4 values can be generated per cycle, as this is the issue width of a core (see Chapter~\ref{chp:setup} Section~\ref{chp:setup:conf}.
-In Section~\ref{chp:chp3:sec:analysis}, Figure~\ref{fig:av_time} showed that, when using RRF, there is a minimum latency of 10 cycles from fetch to dispatch, meaning that the predictor can issue 8 to 16 predictions before dispatching any block.
+This means that 8 values can be generated per cycle, as this is the issue width of a core (see Chapter~\ref{chp:setup} Section~\ref{chp:setup:conf}).
+Since a request to the value predictor can be made at the same time as the start of a block-fetching stage, as described in Figure~\ref{fig:bad_overview}, this gives enough time to fetch all the values before a block is fully dispatched.
 
 
 \subsection{Results}
@@ -208,6 +181,7 @@ However, for \bm{Localization}, \bm{MSER}, \bm{SVM}, \bm{Texture\_Synthesis} and
 The effect of a value misprediction is similar to a branch misprediction: it causes a flush of all blocks younger than the block with the incorrect misprediction.
 Just like branch prediction, large core compositions are very sensitive to mispredictions, thus an accuracy rate of 93\% will impact performance if the blocks are small.
 This explains why the low confidence counter sometimes performs worse than the higher confidence as it mispredicts more often.
+\vspace{-1em}
 
 \subsection{Performance with non-perfect branch prediction}
 
@@ -224,7 +198,6 @@ This explains why the low confidence counter sometimes performs worse than the h
   \caption{Branch prediction accuracy in percentage for each of the benchmarks.}\label{tab:sd-vbsbpred2}
   \vspace{1em}
 \end{table}
-
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{chapter3/graphics/with_bpred.pdf}
