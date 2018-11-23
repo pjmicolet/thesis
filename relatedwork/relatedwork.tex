@@ -25,7 +25,6 @@ To ensure sequential renaming, a Global Program Counter (GPC) is introduced, and
 Using a 4 core composition they report a performance improvement of 2x on SPECINT, 3x on SPECFP and 4x on Mibench/Mediabench compared to a 2 issue core. 
 
 TFlex~\cite{kim2007tflex} proposed by Kim et al. is an EDGE processor that also deploys core composition.
-The mechanism is similar to the one described in Chapter~\ref{chp:Background} Section~\ref{chp:Background:sec:EDGE}.
 They motivate that EDGE simplifies distributing instructions across cores as EDGE itself is designed for distributed microarchitectures.
 Since instruction dependency orders are determined at compile time and encoded at the ISA level, the TFlex instruction fetching can be decentralised, as there is no need for centralised analysis like in a traditional ISA (such as register renaming or instruction number assignment).
 Unlike the model used throughout this thesis, a block's instructions can be distributed amongst the cores in the composition, with one of the cores being the block owner.
@@ -33,7 +32,7 @@ As each core can be responsible for a single block, the total number of blocks i
 In their work~\cite{kim2007tflex} Kim et al. show that a 32 core composition can outperform a single TFlex core by 3x on a set of EEMBC benchmarks and SPEC2000 microbenchmarks.
 
 The E2 processor is another EDGE based processor that can dynamically compose its cores~\cite{putnam2010e2}.
-Unlike TFlex, when cores are composed in the E2 processor, each core is responsible for the blocks they fetch.
+Unlike TFlex, a block is only executed on the core that fetches it, its instructions are not distributed.
 E2 introduces the concept of segmenting the instruction window into lanes, allowing cores to fetch multiple blocks.
 This allows E2 to be more adaptible to different block sizes; if the compiler can only generate small blocks, a core can have multiple blocks in its instruction window executing in parallel.
 For example, if E2 has four lanes, then if the program executing is composed only of 20 instructions, a four core composition on E2 can have up to 4 blocks $\times$ 20 instructions $\times$ 4 cores $=$ 320 instructions in flight, whilst TFlex will only have 4 blocks $\times$ 20 instructions $=$ 80 instructions in flight.
@@ -129,9 +128,8 @@ They show that cores may have to store up to 8 blocks in the instruction window 
 Overall this technique can improve the performance of a 16 core composition on a set of SPEC benchmarks by 1.08x on average, with a maximum speedup of 1.16x.
 
 This implementation depends on the concept that cores in the composition currently hold inactive blocks in their instruction window.
-Whilst this may be the case for TFlex, as it can only execute a single block per core, an E2 type processor is designed to not have idle cores in its composition.
-This is achieved by allowing cores to fetch multiple blocks in its instruction window and execute them in parallel, thus no block can be in the instruction window purely for storage.
-Therefore, another solution to improve fetching for the type of fetching used in this thesis is proposed in Chapter~\ref{chp:hardchanges}.
+Whilst this may be the case for TFlex, as it can only execute a single block per core, an E2 type processor is designed to not have idle blocks in its composition.
+Therefore, another solution to improve fetching for the type of processor used in this thesis is proposed in Chapter~\ref{chp:hardchanges}.
 
 \vspace{-1em}
 \section{Hardware techniques for power and energy efficiency}
@@ -192,8 +190,8 @@ This section covers work on speculative parallelism, where performance improveme
 
 \paragraph*{Software level}
 The idea of speculatively extracting parallelism at runtime was first introduced by Rauchwerger et al. in~\cite{runtimeSpec}.
-They underlined that compile-time analysis of single-threaded programs does not allow for the complete detection of parallel sections, and must be complemented by runtime analysis.
-They proposed a framework for parallelising loops at runtime: instead of detecting if the loop is parallelisable or not, the loop is speculatively executed in parallel and then runtime analysis is conducted to verify that no data-dependencies are violated.
+They underline that compile-time analysis of single-threaded programs does not allow for the complete detection of parallel sections, and must be complemented by runtime analysis.
+They propose a framework for parallelising loops at runtime: instead of detecting if the loop is parallelisable or not, the loop is speculatively executed in parallel and then runtime analysis is conducted to verify that no data-dependencies are violated.
 If any violations occur, the loop is re-executed serially.
 Loops must be marked as speculatively parallel by the compiler, the run-time system only verifies whether or not the speculative execution does not violate dependencies.
 
@@ -291,9 +289,8 @@ Once the values of these instructions are produced they are then forwarded to th
 Using this techniques, Robatmili et al. show that for a 16 core composition (TFlex processor), this register bypassing technique with criticality detection improves performance on a set of integer spec benchmarks by 1.08x on average and up to 1.16x at best.\
 
 The reason this technique cannot improve performance much more is due to the fact that it only attempts to detect which instructions should use register bypassing.
-This model still can still involve significant latency, as the late communication edges may require data from previous instructions as well.
-On the other hand, value prediction allows instructions to execute without having to wait for their depending instructions to finish, thus allowing for potentially more instruction level parallelism.
-This is why value prediction suggested as a new approach to the data-dependency problem for core composition.
+This model can still involve significant latency, as the late communication edges may require data from previous instructions as well, increasing the critical path chain.
+
 \vspace{-1em}
 \paragraph*{Summary}
 Data prefetching and register bypassing can help alleviate the effect of data-dependencies by ensuring that the sensitive instructions fire quicker.
@@ -331,7 +328,6 @@ As the StreamIt programming language was designed to be used for tiled-based arc
 As StreamIt is used to construct scalable parallel streaming applications it makes it a perfect candidate for exploring how to partition multi-threaded applications on a DMP, as seen in chapter~\ref{chp:streamit}.
 Since the current system used does not have a Java Virtual Machine (JVM) it cannot support the commensal compilation technique described by Bosboom et al.
 
-
 \section{Partitioning streaming programs on multicore chip}
 Chapter~\ref{chp:streamit} explores how partitioning streaming applications on a DMP improves performance.
 This involves determining which number of threads leads to the best execution time, and how many cores each thread needs.
@@ -350,7 +346,7 @@ They profile the communication costs of the streaming programs by running the pr
 Using a machine learning model to partition StreamIt programs was previously explored in the work of Wang et al. in ~\cite{wang2013partitionstreamit}.
 They use a k nearest neighbor (kNN) model to determine the perfect partitioning of a StreamIt program for a multicore system. 
 Their model is used to find ways of fusing and fissioning filters to discover a new graph that can then be mapped onto a multicore system.
-
+\vspace{-1em}
 \paragraph*{Summary}
 Whilst this previous work focusses on determining a partition of streaming applications through mathematical models or integer linear programming, Wang et al. in ~\cite{wang2013partitionstreamit} show that machine learning can be used.
 However, none of these proposals explore DMPs, instead focussing on processors with fixed designs.
