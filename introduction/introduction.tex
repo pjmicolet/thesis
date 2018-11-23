@@ -14,7 +14,7 @@ This produces ``on-demand'' heterogeneity where cores are grouped to adapt to th
 
 Whilst the flexibility of a DMP is an advantage, it increases the complexity of obtaining the optimal performance out of applications.
 If reconfiguration cannot be automated, then it is up to the programmer to decide how the processor must be partitioned, adding extra development work.
-In order to motivate further development of DMPs, it is important to demonstrate that they can be practical.
+In order to motivate further development of DMPs, it is important to prove that they can be practical.
 This thesis demonstrates that different techniques can improve the usability and performance of DMPs, making them an attractive approach towards processor design. 
 
 \section{The Problem}
@@ -49,7 +49,7 @@ For example, core composition exploits instruction level parallelism (ILP) by ex
 Unfortunately unresolved data-dependencies, that often arise when many instructions can be executed in parallel, will reduce the potential performance improvements as instructions must wait on each other to execute.
 This means that DMPs will not improve performance to the fullest of their capacities.
 
-Previous work attempts to resolve this problem by smartly scheduling instructions and applying register forwarding to try and reduce the latency caused by data-dependencies~\cite{robatmili2011uniproc}.
+Previous work attempts to resolve this problem by applying register forwarding to try and reduce the latency caused by data-dependencies~\cite{robatmili2011uniproc}.
 However, this is only a partial solution as instructions must still wait on instructions they are dependent on, reducing the potential improvements. 
 It is therefore crucial to critically analyse where the current bottlenecks of core composition are from a hardware perspective.
 By proposing new solutions to these bottlenecks, core composition can become more effective at improving the performance of programs.
