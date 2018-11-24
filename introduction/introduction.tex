@@ -53,7 +53,7 @@ Previous work attempts to resolve this problem by applying register forwarding t
 However, this is only a partial solution as instructions must still wait on instructions they are dependent on, reducing the potential improvements. 
 It is therefore crucial to find new ways of addressing the bottlenecks of core composition from a hardware perspective.
 By proposing new solutions to these bottlenecks, core composition can become more effective at improving the performance of programs.
-Modifications to the hardware can even help dynamic multicore processors become more adaptable to new types of programs, making them more practical.
+Introducing new hardware can even help dynamic multicore processors become more adaptable to new types of programs, making them more practical.
 
 \vspace{-1em}
 \section{Contributions}
@@ -105,8 +105,8 @@ A machine learning model that can determine the correct size of a core compositi
 This proves that dynamic reconfiguration can also be learned.
 The chapter is based on the work previously published in ~\cite{micolet2017cases}.
 
-\textbf{Chapter ~\ref{chp:hardchanges}} presents modifications to the hardware that allow larger core compositions to perform better in the average situation by reducing latencies caused by executing code on such compositions.
-The modifications involve a new fetching mechanism that ensures each core can fetch instructions independently and in a round robin fashion and the use of value prediction to minimise stress on the network on chip and reduce the effect of data dependencies between cores.
+\textbf{Chapter ~\ref{chp:hardchanges}} presents new hardware that allows larger core compositions to perform better in the average situation by reducing latencies caused by executing code on such compositions.
+The new additions involve a new fetching mechanism that ensures each core can fetch instructions independently and in a round robin fashion and the use of value prediction to minimise stress on the network on chip and reduce the effect of data dependencies between cores.
 The chapter shows that a current state-of-the art value predictor paired with the new fetching mechanism can outperform the current implementation of core composition.
 
 \textbf{Chapter ~\ref{chp:conclusion}} finally concludes this thesis by summarising the contributions, providing critical analysis and presenting future work in the field of DMPs.

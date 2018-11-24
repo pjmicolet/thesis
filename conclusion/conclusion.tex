@@ -47,8 +47,8 @@ This allows programmers to be able to immediately benefit from the DMP's flexibi
 
 
 \subsection{Adapting hardware to improve core composition performance}
-Chapter~\ref{chp:hardchanges} proposed two hardware modifications to the DMP in order to improve performance of core composition.
-The two modifications aim to reduce data-dependencies between cores in a composition and also increase the percentage of time each core in a large composition was active.
+Chapter~\ref{chp:hardchanges} proposed two hardware addition to the DMP in order to improve performance of core composition.
+These features aim to reduce data-dependencies between cores in a composition and also increase the percentage of time each core in a large composition was active.
 First, it analysed how the current fetching mechanism was a major cause of inefficiency for large core compositions when blocks are small.
 As the current fetching mechanism focuses on filling the instruction window of a single core, many cores in the composition are left idle.
 The chapter suggests a decentralised round-robin fetch scheme where cores fetch out of order and dispatch in order.

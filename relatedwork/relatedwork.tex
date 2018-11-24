@@ -120,7 +120,7 @@ This section covers how this issue has been address in previous research.
 
 Robatmili et al. in~\cite{robatmili2011uniproc} discuss how to improve block fetching for the TFlex processor by selectively refreshing blocks.
 First, they modify TFlex so that blocks are executed locally on the core instead of dispersing the instructions of a block on multiple cores.
-The two main assumption made is that a core can only ever execute a single block at a time, and once the block is committed, it can remain in the instruction window as a temporary buffer.
+The two main assumption made is that a core can only ever execute a single block at a time, and once the block is committed, it can remain in the instruction window.
 When a new block request is made, the coordinator core in charge of the new block checks to see if any inactive core has that block stored in their window.
 If it does, then that core is activated and starts re-executing the buffered block.
 If no idle core has the block in their window, then the coordinator core will ask one of those cores to fetch the block and start executing it.
@@ -285,15 +285,15 @@ Robatmili et al. in~\cite{robatmili2011uniproc} discuss the potential bottleneck
 This work uses the TFlex processor and presents the Distributed Block Criticality Analyzer (DBCA) that can gather criticality information to optimise the execution of instructions at runtime.
 The DBCA is able to detect and predict which instructions are late communication edges, that is the last register writes in a block that younger blocks.
 When a block is fetched, the core calls the DBCA to get the predicted registers to determine which register writes are late communication edges.
-Once the values of these instructions are produced they are then forwarded to the successive speculative block via a register bypass.
-Using this techniques, Robatmili et al. show that for a 16 core composition (TFlex processor), this register bypassing technique with criticality detection improves performance on a set of integer spec benchmarks by 1.08x on average and up to 1.16x at best.\
+Once the values of these instructions are produced they are forwarded to the successive speculative block directly, bypassing the register file.
+Using this techniques, Robatmili et al. show that for a 16 core composition (TFlex processor), the performance of a set of integer SPEC benchmarks can be improved by 1.08x on average and up to 1.16x at best.
 
 The reason this technique cannot improve performance much more is due to the fact that it only attempts to detect which instructions should use register bypassing.
 This model can still involve significant latency, as the late communication edges may require data from previous instructions as well, increasing the critical path chain.
 
 \vspace{-1em}
 \paragraph*{Summary}
-Data prefetching and register bypassing can help alleviate the effect of data-dependencies by ensuring that the sensitive instructions fire quicker.
+Data prefetching and register bypassing can help alleviate the effect of data-dependencies by ensuring that data-dependent values arrive quicker to their destination.
 Unlike value predictors, data prefetching is a technique that is actually implemented in both compilers and real commercial processors~\cite{intelmanual}.
 Yet both data prefetching and register bypassing do not allow for instructions to execute with speculative data, which, as will be seen in Chapter~\ref{chp:hardchanges} is better for increasing ILP in large core compositions.
 \vspace{-1em}
@@ -394,7 +394,7 @@ These techniques are described to show the breadth of performance optimisations 
 
 Value prediction, data-prefetching and register bypassing were shown to be methods of reducing the impact of data-dependencies between instructions.
 Even though data-prefetching is successfully applied in commercial products, it does not allow instructions to execute with speculative data.
-Also, register bypassing and critical detection does not present the best solution to the problem as it is more focused on smartly scheduling instructions and forwarding values with low overhead.
+Also, register bypassing and critical detection does not present the best solution to the problem as it is more focused on forwarding values with low overhead.
 As value prediction allows instructions to execute with speculative data, this is a more promising approach for increasing ILP in core compositions, as will be explained in Chapter~\ref{chp:hardchanges}.
 
 Then, dataflow programming languages, and the different methods used to partition applications written in these languages on multicore processors was explained.

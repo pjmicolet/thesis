@@ -95,7 +95,7 @@ The block size of 16 is explored to see how capturing a higher number than the a
 \paragraph*{Prediction Delay}
 In the original D-VTAGE proposal, they suggest that the predictor can generate \textit{x} values per cycle where \textit{x} is the issue width of the core.
 This means that 8 values can be generated per cycle, as this is the issue width of a core (see Chapter~\ref{chp:setup} Section~\ref{chp:setup:conf}).
-Since a request to the value predictor can be made at the same time as the start of a block-fetching stage, as described in Figure~\ref{fig:bad_overview}, this gives enough time to fetch all the values before a block is fully dispatched.
+Since a request to the value predictor can be made at the same time as the start of a block fetch as seen in Figure~\ref{fig:bad_overview}, this gives enough time to fetch all the values before a block is fully dispatched as most blocks have at least 8 instructions.
 
 
 \subsection{Results}
