@@ -77,6 +77,13 @@ Each tagged entry has a tag of varying size (first table is 12 bits, second 13 b
 The total number of values for the D-VTAGE predictor is taken from Perais et al's work ~\cite{peraisBeBop2015}.
 The adopted size for this chapter is the medium predictor as it provides a good compromise between performance and total size of the predictor.
 The blocks in the speculative window represents the total number of in-flight blocks that can be handled by the speculative window, which is 4.
+
+\paragraph*{On area and power/energy consumption}
+Since value prediction is still an experimental piece of hardware, this chapter focuses on demonstrating that they are useful in the context of core composition.
+This chapter is therefore a limit study of the performance improvements obtained via value predictors in large core compositions.
+This study motivates the necessity of value predictors, to push further research into how to efficiently implement them in the hardware.
+Therefore, no energy/power consumption or area information is provided here.
+
 \vspace{-0.5em}
 \paragraph*{Parameter tuning}
 Two features of the predictor can be modified: the number of values per entry and at what confidence a prediction is used.

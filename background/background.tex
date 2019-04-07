@@ -227,7 +227,14 @@ Unlike traditional CMPs, composed cores operate on the same thread and extract I
 Figure~\ref{fig:dmp} shows the different stages and mechanisms of core composition for a four core EDGE system.
 When creating a new composition a master core informs all other cores about the fusion and sends the predicted next block address to an available fused core.
 When a new thread is started on a fused core the OS and runtime write the new core mapping to a system register.
+This system register informs the core which cores on the chip belong to the same composition; each bit representing a specific core on the processor.
+As the register files and caches are distributes when cores are composed, this system register is used to determine which core owns which register or cache line.
 The hardware then flushes these cores if they are not idle and sets the PC of the first block of that thread on one core in the composition and starts executing.
+
+The topology of the composition can either be hand-picked by a programmer via an API, or simply defined by specifying the number of cores that they wish to have composed.
+In the first case, the programmer specifies which cores should be fused and calls a function which will trigger the composition; the core that executes this call becomes the master core.
+In the second case, the programmer only defines the number of cores that must belong to the composition; then when the master core executes the composition call, it chooses the X cores which follow it in processor mapping.
+
 When a core mispredicts a branch in a composition, it informs the other cores which flush any younger blocks.
 When un-fusing, the master core informs the other cores, which then commit or flush their blocks and power down while the master core continues to fetch and execute blocks from the thread.
 The extra hardware required to support dynamic reconfiguration is very minimal~\cite{kim2007tflex} since most of the machinery already in place can be reused such as the cache coherence protocol when fusing and un-fusing the cores.

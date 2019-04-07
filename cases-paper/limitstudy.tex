@@ -1,15 +1,17 @@
 This section studies how block size and branch prediction limit the performance of core composition.
 An analytical model is defined to estimate the performance of a core composition, shown in Equation~\ref{form:wcetMath}.
-The variables in Equation~\ref{form:wcetMath} are the average block size \textit{ABS},  the size of the composition \textit{CS} and branch prediction accuracy \textit{BPredAcc} that ranges from 0 to 1.
+The variables in Equation~\ref{form:wcetMath} are the average block size \textit{ABS},  the size of the composition \textit{CS} and branch prediction cost \textit{BPCost} which is the cycle cost of branch prediction given a branch prediction accuracy between 0 and 1.
 For this study, a dual issue core is used, thus the constant 2 in Equation~\ref{form:wcetMath} derives from the hardware constraint that a core can execute up to 2 instructions per cycle.
 \textit{SyncCost} represents the cost (in cycles) of having to commit blocks sequentially in a composition, this is covered in more details later on.
 This analytical model enables a better understanding of what leads to good performance and how to determine regions of code that benefit from core composition.
 The limit study explains why each component of Equation~\ref{form:wcetMath} are important to predict the performance of a core composition.
 
 \begin{align}\label{form:wcetMath}
-IPC(ASB,CS,BPredAcc) &= \bigg(\frac{ABS}{SyncCost(ABS,CS) + {\frac{ABS}{2}}}\bigg) \times BPredAcc \times CS
+IPC(ASB,CS,BPCost) &= \bigg(\frac{ABS}{SyncCost(ABS,CS) + BPCost+ {\frac{ABS}{2}}}\bigg) \times CS
 \end{align}
-
+\begin{align}
+BPCost(BranchPredAcc,BranchMisCost) &= BranchMisCost * ( 1 - BranchPredAcc)
+\end{align}
 
 \subsection{Branch Prediction}
 

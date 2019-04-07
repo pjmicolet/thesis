@@ -5,7 +5,7 @@ The hardware side is about finding out the best core composition that maximises 
 \begin{figure}[t]
  \centering
     \includegraphics[width=1\textwidth]{streamit-paper/graphics/threadingmaybe5.pdf}
-    \caption{Speedup obtained when increasing the number of threads with and without core composition. Baseline is single core single thread. Higher is better}\label{fig:threadtrend}  \vspace{-1em}
+    \caption{Speedup obtained when increasing the number of threads with and without core composition. Baseline is single core single-working-thread. Higher is better}\label{fig:threadtrend}  \vspace{-1em}
 
 \end{figure}
 
@@ -18,7 +18,7 @@ To simplify this study, the default streaming partitioner is used to decide on h
 On the hardware side, two scenarios are considered: the ``without composition scenario'' where there is exactly one core per thread and the ``with composition scenario'' where each thread receives between 1 and 15 cores.
 Figure~\ref{fig:threadtrend} plots how performance varies under both scenarios as a function of the number of threads.
 In this figure, the ``with composition scenario`` uses points from the sample space that result in the fastest execution time for a given number of threads.
-Once again, performance is measured by comparing the execution time of a design point to that of the single core/single thread as it represents the default configuration
+Once again, performance is measured by comparing the execution time of a design point to that of the single core/single-working-thread as it represents the default configuration
 
 Overall the optimal number of threads using core composition is very similar to the scenario without composition as both curves follow the same performance trends.
 This is due to the fact that StreamIt is oriented towards task-level parallelism and thus, multithreading is a natural fit for performance improvements whilst core-composition may have less of an effect.
@@ -37,14 +37,14 @@ Finally it is important to observe that executions without compositions always p
 
 \begin{figure}[t]
   \includegraphics[width=1\textwidth]{streamit-paper/graphics/filterbank_tot2.pdf}
-  \caption{Distribution of FilterBank performance when modifying the amount of threads and compositions. Speedup is obtained by comparing performance of configuration to single core, single thread.}\label{fig:fbtotal}
+  \caption{Distribution of FilterBank performance when modifying the amount of threads and compositions. Speedup is obtained by comparing performance of configuration to single core, single-working-thread.}\label{fig:fbtotal}
 \end{figure}
 
 Using core composition, the processor fuses a number of cores and associates them to a thread to increase its performance.
 Whilst this flexibility is advantageous, choosing the right amount of cores for a given thread is difficult due to the large number of possible configurations~\cite{gulati2008multitaskingdmc}.
 
 Figure~\ref{fig:fbtotal} shows how multi-threading and core compositions affect performance for the \bench{FilterBank} benchmark.
-The curves represent the density distribution of speedups, compared to single core/single thread, for different core compositions as a function of the number of threads.
+The curves represent the density distribution of speedups, compared to single core/single-working-thread, for different core compositions as a function of the number of threads.
 The right hand side Y-axis represents the number of threads present in the current version of the benchmark whilst the left Y-Axis represents the density normalised by the total number of points in the design space.
 For each of the thread counts the benchmark is executed with 100 different core-compositions.
 The density curve for thread 15 is a single point as there exists only a single composition, so a line is drawn to represent where that point lies.
@@ -69,7 +69,7 @@ One method of increasing the size of the blocks is through loop unrolling, and t
 \begin{figure}[t]
   \includegraphics[width=1\textwidth]{streamit-paper/graphics/filterbank_unroll2.pdf}
   \vspace{-1em}
-  \caption{Distribution of FilterBank performance when modifying the amount of threads, composition and unrolling factor. Speedup is obtained by comparing performance of configuration to single core, single thread without unrolling.}\label{fig:fbunroll}  \vspace{-1em}
+  \caption{Distribution of FilterBank performance when modifying the amount of threads, composition and unrolling factor. Speedup is obtained by comparing performance of configuration to single core, single-working-thread without unrolling.}\label{fig:fbunroll}  \vspace{-1em}
 
 \end{figure}
 
@@ -84,11 +84,11 @@ Figure~\ref{fig:fbunroll} shows that unrolling loops for \bench{FilterBank} can 
 \begin{figure}[t]
   \includegraphics[width=1\textwidth]{streamit-paper/graphics/unroll_speed_bars2.pdf}
   \vspace{-1em}
-  \caption{Effect of unrolling on performance via core-composition on the single-threaded versions of each benchmarks. The baseline is single core single thread.}\label{fig:unroll_summary}
+  \caption{Effect of unrolling on performance via core-composition on the single-threaded versions of each benchmarks. The baseline is single core single-working-thread.}\label{fig:unroll_summary}
   \vspace{-1em}
 \end{figure}
 
-Figure~\ref{fig:unroll_summary} shows how unrolling affects the amount of speedup obtained by running each of the StreamIt benchmarks on a single thread using different number of cores in the composition.
+Figure~\ref{fig:unroll_summary} shows how unrolling affects the amount of speedup obtained by running each of the StreamIt benchmarks on a single-working-thread using different number of cores in the composition.
 The X axis represents the number of cores in the composition, ranging from single core to 15 whilst the Y axis compares the execution time in number of cycles for the benchmark using a single core vs. a given core composition.
 The colours of the lines represent with and without unrolling.
 As can be seen, five benchmarks benefit from unrolling, these are \bench{Beamformer}, \bench{ChannelVocoder}, \bench{FFT6}, \bench{FilterBank} and \bench{FMRadio}. 
@@ -127,7 +127,7 @@ Overall, this section has shown that unrolling can improve performance by increa
 \begin{figure}[t]%\hspace{-1em}
     \includegraphics[width=1\linewidth,keepaspectratio]{streamit-paper/graphics/threadcompbench.pdf}
     \caption{Speedup obtained by choosing best core composition, best
-      thread number and the combination of both optimisations. The baseline for the speedup measurement is single core, single thread execution using O2 compiler optimisations. Higher
+      thread number and the combination of both optimisations. The baseline for the speedup measurement is single core, single-working-thread execution using O2 compiler optimisations. Higher
       is better.}\label{fig:overviewhist}
 \end{figure}
 \subsection{Co-Design Space Analysis}
@@ -136,7 +136,7 @@ Overall, this section has shown that unrolling can improve performance by increa
 This section  presents the results of the entire co-design space exploration.
 Figure~\ref{fig:overviewhist} characterises how much of a performance increase, over a baseline of a single-core single-thread with O2 optimisations, can be obtained with and without unrolling.
 For each benchmark, the \textit{THREAD} bar represents the maximal speedup obtained by dividing the program into threads and assigning one core per thread.
-The \textit{CORE} bar represents the best speedup when the benchmark is executed on a single thread and fuse all cores.
+The \textit{CORE} bar represents the best speedup when the benchmark is executed on a single-working-thread and fuse all cores.
 \textit{BOTH} represents the best speedup obtained for each benchmark using a combination of \textit{THREAD} and \textit{CORE}.
 Finally, for each benchmark, the results are obtained for both an unrolled and not unrolled version to compare how the compiler optimisation affects performance.
 Figure~\ref{fig:overviewhist} shows that when loops are not unrolled, composing cores will not greatly improve performance.
@@ -158,7 +158,7 @@ Benchmarks with SplitJoins will naturally benefit from splitting the program int
 %Make sure this is 100% true but as far as I remember this is the case
 Those that do not feature SplitJoins can still be parallelised by splitting a Pipeline into multiple parts.
 For example, benchmark \bench{FIR} features no SplitJoins, yet splitting the Pipeline in 2 will result in a 1.40x speedup.
-However, it is important to note that whilst finding the optimal thread mapping may result in higher performance improvements than finding the optimal composition for a single thread, the best performance is always obtained through a combination of both techniques.
+However, it is important to note that whilst finding the optimal thread mapping may result in higher performance improvements than finding the optimal composition for a single-working-thread, the best performance is always obtained through a combination of both techniques.
 For cases such as \bench{BeamFormer} the optimal pairing results in a 1.8x speedup compared to simply finding the best multithreaded version.
 On average, the optimal combination leads to a 1.5x performance increase compared to only multithreading.
 

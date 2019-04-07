@@ -3,13 +3,13 @@ In Section~\ref{sec:streamit:dse}, Figure~\ref{fig:threadtrend} showed the perfo
 In both cases, the number of threads is often similar.
 The section also demonstrated that loop unrolling can improve the performance of core composition.
 
-Since core composition is used to improve the performance of a single thread, it is important to take into consideration that partitioning the software into threads facilitates the core estimation per thread.
+Since core composition is used to improve the performance of a single-working-thread, it is important to take into consideration that partitioning the software into threads facilitates the core estimation per thread.
 Without determining a number of threads before predicting the number of cores the core-composition model has no information as to the number of threads or the structure of each thread.
-In this situation, the core-composition model would either have to make its own estimates as to the thread count, or make a general prediction for a single thread.
+In this situation, the core-composition model would either have to make its own estimates as to the thread count, or make a general prediction for a single-working-thread.
 Therefore predicting core-composition comes after predicting the number of threads.
 
 \subsubsection{Gathering Training Data for Core-Composition}
-For this section the single threaded version of the StreamIt benchmark are used to determine the optimal number of cores in order to explore all possible core composition sizes.
+For this section the single-working-threaded version of the StreamIt benchmark are used to determine the optimal number of cores in order to explore all possible core composition sizes.
 Some of the multi-threaded versions of benchmarks can be used to add extra data-points to build the model, however not all thread-counts are suitable.
 One of the difficulties of adding data-points from the highly threaded versions of an applications is that each thread will only be able to have a very small core-composition.
 For example, if the 15 threaded version of a benchmarks is added as data points to the model, then each of the feature vectors for this version would have a single core attributed to it.
@@ -96,8 +96,8 @@ However, according to the correlation graph in Figure~\ref{fig:corrCore}, the co
 
 \subsubsection{Linear Regression Model}
 Given that the optimal number of cores highly correlates with a few features, a linear regressor is a natural choice to predict the best number of threads.
-Figures~\ref{fig:maxav} represent how the first three highest correlating values affect the optimal number of cores for a single thread.
-This figure is obtained by finding the best number of cores for the single threaded version of each of the StreamIt benchmarks whilst varying the amount of loop unrolling.
+Figures~\ref{fig:maxav} represent how the first three highest correlating values affect the optimal number of cores for a single-working-thread.
+This figure is obtained by finding the best number of cores for the single-working-threaded version of each of the StreamIt benchmarks whilst varying the amount of loop unrolling.
 It is important to note that the reason the points in the top right corner appear to converge at 15 cores is due to the fact that no more than 15 cores can be fused.
 Overall, Figure~\ref{fig:maxav} shows that StreamIt applications with large unconditionally executed blocks will require large compositions.
 

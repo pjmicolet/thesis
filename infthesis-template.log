@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.5.24)  29 MAY 2018 16:42
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.5.24)  7 APR 2019 13:21
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -144,6 +144,17 @@ Package caption3 Info: TeX engine: e-TeX on input line 67.
 )
 \c@ContinuedFloat=\count92
 ))
+(/usr/share/texlive/texmf-dist/tex/latex/placeins/placeins.sty
+Package: placeins 2005/04/18  v 2.2
+)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/pdflscape.sty
+Package: pdflscape 2008/08/11 v0.10 Display of landscape pages in PDF (HO)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/lscape.sty
+Package: lscape 2000/10/22 v3.01 Landscape Pages (DPC)
+)
+Package pdflscape Info: Auto-detected driver: pdftex on input line 80.
+)
 (/usr/share/texlive/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip10
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
@@ -655,34 +666,225 @@ Package: listings 2015/06/04 1.6 (Carsten Heinz)
 Package: lstlinebgrd 2012/05/03 v0.1 Provides 'listings' options to color the b
 ackground of lines
 )
+(/usr/share/texlive/texmf-dist/tex/latex/algorithm2e/algorithm2e.sty
+Package: algorithm2e 2013/01/06 v5.00 algorithms environments
+\c@AlgoLine=\count180
+\algocf@hangindent=\skip66
+
+(/usr/share/texlive/texmf-dist/tex/latex/relsize/relsize.sty
+Package: relsize 2013/03/29 ver 4.1
+)
+********************************************************
+Package `algorithm2e' Release 5.1 -- october 19 2015 --
+- algorithm2e-announce@lirmm.fr mailing list for announcement about releases
+- algorithm2e-discussion@lirmm.fr mailing list for discussion about package
+subscribe by emailing sympa@lirmm.fr with 'subscribe <list> <firstname name>'
+- Author: Christophe Fiorio (christophe.fiorio@umontpellier.fr)
+********************************************************
+\skiptotal=\skip67
+\skiplinenumber=\skip68
+\skiprule=\skip69
+\skiphlne=\skip70
+\skiptext=\skip71
+\skiplength=\skip72
+\algomargin=\skip73
+\skipalgocfslide=\skip74
+\algowidth=\dimen258
+\inoutsize=\dimen259
+\inoutindent=\dimen260
+\interspacetitleruled=\dimen261
+\interspacealgoruled=\dimen262
+\interspacetitleboxruled=\dimen263
+\algocf@ruledwidth=\skip75
+\algocf@inoutbox=\box78
+\algocf@inputbox=\box79
+\AlCapSkip=\skip76
+\AlCapHSkip=\skip77
+\algoskipindent=\skip78
+\algocf@nlbox=\box80
+\algocf@hangingbox=\box81
+\algocf@untilbox=\box82
+\algocf@skipuntil=\skip79
+\algocf@capbox=\box83
+\algoheightruledefault=\skip80
+\algoheightrule=\skip81
+\algotitleheightruledefault=\skip82
+\algotitleheightrule=\skip83
+\c@algocfline=\count181
+\c@algocfproc=\count182
+\c@algocf=\count183
+\algocf@algoframe=\box84
+\algocf@algobox=\box85
+) (/usr/share/texlive/texmf-dist/tex/latex/algorithmicx/algpseudocode.sty
+Package: algpseudocode 
+
+(/usr/share/texlive/texmf-dist/tex/latex/algorithmicx/algorithmicx.sty
+Package: algorithmicx 2005/04/27 v1.2 Algorithmicx
+
+Document Style algorithmicx 1.2 - a greatly improved `algorithmic' style
+\c@ALG@line=\count184
+\c@ALG@rem=\count185
+\c@ALG@nested=\count186
+\ALG@tlm=\skip84
+\ALG@thistlm=\skip85
+\c@ALG@Lnr=\count187
+\c@ALG@blocknr=\count188
+\c@ALG@storecount=\count189
+\c@ALG@tmpcounter=\count190
+\ALG@tmplength=\skip86
+)
+Document Style - pseudocode environments for use with the `algorithmicx' style
+)
+\llength=\skip87
+ (/usr/share/texlive/texmf-dist/tex/latex/stackengine/stackengine.sty
+Package: stackengine 2014/01/06 v3.24\ Stacking text and objects in convenient 
+ways
+
+(/usr/share/texlive/texmf-dist/tex/latex/etoolbox/etoolbox.sty
+Package: etoolbox 2015/08/02 v2.2a e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count191
+)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/calc.sty
+Package: calc 2014/10/28 v4.3 Infix arithmetic (KKT,FJ)
+\calc@Acount=\count192
+\calc@Bcount=\count193
+\calc@Adimen=\dimen264
+\calc@Bdimen=\dimen265
+\calc@Askip=\skip88
+\calc@Bskip=\skip89
+LaTeX Info: Redefining \setlength on input line 80.
+LaTeX Info: Redefining \addtolength on input line 81.
+\calc@Ccount=\count194
+\calc@Cskip=\skip90
+)
+\c@@stackindex=\count195
+\@boxshift=\skip91
+\stack@tmplength=\skip92
+\temp@stkl=\skip93
+\@stackedboxwidth=\skip94
+\@addedbox=\box86
+\@anchorbox=\box87
+\stackedbox=\box88
+\@centerbox=\box89
+\c@ROWcellindex@=\count196
+)
+(/usr/share/texlive/texmf-dist/tex/latex/rotating/rotating.sty
+Package: rotating 2009/03/28 v2.16a rotated objects in LaTeX
+\c@r@tfl@t=\count197
+\rotFPtop=\skip95
+\rotFPbot=\skip96
+\rot@float@box=\box90
+\rot@mess@toks=\toks24
+)
+(/usr/share/texlive/texmf-dist/tex/latex/base/textcomp.sty
+Package: textcomp 2005/09/27 v1.99g Standard LaTeX package
+Package textcomp Info: Sub-encoding information:
+(textcomp)               5 = only ISO-Adobe without \textcurrency
+(textcomp)               4 = 5 + \texteuro
+(textcomp)               3 = 4 + \textohm
+(textcomp)               2 = 3 + \textestimated + \textcurrency
+(textcomp)               1 = TS1 - \textcircled - \t
+(textcomp)               0 = TS1 (full)
+(textcomp)             Font families with sub-encoding setting implement
+(textcomp)             only a restricted character set as indicated.
+(textcomp)             Family '?' is the default used for unknown fonts.
+(textcomp)             See the documentation for details.
+Package textcomp Info: Setting ? sub-encoding to TS1/1 on input line 79.
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/ts1enc.def
+File: ts1enc.def 2001/06/05 v3.0e (jk/car/fm) Standard LaTeX file
+)
+LaTeX Info: Redefining \oldstylenums on input line 334.
+Package textcomp Info: Setting cmr sub-encoding to TS1/0 on input line 349.
+Package textcomp Info: Setting cmss sub-encoding to TS1/0 on input line 350.
+Package textcomp Info: Setting cmtt sub-encoding to TS1/0 on input line 351.
+Package textcomp Info: Setting cmvtt sub-encoding to TS1/0 on input line 352.
+Package textcomp Info: Setting cmbr sub-encoding to TS1/0 on input line 353.
+Package textcomp Info: Setting cmtl sub-encoding to TS1/0 on input line 354.
+Package textcomp Info: Setting ccr sub-encoding to TS1/0 on input line 355.
+Package textcomp Info: Setting ptm sub-encoding to TS1/4 on input line 356.
+Package textcomp Info: Setting pcr sub-encoding to TS1/4 on input line 357.
+Package textcomp Info: Setting phv sub-encoding to TS1/4 on input line 358.
+Package textcomp Info: Setting ppl sub-encoding to TS1/3 on input line 359.
+Package textcomp Info: Setting pag sub-encoding to TS1/4 on input line 360.
+Package textcomp Info: Setting pbk sub-encoding to TS1/4 on input line 361.
+Package textcomp Info: Setting pnc sub-encoding to TS1/4 on input line 362.
+Package textcomp Info: Setting pzc sub-encoding to TS1/4 on input line 363.
+Package textcomp Info: Setting bch sub-encoding to TS1/4 on input line 364.
+Package textcomp Info: Setting put sub-encoding to TS1/5 on input line 365.
+Package textcomp Info: Setting uag sub-encoding to TS1/5 on input line 366.
+Package textcomp Info: Setting ugq sub-encoding to TS1/5 on input line 367.
+Package textcomp Info: Setting ul8 sub-encoding to TS1/4 on input line 368.
+Package textcomp Info: Setting ul9 sub-encoding to TS1/4 on input line 369.
+Package textcomp Info: Setting augie sub-encoding to TS1/5 on input line 370.
+Package textcomp Info: Setting dayrom sub-encoding to TS1/3 on input line 371.
+Package textcomp Info: Setting dayroms sub-encoding to TS1/3 on input line 372.
+
+Package textcomp Info: Setting pxr sub-encoding to TS1/0 on input line 373.
+Package textcomp Info: Setting pxss sub-encoding to TS1/0 on input line 374.
+Package textcomp Info: Setting pxtt sub-encoding to TS1/0 on input line 375.
+Package textcomp Info: Setting txr sub-encoding to TS1/0 on input line 376.
+Package textcomp Info: Setting txss sub-encoding to TS1/0 on input line 377.
+Package textcomp Info: Setting txtt sub-encoding to TS1/0 on input line 378.
+Package textcomp Info: Setting lmr sub-encoding to TS1/0 on input line 379.
+Package textcomp Info: Setting lmdh sub-encoding to TS1/0 on input line 380.
+Package textcomp Info: Setting lmss sub-encoding to TS1/0 on input line 381.
+Package textcomp Info: Setting lmssq sub-encoding to TS1/0 on input line 382.
+Package textcomp Info: Setting lmvtt sub-encoding to TS1/0 on input line 383.
+Package textcomp Info: Setting lmtt sub-encoding to TS1/0 on input line 384.
+Package textcomp Info: Setting qhv sub-encoding to TS1/0 on input line 385.
+Package textcomp Info: Setting qag sub-encoding to TS1/0 on input line 386.
+Package textcomp Info: Setting qbk sub-encoding to TS1/0 on input line 387.
+Package textcomp Info: Setting qcr sub-encoding to TS1/0 on input line 388.
+Package textcomp Info: Setting qcs sub-encoding to TS1/0 on input line 389.
+Package textcomp Info: Setting qpl sub-encoding to TS1/0 on input line 390.
+Package textcomp Info: Setting qtm sub-encoding to TS1/0 on input line 391.
+Package textcomp Info: Setting qzc sub-encoding to TS1/0 on input line 392.
+Package textcomp Info: Setting qhvc sub-encoding to TS1/0 on input line 393.
+Package textcomp Info: Setting futs sub-encoding to TS1/4 on input line 394.
+Package textcomp Info: Setting futx sub-encoding to TS1/4 on input line 395.
+Package textcomp Info: Setting futj sub-encoding to TS1/4 on input line 396.
+Package textcomp Info: Setting hlh sub-encoding to TS1/3 on input line 397.
+Package textcomp Info: Setting hls sub-encoding to TS1/3 on input line 398.
+Package textcomp Info: Setting hlst sub-encoding to TS1/3 on input line 399.
+Package textcomp Info: Setting hlct sub-encoding to TS1/5 on input line 400.
+Package textcomp Info: Setting hlx sub-encoding to TS1/5 on input line 401.
+Package textcomp Info: Setting hlce sub-encoding to TS1/5 on input line 402.
+Package textcomp Info: Setting hlcn sub-encoding to TS1/5 on input line 403.
+Package textcomp Info: Setting hlcw sub-encoding to TS1/5 on input line 404.
+Package textcomp Info: Setting hlcf sub-encoding to TS1/5 on input line 405.
+Package textcomp Info: Setting pplx sub-encoding to TS1/3 on input line 406.
+Package textcomp Info: Setting pplj sub-encoding to TS1/3 on input line 407.
+Package textcomp Info: Setting ptmx sub-encoding to TS1/4 on input line 408.
+Package textcomp Info: Setting ptmj sub-encoding to TS1/4 on input line 409.
+)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/verbatim.sty
+Package: verbatim 2014/10/28 v1.5q LaTeX2e package for verbatim enhancements
+\every@verbatim=\toks25
+\verbatim@line=\toks26
+\verbatim@in@stream=\read2
+)
+(/usr/share/texlive/texmf-dist/tex/latex/appendix/appendix.sty
+Package: appendix 2009/09/02 v1.2b extra appendix facilities
+\c@@pps=\count198
+\c@@ppsavesec=\count199
+\c@@ppsaveapp=\count266
+)
 (/usr/share/texlive/texmf-dist/tex/generic/ulem/ulem.sty
-\UL@box=\box78
-\UL@hyphenbox=\box79
-\UL@skip=\skip66
-\UL@hook=\toks24
-\UL@height=\dimen258
-\UL@pe=\count180
-\UL@pixel=\dimen259
-\ULC@box=\box80
+\UL@box=\box91
+\UL@hyphenbox=\box92
+\UL@skip=\skip97
+\UL@hook=\toks27
+\UL@height=\dimen266
+\UL@pe=\count267
+\UL@pixel=\dimen267
+\ULC@box=\box93
 Package: ulem 2012/05/18
-\ULdepth=\dimen260
+\ULdepth=\dimen268
 )
 (/usr/share/texlive/texmf-dist/tex/latex/mathtools/mathtools.sty
 Package: mathtools 2015/11/12 v1.18 mathematical typesetting tools
 
-(/usr/share/texlive/texmf-dist/tex/latex/tools/calc.sty
-Package: calc 2014/10/28 v4.3 Infix arithmetic (KKT,FJ)
-\calc@Acount=\count181
-\calc@Bcount=\count182
-\calc@Adimen=\dimen261
-\calc@Bdimen=\dimen262
-\calc@Askip=\skip67
-\calc@Bskip=\skip68
-LaTeX Info: Redefining \setlength on input line 80.
-LaTeX Info: Redefining \addtolength on input line 81.
-\calc@Ccount=\count183
-\calc@Cskip=\skip69
-)
 (/usr/share/texlive/texmf-dist/tex/latex/mathtools/mhsetup.sty
 Package: mhsetup 2010/01/21 v1.2a programming setup (MH)
 )
@@ -690,23 +892,23 @@ LaTeX Info: Thecontrolsequence`\('isalreadyrobust on input line 129.
 LaTeX Info: Thecontrolsequence`\)'isalreadyrobust on input line 129.
 LaTeX Info: Thecontrolsequence`\['isalreadyrobust on input line 129.
 LaTeX Info: Thecontrolsequence`\]'isalreadyrobust on input line 129.
-\g_MT_multlinerow_int=\count184
-\l_MT_multwidth_dim=\dimen263
-\origjot=\skip70
-\l_MT_shortvdotswithinadjustabove_dim=\dimen264
-\l_MT_shortvdotswithinadjustbelow_dim=\dimen265
-\l_MT_above_intertext_sep=\dimen266
-\l_MT_below_intertext_sep=\dimen267
-\l_MT_above_shortintertext_sep=\dimen268
-\l_MT_below_shortintertext_sep=\dimen269
+\g_MT_multlinerow_int=\count268
+\l_MT_multwidth_dim=\dimen269
+\origjot=\skip98
+\l_MT_shortvdotswithinadjustabove_dim=\dimen270
+\l_MT_shortvdotswithinadjustbelow_dim=\dimen271
+\l_MT_above_intertext_sep=\dimen272
+\l_MT_below_intertext_sep=\dimen273
+\l_MT_above_shortintertext_sep=\dimen274
+\l_MT_below_shortintertext_sep=\dimen275
 )
 (/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count185
-\float@exts=\toks25
-\float@box=\box81
-\@float@everytoks=\toks26
-\@floatcapt=\box82
+\c@float@type=\count269
+\float@exts=\toks28
+\float@box=\box94
+\@float@everytoks=\toks29
+\@floatcapt=\box95
 )
 (/usr/share/texlive/texmf-dist/tex/latex/todonotes/todonotes.sty
 Package: todonotes 2015/07/09 .dtx Todonotes source and documentation.
@@ -717,23 +919,23 @@ Package: xkeyval 2014/12/03 v2.7a package option processing (HA)
 
 (/usr/share/texlive/texmf-dist/tex/generic/xkeyval/xkeyval.tex
 (/usr/share/texlive/texmf-dist/tex/generic/xkeyval/xkvutils.tex
-\XKV@toks=\toks27
-\XKV@tempa@toks=\toks28
+\XKV@toks=\toks30
+\XKV@tempa@toks=\toks31
 )
-\XKV@depth=\count186
+\XKV@depth=\count270
 File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
 ))
 (/usr/share/texlive/texmf-dist/tex/latex/pgf/frontendlayer/tikz.sty
 (/usr/share/texlive/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty
 (/usr/share/texlive/texmf-dist/tex/latex/pgf/utilities/pgfrcs.sty
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfutil-common.tex
-\pgfutil@everybye=\toks29
-\pgfutil@tempdima=\dimen270
-\pgfutil@tempdimb=\dimen271
+\pgfutil@everybye=\toks32
+\pgfutil@tempdima=\dimen276
+\pgfutil@tempdimb=\dimen277
 
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfutil-common-lists.t
 ex)) (/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfutil-latex.def
-\pgfutil@abb=\box83
+\pgfutil@abb=\box96
 (/usr/share/texlive/texmf-dist/tex/latex/ms/everyshi.sty
 Package: everyshi 2001/05/15 v3.00 EveryShipout Package (MS)
 ))
@@ -748,30 +950,30 @@ Package: pgf 2015/08/07 v3.0.1a (rcs-revision 1.15)
 Package: pgfsys 2014/07/09 v3.0.1a (rcs-revision 1.48)
 
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex
-\pgfkeys@pathtoks=\toks30
-\pgfkeys@temptoks=\toks31
+\pgfkeys@pathtoks=\toks33
+\pgfkeys@temptoks=\toks34
 
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfkeysfiltered.code.t
 ex
-\pgfkeys@tmptoks=\toks32
+\pgfkeys@tmptoks=\toks35
 ))
-\pgf@x=\dimen272
-\pgf@y=\dimen273
-\pgf@xa=\dimen274
-\pgf@ya=\dimen275
-\pgf@xb=\dimen276
-\pgf@yb=\dimen277
-\pgf@xc=\dimen278
-\pgf@yc=\dimen279
+\pgf@x=\dimen278
+\pgf@y=\dimen279
+\pgf@xa=\dimen280
+\pgf@ya=\dimen281
+\pgf@xb=\dimen282
+\pgf@yb=\dimen283
+\pgf@xc=\dimen284
+\pgf@yc=\dimen285
 \w@pgf@writea=\write3
-\r@pgf@reada=\read2
-\c@pgf@counta=\count187
-\c@pgf@countb=\count188
-\c@pgf@countc=\count189
-\c@pgf@countd=\count190
-\t@pgf@toka=\toks33
-\t@pgf@tokb=\toks34
-\t@pgf@tokc=\toks35
+\r@pgf@reada=\read3
+\c@pgf@counta=\count271
+\c@pgf@countb=\count272
+\c@pgf@countc=\count273
+\c@pgf@countd=\count274
+\t@pgf@toka=\toks36
+\t@pgf@tokb=\toks37
+\t@pgf@tokc=\toks38
  (/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgf.cfg
 File: pgf.cfg 2008/05/14  (rcs-revision 1.7)
 )
@@ -787,8 +989,8 @@ File: pgfsys-common-pdf.def 2013/10/10  (rcs-revision 1.13)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgfsyssoftpath.code.
 tex
 File: pgfsyssoftpath.code.tex 2013/09/09  (rcs-revision 1.9)
-\pgfsyssoftpath@smallbuffer@items=\count191
-\pgfsyssoftpath@bigbuffer@items=\count192
+\pgfsyssoftpath@smallbuffer@items=\count275
+\pgfsyssoftpath@bigbuffer@items=\count276
 )
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgfsysprotocol.code.
 tex
@@ -801,12 +1003,12 @@ Package: pgfcore 2010/04/11 v3.0.1a (rcs-revision 1.7)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathcalc.code.tex
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathutil.code.tex)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathparser.code.tex
-\pgfmath@dimen=\dimen280
-\pgfmath@count=\count193
-\pgfmath@box=\box84
-\pgfmath@toks=\toks36
-\pgfmath@stack@operand=\toks37
-\pgfmath@stack@operation=\toks38
+\pgfmath@dimen=\dimen286
+\pgfmath@count=\count277
+\pgfmath@box=\box97
+\pgfmath@toks=\toks39
+\pgfmath@stack@operand=\toks40
+\pgfmath@stack@operation=\toks41
 )
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.code.tex
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.basic.code
@@ -826,57 +1028,57 @@ tex)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.integerari
 thmetics.code.tex)))
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfloat.code.tex
-\c@pgfmathroundto@lastzeros=\count194
+\c@pgfmathroundto@lastzeros=\count278
 ))
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepoints.code.te
 x
 File: pgfcorepoints.code.tex 2013/10/07  (rcs-revision 1.27)
-\pgf@picminx=\dimen281
-\pgf@picmaxx=\dimen282
-\pgf@picminy=\dimen283
-\pgf@picmaxy=\dimen284
-\pgf@pathminx=\dimen285
-\pgf@pathmaxx=\dimen286
-\pgf@pathminy=\dimen287
-\pgf@pathmaxy=\dimen288
-\pgf@xx=\dimen289
-\pgf@xy=\dimen290
-\pgf@yx=\dimen291
-\pgf@yy=\dimen292
-\pgf@zx=\dimen293
-\pgf@zy=\dimen294
+\pgf@picminx=\dimen287
+\pgf@picmaxx=\dimen288
+\pgf@picminy=\dimen289
+\pgf@picmaxy=\dimen290
+\pgf@pathminx=\dimen291
+\pgf@pathmaxx=\dimen292
+\pgf@pathminy=\dimen293
+\pgf@pathmaxy=\dimen294
+\pgf@xx=\dimen295
+\pgf@xy=\dimen296
+\pgf@yx=\dimen297
+\pgf@yy=\dimen298
+\pgf@zx=\dimen299
+\pgf@zy=\dimen300
 )
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathconstruct.
 code.tex
 File: pgfcorepathconstruct.code.tex 2013/10/07  (rcs-revision 1.29)
-\pgf@path@lastx=\dimen295
-\pgf@path@lasty=\dimen296
+\pgf@path@lastx=\dimen301
+\pgf@path@lasty=\dimen302
 )
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathusage.code
 .tex
 File: pgfcorepathusage.code.tex 2014/11/02  (rcs-revision 1.24)
-\pgf@shorten@end@additional=\dimen297
-\pgf@shorten@start@additional=\dimen298
+\pgf@shorten@end@additional=\dimen303
+\pgf@shorten@start@additional=\dimen304
 )
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorescopes.code.te
 x
 File: pgfcorescopes.code.tex 2015/05/08  (rcs-revision 1.46)
-\pgfpic=\box85
-\pgf@hbox=\box86
-\pgf@layerbox@main=\box87
-\pgf@picture@serial@count=\count195
+\pgfpic=\box98
+\pgf@hbox=\box99
+\pgf@layerbox@main=\box100
+\pgf@picture@serial@count=\count279
 )
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoregraphicstate.c
 ode.tex
 File: pgfcoregraphicstate.code.tex 2014/11/02  (rcs-revision 1.12)
-\pgflinewidth=\dimen299
+\pgflinewidth=\dimen305
 )
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretransformation
 s.code.tex
 File: pgfcoretransformations.code.tex 2015/08/07  (rcs-revision 1.20)
-\pgf@pt@x=\dimen300
-\pgf@pt@y=\dimen301
-\pgf@pt@temp=\dimen302
+\pgf@pt@x=\dimen306
+\pgf@pt@y=\dimen307
+\pgf@pt@temp=\dimen308
 )
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorequick.code.tex
 File: pgfcorequick.code.tex 2008/10/09  (rcs-revision 1.3)
@@ -892,12 +1094,12 @@ File: pgfcorepathprocessing.code.tex 2013/09/09  (rcs-revision 1.9)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorearrows.code.te
 x
 File: pgfcorearrows.code.tex 2015/05/14  (rcs-revision 1.43)
-\pgfarrowsep=\dimen303
+\pgfarrowsep=\dimen309
 )
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreshade.code.tex
 File: pgfcoreshade.code.tex 2013/07/15  (rcs-revision 1.15)
-\pgf@max=\dimen304
-\pgf@sys@shading@range@num=\count196
+\pgf@max=\dimen310
+\pgf@sys@shading@range@num=\count280
 )
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreimage.code.tex
 File: pgfcoreimage.code.tex 2013/07/15  (rcs-revision 1.18)
@@ -905,7 +1107,7 @@ File: pgfcoreimage.code.tex 2013/07/15  (rcs-revision 1.18)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreexternal.code.
 tex
 File: pgfcoreexternal.code.tex 2014/07/09  (rcs-revision 1.21)
-\pgfexternal@startupbox=\box88
+\pgfexternal@startupbox=\box101
 ))
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorelayers.code.te
 x
@@ -921,15 +1123,15 @@ File: pgfcorepatterns.code.tex 2013/11/07  (rcs-revision 1.5)
 )))
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/modules/pgfmoduleshapes.code.tex
 File: pgfmoduleshapes.code.tex 2014/03/21  (rcs-revision 1.35)
-\pgfnodeparttextbox=\box89
+\pgfnodeparttextbox=\box102
 ) (/usr/share/texlive/texmf-dist/tex/generic/pgf/modules/pgfmoduleplot.code.tex
 File: pgfmoduleplot.code.tex 2015/08/03  (rcs-revision 1.13)
 )
 (/usr/share/texlive/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-0-65
 .sty
 Package: pgfcomp-version-0-65 2007/07/03 v3.0.1a (rcs-revision 1.7)
-\pgf@nodesepstart=\dimen305
-\pgf@nodesepend=\dimen306
+\pgf@nodesepstart=\dimen311
+\pgf@nodesepend=\dimen312
 )
 (/usr/share/texlive/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-1-18
 .sty
@@ -943,10 +1145,10 @@ Package: pgfcomp-version-1-18 2007/07/23 v3.0.1a (rcs-revision 1.1)
 Package: pgffor 2013/12/13 v3.0.1a (rcs-revision 1.25)
 
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex)
-\pgffor@iter=\dimen307
-\pgffor@skip=\dimen308
-\pgffor@stack=\toks39
-\pgffor@toks=\toks40
+\pgffor@iter=\dimen313
+\pgffor@skip=\dimen314
+\pgffor@stack=\toks42
+\pgffor@toks=\toks43
 ))
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/tikz.code.tex
 Package: tikz 2015/08/07 v3.0.1a (rcs-revision 1.151)
@@ -954,31 +1156,31 @@ Package: tikz 2015/08/07 v3.0.1a (rcs-revision 1.151)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/libraries/pgflibraryplothandlers
 .code.tex
 File: pgflibraryplothandlers.code.tex 2013/08/31 v3.0.1a (rcs-revision 1.20)
-\pgf@plot@mark@count=\count197
-\pgfplotmarksize=\dimen309
+\pgf@plot@mark@count=\count281
+\pgfplotmarksize=\dimen315
 )
-\tikz@lastx=\dimen310
-\tikz@lasty=\dimen311
-\tikz@lastxsaved=\dimen312
-\tikz@lastysaved=\dimen313
-\tikzleveldistance=\dimen314
-\tikzsiblingdistance=\dimen315
-\tikz@figbox=\box90
-\tikz@figbox@bg=\box91
-\tikz@tempbox=\box92
-\tikz@tempbox@bg=\box93
-\tikztreelevel=\count198
-\tikznumberofchildren=\count199
-\tikznumberofcurrentchild=\count266
-\tikz@fig@count=\count267
+\tikz@lastx=\dimen316
+\tikz@lasty=\dimen317
+\tikz@lastxsaved=\dimen318
+\tikz@lastysaved=\dimen319
+\tikzleveldistance=\dimen320
+\tikzsiblingdistance=\dimen321
+\tikz@figbox=\box103
+\tikz@figbox@bg=\box104
+\tikz@tempbox=\box105
+\tikz@tempbox@bg=\box106
+\tikztreelevel=\count282
+\tikznumberofchildren=\count283
+\tikznumberofcurrentchild=\count284
+\tikz@fig@count=\count285
 
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/modules/pgfmodulematrix.code.tex
 File: pgfmodulematrix.code.tex 2013/09/17  (rcs-revision 1.8)
-\pgfmatrixcurrentrow=\count268
-\pgfmatrixcurrentcolumn=\count269
-\pgf@matrix@numberofcolumns=\count270
+\pgfmatrixcurrentrow=\count286
+\pgfmatrixcurrentcolumn=\count287
+\pgf@matrix@numberofcolumns=\count288
 )
-\tikz@expandcount=\count271
+\tikz@expandcount=\count289
 
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tik
 zlibrarytopaths.code.tex
@@ -988,37 +1190,44 @@ File: tikzlibrarytopaths.code.tex 2008/06/17 v3.0.1a (rcs-revision 1.2)
 zlibrarypositioning.code.tex
 File: tikzlibrarypositioning.code.tex 2008/10/06 v3.0.1a (rcs-revision 1.7)
 )
-\c@@todonotes@numberoftodonotes=\count272
+\c@@todonotes@numberoftodonotes=\count290
 ) (./infthesis-template.aux
 (./introduction/introduction.aux) (./background/background.aux)
-(./relatedwork/relatedwork.aux) (./streamit-paper/streamit-chapter.aux)
-(./cases-paper/cases-chapter.aux
+(./relatedwork/relatedwork.aux) (./setup/thesis-setup.aux)
+(./streamit-paper/streamit-chapter.aux
 
-LaTeX Warning: Label `sec:setup' multiply defined.
+LaTeX Warning: Label `sec:ml' multiply defined.
 
-
-LaTeX Warning: Label `sec:related' multiply defined.
-
-))
+) (./cases-paper/cases-chapter.aux) (./chapter3/chapter3.aux)
+(./conclusion/conclusion.aux) (./appendix/appendix1.aux))
 \openout1 = `infthesis-template.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 111.
-LaTeX Font Info:    ... okay on input line 111.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 111.
-LaTeX Font Info:    ... okay on input line 111.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 111.
-LaTeX Font Info:    ... okay on input line 111.
-LaTeX Font Info:    Checking defaults for OMS/pzccm/m/n on input line 111.
-LaTeX Font Info:    Try loading font information for OMS+pzccm on input line 11
-1.
- (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omspzccm.fd
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 160.
+LaTeX Font Info:    ... okay on input line 160.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 160.
+LaTeX Font Info:    ... okay on input line 160.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 160.
+LaTeX Font Info:    ... okay on input line 160.
+LaTeX Font Info:    Checking defaults for OMS/pzccm/m/n on input line 160.
+LaTeX Font Info:    Try loading font information for OMS+pzccm on input line 16
+0.
+
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/omspzccm.fd
 File: omspzccm.fd 2000/01/03 Fontinst v1.801 font definitions for OMS/pzccm.
 )
-LaTeX Font Info:    ... okay on input line 111.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 111.
-LaTeX Font Info:    ... okay on input line 111.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 111.
-LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    ... okay on input line 160.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 160.
+LaTeX Font Info:    ... okay on input line 160.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 160.
+LaTeX Font Info:    ... okay on input line 160.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 160.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 160.
+
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd
+File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    ... okay on input line 160.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -1056,17 +1265,17 @@ LaTeX Font Info:    ... okay on input line 111.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count273
-\scratchdimen=\dimen316
-\scratchbox=\box94
-\nofMPsegments=\count274
-\nofMParguments=\count275
-\everyMPshowfont=\toks41
-\MPscratchCnt=\count276
-\MPscratchDim=\dimen317
-\MPnumerator=\count277
-\makeMPintoPDFobject=\count278
-\everyMPtoPDFconversion=\toks42
+\scratchcounter=\count291
+\scratchdimen=\dimen322
+\scratchbox=\box107
+\nofMPsegments=\count292
+\nofMParguments=\count293
+\everyMPshowfont=\toks44
+\MPscratchCnt=\count294
+\MPscratchDim=\dimen323
+\MPnumerator=\count295
+\makeMPintoPDFobject=\count296
+\everyMPtoPDFconversion=\toks45
 ) (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
 Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
 )
@@ -1115,6 +1324,7 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: subfig package v1.3 is loaded.
 Package caption Info: float package is loaded.
 Package caption Info: listings package is loaded.
+Package caption Info: rotating package is loaded.
 Package caption Info: End \AtBeginDocument code.
 
 (/usr/share/texlive/texmf-dist/tex/latex/beamer/translator/dicts/translator-bas
@@ -1124,726 +1334,1436 @@ Dictionary: translator-basic-dictionary, Language: English
 (/usr/share/texlive/texmf-dist/tex/latex/siunitx/siunitx-abbreviations.cfg
 File: siunitx-abbreviations.cfg 2016/03/01 v2.6q siunitx: Abbreviated units
 )
-\c@lstlisting=\count279
+\c@lstlisting=\count297
 
 ABD: EveryShipout initializing macros
-\c__siunitx_mathsf_int=\count280
-LaTeX Font Info:    Try loading font information for OT1+ptmcm on input line 11
-1.
+\c__siunitx_mathsf_int=\count298
+LaTeX Font Info:    Try loading font information for OT1+ptmcm on input line 16
+0.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ptmcm.fd
 File: ot1ptmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OT1/ptmcm.
 )
-LaTeX Font Info:    Try loading font information for OML+ptmcm on input line 11
-1.
+LaTeX Font Info:    Try loading font information for OML+ptmcm on input line 16
+0.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omlptmcm.fd
 File: omlptmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OML/ptmcm.
 )
-LaTeX Font Info:    Try loading font information for OMX+psycm on input line 11
-1.
+LaTeX Font Info:    Try loading font information for OMX+psycm on input line 16
+0.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omxpsycm.fd
 File: omxpsycm.fd 2000/01/03 Fontinst v1.801 font definitions for OMX/psycm.
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 111.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 160.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 111.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 160.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 111.
-\c__siunitx_mathtt_int=\count281
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 160.
+\c__siunitx_mathtt_int=\count299
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <20.74> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 117.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 166.
 LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <20.74> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 117.
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 166.
 LaTeX Font Info:    Font shape `OT1/phv/b/n' will be
-(Font)              scaled to size 18.66588pt on input line 117.
+(Font)              scaled to size 18.66588pt on input line 166.
  [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2
 
 ]
 LaTeX Font Info:    Font shape `OT1/phv/m/n' will be
-(Font)              scaled to size 10.79993pt on input line 117.
+(Font)              scaled to size 10.79993pt on input line 166.
 LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <12> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 117.
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 166.
 LaTeX Font Info:    Font shape `OT1/phv/b/n' will be
-(Font)              scaled to size 10.79993pt on input line 117.
- [3] [4] [5] [6
+(Font)              scaled to size 10.79993pt on input line 166.
+ [3] [4]
+LaTeX Font Info:    Try loading font information for TS1+ptm on input line 176.
+
+
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd
+File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
+) [5] [6
 
 ]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <24.88> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 133.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 183.
 LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <24.88> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 133.
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 183.
 LaTeX Font Info:    Font shape `OT1/phv/b/n' will be
-(Font)              scaled to size 22.39185pt on input line 133.
+(Font)              scaled to size 22.39185pt on input line 183.
 
-(./infthesis-template.toc
-Overfull \hbox (1.08368pt too wide) in paragraph at lines 8--8
- [][] []\OT1/ptm/m/n/12 Microarchitectural Re-con-fig-urable Dy-namic Mul-ti-co
-re Pro-ces- 
- []
-
-[7] [8])
+(./infthesis-template.toc [7] [8] [9] [10])
 \tf@toc=\write4
 \openout4 = `infthesis-template.toc'.
 
- [9] [10
+ [11] [12
 
 ]
 \openout2 = `./introduction/introduction.aux'.
 
- (./introduction/introduction.tex
+
+(./introduction/introduction.tex
 Chapter 1.
-) [1
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <17.28> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 20.
+LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <17.28> not available
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 20.
+LaTeX Font Info:    Font shape `OT1/phv/b/n' will be
+(Font)              scaled to size 15.55188pt on input line 20.
+[1
 
 
 ]
+Overfull \hbox (3.9596pt too wide) in paragraph at lines 37--40
+ \OT1/phv/b/n/12 Max-imis-ing per-for-mance through soft-ware op-ti-mi-sa-tions
+ \OT1/ptm/m/n/12 Not all ap-pli-ca-tions ben-
+ []
+
+LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <12> not available
+(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 40.
+LaTeX Font Info:    Font shape `OT1/phv/m/sl' will be
+(Font)              scaled to size 10.79993pt on input line 40.
+[2] [3] [4] [5]) [6]
 \openout2 = `./background/background.aux'.
 
- (./background/background.tex [2
+ (./background/background.tex
+Chapter 2.
+
+Overfull \hbox (9.2893pt too wide) in paragraph at lines 5--6
+\OT1/ptm/m/n/12 Mul-ti-core Pro-ces-sors to mo-ti-vate the use of Dy-namic Mul-
+ti-core Pro-ces-sors (DMP). 
+ []
+
+<background/graphics/i7intel.pdf, id=68, 1330.72156pt x 475.7775pt>
+File: background/graphics/i7intel.pdf Graphic file (type pdf)
+
+<use background/graphics/i7intel.pdf>
+Package pdftex.def Info: background/graphics/i7intel.pdf used on input line 23.
+
+(pdftex.def)             Requested size: 412.56497pt x 147.50401pt.
+ [7
 
 
 
 ]
-Chapter 2.
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <17.28> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 8.
-LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <17.28> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 8.
-LaTeX Font Info:    Font shape `OT1/phv/b/n' will be
-(Font)              scaled to size 15.55188pt on input line 8.
-<background/graphics/i7intel.jpg, id=48, 1250.42157pt x 475.7775pt>
-File: background/graphics/i7intel.jpg Graphic file (type jpg)
-
-<use background/graphics/i7intel.jpg>
-Package pdftex.def Info: background/graphics/i7intel.jpg used on input line 12.
-
-(pdftex.def)             Requested size: 412.56497pt x 156.97801pt.
-
-
-LaTeX Warning: Citation `ekhout2010amdalh' on page 3 undefined on input line 27
-.
-
-[3] <background/graphics/biglittle.png, id=55, 602.25pt x 322.20375pt>
+<background/graphics/biglittle.png, id=73, 721.69624pt x 279.0425pt>
 File: background/graphics/biglittle.png Graphic file (type png)
 
 <use background/graphics/biglittle.png>
-Package pdftex.def Info: background/graphics/biglittle.png used on input line 4
-2.
-(pdftex.def)             Requested size: 412.56497pt x 220.73282pt.
+Package pdftex.def Info: background/graphics/biglittle.png used on input line 5
+4.
+(pdftex.def)             Requested size: 412.56497pt x 159.51572pt.
+ [8 <./background/graphics/i7intel.pdf>] <background/graphics/cmp_new.pdf, id=8
+5, 653.76674pt x 210.3242pt>
+File: background/graphics/cmp_new.pdf Graphic file (type pdf)
 
+<use background/graphics/cmp_new.pdf>
+Package pdftex.def Info: background/graphics/cmp_new.pdf used on input line 78.
 
-LaTeX Warning: Citation `bigLittle' on page 4 undefined on input line 47.
+(pdftex.def)             Requested size: 412.56497pt x 132.72958pt.
+ [9 <./background/graphics/biglittle.png>]
+Underfull \vbox (badness 3668) has occurred while \output is active []
 
-
-LaTeX Warning: Citation `venkatharnessingISA' on page 4 undefined on input line
- 54.
-
-LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <12> not available
-(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 56.
-LaTeX Font Info:    Font shape `OT1/phv/m/sl' will be
-(Font)              scaled to size 10.79993pt on input line 56.
-[4 <./background/graphics/i7intel.jpg>]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [5 <./background/graphics/biglittle.png>]
+ [10 <./background/graphics/cmp_new.pdf>]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 70.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 127.
 LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <14.4> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 70.
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 127.
 LaTeX Font Info:    Font shape `OT1/phv/b/n' will be
-(Font)              scaled to size 12.9599pt on input line 70.
+(Font)              scaled to size 12.9599pt on input line 127.
 
-<streamit-paper/graphics/dmcgraph.pdf, id=64, 400.57782pt x 307.25775pt>
-File: streamit-paper/graphics/dmcgraph.pdf Graphic file (type pdf)
+<background/graphics/EDGE_4.pdf, id=273, 2175.46909pt x 650.4966pt>
+File: background/graphics/EDGE_4.pdf Graphic file (type pdf)
 
-<use streamit-paper/graphics/dmcgraph.pdf>
-Package pdftex.def Info: streamit-paper/graphics/dmcgraph.pdf used on input lin
-e 74.
-(pdftex.def)             Requested size: 288.79422pt x 221.52077pt.
+<use background/graphics/EDGE_4.pdf>
+Package pdftex.def Info: background/graphics/EDGE_4.pdf used on input line 135.
 
+(pdftex.def)             Requested size: 412.56497pt x 123.3574pt.
+ [11]
+<background/graphics/hyperblock.pdf, id=277, 2140.82991pt x 645.95515pt>
+File: background/graphics/hyperblock.pdf Graphic file (type pdf)
 
-LaTeX Warning: Reference `sec' on page 6 undefined on input line 85.
+<use background/graphics/hyperblock.pdf>
+Package pdftex.def Info: background/graphics/hyperblock.pdf used on input line 
+166.
+(pdftex.def)             Requested size: 412.56497pt x 124.47734pt.
+ [12 <./background/graphics/EDGE_4.pdf>] <background/graphics/edge_lanes.pdf, i
+d=312, 1125.41916pt x 595.47469pt>
+File: background/graphics/edge_lanes.pdf Graphic file (type pdf)
 
-[6 <./streamit-paper/graphics/dmcgraph.pdf>]
-Overfull \hbox (5.0113pt too wide) in paragraph at lines 101--101
-[]\OT1/phv/b/n/14.4 Microarchitectural Re-con-fig-urable Dy-namic Mul-ti-core P
-ro-ces-
- []
-
-
-LaTeX Warning: Citation `fallin' on page 7 undefined on input line 103.
-
-<background/graphics/EDGE_3.pdf, id=236, 1606.4139pt x 639.05737pt>
-File: background/graphics/EDGE_3.pdf Graphic file (type pdf)
-
-<use background/graphics/EDGE_3.pdf>
-Package pdftex.def Info: background/graphics/EDGE_3.pdf used on input line 109.
-
-(pdftex.def)             Requested size: 412.56497pt x 164.12274pt.
-
-
-LaTeX Warning: Citation `e2paper' on page 7 undefined on input line 124.
-
-[7]
-LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <12> not available
-(Font)              Font shape `OMS/pzccm/m/n' tried instead on input line 131.
-
- <background/graphics/e2segment.png, id=240, 840.89156pt x 595.47469pt>
-File: background/graphics/e2segment.png Graphic file (type png)
-
-<use background/graphics/e2segment.png>
-Package pdftex.def Info: background/graphics/e2segment.png used on input line 1
-48.
-(pdftex.def)             Requested size: 412.56497pt x 292.15767pt.
-
-
-LaTeX Warning: Citation `e2smith' on page 8 undefined on input line 149.
-
-
-LaTeX Warning: Citation `e2smith' on page 8 undefined on input line 149.
-
-[8 <./background/graphics/EDGE_3.pdf>]
-<cases-paper/graphics/background/proc_test.pdf, id=275, 757.3551pt x 93.8029pt>
+<use background/graphics/edge_lanes.pdf>
+Package pdftex.def Info: background/graphics/edge_lanes.pdf used on input line 
+185.
+(pdftex.def)             Requested size: 412.56497pt x 218.28687pt.
+ [13 <./background/graphics/hyperblock.pdf>] [14 <./background/graphics/edge_la
+nes.pdf>]
+<cases-paper/graphics/background/proc_test.pdf, id=332, 757.3551pt x 93.8029pt>
 File: cases-paper/graphics/background/proc_test.pdf Graphic file (type pdf)
 <use cases-paper/graphics/background/proc_test.pdf>
 Package pdftex.def Info: cases-paper/graphics/background/proc_test.pdf used on 
-input line 167.
+input line 222.
 (pdftex.def)             Requested size: 412.56497pt x 51.09793pt.
- [9 <./background/graphics/e2segment.png>]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+ [15 <./cases-paper/graphics/background/proc_test.pdf>]
+<chapter3/graphics/normfetch.pdf, id=490, 1613.08788pt x 264.24332pt>
+File: chapter3/graphics/normfetch.pdf Graphic file (type pdf)
 
- [10 <./cases-paper/graphics/background/proc_test.pdf>]) [11]
+<use chapter3/graphics/normfetch.pdf>
+Package pdftex.def Info: chapter3/graphics/normfetch.pdf used on input line 244
+.
+(pdftex.def)             Requested size: 412.56497pt x 67.58073pt.
+
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 298.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 298.
+\listingAcontent=\box108
+\listingBcontent=\box109
+ [16 <./chapter3/graphics/normfetch.pdf>]
+<background/graphics/predic.pdf, id=502, 927.59286pt x 285.37805pt>
+File: background/graphics/predic.pdf Graphic file (type pdf)
+
+<use background/graphics/predic.pdf>
+Package pdftex.def Info: background/graphics/predic.pdf used on input line 372.
+
+(pdftex.def)             Requested size: 412.56497pt x 126.92969pt.
+ [17 <./background/graphics/predic.pdf>]
+[18] <background/graphics/valuepred.pdf, id=525, 715.4453pt x 283.34431pt>
+File: background/graphics/valuepred.pdf Graphic file (type pdf)
+
+<use background/graphics/valuepred.pdf>
+Package pdftex.def Info: background/graphics/valuepred.pdf used on input line 4
+07.
+(pdftex.def)             Requested size: 412.56497pt x 163.39296pt.
+ [19 <./background/graphics/valuepred.pdf>] [20]
+<streamit-paper/graphics/streamit_types.pdf, id=548, 866.39468pt x 218.84885pt>
+File: streamit-paper/graphics/streamit_types.pdf Graphic file (type pdf)
+<use streamit-paper/graphics/streamit_types.pdf>
+Package pdftex.def Info: streamit-paper/graphics/streamit_types.pdf used on inp
+ut line 471.
+(pdftex.def)             Requested size: 412.56497pt x 104.21475pt.
+ [21 <./streamit-paper/graphics/streamit_types.pdf>]
+<background/graphics/lin_reg_ex.pdf, id=560, 333.245pt x 298.11375pt>
+File: background/graphics/lin_reg_ex.pdf Graphic file (type pdf)
+
+<use background/graphics/lin_reg_ex.pdf>
+Package pdftex.def Info: background/graphics/lin_reg_ex.pdf used on input line 
+500.
+(pdftex.def)             Requested size: 165.02347pt x 147.62817pt.
+
+<background/graphics/smallest_clust_example.pdf, id=561, 333.245pt x 298.11375p
+t>
+File: background/graphics/smallest_clust_example.pdf Graphic file (type pdf)
+ <use background/graphics/smallest_clust_example.pdf>
+Package pdftex.def Info: background/graphics/smallest_clust_example.pdf used on
+ input line 525.
+(pdftex.def)             Requested size: 165.02347pt x 147.62817pt.
+
+<background/graphics/knn1.pdf, id=562, 701.68852pt x 280.44028pt>
+File: background/graphics/knn1.pdf Graphic file (type pdf)
+
+<use background/graphics/knn1.pdf>
+Package pdftex.def Info: background/graphics/knn1.pdf used on input line 544.
+(pdftex.def)             Requested size: 330.05322pt x 131.91393pt.
+ [22] [23 <./background/graphics/lin_reg_ex.pdf> <./background/graphics/smalles
+t_clust_example.pdf
+
+pdfTeX warning: pdflatex (file ./background/graphics/smallest_clust_example.pdf
+): PDF inclusion: multiple pdfs with page group included in a single page
+>] [24 <./background/graphics/knn1.pdf>]) [25]
 \openout2 = `./relatedwork/relatedwork.aux'.
 
-
-(./relatedwork/relatedwork.tex [12
+ (./relatedwork/relatedwork.tex
+[26
 
 
 
 ]
 Chapter 3.
-) [13]
-\openout2 = `./streamit-paper/streamit-chapter.aux'.
+[27]
+Underfull \vbox (badness 1082) has occurred while \output is active []
 
- (./streamit-paper/streamit-chapter.tex [14
+ [28]
+[29]
+Overfull \hbox (6.7564pt too wide) in paragraph at lines 86--92
+[]\OT1/ptm/m/n/12 Gulati et al. pro-pose an of-fline and on-line schedul-ing al
+-go-rithms for TFlex [[]].
+ []
+
+[30]
+Overfull \hbox (6.4427pt too wide) in paragraph at lines 112--117
+[]\OT1/ptm/m/n/12 Since EDGE in-struc-tions pass their re-sults di-rectly to an
+ in-struc-tion's in-put operands,
+ []
+
+[31]
+Overfull \hbox (12.63553pt too wide) in paragraph at lines 135--135
+[]\OT1/phv/b/n/17.28 Hardware tech-niques for power and en-ergy ef-fi-ciency 
+ []
+
+
+Underfull \vbox (badness 1286) has occurred while \output is active []
+
+ [32]
+[33] [34] [35] [36]
+Underfull \vbox (badness 1874) has occurred while \output is active []
+
+ [37]
+[38]
+Overfull \hbox (7.40474pt too wide) in paragraph at lines 309--316
+[]\OT1/ptm/m/n/12 Brook [[]] is an-other stream-ing pro-gram-ming lan-guage gea
+red to-wards Graph-
+ []
+
+[39] [40]
+Overfull \hbox (16.84929pt too wide) in paragraph at lines 357--357
+[]\OT1/phv/b/n/17.28 Machine-learning guided per-for-mance op-ti-mi-sa-tions 
+ []
+
+[41] [42]) [43]
+\openout2 = `./setup/thesis-setup.aux'.
+
+ (./setup/thesis-setup.tex [44
 
 
 
 ]
 Chapter 4.
-(./streamit-paper/intro.tex
-Underfull \vbox (badness 4872) has occurred while \output is active []
 
- [15]
+Overfull \hbox (0.84781pt too wide) in paragraph at lines 6--21
+[][]
+ []
 
-LaTeX Warning: Reference `sec:background' on page 16 undefined on input line 50
-.
 
-) [16] (./streamit-paper/motivation.tex
-<streamit-paper/graphics/beamformer_motivation.pdf, id=456, 505.89pt x 505.89pt
->
-File: streamit-paper/graphics/beamformer_motivation.pdf Graphic file (type pdf)
+Underfull \hbox (badness 10000) in paragraph at lines 6--21
 
- <use streamit-paper/graphics/beamformer_motivation.pdf>
-Package pdftex.def Info: streamit-paper/graphics/beamformer_motivation.pdf used
- on input line 3.
-(pdftex.def)             Requested size: 412.56497pt x 412.57072pt.
+ []
+
+
+Overfull \hbox (21.89563pt too wide) in paragraph at lines 24--39
+[][]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 24--39
+
+ []
+
+[45] <setup/r0_parameters.png, id=671, 1441.63594pt x 702.37407pt>
+File: setup/r0_parameters.png Graphic file (type png)
+
+<use setup/r0_parameters.png>
+Package pdftex.def Info: setup/r0_parameters.png used on input line 70.
+(pdftex.def)             Requested size: 412.56497pt x 201.00392pt.
+
+<setup/results.png, id=672, 1429.59094pt x 732.48656pt>
+File: setup/results.png Graphic file (type png)
+
+<use setup/results.png>
+Package pdftex.def Info: setup/results.png used on input line 76.
+(pdftex.def)             Requested size: 412.56497pt x 211.38739pt.
+ [46] [47 <./setup/r0_parameters.png> <./setup/results.png>]
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 95.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.4> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 95.
+ [48
+
+]) [49] [50]
+\openout2 = `./streamit-paper/streamit-chapter.aux'.
+
+ (./streamit-paper/streamit-chapter.tex
+Chapter 5.
+(./streamit-paper/intro.tex [51
+
+
+
+] [52]) (./streamit-paper/motivation.tex
+[53]
+<streamit-paper/graphics/filterbank_motivation_4.pdf, id=699, 873.2625pt x 249.
+93375pt>
+File: streamit-paper/graphics/filterbank_motivation_4.pdf Graphic file (type pd
+f)
+ <use streamit-paper/graphics/filterbank_motivation_4.pdf>
+Package pdftex.def Info: streamit-paper/graphics/filterbank_motivation_4.pdf us
+ed on input line 37.
+(pdftex.def)             Requested size: 412.56497pt x 118.07906pt.
+ [54 <./streamit-paper/graphics/filterbank_motivation_4.pdf>]
+Overfull \hbox (6.54253pt too wide) in paragraph at lines 75--80
+\OT1/ptm/m/n/12 is the num-ber of threads that leads to the fastest ex-e-cu-tio
+n time with-out core-composition
+ []
+
 )
+Underfull \vbox (badness 4328) has occurred while \output is active []
+
+ [55]
 (./streamit-paper/setup.tex
-<streamit-paper/graphics/explanation.pdf, id=457, 726.40231pt x 461.5812pt>
-File: streamit-paper/graphics/explanation.pdf Graphic file (type pdf)
+<streamit-paper/graphics/explanation3.pdf, id=716, 792.29466pt x 310.90167pt>
+File: streamit-paper/graphics/explanation3.pdf Graphic file (type pdf)
 
-<use streamit-paper/graphics/explanation.pdf>
-Package pdftex.def Info: streamit-paper/graphics/explanation.pdf used on input 
-line 11.
-(pdftex.def)             Requested size: 412.56497pt x 262.16728pt.
+<use streamit-paper/graphics/explanation3.pdf>
+Package pdftex.def Info: streamit-paper/graphics/explanation3.pdf used on input
+ line 7.
+(pdftex.def)             Requested size: 412.56497pt x 161.89276pt.
 
-Underfull \vbox (badness 3009) has occurred while \output is active []
+<streamit-paper/graphics/examplestrem.pdf, id=717, 464.99013pt x 127.84831pt>
+File: streamit-paper/graphics/examplestrem.pdf Graphic file (type pdf)
 
- [17]
-[18] <streamit-paper/graphics/ESCProx.pdf, id=464, 505.89pt x 505.89pt>
+<use streamit-paper/graphics/examplestrem.pdf>
+Package pdftex.def Info: streamit-paper/graphics/examplestrem.pdf used on input
+ line 17.
+(pdftex.def)             Requested size: 412.56497pt x 113.43738pt.
+ [56]
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 40.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 40.
+
+Overfull \hbox (49.63078pt too wide) in paragraph at lines 40--49
+[][] 
+ []
+
+[57 <./streamit-paper/graphics/explanation3.pdf> <./streamit-paper/graphics/exa
+mplestrem.pdf
+
+pdfTeX warning: pdflatex (file ./streamit-paper/graphics/examplestrem.pdf): PDF
+ inclusion: multiple pdfs with page group included in a single page
+>]
+Overfull \hbox (34.59596pt too wide) in paragraph at lines 67--82
+[][] 
+ []
+
+[58] [59] <streamit-paper/graphics/ESCProx.pdf, id=779, 505.89pt x 505.89pt>
 File: streamit-paper/graphics/ESCProx.pdf Graphic file (type pdf)
 
 <use streamit-paper/graphics/ESCProx.pdf>
 Package pdftex.def Info: streamit-paper/graphics/ESCProx.pdf used on input line
- 70.
+ 144.
 (pdftex.def)             Requested size: 412.56497pt x 412.57072pt.
+ [60 <./streamit-paper/graphics/ESCProx.pdf>]) [61] (./streamit-paper/analysis.
+tex
+<streamit-paper/graphics/threadingmaybe5.pdf, id=792, 845.1575pt x 590.205pt>
+File: streamit-paper/graphics/threadingmaybe5.pdf Graphic file (type pdf)
 
-<streamit-paper/graphics/threadingmaybe.pdf, id=465, 1806.75pt x 578.16pt>
-File: streamit-paper/graphics/threadingmaybe.pdf Graphic file (type pdf)
+<use streamit-paper/graphics/threadingmaybe5.pdf>
+Package pdftex.def Info: streamit-paper/graphics/threadingmaybe5.pdf used on in
+put line 7.
+(pdftex.def)             Requested size: 412.56497pt x 288.11328pt.
+ [62]
+Underfull \vbox (badness 1168) has occurred while \output is active []
 
-<use streamit-paper/graphics/threadingmaybe.pdf>
-Package pdftex.def Info: streamit-paper/graphics/threadingmaybe.pdf used on inp
-ut line 76.
-(pdftex.def)             Requested size: 412.56497pt x 132.02122pt.
- [19])
-(./streamit-paper/analysis.tex
-Underfull \vbox (badness 10000) has occurred while \output is active []
+ [63 <./streamit-paper/graphics/threadingmaybe5.pdf>]
+<streamit-paper/graphics/filterbank_tot2.pdf, id=808, 818.05624pt x 390.45876pt
+>
+File: streamit-paper/graphics/filterbank_tot2.pdf Graphic file (type pdf)
+ <use streamit-paper/graphics/filterbank_tot2.pdf>
+Package pdftex.def Info: streamit-paper/graphics/filterbank_tot2.pdf used on in
+put line 39.
+(pdftex.def)             Requested size: 412.56497pt x 196.92094pt.
 
- [20]
-<streamit-paper/graphics/audiobeam_tots.pdf, id=472, 505.89pt x 505.89pt>
-File: streamit-paper/graphics/audiobeam_tots.pdf Graphic file (type pdf)
+Overfull \hbox (5.54726pt too wide) in paragraph at lines 46--52
+\OT1/ptm/m/n/12 for the \OT1/ptm/m/it/12 Fil-ter-Bank \OT1/ptm/m/n/12 bench-mar
+k. The curves rep-re-sent the den-sity dis-tri-bu-tion of speedups,
+ []
 
-<use streamit-paper/graphics/audiobeam_tots.pdf>
-Package pdftex.def Info: streamit-paper/graphics/audiobeam_tots.pdf used on inp
-ut line 25.
-(pdftex.def)             Requested size: 412.56497pt x 412.57072pt.
- [21]
-<streamit-paper/graphics/unrolled_fm.pdf, id=477, 505.89pt x 505.89pt>
-File: streamit-paper/graphics/unrolled_fm.pdf Graphic file (type pdf)
+[64 <./streamit-paper/graphics/filterbank_tot2.pdf>]
+<streamit-paper/graphics/filterbank_unroll2.pdf, id=821, 818.05624pt x 440.6462
+6pt>
+File: streamit-paper/graphics/filterbank_unroll2.pdf Graphic file (type pdf)
+ <use streamit-paper/graphics/filterbank_unroll2.pdf>
+Package pdftex.def Info: streamit-paper/graphics/filterbank_unroll2.pdf used on
+ input line 70.
+(pdftex.def)             Requested size: 412.56497pt x 222.23212pt.
 
-<use streamit-paper/graphics/unrolled_fm.pdf>
-Package pdftex.def Info: streamit-paper/graphics/unrolled_fm.pdf used on input 
-line 45.
-(pdftex.def)             Requested size: 412.56497pt x 412.57072pt.
+<streamit-paper/graphics/unroll_speed_bars2.pdf, id=822, 700.6175pt x 494.84875
+pt>
+File: streamit-paper/graphics/unroll_speed_bars2.pdf Graphic file (type pdf)
+ <use streamit-paper/graphics/unroll_speed_bars2.pdf>
+Package pdftex.def Info: streamit-paper/graphics/unroll_speed_bars2.pdf used on
+ input line 85.
+(pdftex.def)             Requested size: 412.56497pt x 291.39948pt.
+ [65]
+<streamit-paper/graphics/unroll_speed_bars.pdf, id=826, 864.22874pt x 262.9825p
+t>
+File: streamit-paper/graphics/unroll_speed_bars.pdf Graphic file (type pdf)
+ <use streamit-paper/graphics/unroll_speed_bars.pdf>
+Package pdftex.def Info: streamit-paper/graphics/unroll_speed_bars.pdf used on 
+input line 99.
+(pdftex.def)             Requested size: 412.56497pt x 125.53995pt.
 
-<streamit-paper/graphics/threadcompbench.pdf, id=478, 1806.75pt x 578.16pt>
+<streamit-paper/graphics/unrolling_size.pdf, id=827, 864.22874pt x 262.9825pt>
+File: streamit-paper/graphics/unrolling_size.pdf Graphic file (type pdf)
+
+<use streamit-paper/graphics/unrolling_size.pdf>
+Package pdftex.def Info: streamit-paper/graphics/unrolling_size.pdf used on inp
+ut line 103.
+(pdftex.def)             Requested size: 412.56497pt x 125.53995pt.
+
+Underfull \vbox (badness 3503) has occurred while \output is active []
+
+ [66 <./streamit-paper/graphics/filterbank_unroll2.pdf>]
+<streamit-paper/graphics/threadcompbench.pdf, id=840, 1824.41597pt x 578.16pt>
 File: streamit-paper/graphics/threadcompbench.pdf Graphic file (type pdf)
 
 <use streamit-paper/graphics/threadcompbench.pdf>
 Package pdftex.def Info: streamit-paper/graphics/threadcompbench.pdf used on in
-put line 69.
-(pdftex.def)             Requested size: 412.56497pt x 132.02122pt.
- [22])
-(./streamit-paper/thread_model.tex [23] [24]
-<streamit-paper/graphics/corrGraph.pdf, id=488, 505.89pt x 505.89pt>
-File: streamit-paper/graphics/corrGraph.pdf Graphic file (type pdf)
+put line 128.
+(pdftex.def)             Requested size: 412.56497pt x 130.74203pt.
 
-<use streamit-paper/graphics/corrGraph.pdf>
-Package pdftex.def Info: streamit-paper/graphics/corrGraph.pdf used on input li
-ne 46.
-(pdftex.def)             Requested size: 412.56497pt x 412.57072pt.
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-<streamit-paper/graphics/lineargraphs.pdf, id=489, 2168.1pt x 867.24pt>
+ [67 <./streamit-paper/graphics/unroll_speed_bars2.pdf>] [68 <./streamit-paper/
+graphics/unroll_speed_bars.pdf> <./streamit-paper/graphics/unrolling_size.pdf
+
+pdfTeX warning: pdflatex (file ./streamit-paper/graphics/unrolling_size.pdf): P
+DF inclusion: multiple pdfs with page group included in a single page
+>] [69 <./streamit-paper/graphics/threadcompbench.pdf>])
+(./streamit-paper/thread_model.tex
+<streamit-paper/graphics/thread_expl.pdf, id=999, 662.64188pt x 234.5621pt>
+File: streamit-paper/graphics/thread_expl.pdf Graphic file (type pdf)
+
+<use streamit-paper/graphics/thread_expl.pdf>
+Package pdftex.def Info: streamit-paper/graphics/thread_expl.pdf used on input 
+line 5.
+(pdftex.def)             Requested size: 412.56497pt x 146.0426pt.
+ [70]
+<streamit-paper/graphics/corrThreadRemix2.pdf, id=1003, 385.45557pt x 138.03741
+pt>
+File: streamit-paper/graphics/corrThreadRemix2.pdf Graphic file (type pdf)
+ <use streamit-paper/graphics/corrThreadRemix2.pdf>
+Package pdftex.def Info: streamit-paper/graphics/corrThreadRemix2.pdf used on i
+nput line 35.
+(pdftex.def)             Requested size: 412.56497pt x 147.7512pt.
+
+Underfull \vbox (badness 3679) has occurred while \output is active []
+
+ [71 <./streamit-paper/graphics/thread_expl.pdf> <./streamit-paper/graphics/cor
+rThreadRemix2.pdf
+
+pdfTeX warning: pdflatex (file ./streamit-paper/graphics/corrThreadRemix2.pdf):
+ PDF inclusion: multiple pdfs with page group included in a single page
+>]
+Overfull \hbox (2.05405pt too wide) in paragraph at lines 58--60
+[]\OT1/ptm/m/n/12 Accumulated Un-con-di-tional Work: To-tal num-ber of op-er-a-
+tions in all fil-ters which
+ []
+
+
+Overfull \hbox (5.58144pt too wide) in paragraph at lines 60--61
+[]\OT1/ptm/m/n/12 Total Num-ber of fil-ters in SplitJoins: Amount of fil-ters t
+hat are found in SplitJoins. 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 75--78
+
+ []
+
+[72]) (./streamit-paper/core.tex [73]
+<streamit-paper/graphics/corrGraph_remix2.pdf, id=1044, 383.49236pt x 166.94954
+pt>
+File: streamit-paper/graphics/corrGraph_remix2.pdf Graphic file (type pdf)
+ <use streamit-paper/graphics/corrGraph_remix2.pdf>
+Package pdftex.def Info: streamit-paper/graphics/corrGraph_remix2.pdf used on i
+nput line 27.
+(pdftex.def)             Requested size: 412.56497pt x 179.615pt.
+ [74 <./streamit-paper/graphics/corrGraph_remix2.pdf>] [75]
+<streamit-paper/graphics/lineargraphs.pdf, id=1074, 2168.1pt x 867.24pt>
 File: streamit-paper/graphics/lineargraphs.pdf Graphic file (type pdf)
 
 <use streamit-paper/graphics/lineargraphs.pdf>
 Package pdftex.def Info: streamit-paper/graphics/lineargraphs.pdf used on input
- line 68.
+ line 93.
 (pdftex.def)             Requested size: 412.56497pt x 165.0155pt.
-) (./streamit-paper/core.tex
-<streamit-paper/graphics/coreCorr.pdf, id=490, 505.89pt x 505.89pt>
-File: streamit-paper/graphics/coreCorr.pdf Graphic file (type pdf)
-
-<use streamit-paper/graphics/coreCorr.pdf>
-Package pdftex.def Info: streamit-paper/graphics/coreCorr.pdf used on input lin
-e 4.
-(pdftex.def)             Requested size: 412.56497pt x 412.57072pt.
- [25]) (./streamit-paper/results.tex
-Underfull \vbox (badness 3547) has occurred while \output is active []
-
- [26]
-[27]
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 31.
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 31.
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 31.
- <streamit-paper/graphics/results.pdf, id=501, 505.89pt x 505.89pt>
+ [76])
+(./streamit-paper/results.tex
+<streamit-paper/graphics/results.pdf, id=1078, 505.89pt x 505.89pt>
 File: streamit-paper/graphics/results.pdf Graphic file (type pdf)
 
 <use streamit-paper/graphics/results.pdf>
 Package pdftex.def Info: streamit-paper/graphics/results.pdf used on input line
- 70.
-(pdftex.def)             Requested size: 412.56497pt x 412.57072pt.
-) (./streamit-paper/related.tex
-[28]) (./streamit-paper/conclusion.tex) [29]) [30] [31 <./streamit-paper/graphi
-cs/beamformer_motivation.pdf>] [32 <./streamit-paper/graphics/explanation.pdf>]
-[33 <./streamit-paper/graphics/ESCProx.pdf> <./streamit-paper/graphics/threadin
-gmaybe.pdf>] [34 <./streamit-paper/graphics/audiobeam_tots.pdf>] [35 <./streami
-t-paper/graphics/unrolled_fm.pdf> <./streamit-paper/graphics/threadcompbench.pd
-f>] [36 <./streamit-paper/graphics/corrGraph.pdf>] [37 <./streamit-paper/graphi
-cs/lineargraphs.pdf>] [38 <./streamit-paper/graphics/coreCorr.pdf>] [39]
-[40 <./streamit-paper/graphics/results.pdf>]
+ 5.
+(pdftex.def)             Requested size: 288.79422pt x 288.80028pt.
+ [77 <./streamit-paper/graphics/lineargraphs.pdf>] [78 <./streamit-paper/graphi
+cs/results.pdf>]
+Overfull \hbox (6.60834pt too wide) in paragraph at lines 86--86
+[]  [] 
+ []
+
+
+Overfull \hbox (3.25648pt too wide) in paragraph at lines 86--86
+[][] 
+ []
+
+) (./streamit-paper/conclusion.tex [79] [80])) [81]
 \openout2 = `./cases-paper/cases-chapter.aux'.
 
- (./cases-paper/cases-chapter.tex
-Chapter 5.
-(./cases-paper/introduction.tex [41
+
+(./cases-paper/cases-chapter.tex [82
 
 
 
-]) (./cases-paper/motivationFinal.tex
-<cases-paper/graphics/motivation/disp_opt_4_16_3.pdf, id=653, 703.23317pt x 113
-.80388pt>
+]
+Chapter 6.
+(./cases-paper/introduction.tex [83]
+Overfull \hbox (3.23088pt too wide) in paragraph at lines 20--25
+\OT1/ptm/m/n/12 DMP can im-prove per-for-mance. Through par-ti-tion-ing, the di
+f-fer-ent com-pu-ta-tion phases
+ []
+
+[84]) (./cases-paper/motivationFinal.tex
+<cases-paper/graphics/motivation/disp_opt_4_16_3.pdf, id=1122, 703.23317pt x 17
+8.04388pt>
 File: cases-paper/graphics/motivation/disp_opt_4_16_3.pdf Graphic file (type pd
 f)
  <use cases-paper/graphics/motivation/disp_opt_4_16_3.pdf>
 Package pdftex.def Info: cases-paper/graphics/motivation/disp_opt_4_16_3.pdf us
-ed on input line 3.
-(pdftex.def)             Requested size: 412.56497pt x 66.76514pt.
+ed on input line 8.
+(pdftex.def)             Requested size: 412.56497pt x 104.45273pt.
 
-Overfull \hbox (0.1721pt too wide) in paragraph at lines 13--17
-\OT1/ptm/m/n/12 Previous work in core fu-sion has fo-cused on de-liv-er-ing per
--for-mance im-prove-ments [[],
- []
-
-[42]
-<cases-paper/graphics/motivation/code_opt_3.pdf, id=657, 627.5137pt x 116.50475
-pt>
-File: cases-paper/graphics/motivation/code_opt_3.pdf Graphic file (type pdf)
- <use cases-paper/graphics/motivation/code_opt_3.pdf>
-Package pdftex.def Info: cases-paper/graphics/motivation/code_opt_3.pdf used on
- input line 30.
-(pdftex.def)             Requested size: 412.56497pt x 76.59825pt.
- [43 <./cases-paper/graphics/motivation/disp_opt_4_16_3.pdf>]) (./cases-paper/l
-imitstudy.tex
-
-LaTeX Warning: Reference `sect:background' on page 44 undefined on input line 7
-.
-
-[44 <./cases-paper/graphics/motivation/code_opt_3.pdf>]
-<cases-paper/graphics/limit_study/prediction_req.pdf, id=699, 1150.2975pt x 234
-.8775pt>
-File: cases-paper/graphics/limit_study/prediction_req.pdf Graphic file (type pd
-f)
- <use cases-paper/graphics/limit_study/prediction_req.pdf>
-Package pdftex.def Info: cases-paper/graphics/limit_study/prediction_req.pdf us
-ed on input line 31.
-(pdftex.def)             Requested size: 412.56497pt x 84.24045pt.
- [45 <./cases-paper/graphics/limit_study/prediction_req.pdf>]
-<cases-paper/graphics/limit_study/sync_cost.pdf, id=720, 1048.91875pt x 234.877
-5pt>
-File: cases-paper/graphics/limit_study/sync_cost.pdf Graphic file (type pdf)
- <use cases-paper/graphics/limit_study/sync_cost.pdf>
-Package pdftex.def Info: cases-paper/graphics/limit_study/sync_cost.pdf used on
- input line 58.
-(pdftex.def)             Requested size: 412.56497pt x 92.38315pt.
- [46 <./cases-paper/graphics/limit_study/sync_cost.pdf>]
-<cases-paper/graphics/limit_study/summary.pdf, id=740, 337.26pt x 167.52586pt>
-File: cases-paper/graphics/limit_study/summary.pdf Graphic file (type pdf)
-
-<use cases-paper/graphics/limit_study/summary.pdf>
-Package pdftex.def Info: cases-paper/graphics/limit_study/summary.pdf used on i
-nput line 79.
-(pdftex.def)             Requested size: 247.54149pt x 122.96259pt.
-)
-(./cases-paper/experimental_setup.tex [47 <./cases-paper/graphics/limit_study/s
-ummary.pdf>]) (./cases-paper/compiler_opts.tex
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2015/06/04 1.6 listings language file
 )
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
 File: lstmisc.sty 2015/06/04 1.6 (Carsten Heinz)
 )
-LaTeX Font Info:    Try loading font information for OML+ptm on input line 5.
+LaTeX Font Info:    Try loading font information for OML+ptm on input line 57.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omlptm.fd
 File: omlptm.fd 
 )
-LaTeX Font Info:    Font shape `OML/ptm/m/n' in size <10.95> not available
-(Font)              Font shape `OML/cmm/m/it' tried instead on input line 5.
+LaTeX Font Info:    Font shape `OML/ptm/m/n' in size <6> not available
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 57.
+LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <6> not available
+(Font)              Font shape `OMS/pzccm/m/n' tried instead on input line 57.
 
-Overfull \hbox (5.64223pt too wide) in paragraph at lines 6--7
-[][][][][][][][][][][][][][][][][][][][][] 
+Overfull \hbox (7.33539pt too wide) in paragraph at lines 99--106
+\OT1/ptm/m/it/12 Dis-par-ity \OT1/ptm/m/n/12 Bench-mark from the San-Diego Vi-s
+ion Bench-mark Suite (SD-VBS) [[]]
  []
 
-LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/pzccm/m/n' tried instead on input line 8.
+[85] [86 <./cases-paper/graphics/motivation/disp_opt_4_16_3.pdf>]
+<cases-paper/graphics/motivation/code_opt_3.pdf, id=1149, 627.5137pt x 160.8735
+8pt>
+File: cases-paper/graphics/motivation/code_opt_3.pdf Graphic file (type pdf)
+ <use cases-paper/graphics/motivation/code_opt_3.pdf>
+Package pdftex.def Info: cases-paper/graphics/motivation/code_opt_3.pdf used on
+ input line 134.
+(pdftex.def)             Requested size: 412.56497pt x 105.7694pt.
+ [87 <./cases-paper/graphics/motivation/code_opt_3.pdf>]) (./cases-paper/limits
+tudy.tex [88] [89]
+<cases-paper/graphics/limit_study/prediction_req.pdf, id=1179, 1002.74625pt x 3
+50.30875pt>
+File: cases-paper/graphics/limit_study/prediction_req.pdf Graphic file (type pd
+f)
+ <use cases-paper/graphics/limit_study/prediction_req.pdf>
+Package pdftex.def Info: cases-paper/graphics/limit_study/prediction_req.pdf us
+ed on input line 47.
+(pdftex.def)             Requested size: 412.56497pt x 144.12996pt.
+ [90 <./cases-paper/graphics/limit_study/prediction_req.pdf>]
+<cases-paper/graphics/limit_study/sync_cost.pdf, id=1199, 1002.74625pt x 350.30
+875pt>
+File: cases-paper/graphics/limit_study/sync_cost.pdf Graphic file (type pdf)
+ <use cases-paper/graphics/limit_study/sync_cost.pdf>
+Package pdftex.def Info: cases-paper/graphics/limit_study/sync_cost.pdf used on
+ input line 72.
+(pdftex.def)             Requested size: 412.56497pt x 144.12996pt.
+ [91 <./cases-paper/graphics/limit_study/sync_cost.pdf>]
+<cases-paper/graphics/limit_study/summary.pdf, id=1220, 337.26pt x 167.52586pt>
+File: cases-paper/graphics/limit_study/summary.pdf Graphic file (type pdf)
+<use cases-paper/graphics/limit_study/summary.pdf>
+Package pdftex.def Info: cases-paper/graphics/limit_study/summary.pdf used on i
+nput line 93.
+(pdftex.def)             Requested size: 330.05322pt x 163.94926pt.
+)
+(./cases-paper/experimental_setup.tex
+Underfull \vbox (badness 2961) has occurred while \output is active []
 
-Overfull \hbox (45.06255pt too wide) in paragraph at lines 8--9
-[][][][][][][][][][][][][][][][][][][][][][][][][][][] 
- []
-
-
-Overfull \hbox (5.64223pt too wide) in paragraph at lines 19--20
-[][][][][][][][][][][][][][][][][][][][][] 
- []
-
-
-Overfull \hbox (18.78233pt too wide) in paragraph at lines 21--22
-[][][][][][][][][][][] 
- []
-
-[48]
-<cases-paper/graphics/Exploration/ipc_comp.pdf, id=797, 1429.34pt x 243.91125pt
->
+ [92 <./cases-paper/graphics/limit_study/summary.pdf>] [93])
+(./cases-paper/compiler_opts.tex [94] [95]
+<cases-paper/graphics/Exploration/ipc_comp.pdf, id=1283, 1429.34pt x 243.91125p
+t>
 File: cases-paper/graphics/Exploration/ipc_comp.pdf Graphic file (type pdf)
  <use cases-paper/graphics/Exploration/ipc_comp.pdf>
 Package pdftex.def Info: cases-paper/graphics/Exploration/ipc_comp.pdf used on 
-input line 55.
+input line 92.
 (pdftex.def)             Requested size: 412.56497pt x 70.4012pt.
 
-<cases-paper/graphics/Exploration/comp_speed.pdf, id=798, 1429.34pt x 243.91125
-pt>
+<cases-paper/graphics/Exploration/comp_speed.pdf, id=1284, 1429.34pt x 243.9112
+5pt>
 File: cases-paper/graphics/Exploration/comp_speed.pdf Graphic file (type pdf)
  <use cases-paper/graphics/Exploration/comp_speed.pdf>
 Package pdftex.def Info: cases-paper/graphics/Exploration/comp_speed.pdf used o
-n input line 62.
+n input line 97.
 (pdftex.def)             Requested size: 412.56497pt x 70.4012pt.
- [49] [50 <./cases-paper/graphics/Exploration/ipc_comp.pdf> <./cases-paper/grap
-hics/Exploration/comp_speed.pdf
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [96 <./cases-paper/graphics/Exploration/ipc_comp.pdf> <./cases-paper/graphics/
+Exploration/comp_speed.pdf
 
 pdfTeX warning: pdflatex (file ./cases-paper/graphics/Exploration/comp_speed.pd
 f): PDF inclusion: multiple pdfs with page group included in a single page
->])
-<cases-paper/graphics/Exploration/ipcs_16_2.pdf, id=837, 1131.22626pt x 663.478
-74pt>
-File: cases-paper/graphics/Exploration/ipcs_16_2.pdf Graphic file (type pdf)
- <use cases-paper/graphics/Exploration/ipcs_16_2.pdf>
-Package pdftex.def Info: cases-paper/graphics/Exploration/ipcs_16_2.pdf used on
- input line 39.
-(pdftex.def)             Requested size: 412.56497pt x 241.9703pt.
+>]) (./cases-paper/bmark_exploration.tex
+<cases-paper/graphics/Exploration/ipcs_16_3.pdf, id=1319, 686.565pt x 687.56876
+pt>
+File: cases-paper/graphics/Exploration/ipcs_16_3.pdf Graphic file (type pdf)
+ <use cases-paper/graphics/Exploration/ipcs_16_3.pdf>
+Package pdftex.def Info: cases-paper/graphics/Exploration/ipcs_16_3.pdf used on
+ input line 4.
+(pdftex.def)             Requested size: 412.56497pt x 413.16344pt.
+ [97]
+Underfull \vbox (badness 5022) has occurred while \output is active []
 
-(./cases-paper/bmark_exploration.tex [51 <./cases-paper/graphics/Exploration/ip
-cs_16_2.pdf>]
-<cases-paper/graphics/Exploration/clusters2.pdf, id=859, 1135.8338pt x 192.1373
-3pt>
-File: cases-paper/graphics/Exploration/clusters2.pdf Graphic file (type pdf)
- <use cases-paper/graphics/Exploration/clusters2.pdf>
-Package pdftex.def Info: cases-paper/graphics/Exploration/clusters2.pdf used on
- input line 29.
-(pdftex.def)             Requested size: 412.56497pt x 69.78798pt.
+ [98 <./cases-paper/graphics/Exploration/ipcs_16_3.pdf>]
+<cases-paper/graphics/Exploration/SSE_final.pdf, id=1344, 713.66624pt x 393.47p
+t>
+File: cases-paper/graphics/Exploration/SSE_final.pdf Graphic file (type pdf)
+ <use cases-paper/graphics/Exploration/SSE_final.pdf>
+Package pdftex.def Info: cases-paper/graphics/Exploration/SSE_final.pdf used on
+ input line 38.
+(pdftex.def)             Requested size: 412.56497pt x 227.46227pt.
+ [99 <./cases-paper/graphics/Exploration/SSE_final.pdf>]
+<cases-paper/graphics/Exploration/clusters4.pdf, id=1364, 713.66624pt x 434.623
+75pt>
+File: cases-paper/graphics/Exploration/clusters4.pdf Graphic file (type pdf)
+ <use cases-paper/graphics/Exploration/clusters4.pdf>
+Package pdftex.def Info: cases-paper/graphics/Exploration/clusters4.pdf used on
+ input line 52.
+(pdftex.def)             Requested size: 412.56497pt x 251.25296pt.
+ [100 <./cases-paper/graphics/Exploration/clusters4.pdf>]
+<cases-paper/graphics/Exploration/stddev3.pdf, id=1377, 686.565pt x 587.19376pt
+>
+File: cases-paper/graphics/Exploration/stddev3.pdf Graphic file (type pdf)
+ <use cases-paper/graphics/Exploration/stddev3.pdf>
+Package pdftex.def Info: cases-paper/graphics/Exploration/stddev3.pdf used on i
+nput line 68.
+(pdftex.def)             Requested size: 412.56497pt x 352.8476pt.
 
-<cases-paper/graphics/Exploration/stddev.pdf, id=860, 1429.34pt x 287.0725pt>
-File: cases-paper/graphics/Exploration/stddev.pdf Graphic file (type pdf)
+<cases-paper/graphics/Exploration/SizeBuckets.pdf, id=1378, 838.13126pt x 447.6
+725pt>
+File: cases-paper/graphics/Exploration/SizeBuckets.pdf Graphic file (type pdf)
+ <use cases-paper/graphics/Exploration/SizeBuckets.pdf>
+Package pdftex.def Info: cases-paper/graphics/Exploration/SizeBuckets.pdf used 
+on input line 76.
+(pdftex.def)             Requested size: 412.56497pt x 220.35875pt.
+ [101 <./cases-paper/graphics/Exploration/stddev3.pdf>]
+Underfull \vbox (badness 1810) has occurred while \output is active []
 
-<use cases-paper/graphics/Exploration/stddev.pdf>
-Package pdftex.def Info: cases-paper/graphics/Exploration/stddev.pdf used on in
-put line 38.
-(pdftex.def)             Requested size: 412.56497pt x 82.85904pt.
-
-Underfull \vbox (badness 4940) has occurred while \output is active []
-
- [52]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [53 <./cases-paper/graphics/Exploration/clusters2.pdf> <./cases-paper/graphics
-/Exploration/stddev.pdf
-
-pdfTeX warning: pdflatex (file ./cases-paper/graphics/Exploration/stddev.pdf): 
-PDF inclusion: multiple pdfs with page group included in a single page
->]) (./cases-paper/dynamic_core_fusion.tex
-<cases-paper/graphics/Pareto/DispN3.pdf, id=951, 529.98pt x 278.03876pt>
-File: cases-paper/graphics/Pareto/DispN3.pdf Graphic file (type pdf)
-
-<use cases-paper/graphics/Pareto/DispN3.pdf>
-Package pdftex.def Info: cases-paper/graphics/Pareto/DispN3.pdf used on input l
-ine 4.
-(pdftex.def)             Requested size: 136.14719pt x 71.42288pt.
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 4.
-
-<cases-paper/graphics/Pareto/LocN3.pdf, id=952, 529.98pt x 320.19624pt>
-File: cases-paper/graphics/Pareto/LocN3.pdf Graphic file (type pdf)
-
-<use cases-paper/graphics/Pareto/LocN3.pdf>
-Package pdftex.def Info: cases-paper/graphics/Pareto/LocN3.pdf used on input li
-ne 5.
-(pdftex.def)             Requested size: 136.14719pt x 82.25235pt.
-
-<cases-paper/graphics/Pareto/MSERN3.pdf, id=953, 529.98pt x 278.03876pt>
-File: cases-paper/graphics/Pareto/MSERN3.pdf Graphic file (type pdf)
-
-<use cases-paper/graphics/Pareto/MSERN3.pdf>
-Package pdftex.def Info: cases-paper/graphics/Pareto/MSERN3.pdf used on input l
-ine 7.
-(pdftex.def)             Requested size: 136.14719pt x 71.42288pt.
-
-<cases-paper/graphics/Pareto/MultiN3.pdf, id=954, 529.98pt x 266.9975pt>
-File: cases-paper/graphics/Pareto/MultiN3.pdf Graphic file (type pdf)
-
-<use cases-paper/graphics/Pareto/MultiN3.pdf>
-Package pdftex.def Info: cases-paper/graphics/Pareto/MultiN3.pdf used on input 
-line 8.
-(pdftex.def)             Requested size: 136.14719pt x 68.5866pt.
-
-<cases-paper/graphics/Pareto/SiftN3.pdf, id=955, 529.98pt x 266.9975pt>
-File: cases-paper/graphics/Pareto/SiftN3.pdf Graphic file (type pdf)
-
-<use cases-paper/graphics/Pareto/SiftN3.pdf>
-Package pdftex.def Info: cases-paper/graphics/Pareto/SiftN3.pdf used on input l
-ine 9.
-(pdftex.def)             Requested size: 136.14719pt x 68.5866pt.
-
-<cases-paper/graphics/Pareto/StitchN3.pdf, id=956, 529.98pt x 266.9975pt>
-File: cases-paper/graphics/Pareto/StitchN3.pdf Graphic file (type pdf)
-
-<use cases-paper/graphics/Pareto/StitchN3.pdf>
-Package pdftex.def Info: cases-paper/graphics/Pareto/StitchN3.pdf used on input
- line 11.
-(pdftex.def)             Requested size: 136.14719pt x 68.5866pt.
-
-<cases-paper/graphics/Pareto/SVMN3.pdf, id=957, 529.98pt x 266.9975pt>
-File: cases-paper/graphics/Pareto/SVMN3.pdf Graphic file (type pdf)
-
-<use cases-paper/graphics/Pareto/SVMN3.pdf>
-Package pdftex.def Info: cases-paper/graphics/Pareto/SVMN3.pdf used on input li
-ne 12.
-(pdftex.def)             Requested size: 136.14719pt x 68.5866pt.
-
-<cases-paper/graphics/Pareto/TextN3.pdf, id=958, 529.98pt x 266.9975pt>
-File: cases-paper/graphics/Pareto/TextN3.pdf Graphic file (type pdf)
-
-<use cases-paper/graphics/Pareto/TextN3.pdf>
-Package pdftex.def Info: cases-paper/graphics/Pareto/TextN3.pdf used on input l
-ine 13.
-(pdftex.def)             Requested size: 136.14719pt x 68.5866pt.
-
-<cases-paper/graphics/Pareto/TrackingN3.pdf, id=959, 529.98pt x 266.9975pt>
-File: cases-paper/graphics/Pareto/TrackingN3.pdf Graphic file (type pdf)
-
-<use cases-paper/graphics/Pareto/TrackingN3.pdf>
-Package pdftex.def Info: cases-paper/graphics/Pareto/TrackingN3.pdf used on inp
-ut line 14.
-(pdftex.def)             Requested size: 136.14719pt x 68.5866pt.
-
-Underfull \vbox (badness 1642) has occurred while \output is active []
-
- [54 <./cases-paper/graphics/Pareto/DispN3.pdf> <./cases-paper/graphics/Pareto/
-LocN3.pdf
-
-pdfTeX warning: pdflatex (file ./cases-paper/graphics/Pareto/LocN3.pdf): PDF in
-clusion: multiple pdfs with page group included in a single page
-> <./cases-paper/graphics/Pareto/MSERN3.pdf
-
-pdfTeX warning: pdflatex (file ./cases-paper/graphics/Pareto/MSERN3.pdf): PDF i
-nclusion: multiple pdfs with page group included in a single page
-> <./cases-paper/graphics/Pareto/MultiN3.pdf
-
-pdfTeX warning: pdflatex (file ./cases-paper/graphics/Pareto/MultiN3.pdf): PDF 
-inclusion: multiple pdfs with page group included in a single page
-> <./cases-paper/graphics/Pareto/SiftN3.pdf
-
-pdfTeX warning: pdflatex (file ./cases-paper/graphics/Pareto/SiftN3.pdf): PDF i
-nclusion: multiple pdfs with page group included in a single page
-> <./cases-paper/graphics/Pareto/StitchN3.pdf
-
-pdfTeX warning: pdflatex (file ./cases-paper/graphics/Pareto/StitchN3.pdf): PDF
- inclusion: multiple pdfs with page group included in a single page
-> <./cases-paper/graphics/Pareto/SVMN3.pdf
-
-pdfTeX warning: pdflatex (file ./cases-paper/graphics/Pareto/SVMN3.pdf): PDF in
-clusion: multiple pdfs with page group included in a single page
-> <./cases-paper/graphics/Pareto/TextN3.pdf
-
-pdfTeX warning: pdflatex (file ./cases-paper/graphics/Pareto/TextN3.pdf): PDF i
-nclusion: multiple pdfs with page group included in a single page
-> <./cases-paper/graphics/Pareto/TrackingN3.pdf
-
-pdfTeX warning: pdflatex (file ./cases-paper/graphics/Pareto/TrackingN3.pdf): P
-DF inclusion: multiple pdfs with page group included in a single page
->] [55]
-<cases-paper/graphics/results/speed_bars.pdf, id=1040, 1429.34pt x 287.0725pt>
-File: cases-paper/graphics/results/speed_bars.pdf Graphic file (type pdf)
-
-<use cases-paper/graphics/results/speed_bars.pdf>
-Package pdftex.def Info: cases-paper/graphics/results/speed_bars.pdf used on in
-put line 56.
-(pdftex.def)             Requested size: 412.56497pt x 82.85904pt.
- [56 <./cases-paper/graphics/results/speed_bars.pdf>]
-<cases-paper/graphics/results/edd_bars.pdf, id=1060, 1429.34pt x 295.1025pt>
-File: cases-paper/graphics/results/edd_bars.pdf Graphic file (type pdf)
-
-<use cases-paper/graphics/results/edd_bars.pdf>
-Package pdftex.def Info: cases-paper/graphics/results/edd_bars.pdf used on inpu
-t line 105.
-(pdftex.def)             Requested size: 412.56497pt x 85.17676pt.
-
-
-LaTeX Warning: Reference `sec:coresufion' on page 57 undefined on input line 11
-6.
-
-[57 <./cases-paper/graphics/results/edd_bars.pdf>]
-<cases-paper/graphics/Exploration/phase_len.pdf, id=1081, 1248.665pt x 203.7612
-5pt>
-File: cases-paper/graphics/Exploration/phase_len.pdf Graphic file (type pdf)
- <use cases-paper/graphics/Exploration/phase_len.pdf>
-Package pdftex.def Info: cases-paper/graphics/Exploration/phase_len.pdf used on
- input line 133.
-(pdftex.def)             Requested size: 412.56497pt x 67.32225pt.
-
-<cases-paper/graphics/Exploration/latency_en_sp_sw.pdf, id=1082, 1429.34pt x 29
-5.1025pt>
-File: cases-paper/graphics/Exploration/latency_en_sp_sw.pdf Graphic file (type 
-pdf)
- <use cases-paper/graphics/Exploration/latency_en_sp_sw.pdf>
-Package pdftex.def Info: cases-paper/graphics/Exploration/latency_en_sp_sw.pdf 
-used on input line 141.
-(pdftex.def)             Requested size: 412.56497pt x 85.17676pt.
- [58 <./cases-paper/graphics/Exploration/phase_len.pdf>]) (./cases-paper/linear
-_reg.tex
-[59 <./cases-paper/graphics/Exploration/latency_en_sp_sw.pdf>]
-<cases-paper/graphics/results/lr_speed.pdf, id=1121, 1429.34pt x 287.0725pt>
-File: cases-paper/graphics/results/lr_speed.pdf Graphic file (type pdf)
-
-<use cases-paper/graphics/results/lr_speed.pdf>
-Package pdftex.def Info: cases-paper/graphics/results/lr_speed.pdf used on inpu
-t line 35.
-(pdftex.def)             Requested size: 412.56497pt x 82.85904pt.
- [60 <./cases-paper/graphics/results/lr_speed.pdf>]) (./cases-paper/related_wor
-k.tex [61]
-Overfull \hbox (7.84825pt too wide) in paragraph at lines 33--36
-[]\OT1/ptm/m/n/12 Work on us-ing ma-chine learn-ing to au-to-mat-i-cally choose
- a com-po-si-tion was achieved
+ [102 <./cases-paper/graphics/Exploration/SizeBuckets.pdf>]
+Overfull \hbox (22.53877pt too wide) in paragraph at lines 141--144
+\OT1/ptm/m/n/12 As pre-vi-ously men-tioned, both \OT1/ptm/m/it/12 MSER \OT1/ptm
+/m/n/12 and \OT1/ptm/m/it/12 Multi[]NCut \OT1/ptm/m/n/12 do not ben-e-fit from 
+core-composition
  []
 
-) (./cases-paper/conclusion.tex [62])) [63] (./infthesis-template.bbl [64
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [103]
+Underfull \vbox (badness 4441) has occurred while \output is active []
+
+ [104])
+(./cases-paper/dynamic_core_fusion.tex
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [105]
+Overfull \hbox (1.26186pt too wide) in paragraph at lines 6--8
+[]\OT1/ptm/b/n/12 Static Bench-mark \OT1/ptm/m/n/12 (SB): A fixed fused-core wh
+ich is op-ti-mal for a unique bench-
+ []
+
+
+<cases-paper/graphics/exploration/trace-gathering.pdf, id=1427, 1652.14027pt x 
+373.28032pt>
+File: cases-paper/graphics/exploration/trace-gathering.pdf Graphic file (type p
+df)
+ <use cases-paper/graphics/exploration/trace-gathering.pdf>
+Package pdftex.def Info: cases-paper/graphics/exploration/trace-gathering.pdf u
+sed on input line 21.
+(pdftex.def)             Requested size: 412.56497pt x 93.21162pt.
+
+[106 <./cases-paper/graphics/exploration/trace-gathering.pdf>]
+<cases-paper/graphics/pareto/pareto_best.pdf, id=1453, 1014.79124pt x 727.71875
+pt>
+File: cases-paper/graphics/pareto/pareto_best.pdf Graphic file (type pdf)
+ <use cases-paper/graphics/pareto/pareto_best.pdf>
+Package pdftex.def Info: cases-paper/graphics/pareto/pareto_best.pdf used on in
+put line 51.
+(pdftex.def)             Requested size: 412.56497pt x 295.85709pt.
+ [107]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [108 <./cases-paper/graphics/pareto/pareto_best.pdf>]
+<cases-paper/graphics/results/speed_bars3.pdf, id=1469, 673.51625pt x 373.395pt
+>
+File: cases-paper/graphics/results/speed_bars3.pdf Graphic file (type pdf)
+ <use cases-paper/graphics/results/speed_bars3.pdf>
+Package pdftex.def Info: cases-paper/graphics/results/speed_bars3.pdf used on i
+nput line 114.
+(pdftex.def)             Requested size: 412.56497pt x 228.7278pt.
+ [109]
+<cases-paper/graphics/Exploration/condensed_clust.pdf, id=1474, 473.77pt x 239.
+89626pt>
+File: cases-paper/graphics/Exploration/condensed_clust.pdf Graphic file (type p
+df)
+ <use cases-paper/graphics/Exploration/condensed_clust.pdf>
+Package pdftex.def Info: cases-paper/graphics/Exploration/condensed_clust.pdf u
+sed on input line 145.
+(pdftex.def)             Requested size: 185.65297pt x 94.00574pt.
+
+<cases-paper/graphics/Exploration/latency_2.pdf, id=1475, 473.77pt x 239.89626p
+t>
+File: cases-paper/graphics/Exploration/latency_2.pdf Graphic file (type pdf)
+ <use cases-paper/graphics/Exploration/latency_2.pdf>
+Package pdftex.def Info: cases-paper/graphics/Exploration/latency_2.pdf used on
+ input line 151.
+(pdftex.def)             Requested size: 185.65297pt x 94.00574pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [110 <./cases-paper/graphics/results/speed_bars3.pdf>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [111 <./cases-paper/graphics/Exploration/condensed_clust.pdf> <./cases-paper/g
+raphics/Exploration/latency_2.pdf
+
+pdfTeX warning: pdflatex (file ./cases-paper/graphics/Exploration/latency_2.pdf
+): PDF inclusion: multiple pdfs with page group included in a single page
+>]) (./cases-paper/linear_reg.tex
+<cases-paper/graphics/other/model3.pdf, id=1530, 896.66585pt x 228.96323pt>
+File: cases-paper/graphics/other/model3.pdf Graphic file (type pdf)
+
+<use cases-paper/graphics/other/model3.pdf>
+Package pdftex.def Info: cases-paper/graphics/other/model3.pdf used on input li
+ne 10.
+(pdftex.def)             Requested size: 412.56497pt x 105.34882pt.
+ [112] [113 <./cases-paper/graphics/other/model3.pdf>]
+<cases-paper/graphics/results/lr_speed3.pdf, id=1551, 673.51625pt x 373.395pt>
+File: cases-paper/graphics/results/lr_speed3.pdf Graphic file (type pdf)
+
+<use cases-paper/graphics/results/lr_speed3.pdf>
+Package pdftex.def Info: cases-paper/graphics/results/lr_speed3.pdf used on inp
+ut line 60.
+(pdftex.def)             Requested size: 412.56497pt x 228.7278pt.
+ [114 <./cases-paper/graphics/results/lr_speed3.pdf>]) (./cases-paper/conclusio
+n.tex [115])) [116]
+\openout2 = `./chapter3/chapter3.aux'.
+
+
+(./chapter3/chapter3.tex
+Chapter 7.
+(./chapter3/introduction.tex [117
+
 
 
 ]
-[65]
-Underfull \hbox (badness 1107) in paragraph at lines 56--59
-[]\OT1/ptm/m/n/12 M. De-Vuyst, A. Venkat, and D. M. Tullsen.  Ex-e-cu-tion mi-g
-ra-tion in a
+Underfull \vbox (badness 1082) has occurred while \output is active []
+
+ [118])
+(./chapter3/motivation.tex [119]
+<chapter3/graphics/motiv_p1.pdf, id=1587, 758.835pt x 168.63pt>
+File: chapter3/graphics/motiv_p1.pdf Graphic file (type pdf)
+
+<use chapter3/graphics/motiv_p1.pdf>
+Package pdftex.def Info: chapter3/graphics/motiv_p1.pdf used on input line 6.
+(pdftex.def)             Requested size: 412.56497pt x 91.68152pt.
+
+<chapter3/graphics/perfect_fetch_motiv2.pdf, id=1588, 758.835pt x 168.63pt>
+File: chapter3/graphics/perfect_fetch_motiv2.pdf Graphic file (type pdf)
+
+<use chapter3/graphics/perfect_fetch_motiv2.pdf>
+Package pdftex.def Info: chapter3/graphics/perfect_fetch_motiv2.pdf used on inp
+ut line 11.
+(pdftex.def)             Requested size: 412.56497pt x 91.68152pt.
+ [120 <./chapter3/graphics/motiv_p1.pdf> <./chapter3/graphics/perfect_fetch_mot
+iv2.pdf
+
+pdfTeX warning: pdflatex (file ./chapter3/graphics/perfect_fetch_motiv2.pdf): P
+DF inclusion: multiple pdfs with page group included in a single page
+>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [121]
+<chapter3/graphics/mser_ex.pdf, id=1613, 1016.56839pt x 206.4933pt>
+File: chapter3/graphics/mser_ex.pdf Graphic file (type pdf)
+
+<use chapter3/graphics/mser_ex.pdf>
+Package pdftex.def Info: chapter3/graphics/mser_ex.pdf used on input line 88.
+(pdftex.def)             Requested size: 412.56497pt x 83.80261pt.
+
+<chapter3/graphics/mser_motiv_reg2.pdf, id=1614, 758.835pt x 168.63pt>
+File: chapter3/graphics/mser_motiv_reg2.pdf Graphic file (type pdf)
+
+<use chapter3/graphics/mser_motiv_reg2.pdf>
+Package pdftex.def Info: chapter3/graphics/mser_motiv_reg2.pdf used on input li
+ne 106.
+(pdftex.def)             Requested size: 412.56497pt x 91.68152pt.
+ [122 <./chapter3/graphics/mser_ex.pdf>]) (./chapter3/new_block_fetch_scheme.te
+x
+<chapter3/graphics/4fetchnorm2.pdf, id=1626, 791.95876pt x 171.64125pt>
+File: chapter3/graphics/4fetchnorm2.pdf Graphic file (type pdf)
+
+<use chapter3/graphics/4fetchnorm2.pdf>
+Package pdftex.def Info: chapter3/graphics/4fetchnorm2.pdf used on input line 5
+0.
+(pdftex.def)             Requested size: 412.56497pt x 89.41632pt.
+ [123 <./chapter3/graphics/mser_motiv_reg2.pdf>] [124 <./chapter3/graphics/4fet
+chnorm2.pdf>]
+LaTeX Font Info:    Font shape `OML/ptm/m/it' in size <12> not available
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 169.
+ [125] [126]
+<chapter3/graphics/fetching-model.pdf, id=1660, 1274.68077pt x 267.45532pt>
+File: chapter3/graphics/fetching-model.pdf Graphic file (type pdf)
+
+<use chapter3/graphics/fetching-model.pdf>
+Package pdftex.def Info: chapter3/graphics/fetching-model.pdf used on input lin
+e 200.
+(pdftex.def)             Requested size: 412.56497pt x 86.5628pt.
+ [127 <./chapter3/graphics/fetching-model.pdf>]
+<chapter3/graphics/motivation_fetch2.pdf, id=1674, 523.9575pt x 128.48pt>
+File: chapter3/graphics/motivation_fetch2.pdf Graphic file (type pdf)
+
+<use chapter3/graphics/motivation_fetch2.pdf>
+Package pdftex.def Info: chapter3/graphics/motivation_fetch2.pdf used on input 
+line 255.
+(pdftex.def)             Requested size: 412.56497pt x 101.16872pt.
+
+<chapter3/graphics/sdvbsav.pdf, id=1675, 602.25pt x 146.5475pt>
+File: chapter3/graphics/sdvbsav.pdf Graphic file (type pdf)
+
+<use chapter3/graphics/sdvbsav.pdf>
+Package pdftex.def Info: chapter3/graphics/sdvbsav.pdf used on input line 260.
+(pdftex.def)             Requested size: 412.56497pt x 100.3956pt.
+ [128 <./chapter3/graphics/motivation_fetch2.pdf> <./chapter3/graphics/sdvbsav.
+pdf
+
+pdfTeX warning: pdflatex (file ./chapter3/graphics/sdvbsav.pdf): PDF inclusion:
+ multiple pdfs with page group included in a single page
+>]) (./chapter3/value_predictor.tex
+<chapter3/graphics/val_pred_overview.pdf, id=1696, 697.1072pt x 157.90274pt>
+File: chapter3/graphics/val_pred_overview.pdf Graphic file (type pdf)
+
+<use chapter3/graphics/val_pred_overview.pdf>
+Package pdftex.def Info: chapter3/graphics/val_pred_overview.pdf used on input 
+line 21.
+(pdftex.def)             Requested size: 412.56497pt x 93.45093pt.
+ [129] [130 <./chapter3/graphics/val_pred_overview.pdf>] [131]
+Overfull \hbox (7.33273pt too wide) in paragraph at lines 80--85
+[]\OT1/ptm/m/n/12 Core com-po-si-tion is of-ten most ef-fec-tive when ex-e-cut-
+ing over loops, as seen through-
  []
 
-[66] [67] [68]
-Underfull \hbox (badness 1490) in paragraph at lines 274--277
-[]\OT1/ptm/m/n/12 A. Venkat, S. Shama-sun-der, H. Shacham, and D. M. Tullsen.  
-Hip-str:
+[132]) (./chapter3/experimental_setup.tex
+Underfull \vbox (badness 7613) has occurred while \output is active []
+
+ [133]
+<chapter3/graphics/trace-gen.pdf, id=1733, 1447.89247pt x 385.76204pt>
+File: chapter3/graphics/trace-gen.pdf Graphic file (type pdf)
+
+<use chapter3/graphics/trace-gen.pdf>
+Package pdftex.def Info: chapter3/graphics/trace-gen.pdf used on input line 48.
+
+(pdftex.def)             Requested size: 412.56497pt x 109.91977pt.
+
+<chapter3/graphics/fetching-trace.pdf, id=1734, 653.21262pt x 145.05246pt>
+File: chapter3/graphics/fetching-trace.pdf Graphic file (type pdf)
+
+<use chapter3/graphics/fetching-trace.pdf>
+Package pdftex.def Info: chapter3/graphics/fetching-trace.pdf used on input lin
+e 53.
+(pdftex.def)             Requested size: 412.56497pt x 91.61592pt.
+
+Underfull \vbox (badness 4242) has occurred while \output is active []
+
+ [134])
+(./chapter3/analysis.tex
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [135 <./chapter3/graphics/trace-gen.pdf> <./chapter3/graphics/fetching-trace.p
+df
+
+pdfTeX warning: pdflatex (file ./chapter3/graphics/fetching-trace.pdf): PDF inc
+lusion: multiple pdfs with page group included in a single page
+>]
+LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <12> not available
+(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 14.
+ <chapter3/graphics/tempres4.pdf, id=1782, 552.0625pt x 218.8175pt>
+File: chapter3/graphics/tempres4.pdf Graphic file (type pdf)
+
+<use chapter3/graphics/tempres4.pdf>
+Package pdftex.def Info: chapter3/graphics/tempres4.pdf used on input line 40.
+(pdftex.def)             Requested size: 412.56497pt x 163.53174pt.
+ [136]
+<chapter3/graphics/perf_av_cycle_exec4.pdf, id=1788, 633.43352pt x 234.94472pt>
+File: chapter3/graphics/perf_av_cycle_exec4.pdf Graphic file (type pdf)
+<use chapter3/graphics/perf_av_cycle_exec4.pdf>
+Package pdftex.def Info: chapter3/graphics/perf_av_cycle_exec4.pdf used on inpu
+t line 66.
+(pdftex.def)             Requested size: 412.56497pt x 153.02773pt.
+ [137 <./chapter3/graphics/tempres4.pdf> <./chapter3/graphics/perf_av_cycle_exe
+c4.pdf
+
+pdfTeX warning: pdflatex (file ./chapter3/graphics/perf_av_cycle_exec4.pdf): PD
+F inclusion: multiple pdfs with page group included in a single page
+>] <chapter3/graphics/lsqViol4.pdf, id=1814, 607.26875pt x 183.68625pt>
+File: chapter3/graphics/lsqViol4.pdf Graphic file (type pdf)
+
+<use chapter3/graphics/lsqViol4.pdf>
+Package pdftex.def Info: chapter3/graphics/lsqViol4.pdf used on input line 94.
+(pdftex.def)             Requested size: 412.56497pt x 124.79567pt.
+ [138]) (./chapter3/analysisp2.tex
+<chapter3/graphics/joint.pdf, id=1818, 807.05777pt x 238.95972pt>
+File: chapter3/graphics/joint.pdf Graphic file (type pdf)
+
+<use chapter3/graphics/joint.pdf>
+Package pdftex.def Info: chapter3/graphics/joint.pdf used on input line 8.
+(pdftex.def)             Requested size: 412.56497pt x 122.15588pt.
+
+Overfull \hbox (3.46687pt too wide) in paragraph at lines 20--26
+[]\OT1/ptm/m/n/12 To de-ter-mine the size, all the EDGE blocks of the SD-VBS be
+nch-marks are anaylsed
+ []
+
+[139 <./chapter3/graphics/lsqViol4.pdf>] [140 <./chapter3/graphics/joint.pdf>]
+[141] <chapter3/graphics/vtage_speed3.pdf, id=1852, 607.5032pt x 234.94473pt>
+File: chapter3/graphics/vtage_speed3.pdf Graphic file (type pdf)
+
+<use chapter3/graphics/vtage_speed3.pdf>
+Package pdftex.def Info: chapter3/graphics/vtage_speed3.pdf used on input line 
+114.
+(pdftex.def)             Requested size: 412.56497pt x 159.55237pt.
+ [142]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [143 <./chapter3/graphics/vtage_speed3.pdf>]
+<chapter3/graphics/coverageFull2.pdf, id=1873, 830.01823pt x 280.71252pt>
+File: chapter3/graphics/coverageFull2.pdf Graphic file (type pdf)
+
+<use chapter3/graphics/coverageFull2.pdf>
+Package pdftex.def Info: chapter3/graphics/coverageFull2.pdf used on input line
+ 154.
+(pdftex.def)             Requested size: 412.56497pt x 139.52924pt.
+
+<chapter3/graphics/predAcc2.pdf, id=1874, 809.2382pt x 275.45729pt>
+File: chapter3/graphics/predAcc2.pdf Graphic file (type pdf)
+
+<use chapter3/graphics/predAcc2.pdf>
+Package pdftex.def Info: chapter3/graphics/predAcc2.pdf used on input line 159.
+
+(pdftex.def)             Requested size: 412.56497pt x 140.43512pt.
+ [144 <./chapter3/graphics/coverageFull2.pdf> <./chapter3/graphics/predAcc2.pdf
+
+
+pdfTeX warning: pdflatex (file ./chapter3/graphics/predAcc2.pdf): PDF inclusion
+: multiple pdfs with page group included in a single page
+>] [145] <chapter3/graphics/with_bpred.pdf, id=1906, 758.835pt x 235.88126pt>
+File: chapter3/graphics/with_bpred.pdf Graphic file (type pdf)
+
+<use chapter3/graphics/with_bpred.pdf>
+Package pdftex.def Info: chapter3/graphics/with_bpred.pdf used on input line 21
+0.
+(pdftex.def)             Requested size: 412.56497pt x 128.245pt.
+ [146 <./chapter3/graphics/with_bpred.pdf>]) (./chapter3/conclusion.tex [147]))
+ [148]
+\openout2 = `./conclusion/conclusion.aux'.
+
+ (./conclusion/conclusion.tex
+Chapter 8.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [149
+
+
+
+]
+[150]
+Overfull \hbox (3.80663pt too wide) in paragraph at lines 49--49
+[]\OT1/phv/b/n/14.4 Adapting hard-ware to im-prove core com-po-si-tion per-for-
+mance 
+ []
+
+[151] [152]
+Overfull \hbox (2.70026pt too wide) in paragraph at lines 95--99
+[]\OT1/ptm/m/n/12 Furthermore hy-per-block for-ma-tion is cur-rently lim-ited t
+o the merg-ing of two blocks,
+ []
+
+[153]) [154]
+\openout2 = `./appendix/appendix1.aux'.
+
+ (./appendix/appendix1.tex
+Appendix A.
+
+<streamit-paper/graphics/appendixgraphs/audio_total2.pdf, id=1947, 818.05624pt 
+x 390.45876pt>
+File: streamit-paper/graphics/appendixgraphs/audio_total2.pdf Graphic file (typ
+e pdf)
+ <use streamit-paper/graphics/appendixgraphs/audio_total2.pdf>
+Package pdftex.def Info: streamit-paper/graphics/appendixgraphs/audio_total2.pd
+f used on input line 12.
+(pdftex.def)             Requested size: 412.56497pt x 196.92094pt.
+
+<streamit-paper/graphics/appendixgraphs/beamformer_total2.pdf, id=1948, 818.056
+24pt x 390.45876pt>
+File: streamit-paper/graphics/appendixgraphs/beamformer_total2.pdf Graphic file
+ (type pdf)
+
+<use streamit-paper/graphics/appendixgraphs/beamformer_total2.pdf>
+Package pdftex.def Info: streamit-paper/graphics/appendixgraphs/beamformer_tota
+l2.pdf used on input line 15.
+(pdftex.def)             Requested size: 412.56497pt x 196.92094pt.
+
+<streamit-paper/graphics/appendixgraphs/bitonic-total2.pdf, id=1949, 818.05624p
+t x 390.45876pt>
+File: streamit-paper/graphics/appendixgraphs/bitonic-total2.pdf Graphic file (t
+ype pdf)
+
+<use streamit-paper/graphics/appendixgraphs/bitonic-total2.pdf>
+Package pdftex.def Info: streamit-paper/graphics/appendixgraphs/bitonic-total2.
+pdf used on input line 18.
+(pdftex.def)             Requested size: 412.56497pt x 196.92094pt.
+
+
+LaTeX Warning: Float too large for page by 6.28752pt on input line 20.
+
+
+<streamit-paper/graphics/appendixgraphs/bubble-total2.pdf, id=1950, 818.05624pt
+ x 390.45876pt>
+File: streamit-paper/graphics/appendixgraphs/bubble-total2.pdf Graphic file (ty
+pe pdf)
+ <use streamit-paper/graphics/appendixgraphs/bubble-total2.pdf>
+Package pdftex.def Info: streamit-paper/graphics/appendixgraphs/bubble-total2.p
+df used on input line 24.
+(pdftex.def)             Requested size: 412.56497pt x 196.92094pt.
+
+<streamit-paper/graphics/appendixgraphs/cfar-total2.pdf, id=1951, 818.05624pt x
+ 390.45876pt>
+File: streamit-paper/graphics/appendixgraphs/cfar-total2.pdf Graphic file (type
+ pdf)
+ <use streamit-paper/graphics/appendixgraphs/cfar-total2.pdf>
+Package pdftex.def Info: streamit-paper/graphics/appendixgraphs/cfar-total2.pdf
+ used on input line 27.
+(pdftex.def)             Requested size: 412.56497pt x 196.92094pt.
+
+<streamit-paper/graphics/appendixgraphs/channel-total2.pdf, id=1952, 818.05624p
+t x 390.45876pt>
+File: streamit-paper/graphics/appendixgraphs/channel-total2.pdf Graphic file (t
+ype pdf)
+
+<use streamit-paper/graphics/appendixgraphs/channel-total2.pdf>
+Package pdftex.def Info: streamit-paper/graphics/appendixgraphs/channel-total2.
+pdf used on input line 30.
+(pdftex.def)             Requested size: 412.56497pt x 196.92094pt.
+
+
+LaTeX Warning: Float too large for page by 32.28752pt on input line 32.
+
+
+<streamit-paper/graphics/appendixgraphs/fft-total2.pdf, id=1953, 818.05624pt x 
+390.45876pt>
+File: streamit-paper/graphics/appendixgraphs/fft-total2.pdf Graphic file (type 
+pdf)
+ <use streamit-paper/graphics/appendixgraphs/fft-total2.pdf>
+Package pdftex.def Info: streamit-paper/graphics/appendixgraphs/fft-total2.pdf 
+used on input line 35.
+(pdftex.def)             Requested size: 412.56497pt x 196.92094pt.
+
+<streamit-paper/graphics/appendixgraphs/fft3-total2.pdf, id=1954, 818.05624pt x
+ 390.45876pt>
+File: streamit-paper/graphics/appendixgraphs/fft3-total2.pdf Graphic file (type
+ pdf)
+ <use streamit-paper/graphics/appendixgraphs/fft3-total2.pdf>
+Package pdftex.def Info: streamit-paper/graphics/appendixgraphs/fft3-total2.pdf
+ used on input line 38.
+(pdftex.def)             Requested size: 412.56497pt x 196.92094pt.
+
+<streamit-paper/graphics/appendixgraphs/fft6-total2.pdf, id=1955, 818.05624pt x
+ 390.45876pt>
+File: streamit-paper/graphics/appendixgraphs/fft6-total2.pdf Graphic file (type
+ pdf)
+ <use streamit-paper/graphics/appendixgraphs/fft6-total2.pdf>
+Package pdftex.def Info: streamit-paper/graphics/appendixgraphs/fft6-total2.pdf
+ used on input line 41.
+(pdftex.def)             Requested size: 412.56497pt x 196.92094pt.
+
+
+LaTeX Warning: Float too large for page by 32.28752pt on input line 43.
+
+
+<streamit-paper/graphics/appendixgraphs/fir-total2.pdf, id=1956, 818.05624pt x 
+390.45876pt>
+File: streamit-paper/graphics/appendixgraphs/fir-total2.pdf Graphic file (type 
+pdf)
+ <use streamit-paper/graphics/appendixgraphs/fir-total2.pdf>
+Package pdftex.def Info: streamit-paper/graphics/appendixgraphs/fir-total2.pdf 
+used on input line 46.
+(pdftex.def)             Requested size: 412.56497pt x 196.92094pt.
+
+<streamit-paper/graphics/appendixgraphs/fm-total2.pdf, id=1957, 818.05624pt x 3
+90.45876pt>
+File: streamit-paper/graphics/appendixgraphs/fm-total2.pdf Graphic file (type p
+df)
+ <use streamit-paper/graphics/appendixgraphs/fm-total2.pdf>
+Package pdftex.def Info: streamit-paper/graphics/appendixgraphs/fm-total2.pdf u
+sed on input line 49.
+(pdftex.def)             Requested size: 412.56497pt x 196.92094pt.
+
+<streamit-paper/graphics/appendixgraphs/insertion-total2.pdf, id=1958, 818.0562
+4pt x 390.45876pt>
+File: streamit-paper/graphics/appendixgraphs/insertion-total2.pdf Graphic file 
+(type pdf)
+
+<use streamit-paper/graphics/appendixgraphs/insertion-total2.pdf>
+Package pdftex.def Info: streamit-paper/graphics/appendixgraphs/insertion-total
+2.pdf used on input line 52.
+(pdftex.def)             Requested size: 412.56497pt x 196.92094pt.
+
+
+LaTeX Warning: Float too large for page by 32.28752pt on input line 55.
+
+
+<streamit-paper/graphics/appendixgraphs/matmul-total2.pdf, id=1959, 818.05624pt
+ x 390.45876pt>
+File: streamit-paper/graphics/appendixgraphs/matmul-total2.pdf Graphic file (ty
+pe pdf)
+ <use streamit-paper/graphics/appendixgraphs/matmul-total2.pdf>
+Package pdftex.def Info: streamit-paper/graphics/appendixgraphs/matmul-total2.p
+df used on input line 58.
+(pdftex.def)             Requested size: 412.56497pt x 196.92094pt.
+
+<streamit-paper/graphics/appendixgraphs/radix-total2.pdf, id=1960, 818.05624pt 
+x 390.45876pt>
+File: streamit-paper/graphics/appendixgraphs/radix-total2.pdf Graphic file (typ
+e pdf)
+ <use streamit-paper/graphics/appendixgraphs/radix-total2.pdf>
+Package pdftex.def Info: streamit-paper/graphics/appendixgraphs/radix-total2.pd
+f used on input line 60.
+(pdftex.def)             Requested size: 412.56497pt x 196.92094pt.
+
+[155
+
+
+
+] [156 <./streamit-paper/graphics/appendixgraphs/audio_total2.pdf> <./streamit-
+paper/graphics/appendixgraphs/beamformer_total2.pdf
+
+pdfTeX warning: pdflatex (file ./streamit-paper/graphics/appendixgraphs/beamfor
+mer_total2.pdf): PDF inclusion: multiple pdfs with page group included in a sin
+gle page
+> <./streamit-paper/graphics/appendixgraphs/bitonic-total2.pdf
+
+pdfTeX warning: pdflatex (file ./streamit-paper/graphics/appendixgraphs/bitonic
+-total2.pdf): PDF inclusion: multiple pdfs with page group included in a single
+ page
+>] [157 <./streamit-paper/graphics/appendixgraphs/bubble-total2.pdf> <./streami
+t-paper/graphics/appendixgraphs/cfar-total2.pdf
+
+pdfTeX warning: pdflatex (file ./streamit-paper/graphics/appendixgraphs/cfar-to
+tal2.pdf): PDF inclusion: multiple pdfs with page group included in a single pa
+ge
+> <./streamit-paper/graphics/appendixgraphs/channel-total2.pdf
+
+pdfTeX warning: pdflatex (file ./streamit-paper/graphics/appendixgraphs/channel
+-total2.pdf): PDF inclusion: multiple pdfs with page group included in a single
+ page
+>] [158 <./streamit-paper/graphics/appendixgraphs/fft-total2.pdf> <./streamit-p
+aper/graphics/appendixgraphs/fft3-total2.pdf
+
+pdfTeX warning: pdflatex (file ./streamit-paper/graphics/appendixgraphs/fft3-to
+tal2.pdf): PDF inclusion: multiple pdfs with page group included in a single pa
+ge
+> <./streamit-paper/graphics/appendixgraphs/fft6-total2.pdf
+
+pdfTeX warning: pdflatex (file ./streamit-paper/graphics/appendixgraphs/fft6-to
+tal2.pdf): PDF inclusion: multiple pdfs with page group included in a single pa
+ge
+>] [159 <./streamit-paper/graphics/appendixgraphs/fir-total2.pdf> <./streamit-p
+aper/graphics/appendixgraphs/fm-total2.pdf
+
+pdfTeX warning: pdflatex (file ./streamit-paper/graphics/appendixgraphs/fm-tota
+l2.pdf): PDF inclusion: multiple pdfs with page group included in a single page
+
+> <./streamit-paper/graphics/appendixgraphs/insertion-total2.pdf
+
+pdfTeX warning: pdflatex (file ./streamit-paper/graphics/appendixgraphs/inserti
+on-total2.pdf): PDF inclusion: multiple pdfs with page group included in a sing
+le page
+>] [160 <./streamit-paper/graphics/appendixgraphs/matmul-total2.pdf> <./streami
+t-paper/graphics/appendixgraphs/radix-total2.pdf
+
+pdfTeX warning: pdflatex (file ./streamit-paper/graphics/appendixgraphs/radix-t
+otal2.pdf): PDF inclusion: multiple pdfs with page group included in a single p
+age
+>]
+Appendix B.
+LaTeX Font Info:    Font shape `OML/ptm/m/n' in size <10.95> not available
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 95.
+LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10.95> not available
+(Font)              Font shape `OMS/pzccm/m/n' tried instead on input line 95.
+
+Underfull \vbox (badness 1917) has occurred while \output is active []
+
+ [161
+
+
+]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [162]
+[163]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [164]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [165])
+[166] (./infthesis-template.bbl
+Underfull \hbox (badness 10000) in paragraph at lines 35--41
+[]\OT1/ptm/m/n/12 Anandtech.  ``The A12 Vor-tex CPU micro-
  []
 
 
-Underfull \hbox (badness 1571) in paragraph at lines 279--285
-[]\OT1/ptm/m/n/12 A. Venkat and D. M. Tullsen.  Har-ness-ing isa di-ver-sity: D
-e-sign of a
+Underfull \hbox (badness 10000) in paragraph at lines 35--41
+\OT1/ptm/m/n/12 architecture''.  $\OT1/pcr/m/n/12 https : / / www . anandtech .
+ com / show / 13392 /
  []
 
 
-Underfull \hbox (badness 1571) in paragraph at lines 287--292
-[]\OT1/ptm/m/n/12 A. Venkat and D. M. Tullsen.  Har-ness-ing isa di-ver-sity: D
-e-sign of a
+Overfull \hbox (14.43637pt too wide) in paragraph at lines 35--41
+\OT1/pcr/m/n/12 the-[]iphone-[]xs-[]xs-[]max-[]review-[]unveiling-[]the-[]silic
+on-[]secrets /
  []
 
-[69]) [70] (./infthesis-template.aux (./introduction/introduction.aux)
-(./background/background.aux) (./relatedwork/relatedwork.aux)
-(./streamit-paper/streamit-chapter.aux) (./cases-paper/cases-chapter.aux))
 
-LaTeX Warning: There were undefined references.
+Underfull \hbox (badness 10000) in paragraph at lines 43--49
+[]\OT1/ptm/m/n/12 Anandtech.  ``The Sam-sung Exynos M3 6 Wide De-
+ []
 
+
+Underfull \hbox (badness 10000) in paragraph at lines 43--49
+\OT1/ptm/m/n/12 code With 50 $\OT1/pcr/m/n/12 https : / / www . anandtech . com
+ / show / 12361 /
+ []
+
+
+Underfull \hbox (badness 1152) in paragraph at lines 43--49
+\OT1/pcr/m/n/12 samsung-[]exynos-[]m3-[]architecture$\OT1/ptm/m/n/12 , 2018.  A
+c-cessed: 2018-11-
+ []
+
+
+Underfull \hbox (badness 1571) in paragraph at lines 51--56
+[]\OT1/ptm/m/n/12 R. ARM.  ``big. LIT-TLE Tech-nol-ogy: The Fu-ture of Mo-bile'
+'.
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 51--56
+\OT1/pcr/m/n/12 https : / / www . arm . com / files / pdf / big \ _LITTLE \ _Te
+chnology \
+ []
+
+[167
+
+
+]
+Underfull \hbox (badness 3965) in paragraph at lines 86--90
+[]\OT1/ptm/m/n/12 J. Bos-boom, S. Ra-jadu-rai, W.-F. Wong, and S. Ama-ras-inghe
+.
+ []
+
+[168] [169]
+Underfull \hbox (badness 10000) in paragraph at lines 181--187
+[]\OT1/ptm/m/n/12 EuroLab4HPC.  ``Eu-ro-lab4HPC In-dus-try Day Co-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 181--187
+\OT1/ptm/m/n/12 organized with Mul-ti-core Day 2018''.  $\OT1/pcr/m/n/12 https 
+: / /
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 181--187
+\OT1/pcr/m/n/12 www . eurolab4hpc . eu / communication / events / 24 /
+ []
+
+
+Overfull \hbox (41.41629pt too wide) in paragraph at lines 181--187
+\OT1/pcr/m/n/12 eurolab4hpc-[]industry-[]day-[]co-[]organized-[]with-[]multicor
+e-[]day-[]2018/$\OT1/ptm/m/n/12 ,
+ []
+
+[170] [171]
+Missing character: There is no Â in font ptmr7t!
+Missing character: There is no ® in font ptmr7t!
+
+Underfull \hbox (badness 10000) in paragraph at lines 293--298
+[]\OT1/ptm/m/n/12 Intel.  ``In-tel 64 and IA-32 Ar-chi-tec-tures Op-ti-miza-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 293--298
+\OT1/ptm/m/n/12 tion Ref-er-ence Man-ual''.  $\OT1/pcr/m/n/12 https : / / www .
+ intel . com /
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 293--298
+\OT1/pcr/m/n/12 content / dam / www / public / us / en / documents / manuals /
+ []
+
+[172] [173] [174] [175] [176] [177]) [178] (./infthesis-template.aux
+(./introduction/introduction.aux) (./background/background.aux)
+(./relatedwork/relatedwork.aux) (./setup/thesis-setup.aux)
+(./streamit-paper/streamit-chapter.aux) (./cases-paper/cases-chapter.aux)
+(./chapter3/chapter3.aux) (./conclusion/conclusion.aux)
+(./appendix/appendix1.aux))
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 27052 strings out of 494953
- 547418 string characters out of 6180977
- 672104 words of memory out of 5000000
- 29743 multiletter control sequences out of 15000+600000
- 63683 words of font info for 126 fonts, out of 8000000 for 9000
+ 30273 strings out of 494953
+ 600849 string characters out of 6180977
+ 919685 words of memory out of 5000000
+ 32800 multiletter control sequences out of 15000+600000
+ 81807 words of font info for 166 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 62i,12n,89p,10386b,1475s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 62i,18n,96p,10386b,1838s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
-e/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/
-fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/
-type1/urw/courier/ucrr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/hel
-vetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvr8a
-.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvro8a.pfb></usr/
-share/texlive/texmf-dist/fonts/type1/urw/symbol/usyr.pfb></usr/share/texlive/te
-xmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/
-type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times
-/utmri8a.pfb>
-Output written on infthesis-template.pdf (80 pages, 2210655 bytes).
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts
+/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/u
+crr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></
+usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/share/te
+xlive/texmf-dist/fonts/type1/urw/helvetic/uhvro8a.pfb></usr/share/texlive/texmf
+-dist/fonts/type1/urw/symbol/usyr.pfb></usr/share/texlive/texmf-dist/fonts/type
+1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utm
+bi8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/
+share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on infthesis-template.pdf (190 pages, 4716756 bytes).
 PDF statistics:
- 1214 PDF objects out of 1440 (max. 8388607)
- 755 compressed objects within 8 object streams
+ 2211 PDF objects out of 2487 (max. 8388607)
+ 1431 compressed objects within 15 object streams
  0 named destinations out of 1000 (max. 500000)
- 218 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 433 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -7,7 +7,7 @@ The StreamIt benchmarks often contain tightly knit loops that can be unrolled~\c
 Determining the loop unroll factor can be difficult~\cite{} and depends on a varying set of factors.
 One of the common constraints is on the stress loop unrolling can have on Instruction Caches by increasing the number of cache misses.
 Fusing cores will allow us to reduce some of the penalties incurred by loop unrolling.
-This is due to the E2's ability of allocating a greater amount of resources to a single thread through cache fusion.
+This is due to the E2's ability of allocating a greater amount of resources to a single-working-thread through cache fusion.
 
 Figure X presents an example of how loop unrolling can affect performance on the \textbf{FMRadio} benchmark.
 In this example we experimented using 3 different unroll factors: 2, 4, 8, 16, 32 and 64.

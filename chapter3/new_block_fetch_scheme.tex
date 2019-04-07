@@ -104,7 +104,7 @@ By allowing cores to fetch blocks in \textit{strides}, instead of sequentially, 
 \Comment{Do branch prediction for up to 2 blocks}
 branches = prediction[i+1, i+n]\\
 \Comment{If the predictor generated 2 predictions}
-\eIf{size(branches) == 2}
+\uIf{size(branches) == 2}
 {
 \Comment{If next core in composition is empty submit block i + 1 to it}
 	\eIf{empty(Composition[currentPosition+1])}
@@ -130,7 +130,7 @@ branches = prediction[i+1, i+n]\\
 	
 	}
 }
-{
+\uElseIf{branches[0] is valid}{
 \Comment{If only block i + 1 prediction is valid}
 	\If{empty(Composition[currentPosition+1])}
 	{

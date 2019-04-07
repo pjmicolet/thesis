@@ -48,3 +48,6 @@ Using committed blocks allows us to easily compare each simulation as the total 
 
 The EDGE architecture is fundamentally different from the traditional CISC/RISC paradigm and thus, McPAT~\cite{mcpat} cannot be used to model power consumption as it differs from traditional CISC/RISC cores modeled in McPAT.
 Instead a coarse grained power model is used where power gating is applied; when a core is not currently being used, it is assumed to be turned off and therefore does not consume energy.
+Using a coarse grained power model does have some limitations; mainly that when a core is active but not executing code, the model considers that it is still drawing the maximum amount of power possible.
+This means that this power model is pessimistic and thus the energy savings shown throughout this chapter may not fully reflect what could be achieved on a real physical processor.
+Nonetheless this approach still allows for an analysis of how dynamic adaptation can improve energy consumption.

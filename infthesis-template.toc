@@ -1,91 +1,153 @@
 \contentsline {chapter}{\numberline {1}Introduction}{1}
-\contentsline {chapter}{\numberline {2}Background}{3}
-\contentsline {section}{\numberline {2.1}Chip Multicore Processors}{3}
-\contentsline {section}{\numberline {2.2}Heterogeneous Chip Multicore Processors}{4}
-\contentsline {section}{\numberline {2.3}Dynamic Multicore Processors}{6}
-\contentsline {subsection}{\numberline {2.3.1}Core Fusion Dynamic Multicore Processors}{6}
-\contentsline {subsection}{\numberline {2.3.2}Resource Sharing Dynamic Multicore Processors}{7}
-\contentsline {subsection}{\numberline {2.3.3}Microarchitectural Reconfigurable Dynamic Multicore Processors}{7}
-\contentsline {section}{\numberline {2.4}EDGE Instruction Set Architecture}{7}
-\contentsline {section}{\numberline {2.5}EDGE Processor}{9}
-\contentsline {subsection}{\numberline {2.5.1}Core Lanes}{9}
-\contentsline {subsection}{\numberline {2.5.2}Core Fusion}{9}
-\contentsline {section}{\numberline {2.6}Streaming Programming Languages}{11}
-\contentsline {section}{\numberline {2.7}Machine-learning guided optimisations}{11}
-\contentsline {chapter}{\numberline {3}Related Work}{13}
-\contentsline {chapter}{\numberline {4}Streamit}{15}
-\contentsline {section}{\numberline {4.1}Introduction}{15}
-\contentsline {section}{\numberline {4.2}Motivation}{17}
-\contentsline {section}{\numberline {4.3}Methodology}{17}
-\contentsline {subsection}{\numberline {4.3.1}Overview}{18}
-\contentsline {subsection}{\numberline {4.3.2}Dynamic Multicore Processor}{18}
-\contentsline {subsection}{\numberline {4.3.3}StreamIt Benchmarks}{18}
-\contentsline {subsection}{\numberline {4.3.4}Design Space}{19}
-\contentsline {subsection}{\numberline {4.3.5}Sample Space}{19}
-\contentsline {section}{\numberline {4.4}Design Space Exploration}{20}
-\contentsline {subsection}{\numberline {4.4.1}Thread Partitioning}{21}
-\contentsline {subsection}{\numberline {4.4.2}Core Composition}{21}
-\contentsline {subsection}{\numberline {4.4.3}Impact of Loop Unrolling}{22}
-\contentsline {subsection}{\numberline {4.4.4}Co-Design Space Best Results}{22}
-\contentsline {subsection}{\numberline {4.4.5}Summary}{23}
-\contentsline {section}{\numberline {4.5}Machine Learning Models}{23}
-\contentsline {subsection}{\numberline {4.5.1}Predicting the Best Number of Threads}{24}
-\contentsline {paragraph}{\numberline {4.5.1.0.1}Synthetic Benchmark Generation}{24}
-\contentsline {paragraph}{\numberline {4.5.1.0.2}Extracting Features}{24}
-\contentsline {paragraph}{\numberline {4.5.1.0.3}KNN Model}{25}
-\contentsline {subsection}{\numberline {4.5.2}Predicting Core Composition}{25}
-\contentsline {paragraph}{\numberline {4.5.2.0.1}Gathering Training Data}{25}
-\contentsline {paragraph}{\numberline {4.5.2.0.2}Analyzing Features}{26}
-\contentsline {paragraph}{\numberline {4.5.2.0.3}Linear Regression Model}{26}
-\contentsline {section}{\numberline {4.6}Results}{27}
-\contentsline {subsection}{\numberline {4.6.1}Evaluation Methodology}{27}
-\contentsline {subsection}{\numberline {4.6.2}Evaluation}{27}
-\contentsline {subsection}{\numberline {4.6.3}Summary}{28}
-\contentsline {section}{\numberline {4.7}Related Work}{28}
-\contentsline {paragraph}{\numberline {4.7.0.0.1}Dynamic Multicore Processors}{28}
-\contentsline {paragraph}{\numberline {4.7.0.0.2}Core Configuration}{28}
-\contentsline {paragraph}{\numberline {4.7.0.0.3}Streaming Programming Languages}{29}
-\contentsline {paragraph}{\numberline {4.7.0.0.4}Partitioning StreamIt on multicore chip}{29}
-\contentsline {paragraph}{\numberline {4.7.0.0.5}Machine Learning}{29}
-\contentsline {section}{\numberline {4.8}Conclusion}{29}
-\contentsline {chapter}{\numberline {5}CASES}{41}
-\contentsline {section}{\numberline {5.1}Introduction}{41}
-\contentsline {section}{\numberline {5.2}Motivation}{42}
-\contentsline {subsection}{\numberline {5.2.1}Dynamic Core Fusion}{43}
-\contentsline {subsection}{\numberline {5.2.2}Code Optimizations}{43}
-\contentsline {subsection}{\numberline {5.2.3}Summary}{44}
-\contentsline {section}{\numberline {5.3}A Study of Core Fusion}{44}
-\contentsline {subsection}{\numberline {5.3.1}Branch Prediction}{44}
-\contentsline {subsection}{\numberline {5.3.2}Synchronization Cost}{45}
-\contentsline {subsection}{\numberline {5.3.3}Summary}{46}
-\contentsline {section}{\numberline {5.4}Experimental Setup}{47}
-\contentsline {subsection}{\numberline {5.4.1}Benchmarks}{47}
-\contentsline {subsection}{\numberline {5.4.2}Architecture and Simulator}{48}
-\contentsline {subsection}{\numberline {5.4.3}Compiler}{48}
-\contentsline {subsection}{\numberline {5.4.4}Measuring Performance and Power}{48}
-\contentsline {section}{\numberline {5.5}Code Optimizations}{48}
-\contentsline {subsection}{\numberline {5.5.1}Loop Unrolling}{49}
-\contentsline {subsection}{\numberline {5.5.2}Loop Interchange}{49}
-\contentsline {subsection}{\numberline {5.5.3}Predication and Hyperblock Formation}{50}
-\contentsline {subsection}{\numberline {5.5.4}Results}{50}
-\contentsline {subsection}{\numberline {5.5.5}Summary}{51}
-\contentsline {section}{\numberline {5.6}Benchmark Exploration}{52}
-\contentsline {subsection}{\numberline {5.6.1}Phase Detection}{52}
-\contentsline {subsection}{\numberline {5.6.2}Static Core Fusion Exploration}{53}
-\contentsline {section}{\numberline {5.7}Dynamic Core Fusion}{54}
-\contentsline {subsection}{\numberline {5.7.1}Creating Dynamic Core Fusion Traces}{55}
-\contentsline {subsection}{\numberline {5.7.2}Dynamic Core Fusion}{55}
-\contentsline {subsection}{\numberline {5.7.3}Optimizing for Speed}{56}
-\contentsline {subsection}{\numberline {5.7.4}Optimizing for Efficiency}{57}
-\contentsline {subsection}{\numberline {5.7.5}Reconfiguration Latency}{58}
-\contentsline {subsection}{\numberline {5.7.6}Summary}{58}
-\contentsline {section}{\numberline {5.8}Linear Regression Model}{59}
-\contentsline {subsection}{\numberline {5.8.1}Model}{59}
-\contentsline {subsection}{\numberline {5.8.2}Results}{60}
-\contentsline {section}{\numberline {5.9}Related Work}{61}
-\contentsline {paragraph}{\numberline {5.9.0.0.1}Reconfigurable Processors}{61}
-\contentsline {paragraph}{\numberline {5.9.0.0.2}Dynamic Multicore Processors}{62}
-\contentsline {paragraph}{\numberline {5.9.0.0.3}Dynamic Core Fusion}{62}
-\contentsline {paragraph}{\numberline {5.9.0.0.4}Voltage Scaling}{62}
-\contentsline {section}{\numberline {5.10}Conclusion}{62}
-\contentsline {chapter}{Bibliography}{65}
+\contentsline {section}{\numberline {1.1}The Problem}{2}
+\contentsline {section}{\numberline {1.2}Contributions}{3}
+\contentsline {section}{\numberline {1.3}Structure}{5}
+\contentsline {chapter}{\numberline {2}Background}{7}
+\contentsline {section}{\numberline {2.1}Chip Multicore Processors}{8}
+\contentsline {section}{\numberline {2.2}Heterogeneous Chip Multicore Processors}{9}
+\contentsline {section}{\numberline {2.3}Dynamic Multicore Processors}{10}
+\contentsline {section}{\numberline {2.4}EDGE}{11}
+\contentsline {subsection}{\numberline {2.4.1}EDGE Instruction Set Architecture}{11}
+\contentsline {subsection}{\numberline {2.4.2}EDGE Processor features}{13}
+\contentsline {subsubsection}{\numberline {2.4.2.1}Core Lanes}{14}
+\contentsline {subsubsection}{\numberline {2.4.2.2}Core Composition for EDGE}{14}
+\contentsline {section}{\numberline {2.5}Value Prediction}{16}
+\contentsline {subsection}{\numberline {2.5.1}The Differential Value Tagged Geometric length Predictor}{18}
+\contentsline {subsubsection}{\numberline {2.5.1.1}Speculative Window}{20}
+\contentsline {section}{\numberline {2.6}Streaming Programming Languages}{20}
+\contentsline {subsection}{\numberline {2.6.1}StreamIt Programming Language}{21}
+\contentsline {section}{\numberline {2.7}Machine-learning techniques and evaluation}{22}
+\contentsline {subsection}{\numberline {2.7.1}Linear Regression}{22}
+\contentsline {subsection}{\numberline {2.7.2}k-Means Clustering}{22}
+\contentsline {subsection}{\numberline {2.7.3}k Nearest Neighbours}{23}
+\contentsline {subsection}{\numberline {2.7.4}Leave One Out Cross Validation}{23}
+\contentsline {section}{\numberline {2.8}Early Stopping Criterion}{24}
+\contentsline {chapter}{\numberline {3}Related Work}{27}
+\contentsline {section}{\numberline {3.1}Reconfigurable Processors}{27}
+\contentsline {subsection}{\numberline {3.1.1}Dynamic Multicore Processors}{27}
+\contentsline {subsection}{\numberline {3.1.2}Reconfigurable microarchitectures}{29}
+\contentsline {section}{\numberline {3.2}Automated processor reconfiguration}{30}
+\contentsline {section}{\numberline {3.3}Code optimisation for EDGE}{31}
+\contentsline {section}{\numberline {3.4}Improving instruction fetching for composition}{32}
+\contentsline {section}{\numberline {3.5}Hardware techniques for power and energy efficiency}{32}
+\contentsline {subsection}{\numberline {3.5.1}Dynamic Voltage and Frequency Scaling}{33}
+\contentsline {subsection}{\numberline {3.5.2}Thread migration in HCMPs}{33}
+\contentsline {section}{\numberline {3.6}Speculative Execution}{34}
+\contentsline {section}{\numberline {3.7}Tackling data-dependencies}{36}
+\contentsline {subsection}{\numberline {3.7.1}Value Prediction}{36}
+\contentsline {subsection}{\numberline {3.7.2}Data Prefetching}{38}
+\contentsline {subsection}{\numberline {3.7.3}Register Bypassing and Criticality Detection}{38}
+\contentsline {section}{\numberline {3.8}Dataflow Programming Languages}{39}
+\contentsline {section}{\numberline {3.9}Partitioning streaming programs on multicore chip}{40}
+\contentsline {section}{\numberline {3.10}Machine-learning guided performance optimisations}{41}
+\contentsline {section}{\numberline {3.11}Summary}{42}
+\contentsline {chapter}{\numberline {4}Setup}{45}
+\contentsline {section}{\numberline {4.1}Dynamic Multicore Processor Simulator}{45}
+\contentsline {subsection}{\numberline {4.1.1}Performance baseline}{46}
+\contentsline {section}{\numberline {4.2}Benchmarks}{48}
+\contentsline {subsection}{\numberline {4.2.1}Streaming applications}{48}
+\contentsline {subsection}{\numberline {4.2.2}San-Diego Vision Benchmark Suite}{48}
+\contentsline {section}{\numberline {4.3}Compiler}{50}
+\contentsline {chapter}{\numberline {5}Static ahead of time thread and core partitioning}{51}
+\contentsline {section}{\numberline {5.1}Motivation}{53}
+\contentsline {subsection}{\numberline {5.1.1}Finding an optimal configuration}{53}
+\contentsline {subsection}{\numberline {5.1.2}Minimizing the search space}{55}
+\contentsline {subsection}{\numberline {5.1.3}Summary}{56}
+\contentsline {section}{\numberline {5.2}Methodology}{56}
+\contentsline {subsection}{\numberline {5.2.1}Overview}{56}
+\contentsline {subsection}{\numberline {5.2.2}Design Space}{57}
+\contentsline {subsection}{\numberline {5.2.3}Sample Space}{59}
+\contentsline {subsection}{\numberline {5.2.4}Synthetic Benchmarks}{61}
+\contentsline {section}{\numberline {5.3}Design Space Exploration}{62}
+\contentsline {subsection}{\numberline {5.3.1}Thread Partitioning}{62}
+\contentsline {subsection}{\numberline {5.3.2}Core Composition}{64}
+\contentsline {subsection}{\numberline {5.3.3}Impact of Loop Transformation}{65}
+\contentsline {subsection}{\numberline {5.3.4}Co-Design Space Analysis}{68}
+\contentsline {subsection}{\numberline {5.3.5}Summary}{70}
+\contentsline {section}{\numberline {5.4}Thread and core configurations model}{70}
+\contentsline {subsection}{\numberline {5.4.1}Predicting the number of threads}{70}
+\contentsline {subsubsection}{\numberline {5.4.1.1}Correlation Analysis}{70}
+\contentsline {subsection}{\numberline {5.4.2}Predicting the size of a core composition}{73}
+\contentsline {subsubsection}{\numberline {5.4.2.1}Gathering Training Data for Core-Composition}{74}
+\contentsline {subsubsection}{\numberline {5.4.2.2}Correlation Analysis}{75}
+\contentsline {subsubsection}{\numberline {5.4.2.3}Linear Regression Model}{76}
+\contentsline {section}{\numberline {5.5}Results}{77}
+\contentsline {subsection}{\numberline {5.5.1}Machine Learning Model Evaluation Methodology}{77}
+\contentsline {subsection}{\numberline {5.5.2}Evaluation}{78}
+\contentsline {subsection}{\numberline {5.5.3}Summary}{79}
+\contentsline {section}{\numberline {5.6}Conclusion}{80}
+\contentsline {chapter}{\numberline {6}Dynamic runtime adaptation for efficient execution}{83}
+\contentsline {section}{\numberline {6.1}Motivation}{85}
+\contentsline {subsection}{\numberline {6.1.1}Dynamic Core Composition}{85}
+\contentsline {subsection}{\numberline {6.1.2}Code Optimisations}{87}
+\contentsline {subsection}{\numberline {6.1.3}Knowing when and how to reconfigure the processor}{88}
+\contentsline {section}{\numberline {6.2}A Study of Core Composition}{89}
+\contentsline {subsection}{\numberline {6.2.1}Branch Prediction}{89}
+\contentsline {subsection}{\numberline {6.2.2}Synchronisation Cost}{91}
+\contentsline {paragraph}{\numberline {1}Summary}{92}
+\contentsline {section}{\numberline {6.3}Methodology}{92}
+\contentsline {subsection}{\numberline {6.3.1}Benchmarks}{93}
+\contentsline {subsection}{\numberline {6.3.2}Measuring Performance and Power}{93}
+\contentsline {section}{\numberline {6.4}Code Optimisations}{94}
+\contentsline {subsection}{\numberline {6.4.1}Loop Unrolling}{94}
+\contentsline {subsection}{\numberline {6.4.2}Loop Interchange}{95}
+\contentsline {subsection}{\numberline {6.4.3}Predication and Hyperblock Formation}{95}
+\contentsline {subsection}{\numberline {6.4.4}Optimisation Methodology}{96}
+\contentsline {subsection}{\numberline {6.4.5}Results}{97}
+\contentsline {section}{\numberline {6.5}Benchmark Exploration}{97}
+\contentsline {subsection}{\numberline {6.5.1}Phase Detection}{98}
+\contentsline {subsection}{\numberline {6.5.2}Static Ahead-of-Time Core composition Exploration}{101}
+\contentsline {subsection}{\numberline {6.5.3}Analysis of MSER and Multi\_NCut}{104}
+\contentsline {section}{\numberline {6.6}Dynamic Core Composition}{106}
+\contentsline {subsection}{\numberline {6.6.1}Creating Dynamic Core Composition Traces}{106}
+\contentsline {subsection}{\numberline {6.6.2}Dynamic Core Composition}{107}
+\contentsline {subsection}{\numberline {6.6.3}Optimising for Speed}{109}
+\contentsline {subsection}{\numberline {6.6.4}Reconfiguration Latency}{111}
+\contentsline {section}{\numberline {6.7}Linear Regression Model}{112}
+\contentsline {subsection}{\numberline {6.7.1}Model}{112}
+\contentsline {subsection}{\numberline {6.7.2}Results}{114}
+\contentsline {section}{\numberline {6.8}Conclusion}{115}
+\contentsline {chapter}{\numberline {7}New fetching scheme and data speculation for improved performance}{117}
+\contentsline {section}{\numberline {7.1}Introduction}{117}
+\contentsline {section}{\numberline {7.2}Motivation}{120}
+\contentsline {subsection}{\numberline {7.2.1}Branch prediction}{120}
+\contentsline {subsection}{\numberline {7.2.2}Fetching mechanism}{121}
+\contentsline {subsection}{\numberline {7.2.3}Data dependencies between blocks}{122}
+\contentsline {section}{\numberline {7.3}Round robin block fetching scheme}{123}
+\contentsline {subsection}{\numberline {7.3.1}Current fetching scheme}{123}
+\contentsline {subsection}{\numberline {7.3.2}Round Robin Fetching Scheme}{124}
+\contentsline {subsubsection}{\numberline {7.3.2.1}Generalised form}{124}
+\contentsline {subsection}{\numberline {7.3.3}Evaluating the round robin fetch scheme on a synthetic block}{128}
+\contentsline {section}{\numberline {7.4}Value Predictor}{129}
+\contentsline {subsection}{\numberline {7.4.1}Design features of a value predictor}{131}
+\contentsline {subsection}{\numberline {7.4.2}Block based D-VTAGE predictor}{132}
+\contentsline {section}{\numberline {7.5}Experimental Setup}{133}
+\contentsline {subsection}{\numberline {7.5.1}Benchmarks}{133}
+\contentsline {subsection}{\numberline {7.5.2}Evaluation}{134}
+\contentsline {subsection}{\numberline {7.5.3}Value Predictor}{134}
+\contentsline {subsection}{\numberline {7.5.4}Implementing perfect value and branch predictor}{135}
+\contentsline {section}{\numberline {7.6}Analysis using a perfect value prediction}{136}
+\contentsline {subsection}{\numberline {7.6.1}Analysing the performance of the different configurations}{136}
+\contentsline {subsubsection}{\numberline {7.6.1.1}Performance without value prediction}{136}
+\contentsline {subsubsection}{\numberline {7.6.1.2}Performance with value prediction}{137}
+\contentsline {subsubsection}{\numberline {7.6.1.3}Summary}{138}
+\contentsline {section}{\numberline {7.7}Analysis using the block based D-VTAGE predictor}{139}
+\contentsline {subsection}{\numberline {7.7.1}Block analysis}{139}
+\contentsline {subsection}{\numberline {7.7.2}Setup}{141}
+\contentsline {subsection}{\numberline {7.7.3}Results}{142}
+\contentsline {subsection}{\numberline {7.7.4}Performance with non-perfect branch prediction}{146}
+\contentsline {section}{\numberline {7.8}Conclusion}{147}
+\contentsline {chapter}{\numberline {8}Conclusion}{149}
+\contentsline {section}{\numberline {8.1}Contributions}{149}
+\contentsline {subsection}{\numberline {8.1.1}Static ahead of time thread and core partitioning}{150}
+\contentsline {subsection}{\numberline {8.1.2}Dynamic runtime adaptation for efficient execution}{150}
+\contentsline {subsection}{\numberline {8.1.3}Adapting hardware to improve core composition performance}{151}
+\contentsline {section}{\numberline {8.2}Critical Analysis}{152}
+\contentsline {subsection}{\numberline {8.2.1}Simulation}{152}
+\contentsline {subsection}{\numberline {8.2.2}Processor configuration}{152}
+\contentsline {subsection}{\numberline {8.2.3}Compiler}{153}
+\contentsline {section}{\numberline {8.3}Future Work}{153}
+\contentsline {chapter}{Appendix \numberline {A}Static ahead of time thread and core partitioning}{155}
+\contentsline {chapter}{Appendix \numberline {B}Dynamic runtime adaptation for efficient execution}{161}
+\contentsline {section}{\numberline {B.1}Code listings}{161}
+\contentsline {chapter}{Bibliography}{167}

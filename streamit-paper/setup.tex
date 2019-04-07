@@ -34,6 +34,20 @@ Finally, the processor is reconfigured to compose the requested resources ahead 
 For example in Figure~\ref{fig:examplestream}, once the graph is coloured, the machine learning model estimates the potential ILP in each group and assigns a number of cores each thread will execute on.
 
 \subsection{Design Space}
+\begin{table}[t]
+% The FFT need are variable
+  \small
+ \begin{tabular} { | l | l | l | l | l | l | }
+ \hline
+ \cellcolor[gray]{0.7} & \cellcolor[gray]{0.7}Audiobeam&  \cellcolor[gray]{0.7} Beamformer& \cellcolor[gray]{0.7}Bitonic-Sort  &  \cellcolor[gray]{0.7} BubbleSort &  \cellcolor[gray]{0.7}  CFAR\\ \hline
+ \# Of Executed Inst & 650K & 3.9M & 1.3M & 230K & 770K\\ \hline
+ \cellcolor[gray]{0.7} & \cellcolor[gray]{0.7}ChannelVocoder &  \cellcolor[gray]{0.7} FFT&  \cellcolor[gray]{0.7}FFT3 &  \cellcolor[gray]{0.7} FFT6&  \cellcolor[gray]{0.7}FilterBank \\ \hline
+ \# Of Executed Inst & 17.5M & 1M & 588K & 595K & 858K\\ \hline
+   \cellcolor[gray]{0.7} & \cellcolor[gray]{0.7}FIR &  \cellcolor[gray]{0.7} FMRadio &  \cellcolor[gray]{0.7} InsertionSort &  \cellcolor[gray]{0.7} Matmul-Block &  \cellcolor[gray]{0.7} RadixSort\\ \hline
+\# Of Executed Inst & 947K & 926K & 100K & 1.3M & 153K\\ \hline
+ \end{tabular}
+  \caption{Number of dynamic instructions each program takes to execute with default inputs and iteration count set to 10.}\label{tabl:inst}
+\end{table}
 
 The benchmarks used throughout this chapter are shown in Chapter~\ref{chp:setup} Section~\ref{chp:setup:streamit}.
 These applications represent a variety of embedded applications and kernels, from digital signal processing to a matrix-multiplication kernel or band pass filters.
@@ -44,6 +58,8 @@ This is to include a variety of situations to test the flexibility of the dynami
 Whilst SplitJoins often facilitate the decision of how to partition the programs into threads, they are not the only way to exploit thread level parallelism.
 The applications which do not feature SplitJoins can still be split into threads and will operate in a pipelined fashion~\cite{theis2002streamit}.
 For each benchmark the default inputs provided in the repository~\cite{streamitrepo} are used and the default iteration count is set to 10. 
+An iteration count defines the number of times the entire application is executed; in this case, each of the benchmarks is fully executed 10 times.
+Table~\ref{tabl:inst} gives the total number of dynamic instructions executed for each of the applications.
 
 \begin{table}[t]
 % The FFT need are variable
@@ -113,9 +129,14 @@ Overall, this leads to a total space size of 32,767 unique combination per bench
 Given a partition, any benchmark that can be split into 15 threads requires 32,767 executions to cover the entire space.
 Running the exhaustive exploration of the space for a benchmark requires approximately a week of simulation on a 572+ node supercomputer.
 For this reason, a sample of 1,316 random points from the entire space is utilised.
+
 This roughly corresponds to 100 core compositions for each number of threads; the actual number, 1,316 is smaller than 1,500 since for low and high thread counts there are less than 100 possible different core composition.
-For example, a single thread can have only up to 15 different core-compositions (1 through 15) whilst 15 threads can only have a single core given to each thread.
+For example, a single-working-thread can have only up to 15 different core-compositions (1 through 15) whilst 15 threads can only have a single core given to each thread.
 \bench{InsertionSort} is the only exception since it can at most only be split into 5 threads leading to 415 sample points.
+
+To generate the random space, for each number of worker threads possible (1 to 15), 100 core to threads mappings were generated (when possible).
+The only restrictions placed on the composition topologies are: the total sum of cores must not surpass the available physical core count (15), each thread must have at least one core and a composition must contain cores that are in sequential row order.
+The configurations generated do not have to utilise all available cores in the system, as some cores can simply be turned off.
 Overall, the space exploration required one week of simulation on the supercomputer~\cite{ecdf}.
 
 \begin{figure}[t]

@@ -12,6 +12,15 @@ First, a simple experiment is conducted where the \bench{FilterBank} StreamIt be
 \bench{FilterBank} distributes its inputs amongst an array of discrete fourier transform (DFT) filters, the outputs of the DFT filters are down-sampled, up-sampled and then recombined to form a processed signal~\cite{streamitrepo}.
 The program's tasks are partitioned into threads and a various number of cores are allocated to each of the threads.
 Since one of the threads is the master which creates and joins all worker threads, this means that the application can be partitioned in up to 15 threads, and 15 cores can be used for those threads.
+It also means that the single-threaded version of an application is in fact one master thread and one working thread.
+To clarify this situation, the term single-working-thread is used throughout this chapter.
+
+Choosing the correct composition topology for each thread is equivalent to the knapsack problem and is therefore NP hard.
+Thus, to reduce the total design space, this chapter assumes that each composition can only be formed by cores that follow each other in row order.
+Whenever a composition is started, the master core will always be the core with the smallest core ID.
+These constraints may lead to sub-optimal performance as other core mappings and master cores may be more suitable in certain situations.
+Determinign which topologies are obtimal is left as future work.
+
 As each thread must have at least one core assigned to it, and not all cores have to be grouped together, the total number of configurations are:
 
 \begin{equation}
@@ -19,21 +28,21 @@ As each thread must have at least one core assigned to it, and not all cores hav
 \label{eq:comb}
 \end{equation}
 
-In Equation~\ref{eq:comb}, the constant 15 represents the 15 different number of cores that can be composed for the single threaded version.
+In Equation~\ref{eq:comb}, the constant 15 represents the 15 different number of cores that can be composed for the single-working-threaded version.
 There are 32,767 combinations (exhaustive space) of thread mappings and core compositions pairings that can be generated.
 In this chapter, a design point represents one of these 32,767 different configurations.
 
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{streamit-paper/graphics/filterbank_motivation_4.pdf}
-    \caption{Distribution of speedups for FilterBank when using different core composition and thread pairings compared to single-core single thread. The dots on the X-axis represent specific configurations.}
+    \caption{Distribution of speedups for FilterBank when using different core composition and thread pairings compared to single-core single-working-thread. The dots on the X-axis represent specific configurations.}
      \label{fig:threadcoremotiv}
 	 \vspace{-1em}
 \end{figure}
 
 Figure~\ref{fig:threadcoremotiv} presents the speedup distribution from a subset of the co-design space of \bench{FilterBank} as a density graph.
-The speedup is measured by comparing the performance of the design point to that of a single-core/single thread.
-A single-core/single thread is used here as it represents the default "unmodified" configuration.
+The speedup is measured by comparing the performance of the design point to that of a single-core/single-working-thread.
+A single-core/single-working-thread is used here as it represents the default "unmodified" configuration.
 For this experiment, 1316 different thread/core combinations are explored; the reason this number is chosen is explained later on in section~\ref{chp:stream:sec:setup}.
 
 As can be seen in figure~\ref{fig:threadcoremotiv}, the majority of the design points result in a speedup of 2.7x.

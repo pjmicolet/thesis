@@ -3,7 +3,7 @@ This section describes the performance achieved by the model when predicting the
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.7\textwidth]{streamit-paper/graphics/results.pdf}
-    \caption{Performance of the machine learning model against the best execution from random sampling. The baseline for the speedup measurement is single core, single thread execution using O2 compiler optimisations. Higher is better.}\label{fig:results}
+    \caption{Performance of the machine learning model against the best execution from random sampling. The baseline for the speedup measurement is single core, single-working-thread execution using O2 compiler optimisations. Higher is better.}\label{fig:results}
 \end{figure}
 
 \subsection{Machine Learning Model Evaluation Methodology}
@@ -11,7 +11,7 @@ This section describes the performance achieved by the model when predicting the
 Leave-one-out cross-validation defined in Chapter~\ref{chp:Background} Section~\ref{sec:valid} is used for testing the linear model.
 This is standard methodology in the machine-learning community ensuring that the training data is never used for testing.
 For the kNN model, the training data consists of all the generated synthetic benchmarks and it is only tested on the real StreamIt applications as they are not used for training.
-To obtain the speedup the performance of the machine learning based result are compared to the best from the sample space to running the StreamIt benchmark on a single core, single thread, using O2 compiler optimisations. 
+To obtain the speedup the performance of the machine learning based result are compared to the best from the sample space to running the StreamIt benchmark on a single core, single-working-thread, using O2 compiler optimisations. 
 
 \subsection{Evaluation}
 
