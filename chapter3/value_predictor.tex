@@ -27,7 +27,7 @@ This of course will put stress on the NoC, and increase the latency of what is m
 To ensure that a younger block does not execute a read to a register that must be written to by an older block, the register-file keeps track of registers which will be written to by older blocks.
 If the younger block attempts to execute the read, its request is pushed back until the older block has executed its write and any instruction that depends on the read must wait until the write fires.
 Whilst the serialisation of register reads and writes between blocks ensures correct execution of speculative blocks, it effectively reduces the potential for instruction level parallelism (ILP).
-This is further exacerbated when fusing a large number of cores, as this increases the amount of blocks that may potentially have to wait on register reads and writes.
+This is further exacerbated when fusing a large number of cores, as this increases the number of blocks that may have to wait on register reads and writes.
 
 This chapter underlines two problems related to register reads on large compositions: the potential data dependencies caused by reads waiting for previous writes to execute, and the latency caused by having to send read requests via the NoC.
 The problem of trying to reduce register and memory dependencies to improve instruction level parallelism is not new, and is an issue found in more traditional out of order superscalar processors~\cite{peraisVTAGE2014}.
@@ -41,7 +41,7 @@ In these cases value prediction can be used to attempt to ensure that these bloc
 
 \subsection{Design features of a value predictor}
 
-In this chapter, the only target for value predictions is register read instructions.
+In this chapter, the only target for value prediction is register read instructions.
 This is due to the fact that they are prime suspects for data dependencies and unlike loads, currently cannot be fired speculatively.
 Ideally, a value predictor for EDGE would function as seen in Figure~\ref{fig:bad_overview}.
 When a block is fetched, a single request is made to the value predictor to fetch all predictions for the read instructions of the block.
@@ -58,7 +58,7 @@ If multiple prediction requests are made each cycle, this requires expensive har
 To tackle the challenge of issuing predictions quickly, research has focused on grouping predictions into blocks~\cite{peraisBeBop2015}.
 Instead of issuing a request per instruction a single prediction, the predictor receives a single request for a set of instructions in a basic block.
 Entries are accessed by using the PC of the first instruction of the fetch block.
-By grouping multiple predictions into a single entry, it drastically reduces the amount of requests to the value predictor, reducing the prediction latency for a large amount of instructions.
+By grouping multiple predictions into a single entry, it drastically reduces the number of requests to the value predictor, reducing the prediction latency for a large number of instructions.
 As EDGE organises instructions as blocks, a block-based predictor would reduce the number of prediction requests per cycle, making it an attractive feature.
 
 %Rewrite
@@ -73,15 +73,15 @@ In order for a \textit{context} value predictor to correctly predict the address
 Multiple values for a single instruction must be stored in the table in order to predict the different addresses throughout the execution of the loop.
 Having a large number of values stored in the predictor for a single instruction is inefficient, unless the predictor is very large.
 
-On the other hand, a \textit{computational} predictor can capture how the memory address changes each iteration by determining the \textit{stride} at which the it is modified.
+On the other hand, a \textit{computational} predictor can capture how the memory address changes each iteration by determining the \textit{stride} at which it is modified.
 This means that a \textit{computational} predictor will only have to store 2 values: one for the stride and another for the last committed value.
-Not only does this reduce the amount of entries a single instruction occupies in the predictor, but it allows a \textit{computational} predictor to generate predictions faster than the \textit{context} predictor since the next memory address will be equal to $ lastCommittedValue + stride$.
+Not only does this reduce the number of entries a single instruction occupies in the predictor, but it allows a \textit{computational} predictor to generate predictions faster than the \textit{context} predictor since the next memory address will be equal to $ lastCommittedValue + stride$.
 
 Core composition is often most effective when executing over loops, as seen throughout chapter~\ref{chp:cases}.
 As variables such as loop inductors are passed between blocks via register reads and writes, they are a prime candidate for value prediction.
 Since these variables are often modified using the same stride throughout the loop and the loops may occur multiple times during the execution of the program it is important that the predictor keeps the least amount of information for each value.
 This is to ensure that multiple values can co-exist in the predictor, increasing the overall coverage.
-\textit{Computational} predictors are therefore more adequate for this scenario, as they require less entries to predict a single value and are able to generate predictions faster.
+\textit{Computational} predictors are therefore more adequate for this scenario, as they require fewer entries to predict a single value and are able to generate predictions faster.
 
 
 \paragraph*{Summary}
@@ -91,7 +91,7 @@ As core composition is mostly used to improve the performance of loops, a \texti
 Perais et al. propose such a predictor: a block based differential Value TAGE predictor~\cite{peraisBeBop2015}.
 The next section covers briefly how this predictor works, however more details can be found in Chapter~\ref{chp:Background} Section ~\ref{sec:valpred}.
 
-\subsection{Block based D-VTAGE predictor}
+\subsection{Block-based D-VTAGE predictor}
 
 In this chapter, a \textit{block} based differential value TAGE (D-VTAGE) predictor is implemented, based on the work of Perais et al.~\cite{peraisBeBop2015}.
 Full details on how such a value predictor works can be found in Chapter~\ref{chp:Background} Section~\ref{chp:bck:vtage}.

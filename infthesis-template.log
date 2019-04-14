@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.5.24)  7 APR 2019 13:21
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.5.24)  14 APR 2019 18:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1427,7 +1427,13 @@ LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <12> not available
 (Font)              Font shape `OT1/phv/m/sl' tried instead on input line 40.
 LaTeX Font Info:    Font shape `OT1/phv/m/sl' will be
 (Font)              scaled to size 10.79993pt on input line 40.
-[2] [3] [4] [5]) [6]
+[2] [3] [4]
+Overfull \hbox (25.16685pt too wide) in paragraph at lines 101--107
+\OT1/ptm/m/n/12 The chap-ter first cov-ers some of the fac-tors that af-fect th
+e per-for-mance of core-compositions,
+ []
+
+[5]) [6]
 \openout2 = `./background/background.aux'.
 
  (./background/background.tex
@@ -1596,13 +1602,7 @@ Chapter 3.
 Underfull \vbox (badness 1082) has occurred while \output is active []
 
  [28]
-[29]
-Overfull \hbox (6.7564pt too wide) in paragraph at lines 86--92
-[]\OT1/ptm/m/n/12 Gulati et al. pro-pose an of-fline and on-line schedul-ing al
--go-rithms for TFlex [[]].
- []
-
-[30]
+[29] [30]
 Overfull \hbox (6.4427pt too wide) in paragraph at lines 112--117
 []\OT1/ptm/m/n/12 Since EDGE in-struc-tions pass their re-sults di-rectly to an
  in-struc-tion's in-put operands,
@@ -1613,14 +1613,22 @@ Overfull \hbox (12.63553pt too wide) in paragraph at lines 135--135
 []\OT1/phv/b/n/17.28 Hardware tech-niques for power and en-ergy ef-fi-ciency 
  []
 
+[32] [33] [34]
+Overfull \hbox (3.2507pt too wide) in paragraph at lines 209--213
+ \OT1/phv/b/n/12 Hard-ware level \OT1/ptm/m/n/12 Jef-frey et. al. present a nov
+el tiled ar-chi-tec-ture called Swarm [[]]
+ []
 
-Underfull \vbox (badness 1286) has occurred while \output is active []
+[35]
+Underfull \vbox (badness 2426) has occurred while \output is active []
 
- [32]
-[33] [34] [35] [36]
-Underfull \vbox (badness 1874) has occurred while \output is active []
+ [36]
+[37]
+Overfull \hbox (27.99527pt too wide) in paragraph at lines 284--290
+[]\OT1/ptm/m/n/12 Robatmili et. al. [[]] dis-cuss the po-ten-tial bot-tle-necks
+ caused by data-dependencies
+ []
 
- [37]
 [38]
 Overfull \hbox (7.40474pt too wide) in paragraph at lines 309--316
 []\OT1/ptm/m/n/12 Brook [[]] is an-other stream-ing pro-gram-ming lan-guage gea
@@ -1628,7 +1636,7 @@ red to-wards Graph-
  []
 
 [39] [40]
-Overfull \hbox (16.84929pt too wide) in paragraph at lines 357--357
+Overfull \hbox (16.84929pt too wide) in paragraph at lines 356--356
 []\OT1/phv/b/n/17.28 Machine-learning guided per-for-mance op-ti-mi-sa-tions 
  []
 
@@ -1690,8 +1698,12 @@ Chapter 5.
 
 
 
-] [52]) (./streamit-paper/motivation.tex
-[53]
+] [52]
+
+LaTeX Warning: Reference `sec:motiviation' on page 53 undefined on input line 5
+0.
+
+) (./streamit-paper/motivation.tex [53]
 <streamit-paper/graphics/filterbank_motivation_4.pdf, id=699, 873.2625pt x 249.
 93375pt>
 File: streamit-paper/graphics/filterbank_motivation_4.pdf Graphic file (type pd
@@ -1746,6 +1758,10 @@ Overfull \hbox (34.59596pt too wide) in paragraph at lines 67--82
 [][] 
  []
 
+
+LaTeX Warning: Reference `sec:motivation-str' on page 58 undefined on input lin
+e 125.
+
 [58] [59] <streamit-paper/graphics/ESCProx.pdf, id=779, 505.89pt x 505.89pt>
 File: streamit-paper/graphics/ESCProx.pdf Graphic file (type pdf)
 
@@ -1753,8 +1769,13 @@ File: streamit-paper/graphics/ESCProx.pdf Graphic file (type pdf)
 Package pdftex.def Info: streamit-paper/graphics/ESCProx.pdf used on input line
  144.
 (pdftex.def)             Requested size: 412.56497pt x 412.57072pt.
- [60 <./streamit-paper/graphics/ESCProx.pdf>]) [61] (./streamit-paper/analysis.
-tex
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [60])
+Underfull \vbox (badness 5064) has occurred while \output is active []
+
+ [61 <./streamit-paper/graphics/ESCProx.pdf>] (./streamit-paper/analysis.tex
 <streamit-paper/graphics/threadingmaybe5.pdf, id=792, 845.1575pt x 590.205pt>
 File: streamit-paper/graphics/threadingmaybe5.pdf Graphic file (type pdf)
 
@@ -1763,7 +1784,7 @@ Package pdftex.def Info: streamit-paper/graphics/threadingmaybe5.pdf used on in
 put line 7.
 (pdftex.def)             Requested size: 412.56497pt x 288.11328pt.
  [62]
-Underfull \vbox (badness 1168) has occurred while \output is active []
+Underfull \vbox (badness 2772) has occurred while \output is active []
 
  [63 <./streamit-paper/graphics/threadingmaybe5.pdf>]
 <streamit-paper/graphics/filterbank_tot2.pdf, id=808, 818.05624pt x 390.45876pt
@@ -1773,13 +1794,7 @@ File: streamit-paper/graphics/filterbank_tot2.pdf Graphic file (type pdf)
 Package pdftex.def Info: streamit-paper/graphics/filterbank_tot2.pdf used on in
 put line 39.
 (pdftex.def)             Requested size: 412.56497pt x 196.92094pt.
-
-Overfull \hbox (5.54726pt too wide) in paragraph at lines 46--52
-\OT1/ptm/m/n/12 for the \OT1/ptm/m/it/12 Fil-ter-Bank \OT1/ptm/m/n/12 bench-mar
-k. The curves rep-re-sent the den-sity dis-tri-bu-tion of speedups,
- []
-
-[64 <./streamit-paper/graphics/filterbank_tot2.pdf>]
+ [64 <./streamit-paper/graphics/filterbank_tot2.pdf>]
 <streamit-paper/graphics/filterbank_unroll2.pdf, id=821, 818.05624pt x 440.6462
 6pt>
 File: streamit-paper/graphics/filterbank_unroll2.pdf Graphic file (type pdf)
@@ -1787,15 +1802,15 @@ File: streamit-paper/graphics/filterbank_unroll2.pdf Graphic file (type pdf)
 Package pdftex.def Info: streamit-paper/graphics/filterbank_unroll2.pdf used on
  input line 70.
 (pdftex.def)             Requested size: 412.56497pt x 222.23212pt.
-
-<streamit-paper/graphics/unroll_speed_bars2.pdf, id=822, 700.6175pt x 494.84875
+ [65]
+<streamit-paper/graphics/unroll_speed_bars2.pdf, id=825, 700.6175pt x 494.84875
 pt>
 File: streamit-paper/graphics/unroll_speed_bars2.pdf Graphic file (type pdf)
  <use streamit-paper/graphics/unroll_speed_bars2.pdf>
 Package pdftex.def Info: streamit-paper/graphics/unroll_speed_bars2.pdf used on
  input line 85.
 (pdftex.def)             Requested size: 412.56497pt x 291.39948pt.
- [65]
+
 <streamit-paper/graphics/unroll_speed_bars.pdf, id=826, 864.22874pt x 262.9825p
 t>
 File: streamit-paper/graphics/unroll_speed_bars.pdf Graphic file (type pdf)
@@ -1812,21 +1827,21 @@ Package pdftex.def Info: streamit-paper/graphics/unrolling_size.pdf used on inp
 ut line 103.
 (pdftex.def)             Requested size: 412.56497pt x 125.53995pt.
 
-Underfull \vbox (badness 3503) has occurred while \output is active []
+Underfull \vbox (badness 1478) has occurred while \output is active []
 
  [66 <./streamit-paper/graphics/filterbank_unroll2.pdf>]
-<streamit-paper/graphics/threadcompbench.pdf, id=840, 1824.41597pt x 578.16pt>
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [67 <./streamit-paper/graphics/unroll_speed_bars2.pdf>]
+<streamit-paper/graphics/threadcompbench.pdf, id=854, 1824.41597pt x 578.16pt>
 File: streamit-paper/graphics/threadcompbench.pdf Graphic file (type pdf)
 
 <use streamit-paper/graphics/threadcompbench.pdf>
 Package pdftex.def Info: streamit-paper/graphics/threadcompbench.pdf used on in
 put line 128.
 (pdftex.def)             Requested size: 412.56497pt x 130.74203pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [67 <./streamit-paper/graphics/unroll_speed_bars2.pdf>] [68 <./streamit-paper/
-graphics/unroll_speed_bars.pdf> <./streamit-paper/graphics/unrolling_size.pdf
+ [68 <./streamit-paper/graphics/unroll_speed_bars.pdf> <./streamit-paper/graphi
+cs/unrolling_size.pdf
 
 pdfTeX warning: pdflatex (file ./streamit-paper/graphics/unrolling_size.pdf): P
 DF inclusion: multiple pdfs with page group included in a single page
@@ -1839,6 +1854,9 @@ File: streamit-paper/graphics/thread_expl.pdf Graphic file (type pdf)
 Package pdftex.def Info: streamit-paper/graphics/thread_expl.pdf used on input 
 line 5.
 (pdftex.def)             Requested size: 412.56497pt x 146.0426pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
  [70]
 <streamit-paper/graphics/corrThreadRemix2.pdf, id=1003, 385.45557pt x 138.03741
 pt>
@@ -1847,15 +1865,7 @@ File: streamit-paper/graphics/corrThreadRemix2.pdf Graphic file (type pdf)
 Package pdftex.def Info: streamit-paper/graphics/corrThreadRemix2.pdf used on i
 nput line 35.
 (pdftex.def)             Requested size: 412.56497pt x 147.7512pt.
-
-Underfull \vbox (badness 3679) has occurred while \output is active []
-
- [71 <./streamit-paper/graphics/thread_expl.pdf> <./streamit-paper/graphics/cor
-rThreadRemix2.pdf
-
-pdfTeX warning: pdflatex (file ./streamit-paper/graphics/corrThreadRemix2.pdf):
- PDF inclusion: multiple pdfs with page group included in a single page
->]
+ [71 <./streamit-paper/graphics/thread_expl.pdf>]
 Overfull \hbox (2.05405pt too wide) in paragraph at lines 58--60
 []\OT1/ptm/m/n/12 Accumulated Un-con-di-tional Work: To-tal num-ber of op-er-a-
 tions in all fil-ters which
@@ -1867,30 +1877,29 @@ Overfull \hbox (5.58144pt too wide) in paragraph at lines 60--61
 hat are found in SplitJoins. 
  []
 
-
+[72 <./streamit-paper/graphics/corrThreadRemix2.pdf>]
 Underfull \hbox (badness 10000) in paragraph at lines 75--78
 
  []
 
-[72]) (./streamit-paper/core.tex [73]
-<streamit-paper/graphics/corrGraph_remix2.pdf, id=1044, 383.49236pt x 166.94954
+) (./streamit-paper/core.tex [73]
+<streamit-paper/graphics/corrGraph_remix2.pdf, id=1045, 383.49236pt x 166.94954
 pt>
 File: streamit-paper/graphics/corrGraph_remix2.pdf Graphic file (type pdf)
  <use streamit-paper/graphics/corrGraph_remix2.pdf>
 Package pdftex.def Info: streamit-paper/graphics/corrGraph_remix2.pdf used on i
 nput line 27.
 (pdftex.def)             Requested size: 412.56497pt x 179.615pt.
- [74 <./streamit-paper/graphics/corrGraph_remix2.pdf>] [75]
-<streamit-paper/graphics/lineargraphs.pdf, id=1074, 2168.1pt x 867.24pt>
+ [74] [75 <./streamit-paper/graphics/corrGraph_remix2.pdf>] [76]
+<streamit-paper/graphics/lineargraphs.pdf, id=1078, 2168.1pt x 867.24pt>
 File: streamit-paper/graphics/lineargraphs.pdf Graphic file (type pdf)
 
 <use streamit-paper/graphics/lineargraphs.pdf>
 Package pdftex.def Info: streamit-paper/graphics/lineargraphs.pdf used on input
  line 93.
 (pdftex.def)             Requested size: 412.56497pt x 165.0155pt.
- [76])
-(./streamit-paper/results.tex
-<streamit-paper/graphics/results.pdf, id=1078, 505.89pt x 505.89pt>
+) (./streamit-paper/results.tex
+<streamit-paper/graphics/results.pdf, id=1079, 505.89pt x 505.89pt>
 File: streamit-paper/graphics/results.pdf Graphic file (type pdf)
 
 <use streamit-paper/graphics/results.pdf>
@@ -1908,7 +1917,7 @@ Overfull \hbox (3.25648pt too wide) in paragraph at lines 86--86
 [][] 
  []
 
-) (./streamit-paper/conclusion.tex [79] [80])) [81]
+) [79] (./streamit-paper/conclusion.tex [80])) [81]
 \openout2 = `./cases-paper/cases-chapter.aux'.
 
 
@@ -1925,7 +1934,7 @@ f-fer-ent com-pu-ta-tion phases
  []
 
 [84]) (./cases-paper/motivationFinal.tex
-<cases-paper/graphics/motivation/disp_opt_4_16_3.pdf, id=1122, 703.23317pt x 17
+<cases-paper/graphics/motivation/disp_opt_4_16_3.pdf, id=1123, 703.23317pt x 17
 8.04388pt>
 File: cases-paper/graphics/motivation/disp_opt_4_16_3.pdf Graphic file (type pd
 f)
@@ -1956,7 +1965,7 @@ ion Bench-mark Suite (SD-VBS) [[]]
  []
 
 [85] [86 <./cases-paper/graphics/motivation/disp_opt_4_16_3.pdf>]
-<cases-paper/graphics/motivation/code_opt_3.pdf, id=1149, 627.5137pt x 160.8735
+<cases-paper/graphics/motivation/code_opt_3.pdf, id=1150, 627.5137pt x 160.8735
 8pt>
 File: cases-paper/graphics/motivation/code_opt_3.pdf Graphic file (type pdf)
  <use cases-paper/graphics/motivation/code_opt_3.pdf>
@@ -1965,7 +1974,7 @@ Package pdftex.def Info: cases-paper/graphics/motivation/code_opt_3.pdf used on
 (pdftex.def)             Requested size: 412.56497pt x 105.7694pt.
  [87 <./cases-paper/graphics/motivation/code_opt_3.pdf>]) (./cases-paper/limits
 tudy.tex [88] [89]
-<cases-paper/graphics/limit_study/prediction_req.pdf, id=1179, 1002.74625pt x 3
+<cases-paper/graphics/limit_study/prediction_req.pdf, id=1180, 1002.74625pt x 3
 50.30875pt>
 File: cases-paper/graphics/limit_study/prediction_req.pdf Graphic file (type pd
 f)
@@ -1974,7 +1983,7 @@ Package pdftex.def Info: cases-paper/graphics/limit_study/prediction_req.pdf us
 ed on input line 47.
 (pdftex.def)             Requested size: 412.56497pt x 144.12996pt.
  [90 <./cases-paper/graphics/limit_study/prediction_req.pdf>]
-<cases-paper/graphics/limit_study/sync_cost.pdf, id=1199, 1002.74625pt x 350.30
+<cases-paper/graphics/limit_study/sync_cost.pdf, id=1200, 1002.74625pt x 350.30
 875pt>
 File: cases-paper/graphics/limit_study/sync_cost.pdf Graphic file (type pdf)
  <use cases-paper/graphics/limit_study/sync_cost.pdf>
@@ -1982,7 +1991,7 @@ Package pdftex.def Info: cases-paper/graphics/limit_study/sync_cost.pdf used on
  input line 72.
 (pdftex.def)             Requested size: 412.56497pt x 144.12996pt.
  [91 <./cases-paper/graphics/limit_study/sync_cost.pdf>]
-<cases-paper/graphics/limit_study/summary.pdf, id=1220, 337.26pt x 167.52586pt>
+<cases-paper/graphics/limit_study/summary.pdf, id=1221, 337.26pt x 167.52586pt>
 File: cases-paper/graphics/limit_study/summary.pdf Graphic file (type pdf)
 <use cases-paper/graphics/limit_study/summary.pdf>
 Package pdftex.def Info: cases-paper/graphics/limit_study/summary.pdf used on i
@@ -1994,7 +2003,7 @@ Underfull \vbox (badness 2961) has occurred while \output is active []
 
  [92 <./cases-paper/graphics/limit_study/summary.pdf>] [93])
 (./cases-paper/compiler_opts.tex [94] [95]
-<cases-paper/graphics/Exploration/ipc_comp.pdf, id=1283, 1429.34pt x 243.91125p
+<cases-paper/graphics/Exploration/ipc_comp.pdf, id=1284, 1429.34pt x 243.91125p
 t>
 File: cases-paper/graphics/Exploration/ipc_comp.pdf Graphic file (type pdf)
  <use cases-paper/graphics/Exploration/ipc_comp.pdf>
@@ -2002,7 +2011,7 @@ Package pdftex.def Info: cases-paper/graphics/Exploration/ipc_comp.pdf used on
 input line 92.
 (pdftex.def)             Requested size: 412.56497pt x 70.4012pt.
 
-<cases-paper/graphics/Exploration/comp_speed.pdf, id=1284, 1429.34pt x 243.9112
+<cases-paper/graphics/Exploration/comp_speed.pdf, id=1285, 1429.34pt x 243.9112
 5pt>
 File: cases-paper/graphics/Exploration/comp_speed.pdf Graphic file (type pdf)
  <use cases-paper/graphics/Exploration/comp_speed.pdf>
@@ -2018,7 +2027,7 @@ Exploration/comp_speed.pdf
 pdfTeX warning: pdflatex (file ./cases-paper/graphics/Exploration/comp_speed.pd
 f): PDF inclusion: multiple pdfs with page group included in a single page
 >]) (./cases-paper/bmark_exploration.tex
-<cases-paper/graphics/Exploration/ipcs_16_3.pdf, id=1319, 686.565pt x 687.56876
+<cases-paper/graphics/Exploration/ipcs_16_3.pdf, id=1320, 686.565pt x 687.56876
 pt>
 File: cases-paper/graphics/Exploration/ipcs_16_3.pdf Graphic file (type pdf)
  <use cases-paper/graphics/Exploration/ipcs_16_3.pdf>
@@ -2029,7 +2038,7 @@ Package pdftex.def Info: cases-paper/graphics/Exploration/ipcs_16_3.pdf used on
 Underfull \vbox (badness 5022) has occurred while \output is active []
 
  [98 <./cases-paper/graphics/Exploration/ipcs_16_3.pdf>]
-<cases-paper/graphics/Exploration/SSE_final.pdf, id=1344, 713.66624pt x 393.47p
+<cases-paper/graphics/Exploration/SSE_final.pdf, id=1345, 713.66624pt x 393.47p
 t>
 File: cases-paper/graphics/Exploration/SSE_final.pdf Graphic file (type pdf)
  <use cases-paper/graphics/Exploration/SSE_final.pdf>
@@ -2037,7 +2046,7 @@ Package pdftex.def Info: cases-paper/graphics/Exploration/SSE_final.pdf used on
  input line 38.
 (pdftex.def)             Requested size: 412.56497pt x 227.46227pt.
  [99 <./cases-paper/graphics/Exploration/SSE_final.pdf>]
-<cases-paper/graphics/Exploration/clusters4.pdf, id=1364, 713.66624pt x 434.623
+<cases-paper/graphics/Exploration/clusters4.pdf, id=1365, 713.66624pt x 434.623
 75pt>
 File: cases-paper/graphics/Exploration/clusters4.pdf Graphic file (type pdf)
  <use cases-paper/graphics/Exploration/clusters4.pdf>
@@ -2045,7 +2054,7 @@ Package pdftex.def Info: cases-paper/graphics/Exploration/clusters4.pdf used on
  input line 52.
 (pdftex.def)             Requested size: 412.56497pt x 251.25296pt.
  [100 <./cases-paper/graphics/Exploration/clusters4.pdf>]
-<cases-paper/graphics/Exploration/stddev3.pdf, id=1377, 686.565pt x 587.19376pt
+<cases-paper/graphics/Exploration/stddev3.pdf, id=1378, 686.565pt x 587.19376pt
 >
 File: cases-paper/graphics/Exploration/stddev3.pdf Graphic file (type pdf)
  <use cases-paper/graphics/Exploration/stddev3.pdf>
@@ -2053,7 +2062,7 @@ Package pdftex.def Info: cases-paper/graphics/Exploration/stddev3.pdf used on i
 nput line 68.
 (pdftex.def)             Requested size: 412.56497pt x 352.8476pt.
 
-<cases-paper/graphics/Exploration/SizeBuckets.pdf, id=1378, 838.13126pt x 447.6
+<cases-paper/graphics/Exploration/SizeBuckets.pdf, id=1379, 838.13126pt x 447.6
 725pt>
 File: cases-paper/graphics/Exploration/SizeBuckets.pdf Graphic file (type pdf)
  <use cases-paper/graphics/Exploration/SizeBuckets.pdf>
@@ -2087,7 +2096,7 @@ ich is op-ti-mal for a unique bench-
  []
 
 
-<cases-paper/graphics/exploration/trace-gathering.pdf, id=1427, 1652.14027pt x 
+<cases-paper/graphics/exploration/trace-gathering.pdf, id=1428, 1652.14027pt x 
 373.28032pt>
 File: cases-paper/graphics/exploration/trace-gathering.pdf Graphic file (type p
 df)
@@ -2097,7 +2106,7 @@ sed on input line 21.
 (pdftex.def)             Requested size: 412.56497pt x 93.21162pt.
 
 [106 <./cases-paper/graphics/exploration/trace-gathering.pdf>]
-<cases-paper/graphics/pareto/pareto_best.pdf, id=1453, 1014.79124pt x 727.71875
+<cases-paper/graphics/pareto/pareto_best.pdf, id=1454, 1014.79124pt x 727.71875
 pt>
 File: cases-paper/graphics/pareto/pareto_best.pdf Graphic file (type pdf)
  <use cases-paper/graphics/pareto/pareto_best.pdf>
@@ -2108,7 +2117,7 @@ put line 51.
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [108 <./cases-paper/graphics/pareto/pareto_best.pdf>]
-<cases-paper/graphics/results/speed_bars3.pdf, id=1469, 673.51625pt x 373.395pt
+<cases-paper/graphics/results/speed_bars3.pdf, id=1470, 673.51625pt x 373.395pt
 >
 File: cases-paper/graphics/results/speed_bars3.pdf Graphic file (type pdf)
  <use cases-paper/graphics/results/speed_bars3.pdf>
@@ -2116,7 +2125,7 @@ Package pdftex.def Info: cases-paper/graphics/results/speed_bars3.pdf used on i
 nput line 114.
 (pdftex.def)             Requested size: 412.56497pt x 228.7278pt.
  [109]
-<cases-paper/graphics/Exploration/condensed_clust.pdf, id=1474, 473.77pt x 239.
+<cases-paper/graphics/Exploration/condensed_clust.pdf, id=1475, 473.77pt x 239.
 89626pt>
 File: cases-paper/graphics/Exploration/condensed_clust.pdf Graphic file (type p
 df)
@@ -2125,7 +2134,7 @@ Package pdftex.def Info: cases-paper/graphics/Exploration/condensed_clust.pdf u
 sed on input line 145.
 (pdftex.def)             Requested size: 185.65297pt x 94.00574pt.
 
-<cases-paper/graphics/Exploration/latency_2.pdf, id=1475, 473.77pt x 239.89626p
+<cases-paper/graphics/Exploration/latency_2.pdf, id=1476, 473.77pt x 239.89626p
 t>
 File: cases-paper/graphics/Exploration/latency_2.pdf Graphic file (type pdf)
  <use cases-paper/graphics/Exploration/latency_2.pdf>
@@ -2136,7 +2145,7 @@ Package pdftex.def Info: cases-paper/graphics/Exploration/latency_2.pdf used on
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [110 <./cases-paper/graphics/results/speed_bars3.pdf>]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 5133) has occurred while \output is active []
 
  [111 <./cases-paper/graphics/Exploration/condensed_clust.pdf> <./cases-paper/g
 raphics/Exploration/latency_2.pdf
@@ -2144,7 +2153,7 @@ raphics/Exploration/latency_2.pdf
 pdfTeX warning: pdflatex (file ./cases-paper/graphics/Exploration/latency_2.pdf
 ): PDF inclusion: multiple pdfs with page group included in a single page
 >]) (./cases-paper/linear_reg.tex
-<cases-paper/graphics/other/model3.pdf, id=1530, 896.66585pt x 228.96323pt>
+<cases-paper/graphics/other/model3.pdf, id=1531, 896.66585pt x 228.96323pt>
 File: cases-paper/graphics/other/model3.pdf Graphic file (type pdf)
 
 <use cases-paper/graphics/other/model3.pdf>
@@ -2152,7 +2161,7 @@ Package pdftex.def Info: cases-paper/graphics/other/model3.pdf used on input li
 ne 10.
 (pdftex.def)             Requested size: 412.56497pt x 105.34882pt.
  [112] [113 <./cases-paper/graphics/other/model3.pdf>]
-<cases-paper/graphics/results/lr_speed3.pdf, id=1551, 673.51625pt x 373.395pt>
+<cases-paper/graphics/results/lr_speed3.pdf, id=1552, 673.51625pt x 373.395pt>
 File: cases-paper/graphics/results/lr_speed3.pdf Graphic file (type pdf)
 
 <use cases-paper/graphics/results/lr_speed3.pdf>
@@ -2175,14 +2184,14 @@ Underfull \vbox (badness 1082) has occurred while \output is active []
 
  [118])
 (./chapter3/motivation.tex [119]
-<chapter3/graphics/motiv_p1.pdf, id=1587, 758.835pt x 168.63pt>
+<chapter3/graphics/motiv_p1.pdf, id=1588, 758.835pt x 168.63pt>
 File: chapter3/graphics/motiv_p1.pdf Graphic file (type pdf)
 
 <use chapter3/graphics/motiv_p1.pdf>
 Package pdftex.def Info: chapter3/graphics/motiv_p1.pdf used on input line 6.
 (pdftex.def)             Requested size: 412.56497pt x 91.68152pt.
 
-<chapter3/graphics/perfect_fetch_motiv2.pdf, id=1588, 758.835pt x 168.63pt>
+<chapter3/graphics/perfect_fetch_motiv2.pdf, id=1589, 758.835pt x 168.63pt>
 File: chapter3/graphics/perfect_fetch_motiv2.pdf Graphic file (type pdf)
 
 <use chapter3/graphics/perfect_fetch_motiv2.pdf>
@@ -2198,14 +2207,14 @@ DF inclusion: multiple pdfs with page group included in a single page
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [121]
-<chapter3/graphics/mser_ex.pdf, id=1613, 1016.56839pt x 206.4933pt>
+<chapter3/graphics/mser_ex.pdf, id=1614, 1016.56839pt x 206.4933pt>
 File: chapter3/graphics/mser_ex.pdf Graphic file (type pdf)
 
 <use chapter3/graphics/mser_ex.pdf>
 Package pdftex.def Info: chapter3/graphics/mser_ex.pdf used on input line 88.
 (pdftex.def)             Requested size: 412.56497pt x 83.80261pt.
 
-<chapter3/graphics/mser_motiv_reg2.pdf, id=1614, 758.835pt x 168.63pt>
+<chapter3/graphics/mser_motiv_reg2.pdf, id=1615, 758.835pt x 168.63pt>
 File: chapter3/graphics/mser_motiv_reg2.pdf Graphic file (type pdf)
 
 <use chapter3/graphics/mser_motiv_reg2.pdf>
@@ -2214,7 +2223,7 @@ ne 106.
 (pdftex.def)             Requested size: 412.56497pt x 91.68152pt.
  [122 <./chapter3/graphics/mser_ex.pdf>]) (./chapter3/new_block_fetch_scheme.te
 x
-<chapter3/graphics/4fetchnorm2.pdf, id=1626, 791.95876pt x 171.64125pt>
+<chapter3/graphics/4fetchnorm2.pdf, id=1627, 791.95876pt x 171.64125pt>
 File: chapter3/graphics/4fetchnorm2.pdf Graphic file (type pdf)
 
 <use chapter3/graphics/4fetchnorm2.pdf>
@@ -2226,7 +2235,7 @@ chnorm2.pdf>]
 LaTeX Font Info:    Font shape `OML/ptm/m/it' in size <12> not available
 (Font)              Font shape `OML/cmm/m/it' tried instead on input line 169.
  [125] [126]
-<chapter3/graphics/fetching-model.pdf, id=1660, 1274.68077pt x 267.45532pt>
+<chapter3/graphics/fetching-model.pdf, id=1661, 1274.68077pt x 267.45532pt>
 File: chapter3/graphics/fetching-model.pdf Graphic file (type pdf)
 
 <use chapter3/graphics/fetching-model.pdf>
@@ -2234,7 +2243,7 @@ Package pdftex.def Info: chapter3/graphics/fetching-model.pdf used on input lin
 e 200.
 (pdftex.def)             Requested size: 412.56497pt x 86.5628pt.
  [127 <./chapter3/graphics/fetching-model.pdf>]
-<chapter3/graphics/motivation_fetch2.pdf, id=1674, 523.9575pt x 128.48pt>
+<chapter3/graphics/motivation_fetch2.pdf, id=1675, 523.9575pt x 128.48pt>
 File: chapter3/graphics/motivation_fetch2.pdf Graphic file (type pdf)
 
 <use chapter3/graphics/motivation_fetch2.pdf>
@@ -2242,7 +2251,7 @@ Package pdftex.def Info: chapter3/graphics/motivation_fetch2.pdf used on input
 line 255.
 (pdftex.def)             Requested size: 412.56497pt x 101.16872pt.
 
-<chapter3/graphics/sdvbsav.pdf, id=1675, 602.25pt x 146.5475pt>
+<chapter3/graphics/sdvbsav.pdf, id=1676, 602.25pt x 146.5475pt>
 File: chapter3/graphics/sdvbsav.pdf Graphic file (type pdf)
 
 <use chapter3/graphics/sdvbsav.pdf>
@@ -2254,7 +2263,7 @@ pdf
 pdfTeX warning: pdflatex (file ./chapter3/graphics/sdvbsav.pdf): PDF inclusion:
  multiple pdfs with page group included in a single page
 >]) (./chapter3/value_predictor.tex
-<chapter3/graphics/val_pred_overview.pdf, id=1696, 697.1072pt x 157.90274pt>
+<chapter3/graphics/val_pred_overview.pdf, id=1697, 697.1072pt x 157.90274pt>
 File: chapter3/graphics/val_pred_overview.pdf Graphic file (type pdf)
 
 <use chapter3/graphics/val_pred_overview.pdf>
@@ -2271,7 +2280,7 @@ ing over loops, as seen through-
 Underfull \vbox (badness 7613) has occurred while \output is active []
 
  [133]
-<chapter3/graphics/trace-gen.pdf, id=1733, 1447.89247pt x 385.76204pt>
+<chapter3/graphics/trace-gen.pdf, id=1734, 1447.89247pt x 385.76204pt>
 File: chapter3/graphics/trace-gen.pdf Graphic file (type pdf)
 
 <use chapter3/graphics/trace-gen.pdf>
@@ -2279,7 +2288,7 @@ Package pdftex.def Info: chapter3/graphics/trace-gen.pdf used on input line 48.
 
 (pdftex.def)             Requested size: 412.56497pt x 109.91977pt.
 
-<chapter3/graphics/fetching-trace.pdf, id=1734, 653.21262pt x 145.05246pt>
+<chapter3/graphics/fetching-trace.pdf, id=1735, 653.21262pt x 145.05246pt>
 File: chapter3/graphics/fetching-trace.pdf Graphic file (type pdf)
 
 <use chapter3/graphics/fetching-trace.pdf>
@@ -2301,14 +2310,14 @@ lusion: multiple pdfs with page group included in a single page
 >]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <12> not available
 (Font)              Font shape `OT1/ptm/b/it' tried instead on input line 14.
- <chapter3/graphics/tempres4.pdf, id=1782, 552.0625pt x 218.8175pt>
+ <chapter3/graphics/tempres4.pdf, id=1783, 552.0625pt x 218.8175pt>
 File: chapter3/graphics/tempres4.pdf Graphic file (type pdf)
 
 <use chapter3/graphics/tempres4.pdf>
 Package pdftex.def Info: chapter3/graphics/tempres4.pdf used on input line 40.
 (pdftex.def)             Requested size: 412.56497pt x 163.53174pt.
  [136]
-<chapter3/graphics/perf_av_cycle_exec4.pdf, id=1788, 633.43352pt x 234.94472pt>
+<chapter3/graphics/perf_av_cycle_exec4.pdf, id=1789, 633.43352pt x 234.94472pt>
 File: chapter3/graphics/perf_av_cycle_exec4.pdf Graphic file (type pdf)
 <use chapter3/graphics/perf_av_cycle_exec4.pdf>
 Package pdftex.def Info: chapter3/graphics/perf_av_cycle_exec4.pdf used on inpu
@@ -2319,27 +2328,22 @@ c4.pdf
 
 pdfTeX warning: pdflatex (file ./chapter3/graphics/perf_av_cycle_exec4.pdf): PD
 F inclusion: multiple pdfs with page group included in a single page
->] <chapter3/graphics/lsqViol4.pdf, id=1814, 607.26875pt x 183.68625pt>
+>] <chapter3/graphics/lsqViol4.pdf, id=1815, 607.26875pt x 183.68625pt>
 File: chapter3/graphics/lsqViol4.pdf Graphic file (type pdf)
 
 <use chapter3/graphics/lsqViol4.pdf>
 Package pdftex.def Info: chapter3/graphics/lsqViol4.pdf used on input line 94.
 (pdftex.def)             Requested size: 412.56497pt x 124.79567pt.
  [138]) (./chapter3/analysisp2.tex
-<chapter3/graphics/joint.pdf, id=1818, 807.05777pt x 238.95972pt>
+<chapter3/graphics/joint.pdf, id=1819, 807.05777pt x 238.95972pt>
 File: chapter3/graphics/joint.pdf Graphic file (type pdf)
 
 <use chapter3/graphics/joint.pdf>
 Package pdftex.def Info: chapter3/graphics/joint.pdf used on input line 8.
 (pdftex.def)             Requested size: 412.56497pt x 122.15588pt.
-
-Overfull \hbox (3.46687pt too wide) in paragraph at lines 20--26
-[]\OT1/ptm/m/n/12 To de-ter-mine the size, all the EDGE blocks of the SD-VBS be
-nch-marks are anaylsed
- []
-
-[139 <./chapter3/graphics/lsqViol4.pdf>] [140 <./chapter3/graphics/joint.pdf>]
-[141] <chapter3/graphics/vtage_speed3.pdf, id=1852, 607.5032pt x 234.94473pt>
+ [139 <./chapter3/graphics/lsqViol4.pdf>]
+[140 <./chapter3/graphics/joint.pdf>] [141]
+<chapter3/graphics/vtage_speed3.pdf, id=1853, 607.5032pt x 234.94473pt>
 File: chapter3/graphics/vtage_speed3.pdf Graphic file (type pdf)
 
 <use chapter3/graphics/vtage_speed3.pdf>
@@ -2350,7 +2354,7 @@ Package pdftex.def Info: chapter3/graphics/vtage_speed3.pdf used on input line
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [143 <./chapter3/graphics/vtage_speed3.pdf>]
-<chapter3/graphics/coverageFull2.pdf, id=1873, 830.01823pt x 280.71252pt>
+<chapter3/graphics/coverageFull2.pdf, id=1874, 830.01823pt x 280.71252pt>
 File: chapter3/graphics/coverageFull2.pdf Graphic file (type pdf)
 
 <use chapter3/graphics/coverageFull2.pdf>
@@ -2358,7 +2362,7 @@ Package pdftex.def Info: chapter3/graphics/coverageFull2.pdf used on input line
  154.
 (pdftex.def)             Requested size: 412.56497pt x 139.52924pt.
 
-<chapter3/graphics/predAcc2.pdf, id=1874, 809.2382pt x 275.45729pt>
+<chapter3/graphics/predAcc2.pdf, id=1875, 809.2382pt x 275.45729pt>
 File: chapter3/graphics/predAcc2.pdf Graphic file (type pdf)
 
 <use chapter3/graphics/predAcc2.pdf>
@@ -2370,7 +2374,7 @@ Package pdftex.def Info: chapter3/graphics/predAcc2.pdf used on input line 159.
 
 pdfTeX warning: pdflatex (file ./chapter3/graphics/predAcc2.pdf): PDF inclusion
 : multiple pdfs with page group included in a single page
->] [145] <chapter3/graphics/with_bpred.pdf, id=1906, 758.835pt x 235.88126pt>
+>] [145] <chapter3/graphics/with_bpred.pdf, id=1907, 758.835pt x 235.88126pt>
 File: chapter3/graphics/with_bpred.pdf Graphic file (type pdf)
 
 <use chapter3/graphics/with_bpred.pdf>
@@ -2409,7 +2413,7 @@ o the merg-ing of two blocks,
  (./appendix/appendix1.tex
 Appendix A.
 
-<streamit-paper/graphics/appendixgraphs/audio_total2.pdf, id=1947, 818.05624pt 
+<streamit-paper/graphics/appendixgraphs/audio_total2.pdf, id=1948, 818.05624pt 
 x 390.45876pt>
 File: streamit-paper/graphics/appendixgraphs/audio_total2.pdf Graphic file (typ
 e pdf)
@@ -2418,7 +2422,7 @@ Package pdftex.def Info: streamit-paper/graphics/appendixgraphs/audio_total2.pd
 f used on input line 12.
 (pdftex.def)             Requested size: 412.56497pt x 196.92094pt.
 
-<streamit-paper/graphics/appendixgraphs/beamformer_total2.pdf, id=1948, 818.056
+<streamit-paper/graphics/appendixgraphs/beamformer_total2.pdf, id=1949, 818.056
 24pt x 390.45876pt>
 File: streamit-paper/graphics/appendixgraphs/beamformer_total2.pdf Graphic file
  (type pdf)
@@ -2428,7 +2432,7 @@ Package pdftex.def Info: streamit-paper/graphics/appendixgraphs/beamformer_tota
 l2.pdf used on input line 15.
 (pdftex.def)             Requested size: 412.56497pt x 196.92094pt.
 
-<streamit-paper/graphics/appendixgraphs/bitonic-total2.pdf, id=1949, 818.05624p
+<streamit-paper/graphics/appendixgraphs/bitonic-total2.pdf, id=1950, 818.05624p
 t x 390.45876pt>
 File: streamit-paper/graphics/appendixgraphs/bitonic-total2.pdf Graphic file (t
 ype pdf)
@@ -2442,7 +2446,7 @@ pdf used on input line 18.
 LaTeX Warning: Float too large for page by 6.28752pt on input line 20.
 
 
-<streamit-paper/graphics/appendixgraphs/bubble-total2.pdf, id=1950, 818.05624pt
+<streamit-paper/graphics/appendixgraphs/bubble-total2.pdf, id=1951, 818.05624pt
  x 390.45876pt>
 File: streamit-paper/graphics/appendixgraphs/bubble-total2.pdf Graphic file (ty
 pe pdf)
@@ -2451,7 +2455,7 @@ Package pdftex.def Info: streamit-paper/graphics/appendixgraphs/bubble-total2.p
 df used on input line 24.
 (pdftex.def)             Requested size: 412.56497pt x 196.92094pt.
 
-<streamit-paper/graphics/appendixgraphs/cfar-total2.pdf, id=1951, 818.05624pt x
+<streamit-paper/graphics/appendixgraphs/cfar-total2.pdf, id=1952, 818.05624pt x
  390.45876pt>
 File: streamit-paper/graphics/appendixgraphs/cfar-total2.pdf Graphic file (type
  pdf)
@@ -2460,7 +2464,7 @@ Package pdftex.def Info: streamit-paper/graphics/appendixgraphs/cfar-total2.pdf
  used on input line 27.
 (pdftex.def)             Requested size: 412.56497pt x 196.92094pt.
 
-<streamit-paper/graphics/appendixgraphs/channel-total2.pdf, id=1952, 818.05624p
+<streamit-paper/graphics/appendixgraphs/channel-total2.pdf, id=1953, 818.05624p
 t x 390.45876pt>
 File: streamit-paper/graphics/appendixgraphs/channel-total2.pdf Graphic file (t
 ype pdf)
@@ -2474,7 +2478,7 @@ pdf used on input line 30.
 LaTeX Warning: Float too large for page by 32.28752pt on input line 32.
 
 
-<streamit-paper/graphics/appendixgraphs/fft-total2.pdf, id=1953, 818.05624pt x 
+<streamit-paper/graphics/appendixgraphs/fft-total2.pdf, id=1954, 818.05624pt x 
 390.45876pt>
 File: streamit-paper/graphics/appendixgraphs/fft-total2.pdf Graphic file (type 
 pdf)
@@ -2483,7 +2487,7 @@ Package pdftex.def Info: streamit-paper/graphics/appendixgraphs/fft-total2.pdf
 used on input line 35.
 (pdftex.def)             Requested size: 412.56497pt x 196.92094pt.
 
-<streamit-paper/graphics/appendixgraphs/fft3-total2.pdf, id=1954, 818.05624pt x
+<streamit-paper/graphics/appendixgraphs/fft3-total2.pdf, id=1955, 818.05624pt x
  390.45876pt>
 File: streamit-paper/graphics/appendixgraphs/fft3-total2.pdf Graphic file (type
  pdf)
@@ -2492,7 +2496,7 @@ Package pdftex.def Info: streamit-paper/graphics/appendixgraphs/fft3-total2.pdf
  used on input line 38.
 (pdftex.def)             Requested size: 412.56497pt x 196.92094pt.
 
-<streamit-paper/graphics/appendixgraphs/fft6-total2.pdf, id=1955, 818.05624pt x
+<streamit-paper/graphics/appendixgraphs/fft6-total2.pdf, id=1956, 818.05624pt x
  390.45876pt>
 File: streamit-paper/graphics/appendixgraphs/fft6-total2.pdf Graphic file (type
  pdf)
@@ -2505,7 +2509,7 @@ Package pdftex.def Info: streamit-paper/graphics/appendixgraphs/fft6-total2.pdf
 LaTeX Warning: Float too large for page by 32.28752pt on input line 43.
 
 
-<streamit-paper/graphics/appendixgraphs/fir-total2.pdf, id=1956, 818.05624pt x 
+<streamit-paper/graphics/appendixgraphs/fir-total2.pdf, id=1957, 818.05624pt x 
 390.45876pt>
 File: streamit-paper/graphics/appendixgraphs/fir-total2.pdf Graphic file (type 
 pdf)
@@ -2514,7 +2518,7 @@ Package pdftex.def Info: streamit-paper/graphics/appendixgraphs/fir-total2.pdf
 used on input line 46.
 (pdftex.def)             Requested size: 412.56497pt x 196.92094pt.
 
-<streamit-paper/graphics/appendixgraphs/fm-total2.pdf, id=1957, 818.05624pt x 3
+<streamit-paper/graphics/appendixgraphs/fm-total2.pdf, id=1958, 818.05624pt x 3
 90.45876pt>
 File: streamit-paper/graphics/appendixgraphs/fm-total2.pdf Graphic file (type p
 df)
@@ -2523,7 +2527,7 @@ Package pdftex.def Info: streamit-paper/graphics/appendixgraphs/fm-total2.pdf u
 sed on input line 49.
 (pdftex.def)             Requested size: 412.56497pt x 196.92094pt.
 
-<streamit-paper/graphics/appendixgraphs/insertion-total2.pdf, id=1958, 818.0562
+<streamit-paper/graphics/appendixgraphs/insertion-total2.pdf, id=1959, 818.0562
 4pt x 390.45876pt>
 File: streamit-paper/graphics/appendixgraphs/insertion-total2.pdf Graphic file 
 (type pdf)
@@ -2537,7 +2541,7 @@ Package pdftex.def Info: streamit-paper/graphics/appendixgraphs/insertion-total
 LaTeX Warning: Float too large for page by 32.28752pt on input line 55.
 
 
-<streamit-paper/graphics/appendixgraphs/matmul-total2.pdf, id=1959, 818.05624pt
+<streamit-paper/graphics/appendixgraphs/matmul-total2.pdf, id=1960, 818.05624pt
  x 390.45876pt>
 File: streamit-paper/graphics/appendixgraphs/matmul-total2.pdf Graphic file (ty
 pe pdf)
@@ -2546,7 +2550,7 @@ Package pdftex.def Info: streamit-paper/graphics/appendixgraphs/matmul-total2.p
 df used on input line 58.
 (pdftex.def)             Requested size: 412.56497pt x 196.92094pt.
 
-<streamit-paper/graphics/appendixgraphs/radix-total2.pdf, id=1960, 818.05624pt 
+<streamit-paper/graphics/appendixgraphs/radix-total2.pdf, id=1961, 818.05624pt 
 x 390.45876pt>
 File: streamit-paper/graphics/appendixgraphs/radix-total2.pdf Graphic file (typ
 e pdf)
@@ -2735,14 +2739,17 @@ Underfull \hbox (badness 10000) in paragraph at lines 293--298
 (./chapter3/chapter3.aux) (./conclusion/conclusion.aux)
 (./appendix/appendix1.aux))
 
+LaTeX Warning: There were undefined references.
+
+
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 30273 strings out of 494953
- 600849 string characters out of 6180977
- 919685 words of memory out of 5000000
- 32800 multiletter control sequences out of 15000+600000
+ 30275 strings out of 494953
+ 600890 string characters out of 6180977
+ 919727 words of memory out of 5000000
+ 32802 multiletter control sequences out of 15000+600000
  81807 words of font info for 166 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  62i,18n,96p,10386b,1838s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -2760,10 +2767,10 @@ xlive/texmf-dist/fonts/type1/urw/helvetic/uhvro8a.pfb></usr/share/texlive/texmf
 1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utm
 bi8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/
 share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on infthesis-template.pdf (190 pages, 4716756 bytes).
+Output written on infthesis-template.pdf (190 pages, 4716738 bytes).
 PDF statistics:
- 2211 PDF objects out of 2487 (max. 8388607)
- 1431 compressed objects within 15 object streams
+ 2212 PDF objects out of 2487 (max. 8388607)
+ 1432 compressed objects within 15 object streams
  0 named destinations out of 1000 (max. 500000)
  433 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -46,7 +46,7 @@ When dealing with tightly-knit loops, compositions may perform poorly due to the
 Unrolling loops reduces the number of blocks required to execute the loop and increases the size of the blocks, thus reducing the Synchronisation Cost and increasing ILP.
 For example, the innermost loop in Listing~\ref{lst:small} should be completely unrolled and its outer loop unrolled to increase the block size.
 
-There are certain factors limit the usefulness of loop unrolling.
+There are certain factors that limit the usefulness of loop unrolling.
 In the evaluated EDGE architecture, blocks may not have more than 32 load or store instructions as described in Chapter~\ref{chp:Background} section~\ref{sec:edge_isa}.
 Therefore unrolling memory intensive loops will not always drastically increase the size of a block if the block is composed mainly of load and store instructions, as the EDGE compiler will have to split blocks if they contain more than 32 load/store instructions.
 However as it will generate blocks with fixed branches it reduces the strain on branch prediction.

@@ -13,7 +13,7 @@ This section explores how core composition performance depends on branch predict
     \label{fig:motivation_fetch}
 	\vspace{1em}
 \end{figure}
-Chapter~\ref{chp:cases} section~\ref{sec:lim_study} highlighted the importance of branch prediction accuracy when fusing a high amount of cores.
+Chapter~\ref{chp:cases} section~\ref{sec:lim_study} highlighted the importance of branch prediction accuracy when fusing a high number of cores.
 To maximise utilisation, a core can have multiple blocks in its instruction window.
 In this thesis, the instruction window is segmented into four lanes, each of which can hold a block of up to 32 instructions.
 If the program executing mainly has small blocks, then if it is running on a 16 core composition, the branch prediction accuracy needs to be as high as 98\% to ensure that the cores are fetching blocks on the correct execution path (see Chapter~\ref{chp:cases} section~\ref{sec:lim_study}).
@@ -46,7 +46,7 @@ The figure shows that by modifying the fetching scheme a 16 core composition can
 \subsection{Data dependencies between blocks}
 
 In the EDGE architecture, physical registers are used for inter-block communication.
-For example, in the code found in Listing~\ref{lst:mser_snipet} shows a loop found in the \bm{MSER} benchmark the value of the variable \textit{nvisited} which is used in both the header and loop body will be passed from one block to another via a register read and write.
+For example, the code found in Listing~\ref{lst:mser_snipet} shows a loop found in the \bm{MSER} benchmark when the value of the variable \textit{nvisited}, which is used in both the header and loop body, will be passed from one block to another via a register read and write.
 
 \lstset{
 	backgroundcolor=\color{lbcolor},
@@ -113,8 +113,8 @@ If the data dependencies are not resolved quickly enough, then this causes block
 If cores do not have to wait on data dependencies, this can increase efficiency of core compositions, as they can execute their blocks independently.
 Figure~\ref{fig:motivation_reg} shows how an optimal configuration of the processor, one that can fetch blocks in parallel, has perfect branch prediction and can immediately resolve data dependencies can improve performance on \bm{MSER}.
 The speedup is obtained by comparing the execution time of core compositions to a normal single core, without perfect branch prediction.
-The figure also shows the performance of a "normal" core composition configuration that has no perfect branch prediction, serialised block fetches and cannot resolve data dependencies immediately.
-As shown in the Figure~\ref{fig:motivation_reg}, a 16 core composition can now get a speedup of up to 3x, compared to the 2x when using only perfect branch prediction and the OF scheme.
+The figure also shows the performance of a ``normal" core composition configuration that has no perfect branch prediction, serialised block fetches and cannot resolve data dependencies immediately.
+A,s shown in the Figure~\ref{fig:motivation_reg}, a 16 core composition can now get a speedup of up to 3x, compared to the 2x when using only perfect branch prediction and the OF scheme.
 %This is due to the fact that register dependencies are no longer serialising some of the computation between blocks, and thus blocks can be executed in parallel.
 
 Serialised execution due to data dependencies is a common problem for superscalar processors~\cite{peraisVTAGE2014}.

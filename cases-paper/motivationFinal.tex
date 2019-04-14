@@ -98,7 +98,7 @@ for (i = 0; i < nr; i++)
 
 Applications often feature different phases of IPC due to varying loop patterns.
 To illustrate this Figure~\ref{fig:disp_ex} plots the IPC performance variation over the execution of the \bm{Disparity} Benchmark from the San-Diego Vision Benchmark Suite (SD-VBS)~\cite{sdvbs} on core compositions of sizes 4 and 16 respectively.
-IPC is a natural method of evaluating the performance of a core composition as increasing the size of the composition can lead to a higher amount of instructions executing per cycle.
+IPC is a natural method of evaluating the performance of a core composition as increasing the size of the composition can lead to a higher number of instructions executing per cycle.
 In this Figure, the x-axis tick represents a certain number of blocks (see Chapter~\ref{chp:Background} Section~\ref{sec:edge_isa}) that are committed rather than being a measure of time in cycles.
 This is why the high IPC phases for both compositions appear to last the same length of time even though the 16 core-composition executes the blocks faster.
 The reason why the number of blocks committed is used as a measurement of time is due to the fact that the number of blocks necessary to execute a program are independent of the size of a core-composition.
@@ -116,7 +116,7 @@ This is due to the fact that it uses 4 times as many resources as the 4 core com
 Thus, the static 16 core composition is considered energy inefficient during half the execution of the program.
 
 On the other hand, if the DMP is reconfigured at runtime, the core composition can switch to 4 cores when in the low-IPC phase to save on energy and switch to the 16 core composition when in the high IPC phase to maximise speedup.
-In this situation, runtime reconfiguration allows to maximise speed whilst being energy efficient; a goal that cannot be achieved via static ahead of time configurations.
+In this situation, runtime reconfiguration allows to maximise speed whilst being energy efficient; a goal that cannot be achieved via static ahead of time configuration.
 
 %Maybe, just maybe, add a graph showing how the size of the blocks change (need data on this).
 \subsection{Code Optimisations}
@@ -141,7 +141,7 @@ Figure~\ref{fig:compmotiv} illustrates the impact of applying loop transformatio
 In this case, the two main transformations are loop unrolling and loop interchanging.
 The Figure shows the IPC performance of a 16 core composition with and without optimisations.
 For example, in Listing~\ref{lst:high_ipc}, the nested loop at lines 14 to 16 has a data dependency between iterations; switching the for loop headers can get rid of the dependency.
-As can be seen, the impact of these transformations can be large, leading to an 12x improvement on IPC.
+As can be seen, the impact of these transformations can be large, leading to an 12x improvement in IPC.
 Figure~\ref{fig:compmotiv} shows that the optimisations allow the core-composition to sustain a high IPC phase longer than without the optimisations.
 Longer high IPC phases also means that the DMP will require less switching between core compositions, thus incurring less of a reconfiguration penalty.
 However, it also demonstrates that not all of the code in a program can be optimised, as the low-IPC phases do not change.

@@ -23,7 +23,7 @@ Thus core composition puts a strain on the branch predictor since efficiently us
 
 Depending on the sizes of the blocks and the number of cores in the composition, the branch predictor has to meet a different accuracy requirement in order to ensure that all cores are being used efficiently.
 In this case, efficiency is defined by cores in a composition fetching blocks from the correct branch path, meaning cores in the composition are executing useful code.
-Given a composition of size \textit{CompSize} and average block size \textit{ABS}, the minimum branch prediction accuracy required to ensure efficient use of the composition can be determined using Formula~\ref{form:minpred} where \textit{BlocksInFlight} can be calculated using the equation~\ref{form:blocks}.
+Given a composition of size \textit{CompSize} and average block size \textit{ABS}, the minimum branch prediction accuracy required to ensure efficient use of the composition can be determined using Equation~\ref{form:minpred} where \textit{BlocksInFlight} can be calculated using equation~\ref{form:blocks}.
 The groups in the Equation are derived from hardware limitations: the instruction window is divided into 4 lanes that can take a block of up to 32 instructions each.
 The -1 is due to the fact that when a program is executing the first block does not depend on a branch prediction, thus at any point during the execution of a program, there is a non-speculative block that does not need to predicted.
 
@@ -51,9 +51,9 @@ RequiredAccuracy(ABS,CompSize)= \frac{BlocksInFlight(ABS) \times CompSize- 1}{Bl
 \end{figure}
 Figure~\ref{fig:req_pred} plots the results of using Equation~\ref{form:minpred} with different block sizes and core composition sizes.
 Adding extra physical cores to a composition requires an increasingly accurate branch predictor, especially when the size of a block is under 50 instructions.
-This provides two insights; first of all large compositions will need to run on code sections with less control flow as they are more sensitive to branch mispredictions.
+This provides two insights; first of all large compositions need to run on code sections with less control flow as they are more sensitive to branch mispredictions.
 Second of all, branch prediction can be a simple method of evaluating the current effectiveness of a core composition.
-Given a certain number of cores, if the prediction accuracy is under the limits presented in Figure~\ref{fig:req_pred} it can be easily determine that the core composition size is sub-optimal.
+Given a certain number of cores, if the prediction accuracy is under the limits presented in Figure~\ref{fig:req_pred} it can be easily determined that the core composition size is sub-optimal.
 
 \subsection{Synchronisation Cost}
 
@@ -99,7 +99,7 @@ This indicates that large compositions should be avoided when dealing with small
 \paragraph{Summary}
 
 This section estimates the worst-case IPC for a core composition using Average Block Size, Average Branch Prediction, and Synchronisation Cost using the analytical model presented in Equation~\ref{form:wcetMath}.
-Figure~\ref{fig:lm_summ} presented a worst-case estimate of IPC performance assuming each core can sustain an IPC of 2.
+Figure~\ref{fig:lm_summ} presents a worst-case estimate of IPC performance assuming each core can sustain an IPC of 2.
 The figure using Equation~\ref{form:wcetMath} with different block sizes, accuracies and core composition sizes to generate estimated IPC values.
 Figure~\ref{fig:lm_summ} shows that to obtain optimal performance requires a high branch prediction accuracy and large blocks.
 It shows that larger compositions can easily under-perform; for example it can be seen that 16 composed cores often have IPCs under 15, meaning that each core has an IPC under~1.

@@ -14,11 +14,11 @@ This section therefore starts with a block analysis of the SD-VBS benchmarks.
 
 In a block based D-VTAGE predictor a single prediction request fetches multiple values.
 Due to the fact that the block size is fixed ahead of time~\cite{peraisBeBop2015}, determining the correct size is important.
-Having a block with many values means that the D-VTAGE predictor can predict a higher number of register reads for a single EDGE block, however this comes at the expense of having less blocks in the predictor tables.
+Having a block with many values means that the D-VTAGE predictor can predict a higher number of register reads for a single EDGE block, however this comes at the expense of having fewer blocks in the predictor tables.
 On the other hand, a small block size allows to have multiple blocks stored at a time but means that not all instructions can have their values predicted in the EDGE block.
 
-To determine the size, all the EDGE blocks of the SD-VBS benchmarks are analysed to determine the average register read and write count is per block.
-The writes are tracked as it provides information on the potential amount of register dependencies found in each of the applications.
+To determine the size, all the EDGE blocks of the SD-VBS benchmarks are analysed to determine the average register read and write count per block.
+The writes are tracked as it provides information on the potential number of register dependencies found in each of the applications.
 The left hand side of figure~\ref{fig:edge_reg_read} shows the average number of register read and writes for each of the benchmarks.
 Whilst \bm{Disparity} \bm{Localization}, \bm{Texture\_Synthesis} and \bm{Tracking} have higher register read counts than the average, most of them only have 5 writes per block.
 This means that having a D-VTAGE block size of 5 could capture all dependencies; however this would require detection of which reads are data-dependent, which is beyond the scope of this thesis.
@@ -37,12 +37,12 @@ As Section~\ref{chp:chp3:sec:analysis} showed these benchmarks benefit from valu
 
 One method of understanding how the block based D-VTAGE predictor will perform is to study the number of unique blocks found in each of the benchmarks.
 Benchmarks that feature a smaller number of unique blocks can potentially benefit more from value prediction as the predictor cannot hold many blocks at a time.
-Reporting all unique blocks executed is not a proper evaluation of the variety of blocks found in the benchmark, as some will most certainly be executed more times than other.
+Reporting all unique blocks executed is not a proper evaluation of the variety of blocks found in the benchmark, as some will most certainly be executed more times than others.
 To account for this, blocks are sorted by number of occurrences in descending order, and then added to the unique block counter as long the number of occurrences of visited blocks is under a percentage of total number of blocks executed.
 
-The right hand side of figure~\ref{fig:edge_reg_read} shows the number of unique blocks found in each benchmark that account for 50,80,90 and 99\% of the total number of executed blocks.
-As can be seen, applications \bm{Disparity}, \bm{Multi\_NCut} and \bm{Sift} \bm{Stitch} and \bm{Tracking} execute less than 50 unique blocks during 90\% of its total execution.
-This is promising as it means that there is a high chance that the predictor requires less entries to capture all possible blocks in the application.
+The right hand side of figure~\ref{fig:edge_reg_read} shows the number of unique blocks found in each benchmark that account for 50\%,80\%,90\% and 99\% of the total number of executed blocks.
+As can be seen, applications \bm{Disparity}, \bm{Multi\_NCut} and \bm{Sift} \bm{Stitch} and \bm{Tracking} execute fewer than 50 unique blocks during 90\% of its total execution.
+This is promising as it means that there is a high chance that the predictor requires fewer entries to capture all possible blocks in the application.
 On the other hand, \bm{Localization}, and \bm{SVM} execute over 100 blocks throughout 90\% of their execution, twice as many as the previously mentioned benchmarks.
 For these applications, it might be harder to predict values as new blocks may overwrite entries in the predictor.
 
@@ -66,7 +66,7 @@ Confidence Value & 4 or 7 with FPC \\ \bottomrule
 \end{table}
 
 This section demonstrates how the block based D-VTAGE value predictor improves the performance of core composition using the round-robin fetch scheme (RRF).
-Serial fetch is not explored since previous section showed that when using value prediction, RRF always provides the best results.
+Serial fetch is not explored since the previous section showed that when using value prediction, RRF always provides the best results.
 The results reported in this section represent the culmination of hardware modifications for core composition discussed in this chapter.
 All benchmarks are executed using a 16 core composition.
 
@@ -125,15 +125,15 @@ Throughout this section, the configurations of D-VTAGE are labelled: \textbf{D-V
 On average, using a D-VTAGE value predictor with the RRF scheme results in an average speedup of 1.32x.
 When comparing the performance between the different configurations, the main observation is that using a higher confidence results in better performance, however slight, 1.35x for D-VTAGE\_7\_16 compared to 1.31x for D-VTAGE\_4\_16.
 However, for the benchmark \bm{Disparity} using a higher confidence leads to less of a performance increase 1.75x speedup compared to 2.0x for a confidence counter of 4.
-This is due to the fact that \bm{Disparity} is composed of loops with highly predictable values, and thus deploying predictions faster results in better performance improvements without risking a higher misprediction rate.
-On the other hand, \bm{Localization} and \bm{MSER} performs worse with a lower confidence counter, and result in a slowdown.
+This is due to the fact that \bm{Disparity} is composed of loops with highly predictable values, and thus deploying predictions earlier results in better performance improvements without risking a higher misprediction rate.
+On the other hand, \bm{Localization} and \bm{MSER} perform worse with a lower confidence counter, and result in a slowdown.
 Benchmarks \bm{Sift} and \bm{Tracking} perform better with a higher confidence, but the results of using a 4 bit counter never negatively impact performance.
 
 The 16 values per block does not lead to better performance than 8 values but stays on par with it.
 The only noticeable difference is with \bm{MSER} where the smaller block performs better.
 A lower number of values per block allows the predictor to capture a higher variety of executed blocks.
 Figure~\ref{fig:edge_reg_read} shows that \bm{MSER} has at least 50 different blocks throughout 99\% of its execution, and on average, only 3 register reads per block.
-Therefore, for \bm{MSER}, a predictor with less values per entry can capture more of the variation.
+Therefore, for \bm{MSER}, a predictor with fewer values per entry can capture more of the variation.
 On the other hand, for \bm{Disparity}, 16 values per entry is required to get the best performance.
 This once again corroborates with the information from Figure~\ref{fig:edge_reg_read}.
 \bm{Disparity} has a higher average of reads per block, but features a very low number of unique blocks.
@@ -164,7 +164,7 @@ Also a single accurate register prediction may not necessarily improve performan
 In this chapter, only blocks that are committed count towards the predicted blocks as any flush will artificially inflate the coverage count.
 Figure~\ref{fig:vtag_cov_block} displays the number of blocks which have at least one prediction, relative to the total number of committed blocks and the number of predicted register reads relative to the total executed register reads.
 The figure shows similar patterns for both coverages: the predictors with lower confidence counters have a higher coverage, 65\% compared to 31\% for the high confidence counter.
-This is normal: lower confidence allows predictions to be used with faster, which will increase coverage.
+This is normal: lower confidence allows predictions to be used earlier, which will increase coverage.
 
 Whilst the block coverage is high, the coverage for registers reveals that not all registers are being predicted.
 Once again, lower confidence equates to higher coverage, however this time it's 30\% for a confidence of 4 and under 25\% for a confidence of 7 with FPC.

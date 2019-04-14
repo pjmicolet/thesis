@@ -1,6 +1,6 @@
 \chapter{Conclusion}~\label{chp:conclusion}
 This thesis has explored how static ahead of time reconfiguration, dynamic runtime adaptation and micro-architectural modifications can make dynamic multicore processors (DMP) more practical.
-Chapter~\ref{chp:streamit} showed that a multi-threaded application can automatically be mapped ahead of time to a DMP, where different number of cores are composed for each thread.
+Chapter~\ref{chp:streamit} showed that a multi-threaded application can automatically be mapped ahead of time to a DMP, where different numbers of cores are composed for each thread.
 Chapter~\ref{chp:cases} demonstrated that at runtime the DMP can automatically change the size of a composition to ensure that the system is maximising speed whilst being energy efficient.
 Both chapters extract features from the software and use machine learning techniques such as linear regression and k Nearest Neighbours to determine correct configurations.
 Using cross-validation, the two chapters show that the automatic reconfiguration can be used in new unseen situations.
@@ -47,7 +47,7 @@ This allows programmers to be able to immediately benefit from the DMP's flexibi
 
 
 \subsection{Adapting hardware to improve core composition performance}
-Chapter~\ref{chp:hardchanges} proposed two hardware addition to the DMP in order to improve performance of core composition.
+Chapter~\ref{chp:hardchanges} proposed two hardware additions to the DMP in order to improve performance of core composition.
 These features aim to reduce data-dependencies between cores in a composition and also increase the percentage of time each core in a large composition was active.
 First, it analysed how the current fetching mechanism was a major cause of inefficiency for large core compositions when blocks are small.
 As the current fetching mechanism focuses on filling the instruction window of a single core, many cores in the composition are left idle.
@@ -81,13 +81,13 @@ A Register-transfer level (RTL) implementation of the EDGE processor that featur
 \subsection{Processor configuration}
 The design exploration and results produced in this thesis all used the same core configuration.
 Naturally, this means that some of the observations are specific to the processor that was used during the experiments.
-The thesis does provide a solid methodology for creating models that can predict a good configuration for any dynamic multicore processors but it cannot provide absolute truths.
+The thesis does provide a solid methodology for creating models that can predict a good configuration for any dynamic multicore processor but it cannot provide absolute truths.
 For example, if cores can only fetch a single block at any given time, then composing cores would most likely improve performance at a faster rate, since the performance of a single core would be lower.
 This means that the analysis of what loop optimisations make software run faster on compositions is potentially tied to the configuration of the cores.
 Thus, whilst the results presented throughout this thesis demonstrate that DMPs can be made more practical, it does not provide insights on when core composition should be a feature of a processor.
 
 \subsection{Compiler}
-In chapters ~\ref{chp:streamit}, \ref{chp:cases} one of the factors that limits performance in core composition is block size.
+In chapters ~\ref{chp:streamit} and \ref{chp:cases}, one of the factors that limits performance in core composition is block size.
 The chapters explored source-level transformations to improve the size of blocks.
 However code transformations at the compiler level could potentially increase block sizes for some programs that could not be improved manually.
 This could potentially affect the amount of instruction level parallelism found in some of the benchmarks explored throughout this thesis, which, naturally could affect energy savings when considering dynamic reconfiguration.
@@ -95,7 +95,7 @@ This could potentially affect the amount of instruction level parallelism found 
 Furthermore hyperblock formation is currently limited to the merging of two blocks, which once again limits the potential size of a block.
 Hyperblock formation also does not take into account any profiling information which could potentially impact the formation of blocks.
 For example, the merging of two blocks that form an if/else statement is only useful if both conditions happen fairly regularly.
-If this is not the case and one of the statements is taken most of the time then the block's size is only artificially increased, as some of the predicated instructions will never fire.
+If this is not the case and one of the statements takes most of the time then the block's size is only artificially increased, as some of the predicated instructions will never fire.
 
 
 \section{Future Work}
@@ -107,11 +107,11 @@ Employing optimisation techniques such as modulo scheduling can potentially help
 As for hyperblock formation, using execution traces to determine which blocks should be merged together can help increase the usefulness of hyperblocks.
 
 On the hardware side, it is important to evaluate when core composition should be implemented in a processor.
-Currently, the focus is on demonstrating that composing cores can lead to performance improvements, however there is no research being conducted on the type of cores that can benefit the most from composition.
+Currently, the focus is on demonstrating that composing cores can lead to performance improvements, however there is no research being conducted on the types of cores that can benefit the most from composition.
 Exploring how core composition can speedup the performance of processors with different core configurations can help shed light as to when core composition should be implemented.
 This should be done by conducting a micro-architectural design space exploration where structures such as load-store queues, number of lanes a core has and cache sizes are modified.
 
 Finally, pairing core composition with speculative parallel execution could provide an interesting avenue of research.
 For example, programs that feature irregular paralellism have phases that alternate between embarrassingly parallel work, and highly serialised work.
-A processor could begin my attempting to extract as much parallelism as possible via speculative parallelism, and adapt itself via core composition if the workload does not feature any parallelism.
+A processor could begin by attempting to extract as much parallelism as possible via speculative parallelism, and adapt itself via core composition if the workload does not feature any parallelism.
 This could help improve the performance of graph algorithms that often feature phases of parallel and serial work.

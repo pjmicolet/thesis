@@ -19,7 +19,7 @@ Linear regression, which makes predictions using a weighted sum of the input fea
 It is chosen as it has been as it can easily be implemented in hardware~\cite{lee2006linreg,Lukefahr2012Composite} and has a low overhead when computing the sum.
 The model is trained offline using the traces gathered from the prior analysis for the \textbf{DSpeed} scenario which maximises energy savings while maintaining performance.
 
-Figure~\ref{fig:linmod} is a shows how the linear model is trained.
+Figure~\ref{fig:linmod} shows how the linear model is trained.
 The dataset consists of a set of four input features (average block size, and percentage of integer, floating point and load operations) and the optimal number of cores for each time tick for each program.
 These features are chosen as they are easy to extract from the hardware.
 The reason stores are not in the feature vector is due to the fact that a block is comprised only of integer, floating point, load and store operations.
@@ -68,7 +68,7 @@ By increasing the core count on load heavy blocks this will improve performance 
 \subsection{Results}
 
 To evaluate the performance of the model leave-one-out cross-validation  is used; it is a standard machine-learning methodology which tests the model using not seen during training.
-For instance, if the model is tested for one program, let say \textit{Disparity}, the model is then trained using the dataset from all the other programs combined.
+For instance, if the model is tested for one program, for example \textit{Disparity}, the model is then trained using the dataset from all the other programs combined.
 Then the resulting trained linear model is used to predict the optimal core number for each time tick of the disparity program and report the performance achieved.
 
 Figure~\ref{fig:speedlr} shows the performance in terms of speed and energy that is achieved using the linear model normalised by a fixed static configuration.
@@ -82,5 +82,5 @@ This benchmark is therefore an outlier compared to the rest of the set, as it is
 
 The performance is also compared with the best possible choice of dynamic reconfiguration, \textbf{DSpeed} which acts as an Oracle.
 As can be seen, the linear model is able to exploit similar energy savings to the \textbf{Dspeed} scheme in most cases.
-On average it reduces energy by 37\%, which is within 5\% of the 42\% achievable by the \textbf{Dspeed} scheme.
+On average it reduces energy by 37\%, which is within 5 percentage points of the 42\% achievable by the \textbf{Dspeed} scheme.
 These results show that it is possible to implement a simple realistic lightweight scheme which offers large energy savings.

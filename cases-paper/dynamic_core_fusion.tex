@@ -1,4 +1,4 @@
-This section discusses a dynamic core composition scheme that is created by generating traces the ahead-of-time static compositions.
+This section discusses a dynamic core composition scheme that is created by generating traces of the ahead-of-time static compositions.
 The section first describe how the traces are generated for the dynamic core composition schemes.
 Before the analysis two types of static core composition are defined:
 
@@ -104,7 +104,7 @@ This scheme is used to demonstrate how dynamic reconfiguration can achieve the s
 Figure~\ref{fig:speedres} shows the speedup of \textbf{DSpeed} and Static Best (SB) and the respective energy consumption.
 The results are normalised against the performance of Static Suite (SS), which is 8 cores fused.
 The SS core count is obtained by averaging the number of cores that leads to the fastest execution time for each benchmark.
-The execution times for \textbf{DSpeed} and SB are the same as the dynamic scheme is designed to match the static best's execution time.
+The execution times for \textbf{DSpeed} and SB are the same as the dynamic scheme designed to match the static best's execution time.
 As can be seen some benchmark perform better when using benchmark specific core compositions rather than SS.
 Both \bm{Disparity} and \bm{Sift} obtain a 1.25x speedup when using the SB scheme whilst \bm{Tracking} benefits from a 1.10x speedup.
 This reconfirms the concept that even static core-composition is a feature that leads to performance improvements over design time configurations.
@@ -118,7 +118,7 @@ This reconfirms the concept that even static core-composition is a feature that 
 \end{figure}
 
 When looking at the Energy graph of Figure~\ref{fig:speedres}, it is clear where the SS scheme fails.
-Benchmarks \bm{MSER} and \bm{Multi\_NCut} feature very little improvements when using core composition, if any, therefore the SS will perform very poorly when it comes to energy consumption for the benchmarks.
+Benchmarks \bm{MSER} and \bm{Multi\_NCut} feature very little improvement when using core composition, if any, therefore SS will perform very poorly when it comes to energy consumption for the benchmarks.
 In the case of those benchmarks, the energy consumption is over 2x less on SB than it is on SS.
 In this situation, SS is analogous to designing a large physical core meant to extract a lot of IPC for single-threaded performance and executing low IPC benchmarks on it.
 This core will end up consuming too much energy and lead to low performance increases.
@@ -129,7 +129,7 @@ However, SB is still not an optimal solution.
 For the benchmarks \bm{Disparity}, \bm{Sift}, \bm{Texture\_Synthesis} the energy consumption is much higher.
 This is due to the fact that these benchmarks perform best on a 16-core system, however as seen in Figure~\ref{fig:stddev}, the variation in performance always increases when fusing this many cores.
 In this situation, whilst 16 cores does result in the fastest execution times, the energy consumption is higher than SS.
-This shows the limitations of static configurations overall, whether it be at design time or ahead of time: the lack of flexibility means that compromises have to be made.
+This shows the limitations of static configuration overall, whether it be at design time or ahead of time: the lack of flexibility means that compromises have to be made.
 In the case of aiming for the fastest execution times energy consumption may increase.
 
 %More here
@@ -158,8 +158,8 @@ This illustrates the greatest advantage of using a DMP since the number of compo
 %Check if th
 Up until now, the chapter has assumed a reconfiguration latency of 100 cycles whenever dynamic reconfiguration occurs as explained in Chapter~\ref{chp:setup}.
 This section studies the impact of a larger reconfiguration overhead on energy savings.
-First, figure~\ref{fig:avlen} shows the average phase length for each benchmarks when maximising energy savings while maintaining performance (\textbf{DSpeed}).
-As can be seen, the majority of the benchmarks run for long period of several ten of thousands cycles before any switching occurs.
+First, figure~\ref{fig:avlen} shows the average phase length for each benchmark when maximising energy savings while maintaining performance (\textbf{DSpeed}).
+As can be seen, the majority of the benchmarks run for long period of several tens of thousands of cycles before any switching occurs on average.
 Therefore, even if the reconfiguration latency is increased to a larger value (\eg 1,000 cycles), its impact might be minimal.
 For these applications, the phase length is also tied to the size of the input, the phases may increase when working on inputs such as high definition images.
 
@@ -169,7 +169,7 @@ Figure~\ref{fig:enlatency} illustrates this perfectly, showing how energy behave
 For each latency value, the best trace of reconfiguration is determined to keep performance constant while minimising energy (\textbf{DSpeed}).
 The left y-axis expresses the energy savings relative to the static scheme, while the right y-axis shows the total number of switches.
 The energy savings remains high up to a latency of 1,000 cycles, with a noticeable decrease in the number of switches.
-For latency values over 1,000 cycles, the energy savings drop considerably, with very few switching occurring.
+For latency values over 1,000 cycles, the energy savings drop considerably, with very little switching occurring.
 This data shows that even if the reconfiguration overhead is 1,000 cycles, average energy savings of 38\% are possible compared to 42\% when the overhead is 100 cycles.
 
 \paragraph*{Summary}

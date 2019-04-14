@@ -57,7 +57,7 @@
 The main issue with the SF scheme is that cores in a composition depend on each other in order to fetch blocks.
 For example, if Listing~\ref{lst:basic} is compiled without unrolling and executed on a core composition, each core has to fetch 4 iterations of the loop before sending the next fetch request to another core.
 To illustrate how fetching can be a bottleneck in this situation, instrumentation is added to the simulator to track when cores fetch blocks in order to be able to visualise how long it takes to fill up a core composition.
-Figure~\ref{fig:fetch_norm} plots the when cores fetch blocks for a 4 core composition executing the code in Listing~\ref{lst:basic}.
+Figure~\ref{fig:fetch_norm} plots when cores fetch blocks for a 4 core composition executing the code in Listing~\ref{lst:basic}.
 Each point represents a block fetch, the X-axis represents the time (in cycles) whilst the Y axis represents which core has started fetching a block.
 The figure shows that there are 50 cycles between the first block fetched by Core 0 and the first block fetched by Core 3.
 Given that a block in Listing~\ref{lst:basic} takes only 10 cycles to execute, this means that Core 0 is inactive when Core 3 fetches.
@@ -68,7 +68,7 @@ This is due to the fact that once Core 0 submits a fetch request to Core 1, it w
 %When using multithreading, cores fetch blocks independently, thus maximizing throughput easily; the size of the block will not have the same impact on performance.
 %A mechanism that alleviates fetch dependencies between cores is a first step in improving block throughput for core-compositions.
 
-\subsection{Round Robin Fetching Scheme}
+\subsection{Round-Robin-Fetching Scheme}
 
 %Fetching blocks in a serial fashion currently makes large core compositions more difficult to use efficiently when blocks are small.
 %Whilst serialising fetches aims to improve the efficiency of a single core by ensuring that its instruction window is full, it makes populating large core compositions a challenging task.
@@ -82,13 +82,13 @@ Finally it compares the performance of the new fetching scheme with the current 
 \subsubsection{Generalised form}
 The advantage of core composition is that multiple cores can execute the same thread in parallel.
 Thus, the fact that the SF scheme prioritises filling a single core before using another core in the composition is counter-intuitive as it reduces the chance that all the cores are in use.
-The new fetching scheme has two design objectives: reduce the number of times core's depend on each other to fetch blocks and ensure that each core in the composition is always executing at least one block.
+The new fetching scheme has two design objectives: reduce the number of times cores depend on each other to fetch blocks and ensure that each core in the composition is always executing at least one block.
 Sequential blocks should not be found on the same core, instead they should all be on separate cores and fetched in a round robin fashion.
 This ensures a more equal distribution of work amongst all the cores in the composition.
 
 %Currently, if a core does not have a block in its instruction window, it waits until another core in the composition sends it a fetch request.
 If blocks are distributed equally amongst all cores using a round robin model, this may still require that each core must submit a fetch request to the next core.
-This means that changing the fetching scheme to a round robin scheme does not necessarily stop cores from depending from one another to fetch blocks.
+This means that changing the fetching scheme to a round robin scheme does not necessarily stop cores from depending on one another to fetch blocks.
 However, once a core has a block it can use branch prediction to predict the next block it must fetch, rather than waiting for another fetch request from a core.
 As this new fetching mechanism employs a round robin scheme, the branch predictor must predict a block that is multiple steps into the future rather than the immediate branch.
 By allowing cores to fetch blocks in \textit{strides}, instead of sequentially, the new fetching mechanism not only ensures cores have an equal amount of work, but that they can fetch in parallel.
@@ -173,7 +173,7 @@ branches = prediction[i+1, i+n]\\
 \paragraph*{Fetching mechanism}
 Algorithm~\ref{alg:fetch} explains how the new fetching scheme, named Round Robin Fetch (RRF) works for \textit{n} cores in a composition.
 In the general case, when a core composition is created, each core, aside from the core that initiated the composition, is empty.
-When a core fetches a $block_i$, if the next core is empty, it makes two branch predictions, one for $block_{i+1}$ and one for $block_{i+n}$.
+When a core fetches $block_i$, if the next core is empty, it makes two branch predictions, one for $block_{i+1}$ and one for $block_{i+n}$.
 The predictions do not have to be done on the same cycle, however previous work on multi-block ahead branch predictors demonstrated that two predictions per cycle is possible~\cite{SeznecMultipleBlock}.
 The core submits a fetch request to the next core in the composition for $block_{i+1}$ and then uses the prediction $block_{i+n}$ to fetch its next block.
 If the next core is not empty, then the current core simply predicts $block_{i+n}$.
@@ -190,7 +190,7 @@ In this chapter, a core can only have one buffered PC at a time.
 \paragraph*{Committing mechanism}
 Algorithm~\ref{alg:commit} shows how blocks are committed in RRF.
 When committing $block_i$, the core sets the next core in line to be the non-speculative core.
-This is due to the fact that the next core will always have $block_i+1$.
+This is due to the fact that the next core will always have $block_{i+1}$.
 If the next core in line does not yet have $block_{i+1}$ due to no prediction having been made, then the committing core will submit the resolved PC to the next core, rather than fetching it for itself.
 If the core has a PC in its buffer, it immediately starts fetching a new block.
 However, if it has no PC in its buffer, it must wait on another core to send it a request.
@@ -231,7 +231,7 @@ Whilst RRF allows for cores to fetch out of order in parallel, blocks must still
 This is to ensure that blocks do not execute data-dependent register reads out of order, when dependencies are not yet determined.
 To achieve this, each core maintains a flag that tells it whether or not its oldest - not yet dispatched block - can be dispatched.
 Since blocks are fetched in a round-robin fashion, whenever a core starts dispatching a block, it sets the flag to false, and informs the next core to start fetching.
-Only a single core has this flag set to true, thus insuring blocks are dispatched in order.
+Only a single core has this flag set to true, thus ensuring blocks are dispatched in order.
 In this chapter, compositions are created out of cores that are physically close, and the following block is always on a core that is 1 network hop away (1 clock cycle).
 Assuming, for this architecture, that a hop takes a single cycle, a block can theoretically be dispatched every cycle.
 

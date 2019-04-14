@@ -18,7 +18,7 @@ The IPC is calculated for each time tick, which is set at interval of 640 blocks
 To re-iterate, the interval of 640 blocks was chosen as the largest core composition of size 16 can potentially commit up to 64 blocks at a time.
 Thus measuring performance every 640 blocks allows to fully capture the performance of large compositions without sacrificing loss of information.
 
-Displaying the performance of the core composition of size 16 gives a performance ceiling for all the benchmarks as it is the maximum number of cores which can be composed at any point.
+Displaying the performance of the core composition of size 16 gives a performance ceiling for all the benchmarks as it is the maximum number of cores that can be composed at any point.
 Figure~\ref{fig:sxt} shows that the IPC varies a lot for some of the benchmarks such as \bm{Disparity} or \bm{Localization} where dynamic composition is expected to be especially good.
 For other, such as \bm{Multi\_NCut}, the execution is dominated by a single long phase with constant IPC, which will clearly show no benefit from using dynamic composition.
 
@@ -88,7 +88,7 @@ It can be seen that, for most benchmarks, fusing more cores provides an increase
 Benchmarks \bm{Disparity}, \bm{Localization}, \bm{Sift}, \bm{Stitch}, \bm{Texture Synthesis} and \bm{Tracking} all at least observe a speedup of 2x when using core composition.
 
 However increasing the size of a composition is not always beneficial as can be seen in benchmarks \bm{Localization}, \bm{MSER}, \bm{Multi\_NCut}, \bm{Stich}, and \bm{SVM}.
-For benchmarks \bm{Localization} and \bm{Stitch} the performance increases when fusing up to 8 cores, where-as \bm{MSER} and \bm{Multi\_NCut} never benefit from core composition.
+For benchmarks \bm{Localization} and \bm{Stitch} the performance increases when fusing up to 8 cores, whereas \bm{MSER} and \bm{Multi\_NCut} never benefit from core composition.
 These benchmarks may not see a reduction in performance on 16 cores due to the increase in network traffic, which will make the largest core composition size slower than 8 cores.
 To summarise, when cores are fused, register files, caches and LSQs are shared, which means that cores must communicate via the network to send register or memory requests to other cores when the data they required is not stored locally.
 Thus, having a higher number of cores composed will put pressure on the network.
@@ -102,7 +102,7 @@ Using a composition of size 4 for the \bm{Disparity} benchmark an average of 4.1
 Thus, if the composition could change size, there is a possibility that this could reduce the overall energy consumption of the system by switching from 16 to 4.
 
 Figure~\ref{fig:block_sizes} shows the distribution of block-sizes for each of the benchmarks.
-As two blocks cannot occupy the same lane, which is a segment of the instruction window (see Chapter~\ref{chp:Background}), the block sizes are clustered into groups which represent how ever many number of lanes will be occupied (one lane may execute a block of up to 32 instructions).
+As two blocks cannot occupy the same lane, which is a segment of the instruction window (see Chapter~\ref{chp:Background}), the block sizes are clustered into groups which represent however many lanes will be occupied (one lane may execute a block of up to 32 instructions).
 Using the information discussed in Section~\ref{sec:lim_study}, the size of blocks is a determining factor of whether or not a program may benefit from core composition.
 
 Figure~\ref{fig:block_sizes} helps explain why benchmarks \bm{MSER} and \bm{Multi\_NCut} do not perform any better with core-composition.
@@ -111,14 +111,14 @@ In fact, the most frequent block in \bm{MSER}, comprising 21\% the total execute
 Having such small blocks will always increase both the \textit{SynchronizationCost} and the branch-prediction requirements.
 
 For \bm{MSER}, the fact that an important percentage of blocks are only 8 instructions long signifies that the overhead of fetching enough blocks for a large core-composition and the synchronisation cost for committing them outweighs executing the blocks on a single core.
-The reason there is no degradation of performance is due to the fact that when fusing a high amount of cores, if the overhead of fetching the blocks outweighs the time required to execute then a core will not submit a block address to be fetched by another core in the composition.
+The reason there is no degradation of performance is due to the fact that when fusing a high number of cores, if the overhead of fetching the blocks outweighs the time required to execute then a core will not submit a block address to be fetched by another core in the composition.
 In this case, multiple cores may be composed, but only a single one is executing any code.
 For example, fusing 16 cores and executing \bm{MSER} may in fact result in a single core being used due to it executing blocks faster than it being able to dispatch the blocks to a next core.
 Hence, in this case, \bm{MSER} would be wasting a lot of energy trying to use 16 cores in a composition, whilst effectively only executing on a single core. 
 This explains the lack of scaling for these two benchmarks.
-The source-code of \bm{MSER} and \bm{Multi\_NCut} is explored later on, to demonstrate how such small blocks are generated and why it cannot be improved.
+The source code of \bm{MSER} and \bm{Multi\_NCut} is explored later on, to demonstrate how such small blocks are generated and why it cannot be improved.
 
-Overall, most benchmarks that benefit from large composition will also be met with an important difference in IPC performance.
+Overall, most benchmarks that benefit from large compositions will also be met with an important difference in IPC performance.
 The high difference in IPC performance is evidence of performance phases found in each application which are likely to benefit from dynamic adaptation.
 
 %Need a better name for this
@@ -138,7 +138,7 @@ The high difference in IPC performance is evidence of performance phases found i
   \vspace{1em}
 \end{table}
 
-As previously mentioned, both \bm{MSER} and \bm{Multi\_NCut} do not benefit from core-composition during their predominant phases'.
+As previously mentioned, both \bm{MSER} and \bm{Multi\_NCut} do not benefit from core-composition during their predominant phases.
 This subsection focuses on understanding why this is the case and explores the code that represent the main phases of both of these applications to underline where the problems arise.
 %Other code snipets from other SD-VBS benchmarks are also explored to demonstrate examples of code that perform well on core-compositions.
 
@@ -218,12 +218,12 @@ for(k=0; k<rows; k++) {
 \vspace{1em}
 \end{figure}
 
-It's also important to note that the average branch-prediction accuracy of \bm{MSER} is of 85\%, as shown in Table~\ref{tab:sd-vbsbpred}.
+It's also important to note that the average branch-prediction accuracy of \bm{MSER} is 85\%, as shown in Table~\ref{tab:sd-vbsbpred}.
 Recalling Figure~\ref{fig:req_pred} and the fact that the average block size of \bm{MSER} is under 32 instructions, this means that no composition can be efficiently used.
-Some speedup can still be obtained, as cores in a composition do not need to have all the instruction window full to be able to obtain performance improvements.
+Some speedup can still be obtained, as cores in a composition do not need to have the instruction window full to be able to obtain performance improvements.
 However these improvements are minor, and come at a high energy cost.
 
-To get performance out of \bm{MSER}, this major phase would have to be re-written to use less while loops with complex termination conditions so that larger blocks can be extracted.
+To get performance out of \bm{MSER}, this major phase would have to be re-written to use fewer while loops with complex termination conditions so that larger blocks can be extracted.
 Even with compiler optimisations, due to the fact that the loops are never executing for a long time, and their bodies are small and hard to unroll, it will be difficult to get performance improvements using core composition.
 
 \paragraph*{Multi-NCut}

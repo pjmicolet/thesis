@@ -1,8 +1,8 @@
 The previous chapter explored how static ahead-of-time configuration of a dynamic multicore processor (DMP) can improve the performance of multi-threaded streaming applications and showed how a mix of core and thread partitioning leads to optimal performance.
 Static ahead-of-time configurations can improve the overall performance of programs, however they cannot adapt themselves to exploit the different phases a program may have.
-A program phase can be used to describe multiple concepts, for example regions of code that exhibit different Instruction per cycle (IPC) performances, or variations of instruction mixes.
+A program phase can be used to describe multiple concepts, for example regions of code that exhibit different Instructions per cycle (IPC) performance, or variations of instruction mixes.
 When programs exhibit different phases of IPC, this can result in situations where composing multiple cores may be an inefficient solution, thus wasting resources.
-Chapter~\ref{chp:streamit} explored multi-threaded applications yet core composition is designed to improve the performance of single threaded applications~\cite{ipek2007CoreFusion} as it has become harder to improve performance for these types of applications.
+Chapter~\ref{chp:streamit} explored multi-threaded applications yet core composition is designed to improve the performance of single threaded applications~\cite{ipek2007CoreFusion} as it has become harder to improve performance for these types of application.
 Therefore this chapter focuses on how a DMP can reconfigure itself at runtime to exploit phases of a set of single-threaded applications.
 
 %Core composition is a technique that allows multiple cores to work on a single thread, allowing a DMP to improve the performance of single threaded applications.
@@ -20,7 +20,7 @@ Automating the decision of when to compose cores allows the programmer to solely
 The previous chapter used streaming applications to explore how partitioning a DMP can improve performance.
 Through partitioning, the different computation phases of the streaming programs are essentially divided amongst those threads.
 This chapter explores a set of single-threaded C applications, where phases cannot be isolated into different threads.
-A domain that features different phases of computations and is also prominent in the embedded space is image and vision recognition.
+A domain that features different phases of computation and is also prominent in the embedded space is image and vision recognition.
 Since these applications are often designed as software pipelines, they present different phases throughout their execution, and thus are an interesting case for dynamic adaptation of a DMP.
 
 The chapter starts with an explanation of the theoretical limitations of core composition and what can be expected in terms of performance.

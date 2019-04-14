@@ -11,7 +11,7 @@ Instead of only focusing on improving the source code, analysing how a compositi
 
 In order to improve the performance of larger core compositions, some of the mechanisms may need to be added to the processor.%By modifying how core composition behaves, this can improve the performance of large compositions.
 For example, having to fetch multiple small blocks on large core compositions introduces a fetch latency and reduces the potential speedup.
-Introducing a new way of fetching blocks amongst cores can potentially reduce this latency and thus increasing the efficiency of the composition.
+Introducing a new way of fetching blocks amongst cores can potentially reduce this latency and thus increase the efficiency of the composition.
 %This chapter explores the hardware bottlenecks that reduce the efficiency of core composition, and how to address these concerns by modifying the hardware.
 
 This chapter looks at two features of the processor that have a large impact on performance: the block fetching mechanism in a composition, and data dependencies that arise between blocks.
@@ -55,7 +55,7 @@ To summarise, the contributions are:
 \begin{itemize}
 \item A presentation of a new fetching scheme, Round Robin Fetch that enables better utilisation of large core compositions.
 \vspace{-1em}
-\item An analysis of how how value prediction can improve performance of core composition on the SD-VBS benchmark suite~\cite{sdvbs}.
+\item An analysis of how value prediction can improve performance of core composition on the SD-VBS benchmark suite~\cite{sdvbs}.
 \vspace{-1em}
 \item An implementation and evaluation of the block-based VTAGE value predictor for EDGE, demonstrating that performance can be improved by only predicting register reads.
 \end{itemize}

@@ -7,12 +7,12 @@ Finding a way to predict data can potentially alleviate data dependencies and re
 
 This chapter proposed a round-robin fetching mechanism, where cores do not fetch sequential blocks, but rather fetch blocks in strides.
 This enables cores to fetch independently from one another, without having to submit fetch requests to other cores.
-Using such a scheme can potentially increase the performance of large core compositions on small blocks by a factor of 2 to 3x.
+Using such a scheme can potentially increase the performance of large core compositions on small blocks by a factor of 2x to 3x.
 Then the idea of using a block based value predictor was covered.
-This value predictor was initially designed by Perais. et al. in ~\cite{peraisVTAGE2014, peraisBeBop2015}.
+This value predictor was initially designed by Perais. et al.~\cite{peraisVTAGE2014, peraisBeBop2015}.
 The design choices behind the value predictor match some of the architectural features of EDGE, mainly to do predictions at the granularity of a block.
 
-To understand how these two additions can impact performance, the same set of benchmarks have been used in Chapter~\ref{chp:cases} are explored here.
+To understand how these two additions can impact performance, the same set of benchmarks used in Chapter~\ref{chp:cases} are explored here.
 First, the performance of a perfect value predictor with the round robin fetching scheme is explored and shows that it can improve the performance of core composition by up to 3x, with an average of 1.88x.
 This was followed by an analysis of the performance of using different configurations of the D-VTAGE value predictor with and without perfect branch prediction.
 Overall, using state-of-the art value prediction with round-robin fetching scheme leads to a performance improvement of up to 2.7x with an average of 1.3x even without perfect branch prediction compared to serial fetch without value prediction.
