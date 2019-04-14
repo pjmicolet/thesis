@@ -79,11 +79,11 @@ This is why the number of SplitJoins is not present in the correlating features;
 A method of determining how many threads an application requires is to build a database of programs.
 Each entry in the database contains a feature vector for a program and the number of threads that leads to the best performance.
 When a new program is encountered, the database can be searched to find applications that have similar features to determine the number of threads needed.
-To implement such a model, k-Nearest Neighbor (kNN) is deployed.
+To implement such a model, k-Nearest Neighbour (kNN) is deployed.
 As programs will most likely not have the same values for each feature, using kNN allows to estimate the thread count by comparing the feature vector of an unknown program with a group of known programs.
 Given a new application, the classifier determines the $k$ closest synthetic applications.
 The distance between the features is measured using the Euclidean distance for each application.
-Once the set of $k$ nearest neighbors is identified, the model averages the best number of threads for each of the neighbors to make a prediction. 
+Once the set of $k$ nearest neighbours is identified, the model averages the best number of threads for each of the neighbours to make a prediction. 
 The parameter $k$ was determined experimentally using only the synthetic benchmarks.
 A value of $k=7$ was found to lead to the best performance.
 The features chosen are the ten variables displayed in Figure~\ref{fig:corr}.

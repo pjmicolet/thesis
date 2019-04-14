@@ -1,14 +1,14 @@
 This chapter has introduced the problem of partitioning both software and hardware for a Dynamic Multicore Processor (DMP).
 Given the ability to execute up to 15 threads, a DMP can have up to 32,767 different configurations, making exhaustive search a prohibitive task.
-Whilst certain design choices, such as restricting the space to scenarios where only using multithreading or homogeneous core composition are used appear as a solution, it reduces performance by up to 1.5x.
-Thus it is important to look at heterogeneous core-composition with multithreading to get the best performance.
+Whilst certain design choices, such as restricting the space to scenarios where only using multi-threading or homogeneous core composition are used appear as a solution, it reduces performance by up to 1.5x.
+Thus it is important to look at heterogeneous core-composition with multi-threading to get the best performance.
 
 In order quickly find a good configuration, machine learning is used and a set of 15 StreamIt benchmarks were explored.
-Using the early-stopping criterion, it is determined that exploring 1300 different configurations of the processor is a good represantation of the performance space for each of the applications.
+Using the early-stopping criterion, it is determined that exploring 1300 different configurations of the processor is a good representation of the performance space for each of the applications.
 By running each benchmark under the different configurations, each benchmark was analysed to evaluate how much performance can be obtained through the best configuration.
 On average, finding the optimal configuration and using the appropriate loop optimisations can lead to a performance increase of 3x compared to running the program on a single core.
 
-Using the data from the analysis, two models were created, one that predicted the number of threads via k Nearest Neighbors, and the other predicted the number of cores to compose per thread using linear regression.
+Using the data from the analysis, two models were created, one that predicted the number of threads via k Nearest Neighbours, and the other predicted the number of cores to compose per thread using linear regression.
 The two models are able to predict configurations close to the performance of the best design points from the sampled space; on average within 16\% of the best.
 This demonstrated that by analysing program features, the decision of how to configure a DMP can be fully automated.
 
@@ -18,7 +18,7 @@ To summarise, the contributions of the chapter are:
 \begin{itemize}
 \item Proof that the configuration decision for DMPs can be automated without necessitating hand-crafted heuristics, making DMPs more practical
 \vspace{-0.5em}
-\item An analysis of the co-design space of thread partitioning and core composition which shows how applications always perform best when using a heterogeneous configuration, leading to a 1.50x speedup compared to only multithreading.
+\item An analysis of the co-design space of thread partitioning and core composition which shows how applications always perform best when using a heterogeneous configuration, leading to a 1.50x speedup compared to only multi-threading.
 \vspace{-0.5em}
 \item A study on the impact of loop unrolling on performance, allowing for core composition to be better utilised by increasing block size, resulting in up to 3x performance increases compared to no unrolling.
 \vspace{-0.5em}

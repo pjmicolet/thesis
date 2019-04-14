@@ -97,7 +97,7 @@ For example, in the code found in Listing~\ref{lst:mser_snipet} shows a loop fou
 
 To illustrate the data-dependency problem, Figure~\ref{fig:mser_nvsited} shows a simplified view of four blocks representing the body of the loop in Listing~\ref{lst:mser_snipet} being executed in parallel.
 Each block starts executing a cycle after its parent; the instructions highlighted in colour represent the register causing the data-dependency; blue represents the register being read, and red represents the register being written to.
-The gray slots represent cycles where the block cannot execute any instructions.
+The grey slots represent cycles where the block cannot execute any instructions.
 Assuming each instruction takes a single cycle to execute, 22 cycles are needed to execute all four blocks in parallel, compared to 28 cycles if they were to be executed sequentially.
 If the data dependencies are not resolved quickly enough, then this causes blocks to execute in a serial fashion, which reduces any benefit from using the composition.
 

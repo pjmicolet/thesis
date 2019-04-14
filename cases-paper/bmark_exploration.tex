@@ -22,7 +22,7 @@ Displaying the performance of the core composition of size 16 gives a performanc
 Figure~\ref{fig:sxt} shows that the IPC varies a lot for some of the benchmarks such as \bm{Disparity} or \bm{Localization} where dynamic composition is expected to be especially good.
 For other, such as \bm{Multi\_NCut}, the execution is dominated by a single long phase with constant IPC, which will clearly show no benefit from using dynamic composition.
 
-To better understand how dynamic core composition improves performance, either through speedup or energy rediction, this section studies how the benchmarks feature different phases during their execution.
+To better understand how dynamic core composition improves performance, either through speedup or energy reductions, this section studies how the benchmarks feature different phases during their execution.
 Determining phases in a program requires profiling applications and analysing the profile data.
 This can be done with tools such as SimPoint~\cite{simpoint} which tracks basic blocks to generate basic block vectors.
 These basic block vectors are then analysed using a clustering technique to determine phases.
@@ -94,7 +94,7 @@ To summarise, when cores are fused, register files, caches and LSQs are shared, 
 Thus, having a higher number of cores composed will put pressure on the network.
 Referring back to Figures~\ref{fig:sxt} and~\ref{fig:clust}, \bm{MSER} and \bm{Multi\_NCut} feature one dominating long phase with a very low IPC, and thus fusing cores cannot improve performance.
 
-Figure~\ref{fig:stddev} also shows the variation of the IPC for each given composition size represented by the grayed out areas.
+Figure~\ref{fig:stddev} also shows the variation of the IPC for each given composition size represented by the greyed out areas.
 For example, running the \bm{Disparity} benchmark on a composition of 16 cores, it can be observed that an average IPC of 8.3.
 The variation for 16 cores shows that the performance can drop down to 2.5.
 An IPC of 2.5 when using 16 cores is very inefficient as this represents 0.1 of an instruction per cycle for each core and this performance can be achieved by using smaller core compositions.
@@ -110,7 +110,7 @@ For both cases, not only do they have a single detected phase, but both are pred
 In fact, the most frequent block in \bm{MSER}, comprising 21\% the total executed blocks are comprised of only 8 instructions, whilst 31\% of \bm{Multi\_NCut}'s blocks are of 28 instructions.
 Having such small blocks will always increase both the \textit{SynchronizationCost} and the branch-prediction requirements.
 
-For \bm{MSER}, the fact that an important percentage of blocks are only 8 instructions long signifies that the overhead of fetching enough blocks for a large core-composition and the synchronization cost for committing them outweighs executing the blocks on a single core.
+For \bm{MSER}, the fact that an important percentage of blocks are only 8 instructions long signifies that the overhead of fetching enough blocks for a large core-composition and the synchronisation cost for committing them outweighs executing the blocks on a single core.
 The reason there is no degradation of performance is due to the fact that when fusing a high amount of cores, if the overhead of fetching the blocks outweighs the time required to execute then a core will not submit a block address to be fetched by another core in the composition.
 In this case, multiple cores may be composed, but only a single one is executing any code.
 For example, fusing 16 cores and executing \bm{MSER} may in fact result in a single core being used due to it executing blocks faster than it being able to dispatch the blocks to a next core.
@@ -230,7 +230,7 @@ Even with compiler optimisations, due to the fact that the loops are never execu
 
 \bm{Multi\_NCut} is faced with a similar situation to \bm{MSER}.
 Figure~\ref{fig:block_sizes} shows that once again, the majority of the blocks are less than 32 instructions long, in fact, over 50\% of the blocks are of 12 instructions or less.
-Table~\ref{tab:sd-vbsbpred} shows that the branch prediction is always correct, yet, with blocks this small, the synchronization cost of executing the blocks on large compositions outdoes any benefit that can be obtained via core-composition.
+Table~\ref{tab:sd-vbsbpred} shows that the branch prediction is always correct, yet, with blocks this small, the synchronisation cost of executing the blocks on large compositions outdoes any benefit that can be obtained via core-composition.
 Listing~\ref{lst:multi_loop} shows the main loop of \bm{Multi\_NCut}; the rest of the source code can be found in Listing~\ref{lsting:multi}.%Listing~\ref{lsting:multi} in the Apendix shows the source code of the main phase of \bm{Multi\_NCut}, the main loop found at lines 17 to 31, also found in Listing~\ref{lst:multi_loop}.
 Once again, this loop cannot be efficiently unrolled as the if statement can only be turned into a single hyperblock once.
 For \bm{Multi\_NCut} the problem is that the blocks are too small which will cause the overhead of dispatching multiple blocks across a core-composition inefficient.

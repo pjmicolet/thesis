@@ -95,7 +95,7 @@ However, according to the correlation graph in Figure~\ref{fig:corrCore}, the co
 \end{figure}
 
 \subsubsection{Linear Regression Model}
-Given that the optimal number of cores highly correlates with a few features, a linear regressor is a natural choice to predict the best number of threads.
+Given that the optimal number of cores highly correlates with a few features, a linear regression is a natural choice to predict the best number of threads.
 Figures~\ref{fig:maxav} represent how the first three highest correlating values affect the optimal number of cores for a single-working-thread.
 This figure is obtained by finding the best number of cores for the single-working-threaded version of each of the StreamIt benchmarks whilst varying the amount of loop unrolling.
 It is important to note that the reason the points in the top right corner appear to converge at 15 cores is due to the fact that no more than 15 cores can be fused.

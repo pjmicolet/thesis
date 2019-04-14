@@ -1,11 +1,11 @@
 This section describes the setup used throughout this chapter to conduct the design space exploration.
-It starts by presenting the overall workflow and then explores briefly some of the features of the benchmarks.
+It starts by presenting the overall work flow and then explores briefly some of the features of the benchmarks.
 Finally the section explains how the number of design points used throughout the exploration were determined.
 
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{streamit-paper/graphics/explanation3.pdf}
-    \caption{Description of the workflow.
+    \caption{Description of the work flow.
     Two distinct machine-learning models are used to predict the optimal thread partitioning and core composition based on static code features.}
     \label{fig:overview}
 \end{figure}
@@ -19,7 +19,7 @@ Finally the section explains how the number of design points used throughout the
     \label{fig:examplestream}
 \end{figure}
 
-Figure~\ref{fig:overview} presents the workflow of the system used in this chapter and Figure~\ref{fig:examplestream} illustrates the workflow on a synthetic StreamIt graph.
+Figure~\ref{fig:overview} presents the work flow of the system used in this chapter and Figure~\ref{fig:examplestream} illustrates the work flow on a synthetic StreamIt graph.
 First, the source-to-source StreamIt compiler is used to unroll loops as this is often beneficial when cores are composed as will be seen later in Section~\ref{sec:streamit:dse}.
 Then, static code features such as the program's graph structure are extracted from the StreamIt code through the StreamIt source-to-source compiler.
 These features are used as an input to the first machine-learning model that determines how many threads will be required based on an estimate of Thread Level Parallelism (TLP) found in the program.

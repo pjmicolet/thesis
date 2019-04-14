@@ -9,7 +9,7 @@
 This section motivates the difficulty of finding a good combination of thread and core partitioning.
 First, a simple experiment is conducted where the \bench{FilterBank} StreamIt benchmark is analysed using a 16 core dynamic multicore processor.
 %Maybe reform this sentence
-\bench{FilterBank} distributes its inputs amongst an array of discrete fourier transform (DFT) filters, the outputs of the DFT filters are down-sampled, up-sampled and then recombined to form a processed signal~\cite{streamitrepo}.
+\bench{FilterBank} distributes its inputs amongst an array of discrete Fourier transform (DFT) filters, the outputs of the DFT filters are down-sampled, up-sampled and then recombined to form a processed signal~\cite{streamitrepo}.
 The program's tasks are partitioned into threads and a various number of cores are allocated to each of the threads.
 Since one of the threads is the master which creates and joins all worker threads, this means that the application can be partitioned in up to 15 threads, and 15 cores can be used for those threads.
 It also means that the single-threaded version of an application is in fact one master thread and one working thread.
@@ -19,7 +19,7 @@ Choosing the correct composition topology for each thread is equivalent to the k
 Thus, to reduce the total design space, this chapter assumes that each composition can only be formed by cores that follow each other in row order.
 Whenever a composition is started, the master core will always be the core with the smallest core ID.
 These constraints may lead to sub-optimal performance as other core mappings and master cores may be more suitable in certain situations.
-Determinign which topologies are obtimal is left as future work.
+Determining which topologies are optimal is left as future work.
 
 As each thread must have at least one core assigned to it, and not all cores have to be grouped together, the total number of configurations are:
 
@@ -48,12 +48,12 @@ For this experiment, 1316 different thread/core combinations are explored; the r
 As can be seen in figure~\ref{fig:threadcoremotiv}, the majority of the design points result in a speedup of 2.7x.
 The best speedups however are far fewer than the average case (4x smaller density) and can improve performance by up to 5.5x.
 Thus, if a good configuration is found, this can yield an important speedup compared to the average configuration.
-However since the number of good configurations is low, this underlines the notion that finding a combination of threads and cores is a non-trivial endeavor, as randomly choosing a configuration will result in a sub-optimal performance.
+However since the number of good configurations is low, this underlines the notion that finding a combination of threads and cores is a non-trivial endeavour, as randomly choosing a configuration will result in a sub-optimal performance.
 Indeed, even if the average case is 2.7x faster than a single core, Figure~\ref{fig:threadcoremotiv} shows that there exists a good number of configurations that can lead to less than average speedups.
 
 \subsection{Minimizing the search space}
 Whilst there exists a large variety of thread-core combinations, certain design choices can be used to try and minimise the space.
-For example, choosing to only do multithreading reduces the search space to 15 possible solutions whilst only combinations that lead to homogeneous core compositions reduces the search space to:
+For example, choosing to only do multi-threading reduces the search space to 15 possible solutions whilst only combinations that lead to homogeneous core compositions reduces the search space to:
 
 \begin{equation}
 \sum_{threads=1}^{15} \lfloor\frac{15}{threads}\rfloor= 45
@@ -64,24 +64,24 @@ Using only homogeneous core compositions, which facilitates the core partitionin
 However, reducing the search space limits the potential obtainable speedup.
 Figure~\ref{fig:threadcoremotiv} shows the performance distribution of these specific design points.
 Their location on the X-axis represents the speedup obtained for that specific configuration.
-The points represent a set of different design choices such as only using multithreading, using homogeneous core-compositions with threads and using heterogeneous core-compositions with threads.
+The points represent a set of different design choices such as only using multi-threading, using homogeneous core-compositions with threads and using heterogeneous core-compositions with threads.
 
-Using only multithreading can lead to some performance improvements, however it will not result in the optimal performance.
-For the \bench{FilterBank} benchmark, 4 threads leads to the fastest execution time when only using multithreading.
+Using only multi-threading can lead to some performance improvements, however it will not result in the optimal performance.
+For the \bench{FilterBank} benchmark, 4 threads leads to the fastest execution time when only using multi-threading.
 This performance is in the highest peak of the density curve, which means that finding the best number of threads for the benchmark will only lead to average performance improvements in this case.
 However, using too many threads, such as 15 threads, leads to a degraded performance compared to the average.
 This is due to the fact that the communication overhead between threads will be too high.
 
 To explore homogeneous core composition, the optimal number of threads, which is the number of threads that leads to the fastest execution time without core-composition is used as a baseline.
 In this case only 2 homogeneous pairings exist: 2 cores fused for each of the 4 threads or 3 cores fused for each of the 4 threads.
-Figure~\ref{fig:threadcoremotiv} shows that homogeneous core-composition will outperform only using multithreading by 1.3x, however it is not the optimal solution.
+Figure~\ref{fig:threadcoremotiv} shows that homogeneous core-composition will outperform only using multi-threading by 1.3x, however it is not the optimal solution.
 In the end, using a heterogeneous configuration leads to a 1.5x speedup compared to the fastest homogeneous configuration.
 Therefore, it is important to consider all possible configurations to ensure the possibility of obtaining the best performance.
 
 \subsection{Summary}
 This section shows that multi-threading with heterogeneous core-composition is the optimal solution.
 This means that the total space must be explored in order to ensure that the best speedup can be found.
-Due to the size of the space and the fact that there can be no apriori about good configurations, using machine learning to predict configurations is a promising approach. % be used to predict good configurations.
+Due to the size of the space and the fact that there can be no a priori about good configurations, using machine learning to predict configurations is a promising approach. % be used to predict good configurations.
 By exploring a set of StreamIt benchmarks a machine learning model can learn what features correlate with the correct configuration.
 This example illustrates the necessity for designing the technique to predict both the optimal number of threads and core composition to use.
 The next section will present a more in-depth analysis of the design space before presenting the machine-learning predictive model.

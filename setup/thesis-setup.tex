@@ -43,15 +43,15 @@
 
 \section{Dynamic Multicore Processor Simulator}\label{chp:setup:conf}
 
-To evaluate the work a customizable cycle-level simulator for the EDGE architecture is used.
+To evaluate the work a customisable cycle-level simulator for the EDGE architecture is used.
 The simulator is verified against RTL implementation of an EDGE core as described in~\cite{putnam2010e2} and is within 5\% from that implementation~\cite{micolet2016dmpstream}.
 This validation is done by running workloads on RTL and comparing the traces cycle-by-cycle with the simulator~\cite{micolet2017cases}.
 
 To maintain a homogeneous view of the system, the same core configuration was used throughout the thesis.
-The features of the core can be found in table~\ref{tab:processor}, and the processor is composed of 16 cores connected via a mesh network (1 cylce hop, manhattan distance), with the L2 Cache being the shared last level cache.
+The features of the core can be found in table~\ref{tab:processor}, and the processor is composed of 16 cores connected via a mesh network (1 cycle hop, Manhattan distance), with the L2 Cache being the shared last level cache.
 The number of lanes represents how many blocks a single core can hold in its instruction window at a time, and is the same number used in the original proposal of the E2 core (4 lanes)~\cite{putnam2010e2}.
 
-As of 2018, it is not uncommon to see embedded cores in smartphones that have up to 12 execution units and are able to dispatch up to 6 instructions per cycle~\cite{samsung2018,apple}.
+As of 2018, it is not uncommon to see embedded cores in smart-phones that have up to 12 execution units and are able to dispatch up to 6 instructions per cycle~\cite{samsung2018,apple}.
 EDGE is designed to reduce the complexity and overhead of out-of-order engines by encoding dependencies at the ISA level~\cite{kim2007tflex,gray2018edge} and thus exploit high amount of instruction level parallelism with less resources.
 The configuration of the core in table~\ref{tab:processor} represents an example of an EDGE core that could potentially be built today or in the near-future.
 This setup was in fact described as a "small" EDGE core by Burger et al. during their keynote at ISCA 2018~\cite{iscakeynote,e2thereg,twitter}.
@@ -62,8 +62,8 @@ Since the length of the reconfiguration latency can affect performance, the effe
 This is the only chapter that uses dynamic reconfiguration.
  
 Previous studies on dynamic multicore processors for EDGE explored chips with up to 32 cores~\cite{kim2007tflex, gulati2008multitaskingdmc}, yet in Kim et al.'s work, they determine that 16 cores composed leads to the best average performance.
-Both embedded and desktop processors are still seeing their core count rise as time goes on (Apple's A12 features 6, Huawei Mate Smartphone has an 8 core processor, and the AMD Bulldozer features 32 cores), therefore having a 16 core EDGE processor represents a near-future design.
-Also, having 16 cores available increases the number of possible configurations of the processor which in turn allows for a more impactfull exploration of core composition.
+Both embedded and desktop processors are still seeing their core count rise as time goes on (Apple's A12 features 6, Huawei Mate Smart-phone has an 8 core processor, and the AMD Bulldozer features 32 cores), therefore having a 16 core EDGE processor represents a near-future design.
+Also, having 16 cores available increases the number of possible configurations of the processor which in turn allows for a more impactful exploration of core composition.
 
 \begin{figure}[t]
   \centering
@@ -103,7 +103,7 @@ This section covers the different benchmark suites used throughout the thesis.
 
 \subsection{Streaming applications}\label{chp:setup:streamit}
 
-Chapter~\ref{chp:streamit} demonstrates how configuring a DMP to get the optimal performance out of multithreaded applications can be learned.
+Chapter~\ref{chp:streamit} demonstrates how configuring a DMP to get the optimal performance out of multi-threaded applications can be learned.
 To explore this concept, choosing a programming language that naturally exposes parallelism is important as it facilitates the process of generating threads for an application.
 As the introduction of Chapter~\ref{chp:streamit} will explain, StreamIt is one such language.
 
@@ -111,9 +111,9 @@ The StreamIt repository holds a set of benchmarks that can be used to evaluate t
 As the processor and tools used throughout this thesis are still in development, some of the applications would either not compile or execute correctly on the provided simulator; thus a subset of the applications are used.
 The 15 StreamIt benchmark that worked and are explored in Chapter~\ref{chp:streamit} are shown in Table~\ref{tab:streamwl}.
 These applications represent a variety of embedded applications and kernels, from digital signal processing to a matrix-multiplication kernel or band pass filters.
-They can be found in a multitude of devices from digital radios to HDTVs and smartphones (audio/video streaming applications).
+They can be found in a multitude of devices from digital radios to HDTVs and smart-phones (audio/video streaming applications).
 The benchmarks also present a varying degree of parallelism as will be shown in Chapter~\ref{chp:streamit} Section~\ref{chp:stream:sec:setup}.
-As dynamic multicore processors are intended to adapt to the program at hand, having varying amounts of parallelism in the different benchmarks is essential to demonstrate its flexibilitiy.
+As dynamic multicore processors are intended to adapt to the program at hand, having varying amounts of parallelism in the different benchmarks is essential to demonstrate its flexibility.
 
 \subsection{San-Diego Vision Benchmark Suite}\label{chp:setup:sdvbs}
 \begin{table}[t]
@@ -134,7 +134,7 @@ As core composition is designed to improve the performance of single-threaded ap
 Chapters~\ref{chp:cases} and \ref{chp:hardchanges} explore a set of Vision Benchmarks designed for hardware and compiler research~\cite{sdvbs}.
 The San Diego Vision Benchmark suite (SD-VBS) is composed of nine single-threaded C benchmarks ranging from image analysis to motion tracking.
 These benchmarks represent state-of-the-art applications in image and vision recognition which are prevalent in embedded systems.
-The domain of image analysis and vision recognition is prevalent in multiple commercial and research fields, such as robotics, self-driving cars and even facial recognition in smartphones.
+The domain of image analysis and vision recognition is prevalent in multiple commercial and research fields, such as robotics, self-driving cars and even facial recognition in smart-phones.
 
 Vision applications are usually designed as software pipelines featuring different passes which will naturally form phases throughout the execution of the program.
 The programs typically have regular and simple control flow which enables the formation of large blocks of instructions.

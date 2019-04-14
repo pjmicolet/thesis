@@ -17,7 +17,7 @@ Due to the fact that the block size is fixed ahead of time~\cite{peraisBeBop2015
 Having a block with many values means that the D-VTAGE predictor can predict a higher number of register reads for a single EDGE block, however this comes at the expense of having less blocks in the predictor tables.
 On the other hand, a small block size allows to have multiple blocks stored at a time but means that not all instructions can have their values predicted in the EDGE block.
 
-To determine the size, all the EDGE blocks of the SD-VBS benchmarks are anaylsed to determine the average register read and write count is per block.
+To determine the size, all the EDGE blocks of the SD-VBS benchmarks are analysed to determine the average register read and write count is per block.
 The writes are tracked as it provides information on the potential amount of register dependencies found in each of the applications.
 The left hand side of figure~\ref{fig:edge_reg_read} shows the average number of register read and writes for each of the benchmarks.
 Whilst \bm{Disparity} \bm{Localization}, \bm{Texture\_Synthesis} and \bm{Tracking} have higher register read counts than the average, most of them only have 5 writes per block.
@@ -120,7 +120,7 @@ Since a request to the value predictor can be made at the same time as the start
 Figure~\ref{fig:vtage_perf} reports the speedup obtained with the different configurations of the D-VTAGE predictor with RRF.
 The baseline is a 16 core composition that uses the serial fetching (SF) scheme without any value prediction and using perfect branch prediction.
 To better understand the performance of the predictors, each configuration is compared to the perfect predictor, which can predict every register value at any instance.
-Throughout this section, the configurations of D-VTAGE are labeled: \textbf{D-VTAGE\_\textit{Confidence}\_\textit{BlockSize}}.
+Throughout this section, the configurations of D-VTAGE are labelled: \textbf{D-VTAGE\_\textit{Confidence}\_\textit{BlockSize}}.
 
 On average, using a D-VTAGE value predictor with the RRF scheme results in an average speedup of 1.32x.
 When comparing the performance between the different configurations, the main observation is that using a higher confidence results in better performance, however slight, 1.35x for D-VTAGE\_7\_16 compared to 1.31x for D-VTAGE\_4\_16.
@@ -164,7 +164,7 @@ Also a single accurate register prediction may not necessarily improve performan
 In this chapter, only blocks that are committed count towards the predicted blocks as any flush will artificially inflate the coverage count.
 Figure~\ref{fig:vtag_cov_block} displays the number of blocks which have at least one prediction, relative to the total number of committed blocks and the number of predicted register reads relative to the total executed register reads.
 The figure shows similar patterns for both coverages: the predictors with lower confidence counters have a higher coverage, 65\% compared to 31\% for the high confidence counter.
-This is normal: lower confidence allowes predictions to be used with faster, which will increase coverage.
+This is normal: lower confidence allows predictions to be used with faster, which will increase coverage.
 
 Whilst the block coverage is high, the coverage for registers reveals that not all registers are being predicted.
 Once again, lower confidence equates to higher coverage, however this time it's 30\% for a confidence of 4 and under 25\% for a confidence of 7 with FPC.

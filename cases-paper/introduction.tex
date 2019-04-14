@@ -2,7 +2,7 @@ The previous chapter explored how static ahead-of-time configuration of a dynami
 Static ahead-of-time configurations can improve the overall performance of programs, however they cannot adapt themselves to exploit the different phases a program may have.
 A program phase can be used to describe multiple concepts, for example regions of code that exhibit different Instruction per cycle (IPC) performances, or variations of instruction mixes.
 When programs exhibit different phases of IPC, this can result in situations where composing multiple cores may be an inefficient solution, thus wasting resources.
-Chapter~\ref{chp:streamit} explored multi-threaded applications yet core composition is designed to improve the performance of single threaded applications~\cite{ipek2007CoreFusion} as it has become harded to improve performance for these types of applications.
+Chapter~\ref{chp:streamit} explored multi-threaded applications yet core composition is designed to improve the performance of single threaded applications~\cite{ipek2007CoreFusion} as it has become harder to improve performance for these types of applications.
 Therefore this chapter focuses on how a DMP can reconfigure itself at runtime to exploit phases of a set of single-threaded applications.
 
 %Core composition is a technique that allows multiple cores to work on a single thread, allowing a DMP to improve the performance of single threaded applications.
@@ -12,7 +12,7 @@ Some programs may have phases that feature high IPC whilst other phases do not p
 Therefore, for programs that feature many phases, runtime reconfiguration is necessary to ensure efficient use of a DMP.
 
 Whilst optimising for speed is an important method of evaluating a DMP, the ability to reconfigure the processor allows the hardware to adapt to different performance profiles.
-For example, a DMP can reconfigure itself at runtime to maximise energy efficiency, instead of only focussing on speed.
+For example, a DMP can reconfigure itself at runtime to maximise energy efficiency, instead of only focusing on speed.
 Yet, whilst being able to adapt to different profiles is an attractive feature, determining when to reconfigure the processor is a challenging task for programmers.
 It is also difficult for compilers to determine when to compose cores without profiling information as core composition is sensitive to branch prediction and memory dependencies that may only be determined at runtime.% relying on programmers to determine when to reconfigure the processor is a challenging task. 
 Automating the decision of when to compose cores allows the programmer to solely focus on the software rather than decide when to modify the hardware.

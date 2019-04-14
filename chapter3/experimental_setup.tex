@@ -62,10 +62,10 @@ In order to motivate new research in branch prediction and value predictors and 
 Thus, a perfect value predictor and branch predictor are considered for the analysis.
 
 These predictors use execution traces of each application to make their predictions.
-Figure~\ref{fig:trace-gen} shows how these traces are genereated.
+Figure~\ref{fig:trace-gen} shows how these traces are generated.
 The trace file contains an entry for every committed block, which is comprised of the Program Counter (PC) for the next block a list of registers that were read and their corresponding values.
 
 When the perfect predictors are activated, the simulator reads in the trace file.
-Figrue~\ref{fig:trace-used} shows how the trace data is used: a newly fetched block is paired with its correspondant trace data.
+Figrue~\ref{fig:trace-used} shows how the trace data is used: a newly fetched block is paired with its correspondent trace data.
 Instead of using the branch predictor, the next block's PC is directly taken from the trace entry, and whenever the block can issue a register read, the value is fetched from the trace entry instead of making a request to the register file.
 \vspace{-2em}

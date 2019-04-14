@@ -58,7 +58,7 @@ By increasing the core count on load heavy blocks this will improve performance 
 \begin{figure}[t]
     \centering
 	\includegraphics[width=1\textwidth]{cases-paper/graphics/results/lr_speed3.pdf}
-    \caption{Performance results for maximising speed for the SD-VBS benchmarks using the linear regressor (LR) model. The results are normalised against the Static Suite core composition.}% For Speedup, higher means better, for energy lower is better.}
+    \caption{Performance results for maximising speed for the SD-VBS benchmarks using the linear regression (LR) model. The results are normalised against the Static Suite core composition.}% For Speedup, higher means better, for energy lower is better.}
     \label{fig:speedlr}
 	\vspace{1em}
 \end{figure}
@@ -73,8 +73,8 @@ Then the resulting trained linear model is used to predict the optimal core numb
 
 Figure~\ref{fig:speedlr} shows the performance in terms of speed and energy that is achieved using the linear model normalised by a fixed static configuration.
 The fixed configuration maximised performance across all the benchmarks using 8 cores and is the same as in the previous results presented in figure~\ref{fig:speedres}.
-On average, the linear regressor model is able to consume 37\% less energy compared to the 8 cores fixed configuration and is able to exactly match its speed.
-The main outlier is \bm{MSER} where the linear regressor consumes over 2x more energy than \textbf{DSpeed}.
+On average, the linear regression model is able to consume 37\% less energy compared to the 8 cores fixed configuration and is able to exactly match its speed.
+The main outlier is \bm{MSER} where the linear regression consumes over 2x more energy than \textbf{DSpeed}.
 This is due to the fact that \bm{MSER} is a benchmark where the branch prediction is poor as previously mentioned in Table~\ref{tab:sd-vbsbpred}.
 Indeed, \bm{MSER} has an average branch prediction of 85\% compared to the average of 95\%.S
 As \bm{MSER} tends to have very small blocks, the branch prediction makes it very difficult to ever efficiently use even a core composition of size 2.

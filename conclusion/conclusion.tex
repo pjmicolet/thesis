@@ -1,8 +1,8 @@
 \chapter{Conclusion}~\label{chp:conclusion}
-This thesis has explored how static ahead of time reconfiguration, dynamic runtime adaptation and microarchitectural modifications can make dynamic multicore processors (DMP) more practical.
-Chapter~\ref{chp:streamit} showed that a multithreaded application can automatically be mapped ahead of time to a DMP, where different number of cores are composed for each thread.
+This thesis has explored how static ahead of time reconfiguration, dynamic runtime adaptation and micro-architectural modifications can make dynamic multicore processors (DMP) more practical.
+Chapter~\ref{chp:streamit} showed that a multi-threaded application can automatically be mapped ahead of time to a DMP, where different number of cores are composed for each thread.
 Chapter~\ref{chp:cases} demonstrated that at runtime the DMP can automatically change the size of a composition to ensure that the system is maximising speed whilst being energy efficient.
-Both chapters extract features from the software and use machine learning techniques such as linear regression and k Nearest Neighbors to determine correct configurations.
+Both chapters extract features from the software and use machine learning techniques such as linear regression and k Nearest Neighbours to determine correct configurations.
 Using cross-validation, the two chapters show that the automatic reconfiguration can be used in new unseen situations.
 The chapters also covered how source-level code optimisations can help improve the performance of core composition when access to the compiler is not available.
 Finally, Chapter~\ref{chp:hardchanges} explored how modifying the fetching scheme in core composition and adding value prediction can improve the performance of large core compositions.
@@ -21,7 +21,7 @@ A compiler optimisation was also explored, loop unrolling, and showed that core 
 Overall the design space exploration underlined that in order to get the best performance, a mix of multi-threading and core composition is required and leads to an average speedup of 3x compared to a single core single thread.
  
 This was followed by the presentation of two models that can determine the number of threads that lead to the best performance for a given application and the number of cores per thread.
-The thread model used k Nearest Neighbor to classify a program based on its structure.
+The thread model used k Nearest Neighbour to classify a program based on its structure.
 The core composition model uses linear regression to determine how large a composition must be by analysing the average size of an unconditional block of operations found in the thread.
 Using leave one out cross-validation, automated model leads to DMP configurations that are within 16\% of the best from the total exploration space.
 

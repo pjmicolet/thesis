@@ -43,10 +43,10 @@ Streaming programming languages are a branch of dataflow programming that focus 
 These applications, such as audio or video decoding can be commonly found in mobile devices.
 Unlike conventional programming languages such as C++, these languages abstract the concept of incoming and outgoing data to permit the programmer to focus on how the data should be treated.
 Programs are described as directed graphs where nodes are functions and their edges represent their input and output streams. 
-These languages offer primitives to describe such a graph~\cite{theis2002streamit} which expose parallelizable and serial sections of the application directly to the compiler. 
-Rates of incoming and outcoming data can also be defined to facilitate load balancing optimizations~\cite{chen2005rawstream}.
+These languages offer primitives to describe such a graph~\cite{theis2002streamit} which expose parallelisable and serial sections of the application directly to the compiler. 
+Rates of incoming and outcoming data can also be defined to facilitate load balancing optimisations~\cite{chen2005rawstream}.
 
 Features of streaming programming languages make them an ideal language for targeting multicore processors.
 The explicit data communication between the different tasks in the program, the ability to estimate the amount of work performed in each task and information about data rates between tasks allows the compiler to easily generate a multi-threaded application that can run on a dynamic multicore processor.
-However, the main challenge consists of deciding how to map the different tasks onto threads and how to allocate the right amount of resources to maximize performance.
+However, the main challenge consists of deciding how to map the different tasks onto threads and how to allocate the right amount of resources to maximise performance.
 

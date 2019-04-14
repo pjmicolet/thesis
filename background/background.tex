@@ -11,7 +11,7 @@ Subsection~\ref{sec:edge_arch} covers how blocks are executed on a single core, 
 \item Section~\ref{sec:bg:stream} describes streaming programming languages, explored in Chapter~\ref{chp:streamit}.
 \item Section~\ref{sec:ml} covers the different machine learning techniques and the evaluation method used.
 Linear regression, described in subsection~\ref{sec:lr} is used in both Chapter~\ref{chp:streamit} and \ref{chp:cases}.
-k Nearest Neighbors explained in subsection~\ref{sec:kNN} is used in Chapter~\ref{chp:streamit}, k-means clustering found at subsection~\ref{sec:kMeans} is used in Chapter~\ref{chp:cases}.
+k Nearest Neighbours explained in subsection~\ref{sec:kNN} is used in Chapter~\ref{chp:streamit}, k-means clustering found at subsection~\ref{sec:kMeans} is used in Chapter~\ref{chp:cases}.
 Leave-one cross validation described in subsection~\ref{sec:valid} is used in Chapter~\ref{chp:streamit} and \ref{chp:cases}.
 \item Finally, Section~\ref{sec:esc} explains the Early Stopping Criterion used in Chapter~\ref{chp:streamit}.
 \end{itemize}
@@ -88,12 +88,12 @@ Multi-ISA HCMPs also face a similar issue as having more than a single ISA not o
 
 In both CMPs and HCMPs, the design of the processor is fixed, meaning that many of the trade-offs between power, performance and area cannot be changed after production.
 Dynamic Multicore Processors (DMPs) attempt to bridge the gap between the two previous designs by allowing the execution substrate to adapt dynamically at runtime.
-Mitall's survey ~\cite{MittalSurv2016} defines three types of modifiable resources: the core count~\cite{ipek2007CoreFusion,kim2007tflex,pricopi2012bahurupi}, number of resources that each core has~\cite{Homayoun3DPooling2012} and microarchitectural features~\cite{fallinhetblock2014,BauerRSE08,tavanaElastic}.
+Mitall's survey ~\cite{MittalSurv2016} defines three types of modifiable resources: the core count~\cite{ipek2007CoreFusion,kim2007tflex,pricopi2012bahurupi}, number of resources that each core has~\cite{Homayoun3DPooling2012} and micro-architectural features~\cite{fallinhetblock2014,BauerRSE08,tavanaElastic}.
 
 \paragraph*{Core Composition Dynamic Multicore Processors}
 
 
-A DMP that can modify its core count is built out of homogeneous cores with a reconfigurable fabric on top.
+A DMP that can modify its core count is built out of homogeneous cores with a re-configurable fabric on top.
 Physical cores can function either on their own or as a group.
 Figure~\ref{fig:dynmulticore} provides an high level view of a DMP: the physical cores \textit{P}, are composed into 3 separate compositions of sizes 2, 8 and 4.
 Each of the compositions executes a single thread, leveraging the power of the cores that are grouped together.
@@ -112,9 +112,9 @@ They then are connected to Execution Units which they can choose to use.
 Each core in WiDGET also has access to their neighbours Execution Units, allowing for more variation.
 Another example of resource sharing is Rodrigues et al.'s work~\cite{rodrigues2014perf} where a core can use resources such as Arithmetic Logic Units (ALUs) from other cores.
 
-\paragraph*{Microarchitectural Reconfigurable Dynamic Multicore Processors}
-A final example is a DMP which can reconfigure microarchitectural features to better fit the current application.
-Fallin et al.~\cite{fallinhetblock2014} observe that serial code can exhibit phases that fit different microarchitectural features.
+\paragraph*{Micro-architectural Reconfigurable Dynamic Multicore Processors}
+A final example is a DMP which can reconfigure micro-architectural features to better fit the current application.
+Fallin et al.~\cite{fallinhetblock2014} observe that serial code can exhibit phases that fit different micro-architectural features.
 According to them, these phases may only been in the ten to hundred thousands instructions long.
 These DMPs can therefore modify microarchitecural features, such as in-order or out-of-order execution, to best match the current phase of a program.
 
@@ -126,7 +126,7 @@ Then the features of an EDGE processor are described, such as the ability of exe
 
 \subsection{EDGE Instruction Set Architecture}~\label{sec:edge_isa}
 
-The Explicit Data Graph Execution (EDGE) architecture~\cite{burger04edge} is a dataflow architecture aimed at improving concurrency whilst being energy and power efficient \cite{smith2006edge,burger04edge}.
+The Explicit Data Graph Execution (EDGE) architecture~\cite{burger04edge} is a data-flow architecture aimed at improving concurrency whilst being energy and power efficient \cite{smith2006edge,burger04edge}.
 Similar to very long instruction word (VLIW) architectures that pack multiple sub-instructions into a single instruction, EDGE requires that the compiler pack instructions into blocks.
 Unlike VLIW that uses static placement and static issue -- which puts high pressure on the compiler -- EDGE allows for dynamic issue which distributes responsibility between the hardware and the compiler more evenly.
 
@@ -378,7 +378,7 @@ A \textit{Context} predictor relies on the history of values an instruction outp
 This means that a single instruction can occupy multiple entries of the predictor as each new value must be recorded.
 This is why, in Figure~\ref{fig:pred_examples}, the specific load instruction has multiple entries in the predictor, as the value generated by the load is different for each iteration of the loop.
 The \textit{Context} predictor can only predict the value the instruction if the specific value is already stored in the predictor as it does not have any ability to \textit{infer} the value.
-The predicted value depens on the context, which can either be captured by dataflow information or branch history~\cite{peraisVTAGE2014}.
+The predicted value depends on the context, which can either be captured by dataflow information or branch history~\cite{peraisVTAGE2014}.
 Overall, whilst predictions may be simpler to generate they are considered space-inefficient~\cite{peraisBeBop2015}.
 
 %This makes \textit{Context} predictors less efficient for predicting values that are incremented at a constant rate, as each increment occupies a new entry~\cite{peraisBeBop2015}.
@@ -396,7 +396,7 @@ This allows \textit{Computational} to potentially reduce the size of the predict
 \subsection{The Differential Value Tagged Geometric length Predictor}~\label{chp:bck:vtage}
 
 This section covers a specific implementation of a value predictor that is used in Chapter~\ref{chp:hardchanges}.
-The Differential Value Tagged Geometric length Predictor (D-VTAGE) \cite{peraisBeBop2015} is a Computational value predictor that operates on blocks of instructions to minimize network pressure and increase the prediction output per cycle.
+The Differential Value Tagged Geometric length Predictor (D-VTAGE) \cite{peraisBeBop2015} is a Computational value predictor that operates on blocks of instructions to minimise network pressure and increase the prediction output per cycle.
 To simplify the explanation of the predictor, the size of the block is set to 1 instruction.
 D-VTAGE is organised in two parts, a Last Value Table (LVT) that contains the last committed values for a given set of instructions, and a set of value tables (VT) which contain the strides.
 The left hand side of Figure~\ref{fig:stride_over} shows an overview of the predictor with N stride tables.
@@ -565,7 +565,7 @@ This section covers the Early Stopping Criterion (ESC) used in Chapter~\ref{chp:
 When exhaustive search of an optimisation space is not feasible, a subset of the space is explored.
 ESC~\cite{vuduc2003AutomaticPerf} provides a method of determining when new points added in the subspace no longer provide new information, and thus the currently evaluated subspace is representative of the total space.
 Given $N$ possible number of implementations, if $i$ is a single implementation and $x_i$ is its performance normalised between 0 and 1, then $S=\{x_1,...,x_N\}$ is the set of all performances for all possible implementations.
-If $X$ is a random variable corresponding to a randomly selected performance from the set S then there is a cummulative distribution function (CDF) $F(x) = Pr[X \le x]$ which is equal to the number of items in S that are less than or equal to $x$ (the function $n(x)$) over all possible items $N$.
+If $X$ is a random variable corresponding to a randomly selected performance from the set S then there is a cumulative distribution function (CDF) $F(x) = Pr[X \le x]$ which is equal to the number of items in S that are less than or equal to $x$ (the function $n(x)$) over all possible items $N$.
 If, for a number of time steps, a performance from S is randomly chosen and not replaced, then at time step $t$ $M_t$ is maximum performance observed $max_{1\le i \le t} Xi$ up to time t.
 ESC posits that, that if the probability that $M_t$ is within a distance of the maximum performance found in S then the space exploration can stop at time t.
 Formally, ESC is:

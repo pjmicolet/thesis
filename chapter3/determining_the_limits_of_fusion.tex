@@ -9,7 +9,7 @@
 \end{figure}
 
 In a core-composition, the fetching mechanism operates in a round-robin fashion.
-The first core in the composition starts by fetching blocks untill all its lanes are full.
+The first core in the composition starts by fetching blocks until all its lanes are full.
 Once this happens, the first core then submits a block prediction to the next core in the composition.
 The next core then operates in the same fashion, filling the lanes and then submitting another prediction to the next core in the composition.
 After this prediction to the other core has been sent, the submitting core will no longer attempt any more fetches until another core sends it a new prediction.

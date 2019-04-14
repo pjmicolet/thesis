@@ -5,7 +5,7 @@ This chapter covers the related work relevant and adjacent to this thesis.
 \vspace{-3em}
 \section{Reconfigurable Processors}
 
-This section covers work on both dynamic multicore processors (DMP) and processors that can reconfigure their microarchitectures.
+This section covers work on both dynamic multicore processors (DMP) and processors that can reconfigure their micro-architectures.
 \vspace{-1em}
 \subsection{Dynamic Multicore Processors}~\label{chp:rw:sec:dmp}
 The idea of composing physical cores was first introduced by Ipek et al. in CoreFusion~\cite{ipek2007CoreFusion}.
@@ -25,7 +25,7 @@ To ensure sequential renaming, a Global Program Counter (GPC) is introduced, and
 Using a 4 core composition they report a performance improvement of 2x on SPECINT, 3x on SPECFP and 4x on Mibench/Mediabench compared to a 2 issue core. 
 
 TFlex~\cite{kim2007tflex} proposed by Kim et al. is an EDGE processor that also deploys core composition.
-They motivate that EDGE simplifies distributing instructions across cores as EDGE itself is designed for distributed microarchitectures.
+They motivate that EDGE simplifies distributing instructions across cores as EDGE itself is designed for distributed micro-architectures.
 Since instruction dependency orders are determined at compile time and encoded at the ISA level, the TFlex instruction fetching can be decentralised, as there is no need for centralised analysis like in a traditional ISA (such as register renaming or instruction number assignment).
 Unlike the model used throughout this thesis, a block's instructions can be distributed amongst the cores in the composition, with one of the cores being the block owner.
 As each core can be responsible for a single block, the total number of blocks in flight is equal to the number of cores in the composition.
@@ -34,7 +34,7 @@ In their work~\cite{kim2007tflex} Kim et al. show that a 32 core composition can
 The E2 processor is another EDGE based processor that can dynamically compose its cores~\cite{putnam2010e2}.
 Unlike TFlex, a block is only executed on the core that fetches it, its instructions are not distributed.
 E2 introduces the concept of segmenting the instruction window into lanes, allowing cores to fetch multiple blocks.
-This allows E2 to be more adaptible to different block sizes; if the compiler can only generate small blocks, a core can have multiple blocks in its instruction window executing in parallel.
+This allows E2 to be more adaptable to different block sizes; if the compiler can only generate small blocks, a core can have multiple blocks in its instruction window executing in parallel.
 For example, if E2 has four lanes, then if the program executing is composed only of 20 instructions, a four core composition on E2 can have up to 4 blocks $\times$ 20 instructions $\times$ 4 cores $=$ 320 instructions in flight, whilst TFlex will only have 4 blocks $\times$ 20 instructions $=$ 80 instructions in flight.
 This means E2 can potentially extract more instruction level parallelism (ILP) from each core in the composition than TFlex can at any point.
 
@@ -46,19 +46,19 @@ They show that using in-order cores with a fine-grained reconfiguration can redu
 It is even able to outperform it by 26\% whilst still reducing power consumption by 6\%.
 
 \vspace{-1em}
-\subsection{Reconfigurable microarchitectures}
+\subsection{Reconfigurable micro-architectures}
 
 MorphCore~\cite{khubaibMorphCore2012} focuses on reconfiguring a core for thread level parallelism.
 It switches between out-of-order (OoO) when running single threaded applications and an in-order core optimised for simultaneous multi threading (SMT) workloads.
 This provides an opposite solution to our DMP: providing a large core made for ILP that can be modified to better fit TLP workloads.
 MorphCore outperform a 2-Way SMT OoO core by 10\% whilst being 22\% more efficient.
 
-ElasticCore~\cite{tavanaElastic} proposes a morphable core that uses dynamic voltage and frequency scaling (DVFS) and microarchitectural modifications such as instruction bandwidth and capacity to adapt the processor to current needs.
+ElasticCore~\cite{tavanaElastic} proposes a morphable core that uses dynamic voltage and frequency scaling (DVFS) and micro-architectural modifications such as instruction bandwidth and capacity to adapt the processor to current needs.
 Unlike heterogeneous systems that can present different sized cores on a single package, the ElasticCore is a single core with four different size configurations.
 Each size configuration uses more resources than the previous, such as increasing the fetch width from 2 to 4 to 8 instructions.
 Having all the resources on the single core allows adaptation to be quicker than migrating a thread to a  more appropriate core, 1000 cycles compared to the 10,000 for ARM's big.LITTLE architecture.
 
-This is similar to the work proposed by Dubach et al. in ~\cite{dubach13dynamic} where microarchitectural features can be modified for better performance or energy efficiency.
+This is similar to the work proposed by Dubach et al. in ~\cite{dubach13dynamic} where micro-architectural features can be modified for better performance or energy efficiency.
 They provide extensive analysis of SPEC 2000 benchmarks and demonstrate that machine learning and dynamic adaptation can double the energy/performance efficiency compared to a static configuration.
 
 \paragraph*{Summary}
@@ -134,7 +134,7 @@ Therefore, another solution to improve fetching for the type of processor used i
 \vspace{-1em}
 \section{Hardware techniques for power and energy efficiency}
 
-Chapter~\ref{chp:cases} focusses on changing the size of a core composition at runtime to the energy consumption of single threaded applications whilst still maintaining the same execution times as the fastest static core compositions.
+Chapter~\ref{chp:cases} focuses on changing the size of a core composition at runtime to the energy consumption of single threaded applications whilst still maintaining the same execution times as the fastest static core compositions.
 This section covers the different techniques for reducing energy consumption using hardware techniques.
 
 \subsection{Dynamic Voltage and Frequency Scaling}
@@ -334,8 +334,8 @@ This involves determining which number of threads leads to the best execution ti
 This section covers work on partitioning streaming applications. 
 
 Previous work on scheduling streaming applications focuses on finding mathematical ways of partitioning the graph onto the chip ~\cite{carpenter2009streammap,kudlur2008orchestratingstreamprog}.  
-In Carpenter et al.'s work~\cite{carpenter2009streammap} they restrain themselves to partitioning a StreamIt application maintaining connectedness.
-Connectedness can be defined as a subgraph where the filters are connected. 
+In Carpenter et al.'s work~\cite{carpenter2009streammap} they restrain themselves to partitioning a StreamIt application maintaining correctness.
+Correctness can be defined as a subgraph where the filters are connected. 
 This restriction reduces the number of potential partitions that can be generated by their algorithm and will put TLP in favour of ILP. 
 
 Kudlur et al. in~\cite{kudlur2008orchestratingstreamprog} choose to represent the partitioning problem as an integer linear programming problem.
@@ -344,12 +344,12 @@ Farhad et al. also use integer linear programming in~\cite{farhad2012streamilp} 
 They profile the communication costs of the streaming programs by running the program using different multicore allocations and feed that information into their integer linear programming model.
 
 Using a machine learning model to partition StreamIt programs was previously explored in the work of Wang et al. in ~\cite{wang2013partitionstreamit}.
-They use a k nearest neighbor (kNN) model to determine the perfect partitioning of a StreamIt program for a multicore system. 
+They use a k nearest neighbour (kNN) model to determine the perfect partitioning of a StreamIt program for a multicore system. 
 Their model is used to find ways of fusing and fissioning filters to discover a new graph that can then be mapped onto a multicore system.
 \vspace{-1em}
 \paragraph*{Summary}
-Whilst this previous work focusses on determining a partition of streaming applications through mathematical models or integer linear programming, Wang et al. in ~\cite{wang2013partitionstreamit} show that machine learning can be used.
-However, none of these proposals explore DMPs, instead focussing on processors with fixed designs.
+Whilst this previous work focuses on determining a partition of streaming applications through mathematical models or integer linear programming, Wang et al. in ~\cite{wang2013partitionstreamit} show that machine learning can be used.
+However, none of these proposals explore DMPs, instead focusing on processors with fixed designs.
 This means that whilst some techniques such as kNN can be used to automate the partitioning decision, there still lacks any exploration of how the thread/core composition design space affects the performance of streaming applications.
 This thesis therefore conducts that exploration to generate a new model for partitioning streaming applications on DMPs.
  
@@ -359,11 +359,11 @@ This thesis therefore conducts that exploration to generate a new model for part
 Using machine learning to increase performance has been a popular area of research as of late.
 There are two areas in which machine learning is used: compiler driven optimisations and runtime driven optimisations.
 
-Dubach et al. use machine learning to determine what the performance and energy consumption will be based on the microarchitectural parameters and compiler optimisations that are used in ~\cite{DubachExpl2012}.
-By exploring the 35 MiBench benchmarks and modifying compiler optimisations and microarchitectural features of an embedded system.
+Dubach et al. use machine learning to determine what the performance and energy consumption will be based on the micro-architectural parameters and compiler optimisations that are used in ~\cite{DubachExpl2012}.
+By exploring the 35 MiBench benchmarks and modifying compiler optimisations and micro-architectural features of an embedded system.
 Over 1000 compiler flags are explored, and 200 configurations of the processor are used (modifying cache sizes, associativity, branch target buffer sizes and associativity).
 Their design space exploration shows that to obtain the best performance for each of the applications, both the compiler optimisations and processor must be tuned.
-They then use this information to build a machine learning model using an Artificial Neural Network which is able to predict the performance, in terms of $Energy \times Delay \times Delay$ of an application given a set of compiler flags and microarchitectural features.
+They then use this information to build a machine learning model using an Artificial Neural Network which is able to predict the performance, in terms of $Energy \times Delay \times Delay$ of an application given a set of compiler flags and micro-architectural features.
 Their model is able to predict a performance that with an error rate of just 3.2\%.
 
 Cummins et al. developed a deep learning model that takes source-code and is able to learn how the code correlates to performance~\cite{cummins2017pact}.
@@ -399,8 +399,8 @@ As value prediction allows instructions to execute with speculative data, this i
 
 Then, dataflow programming languages, and the different methods used to partition applications written in these languages on multicore processors was explained.
 The StreamIt programming language is explored in Chapter~\ref{chp:streamit} as it was designed for architectures similar to the one used in this thesis.
-The work of Wang et al.~\cite{wang2013partitionstreamit} motivated the use of machine learning for streaming applications however it focussed on homogeneous multicore processors.
-This thesis pushes this work further by providing a model that can determine both thread count and nubmer of cores composed.
+The work of Wang et al.~\cite{wang2013partitionstreamit} motivated the use of machine learning for streaming applications however it focused on homogeneous multicore processors.
+This thesis pushes this work further by providing a model that can determine both thread count and number of cores composed.
 
 Finally, two examples of how machine learning has been used for performance optimisations were described.
 This is to demonstrate that machine learning is becoming a promising method for the domain of improving the performance of programs and determining architectural parameters.
