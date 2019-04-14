@@ -1,16 +1,16 @@
 % Software point of view: the problem
 A Dynamic Multicore Processor's (DMP) ability to reconfigure itself allows it to adapt to any program it executes.
 Whilst being able to reconfigure hardware is a promising approach to optimising execution, DMPs come with their own set of challenges when attempting to finding a good configuration for the program at hand.
-Given a program that can be parallelised, a DMP can either be configured to run a high amount of threads on small groups of cores, a small number of threads on large groups of cores or a heterogeneous mix of both large and small cores.
+Given a program that can be parallelised, a DMP can either be configured to run a high number of threads on small groups of cores, a small number of threads on large groups of cores or a heterogeneous mix of both large and small cores.
 Without deep knowledge of the architecture, knowing how to configure the processor correctly, to be able to obtain the best performance, can be a highly time consuming task.
 This can be further complicated if the programming model does not provide any insights on how the program may be partitioned into threads.
 The problem of optimising multi-threaded software for DMPs can therefore be split into two distinct tasks.
 First, finding a programming model that makes software partitioning into threads explicit.
 Second, using information from both the hardware and software, automate the partitioning of both the software into threads, and the hardware into compositions.
 
-In most parallel programming models such as OpenMP~\cite{openmp}, the user is directly responsible for mapping parallelism to the hardware; a difficult and time consuming task~\cite{prabhu2011LanguagePar}.
+In most parallel programming models, such as OpenMP~\cite{openmp}, the user is directly responsible for mapping parallelism to the hardware; a difficult and time consuming task~\cite{prabhu2011LanguagePar}.
 This is due to the fact that these models extend programming languages that do not consider parallelism as a defining design factor~\cite{pingaliTao2011}.
-On the other-hand dataflow programming models such as StreamIt~\cite{theis2002streamit} and Lime \cite{auerbach2012lime} make data and paralleism a first class citizen.
+On the other-hand, dataflow programming models such as StreamIt~\cite{theis2002streamit} and Lime \cite{auerbach2012lime} make data and parallelism first class citizens.
 In these languages, applications are expressed as data oriented graphs and --- ideally --- the compiler or runtime determines the mapping of parallelism onto the available hardware and controls the grouping of hardware resources.
 Thus using such a model can be a potential solution to the first part of the problem.
 
@@ -18,7 +18,7 @@ However, optimally mapping parallelism and managing hardware resources remains a
 For example, given a 16 core DMP with up to 15 threads, a program can have over 32,000 different configurations of thread to core composition pairings.
 Rather than exhaustively searching the space, which is a very time consuming task, finding a way to automate the configuration of the processor makes using DMPs more attractive.
 The number of program features that may influence how to partition programs is large, for example it could depend on the number of tasks, the parallelism made explicit by the language and/or different compiler optimisations.
-Therefore manually determining a set of heuristics to create a model that selects thread count and core compositions is not recommended as important information may potentially be disregarded.
+Therefore manually determining a set of heuristics to create a model that selects thread count and core compositions is not recommended as important information may be disregarded.
 Instead, correlation analysis is used to extract all the features that correlate the most with deciding a good partition and generate an appropriate machine learning model.
 
 This chapter analyses how static ahead-of-time reconfiguration of a DMP can improve performance of a set of streaming applications.
@@ -26,7 +26,7 @@ In this setting, static defines a core composition that does not change during t
 These streaming applications include audio signal and image processing and sorting algorithms.
 Streaming programs are ubiquitous in the embedded systems space~\cite{theis2002streamit} and their mix of parallelism and computation make them an interesting domain for DMPs.
 
-An analysis of the design space exploration is performed and shows the impact of modifying resources and thread mapping and is conducted using a set of StreamIt programs.
+An analysis of the design space is performed and shows the impact of modifying resources and thread mapping and is conducted using a set of StreamIt programs.
 A machine learning model is developed using the information gathered from the exploration.
 This model predicts the best number of threads for a given application and an optimal number of cores to allocate to each thread.
 To demonstrate the viability of the approach the results of the predictive model are compared to the best sampled thread and core composition pairing in a space of more than 32,000 design points.

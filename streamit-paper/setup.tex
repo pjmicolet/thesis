@@ -122,7 +122,7 @@ Each core is restricted to running only a single thread, as no context switching
 The core-composition is not used on the master core, leaving 15 physical cores to be distributed to each of the worker threads.
 Cores can be composed together to form a composition with up to 15 physical cores, making the total number of cores assigned to a thread between 1 and 15.
 Of course, not all cores have to be assigned to a thread, in this case all remaining cores that aren't in a composition or a thread are turned off.
-Overall, this leads to a total space size of 32,767 unique combination per benchmark as previously described in Section~\ref{sec:motivation}.
+Overall, this leads to a total space size of 32,767 unique combination per benchmark as previously described in Section~\ref{sec:motivation-str}.
 
 \subsection{Sample Space}
 
@@ -130,7 +130,7 @@ Given a partition, any benchmark that can be split into 15 threads requires 32,7
 Running the exhaustive exploration of the space for a benchmark requires approximately a week of simulation on a 572+ node supercomputer.
 For this reason, a sample of 1,316 random points from the entire space is utilised.
 
-This roughly corresponds to 100 core compositions for each number of threads; the actual number, 1,316 is smaller than 1,500 since for low and high thread counts there are less than 100 possible different core composition.
+This roughly corresponds to 100 core compositions for each number of threads; the actual number, 1,316 is smaller than 1,500 since for low and high thread counts there are fewer than 100 possible different core compositions.
 For example, a single-working-thread can have only up to 15 different core-compositions (1 through 15) whilst 15 threads can only have a single core given to each thread.
 \bench{InsertionSort} is the only exception since it can at most only be split into 5 threads leading to 415 sample points.
 
@@ -146,7 +146,7 @@ Overall, the space exploration required one week of simulation on the supercompu
 \end{figure}
 
 %Define stopping criterion?
-To gain confidence that the best configuration from the sample space is indeed close to the real best in the entire space, a statistical model based on the Early Stopping Criterion defined in~\cite{vuduc2003AutomaticPerf} is deployed.
+To gain confidence that the best configuration from the sample space is indeed close to the real best in the entire space, a statistical model based on the Early Stopping Criterion~\cite{vuduc2003AutomaticPerf} is deployed.
 This statistical model estimates, given a sample of the total space, if the best observed performance of that sample space is within a percentage of the statistical best performance, a more detailed explanation can be found in Chapter~\ref{chp:Background} Section~\ref{sec:esc}.
 The results demonstrate that the sample space selected is representative of the whole space.
 
@@ -172,8 +172,8 @@ To summarise, it can be concluded that the best point found in the sample space 
  \caption{Data on the synthetic benchmarks compared to the selected benchmarks}~\label{tab:synthvsreal}
  \end{table}
 
-One of the difficulties of building a machine learning based model for StreamIt is the lack of a large amount benchmarks available~\cite{wang2013partitionstreamit}.
-To overcome this problem generating synthetic benchmarks can be a solution~\cite{cumminsopencl2017}.
+One of the difficulties of building a machine learning based model for StreamIt is the lack of a large number of benchmarks available~\cite{wang2013partitionstreamit}.
+To overcome this problem, generating synthetic benchmarks can be a solution~\cite{cumminsopencl2017}.
 Thus synthetic StreamIt benchmarks are generated and statistics are gathered from them in a similar style as in~\cite{wang2013partitionstreamit}.
 In this chapter, the synthetic benchmarks are used to build a model for predicting the number of threads, which will be described later in section~\ref{sec:ml}
 

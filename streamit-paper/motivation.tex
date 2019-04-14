@@ -10,7 +10,7 @@ This section motivates the difficulty of finding a good combination of thread an
 First, a simple experiment is conducted where the \bench{FilterBank} StreamIt benchmark is analysed using a 16 core dynamic multicore processor.
 %Maybe reform this sentence
 \bench{FilterBank} distributes its inputs amongst an array of discrete Fourier transform (DFT) filters, the outputs of the DFT filters are down-sampled, up-sampled and then recombined to form a processed signal~\cite{streamitrepo}.
-The program's tasks are partitioned into threads and a various number of cores are allocated to each of the threads.
+The program's tasks are partitioned into threads and a varying number of cores are allocated to each of the threads.
 Since one of the threads is the master which creates and joins all worker threads, this means that the application can be partitioned in up to 15 threads, and 15 cores can be used for those threads.
 It also means that the single-threaded version of an application is in fact one master thread and one working thread.
 To clarify this situation, the term single-working-thread is used throughout this chapter.
@@ -51,8 +51,8 @@ Thus, if a good configuration is found, this can yield an important speedup comp
 However since the number of good configurations is low, this underlines the notion that finding a combination of threads and cores is a non-trivial endeavour, as randomly choosing a configuration will result in a sub-optimal performance.
 Indeed, even if the average case is 2.7x faster than a single core, Figure~\ref{fig:threadcoremotiv} shows that there exists a good number of configurations that can lead to less than average speedups.
 
-\subsection{Minimizing the search space}
-Whilst there exists a large variety of thread-core combinations, certain design choices can be used to try and minimise the space.
+\subsection{Minimising the search space}
+Whilst there exists a large variety of thread-core combinations, certain design choices can be used to try to minimise the space.
 For example, choosing to only do multi-threading reduces the search space to 15 possible solutions whilst only combinations that lead to homogeneous core compositions reduces the search space to:
 
 \begin{equation}

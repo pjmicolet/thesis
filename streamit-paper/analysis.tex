@@ -26,7 +26,7 @@ As both scenarios follow the same trends the optimal number of threads for a ben
 Also, since the number of cores in a composition is decided based on the amount of instruction level parallelism estimated in a thread, as will be explained in Section~\ref{sec:ml}, the thread count must be chosen before deciding on the number of cores that will be allocated to each thread.
 The system can therefore proceed in two stages: first determine the optimal number of threads and then decide on a core composition.
 
-Figure~\ref{fig:threadtrend} also shows that the performance of most benchmarks starts to deteriorate passed a certain number of threads making it critical to not over-allocate threads.
+Figure~\ref{fig:threadtrend} also shows that the performance of most benchmarks starts to deteriorate past a certain number of threads making it critical to not over-allocate threads.
 Since the optimal number of threads varies between benchmarks, there is no general thread count that can be applied to all of them.
 By conducting a feature analysis of the set of applications, a model can be built to determine the optimal thread count for each of the benchmarks.
 This procedure lends itself well to the use of machine learning.
@@ -37,25 +37,25 @@ Finally it is important to observe that executions without compositions always p
 
 \begin{figure}[t]
   \includegraphics[width=1\textwidth]{streamit-paper/graphics/filterbank_tot2.pdf}
-  \caption{Distribution of FilterBank performance when modifying the amount of threads and compositions. Speedup is obtained by comparing performance of configuration to single core, single-working-thread.}\label{fig:fbtotal}
+  \caption{Distribution of FilterBank performance when modifying the number of threads and compositions. Speedup is obtained by comparing performance of configuration to single core, single-working-thread.}\label{fig:fbtotal}
 \end{figure}
 
 Using core composition, the processor fuses a number of cores and associates them to a thread to increase its performance.
-Whilst this flexibility is advantageous, choosing the right amount of cores for a given thread is difficult due to the large number of possible configurations~\cite{gulati2008multitaskingdmc}.
+Whilst this flexibility is advantageous, choosing the right number of cores for a given thread is difficult due to the large number of possible configurations~\cite{gulati2008multitaskingdmc}.
 
-Figure~\ref{fig:fbtotal} shows how multi-threading and core compositions affect performance for the \bench{FilterBank} benchmark.
+Figure~\ref{fig:fbtotal} shows how multi-threading and core composition affect performance for the \bench{FilterBank} benchmark.
 The curves represent the density distribution of speedups, compared to single core/single-working-thread, for different core compositions as a function of the number of threads.
 The right hand side Y-axis represents the number of threads present in the current version of the benchmark whilst the left Y-Axis represents the density normalised by the total number of points in the design space.
 For each of the thread counts the benchmark is executed with 100 different core-compositions.
 The density curve for thread 15 is a single point as there exists only a single composition, so a line is drawn to represent where that point lies.
 Whilst only \bench{FilterBank} is shown here, a figure for each of the benchmarks was generated and can be found in the Appendix Figures \ref{chp:stream:at} through \ref{chp:stream:rt}
 
-The width of each of the curves represents the influence of composition on the \bench{FilterBank}'s performance for a given number of threads.
+The width of each of the curves represents the influence of composition on \bench{FilterBank}'s performance for a given number of threads.
 For this benchmark, the impact of having core-composition enabled often leads to a 1.5x speedup compared to running only in multi-threaded mode; this can be seen for 1 to 4 threads.
 Interestingly, as more threads are used, performance worsens, echoing the results shown in the previous section.
 This is due to the fact that when the number of threads is increased, synchronisation between threads will increase whilst the potential number of cores which can be fused decreases.
 In the case where the application does not feature highly parallel tasks, de-prioritising core compositions can negatively impact performance.
-This signifies that for the benchmark \bench{FilterBank}, it is more important to compose cores with a small amount of threads rather than add more threads to the application.
+This signifies that for the benchmark \bench{FilterBank}, it is more important to compose cores with a small number of threads rather than add more threads to the application.
 
 
 
@@ -69,7 +69,7 @@ One method of increasing the size of the blocks is through loop unrolling, and t
 \begin{figure}[t]
   \includegraphics[width=1\textwidth]{streamit-paper/graphics/filterbank_unroll2.pdf}
   \vspace{-1em}
-  \caption{Distribution of FilterBank performance when modifying the amount of threads, composition and unrolling factor. Speedup is obtained by comparing performance of configuration to single core, single-working-thread without unrolling.}\label{fig:fbunroll}  \vspace{-1em}
+  \caption{Distribution of FilterBank performance when modifying the number of threads, composition and unrolling factor. Speedup is obtained by comparing performance of configuration to single core, single-working-thread without unrolling.}\label{fig:fbunroll}  \vspace{-1em}
 
 \end{figure}
 
@@ -105,14 +105,14 @@ On average, the information shown in Figure~\ref{fig:unroll_bars} and Figure~\re
   \caption{Average size (in instructions) of blocks executed with and without unrolling for each benchmark .}\label{fig:unroll_size}  \vspace{-1em}
 
 \end{figure}
-For the benchmarks that do not scale with unrolling; this is most certainly due to the for loops containing conditional statements which may keep the blocks size small.
+For the benchmarks that do not scale with unrolling; this is most certainly due to the for loops containing conditional statements which may keep the block size small.
 When a loop that holds multiple conditional statements is unrolled, conditional statements may not be fused into a single block; thus the block size does not change.
 This is due to the fact that the compiler cannot generate multiple instruction predicates per block.
 Benchmark \bench{FMRadio} sees a 3x improvement compared to the non-unrolled version, this is due to the fact that all the loops are fully unrolled, reducing the total number of instructions required to execute the task.
 For the \bench{FFT6} benchmark, unrolling loops will actually cause the single-core version to be slower than its not unrolled version.
 %I think this is due to a refreshing performance thing
 This is due to the fact that for \bench{FFT6}, the source to source unrolling adds intermediate variables in the loop which increase the number of loads and stores.
-Whilst it may be slower on a single core, as seen in Figure~\ref{fig:unroll_bars}, having a core-composition running the thread will still result in faster execution that without loop-unrolling.
+Whilst it may be slower on a single core, as seen in Figure~\ref{fig:unroll_bars}, having a core-composition running the thread will still result in faster execution than without loop-unrolling.
 
 Figure~\ref{fig:unroll_size} shows the influence of loop unrolling on the average size of an EDGE block for each of the benchmarks.
 The size represents the number of instructions executed in each of the blocks.
@@ -157,7 +157,7 @@ This is natural as StreamIt applications are naturally geared towards thread lev
 Benchmarks with SplitJoins will naturally benefit from splitting the program into threads~\cite{thiesStreamit2010}.
 %Make sure this is 100% true but as far as I remember this is the case
 Those that do not feature SplitJoins can still be parallelised by splitting a Pipeline into multiple parts.
-For example, benchmark \bench{FIR} features no SplitJoins, yet splitting the Pipeline in 2 will result in a 1.40x speedup.
+For example, benchmark \bench{FIR} features no SplitJoins, yet splitting the Pipeline in two will result in a 1.40x speedup.
 However, it is important to note that whilst finding the optimal thread mapping may result in higher performance improvements than finding the optimal composition for a single-working-thread, the best performance is always obtained through a combination of both techniques.
 For cases such as \bench{BeamFormer} the optimal pairing results in a 1.8x speedup compared to simply finding the best multi-threaded version.
 On average, the optimal combination leads to a 1.5x performance increase compared to only multi-threading.

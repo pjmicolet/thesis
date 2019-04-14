@@ -3,7 +3,7 @@ This section describes the performance achieved by the model when predicting the
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.7\textwidth]{streamit-paper/graphics/results.pdf}
-    \caption{Performance of the machine learning model against the best execution from random sampling. The baseline for the speedup measurement is single core, single-working-thread execution using O2 compiler optimisations. Higher is better.}\label{fig:results}
+    \caption{Performance of the machine-learning model against the best execution from random sampling. The baseline for the speedup measurement is single core, single-working-thread execution using O2 compiler optimisations. Higher is better.}\label{fig:results}
 \end{figure}
 
 \subsection{Machine Learning Model Evaluation Methodology}
@@ -18,21 +18,21 @@ To obtain the speedup the performance of the machine learning based result are c
 Figure~\ref{fig:results} compares the performance of the machine-learning model and the best performance from the sample space.
 As explained in the earlier section, the sampled best is drawn from a sample size of 1,316 combinations of core compositions and thread partitions for each application when possible.
 The baseline is the original StreamIt application running with one thread and one core with O2 optimisations on the dynamic multicore processor.
-The average speedup obtained through the machine learning model is 2.6 compared to the baseline, this is only 16\% smaller than the average of the best found, which is a speedup of 3.1.
+The average speedup obtained through the machine-learning model is 2.6x compared to the baseline, this is only 16\% smaller than the average of the best found, which is a speedup of 3.1x.
 These results are positive as it means the model's results are at least within 16\% of the total best.
 
 As can been seen in Figure~\ref{fig:results} the largest performance penalty resides in the performance of \bench{ChannelVocoder}.
-Table~\ref{tab:summary} presents the actual configuration found for the best sampled point and the machine learning model prediction.
-Each column represent a different threads and the number in the cell represents the number of core associated with that thread.
+Table~\ref{tab:summary} presents the actual configuration found for the best sampled point and the machine-learning model prediction.
+Each column represents a different thread and the number in the cell represents the number of cores associated with that thread.
 For ~\bench{ChannelVocoder} the model predicts only 8 threads rather than the optimal 13.
 Referring back to Figure~\ref{fig:threadtrend} and Figure~\ref{fig:overviewhist} from Section~\ref{sec:streamit:dse} \bench{ChannelVocoder} always performs better when adding more threads rather than increasing the size of a core composition.
 This is the cause of the performance penalty, for ~\bench{ChannelVocoder} it is more important to allocate a higher number of threads rather than compose cores.
-Aside from this case, the machine learning model obtains similar speedups to the best sample.
+Aside from this case, the machine-learning model obtains similar speedups to the best sample.
 
 For other applications such as ~\bench{Beamformer} and ~\bench{FMRadio}, the model is able to get very close to the optimal performance.
 Both benchmarks obtain at least an 8x speedup when using the model.
 This is an encouraging result as it shows that static-ahead of time partitioning of a DMP is an effective way of getting a good configuration.
-In fact, the difference of configurations for ~\bench{FMRadio} between the best point from the space and the machine learning model's is only of two cores which is small.
+In fact, the difference of configurations for ~\bench{FMRadio} between the best point from the space and the machine-learning model's is only of two cores which is small.
 
 \begin{table*}[t]
 \centering

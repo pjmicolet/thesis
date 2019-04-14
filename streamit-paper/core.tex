@@ -61,11 +61,11 @@ The features are very different from the ones presented in Figure~\ref{fig:corr}
 The highest correlating value, which is the average size of a block, has a correlation factor of 0.88.
 It is important to note that the concept of an operation here is at the StreamIt level and not the architectural level.
 This is because the machine learning model will get information from the source-level StreamIt translation.
-With that in mind, the number of operations will correlate with number of instructions found at the instruction level.
+With that in mind, the number of operations will correlate with the number of instructions found at the instruction level.
 
 The second feature is similar to the first but only takes into account blocks that will be executed unconditionally.
-Blocks found in loops are excluded for this metric as there is still some form of condition for those blocks to be executed, they are counted as conditional.
-The next two feature compare the size of the average size of an unconditional block to the largest and smallest unconditional block.
+Blocks found in loops are excluded for this metric as there is still some form of condition for those blocks to be executed.
+The next two features compare the average size of an unconditional block to the largest and smallest unconditional block.
 The fifth feature measures the ratio of the number of unconditional blocks to conditional.
 
 Overall the highest correlating features are not features distinct to StreamIt, such as Pipelines or SplitJoins.
@@ -76,9 +76,9 @@ Instead determining the correct core-composition is more dependent on the amount
 
 From Figure~\ref{fig:corrCore} the highest correlating features fit naturally under the assumptions that higher core compositions will perform better with larger blocks of operations and thus blocks of instructions.
 When blocks are small, a single core can fetch and execute multiple blocks in parallel; up to 4 blocks per core when blocks are smaller than 32 instructions.
-Cores in a composition do not fetch blocks independently; instead one of the cores in the composition will start by fetching blocks until it all its lanes are used and then submits the following predicted PC to the next core in the composition.
-If blocks are small this means that core-compositions will have to predict a high amount of blocks to fill up all its cores.
-Thus large blocks reduce the amount of predictions required to populate all the cores with blocks, reducing the latency of fetching blocks for all cores.
+Cores in a composition do not fetch blocks independently; instead one of the cores in the composition will start by fetching blocks until all its lanes are used and then submits the following predicted PC to the next core in the composition.
+If blocks are small this means that core-compositions will have to predict a high number of blocks to fill up all its cores.
+Thus large blocks reduce the number of predictions required to populate all the cores with blocks, reducing the latency of fetching blocks for all cores.
 The necessity to correctly predict blocks to ensure that all cores are fully utilised explains why a higher number of unconditionally executed blocks compared to conditional blocks correlates positively with large core compositions.
 
 The importance of size is also apparent as the difference between the largest block size and the average block size negatively correlates with core-composition.

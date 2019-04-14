@@ -6,7 +6,7 @@
   \caption{Visual representation of how data was collected for the threading model.}\label{fig:thread_expl}
 \end{figure}
 As seen in the previous section, selecting the right number of threads and a good combination of cores is difficult.
-This difficulty arises from trying to balance between exploiting instruction level parallelism (ILP) by composing a large amount of cores and exploiting TLP by generating more threads.
+This difficulty arises from trying to balance between exploiting instruction level parallelism (ILP) by composing a large number of cores and exploiting TLP by generating more threads.
 As the design space is large, it is important to automate the decision making to alleviate the task of getting the best performance out of the streaming application at hand.
 The problem of automating this decision can be decomposed into two stages; first, determining the right number of threads and second, selecting a good core composition.
 Partitioning the program is done first as it is more natural to split the program up into threads before determining how many cores each thread requires.
@@ -18,7 +18,7 @@ In this section, two machine-learning models that predict the best thread partit
 
 To build the threading model, the synthetic benchmarks previously described in~\ref{chp:stream:sec:setup} are used.
 Figure~\ref{fig:thread_expl} shows the overview of how the data for the model is collected.
-For each of the synthetic benchmark 15 different threaded versions are generated and assigned a single core per thread.
+For each of the synthetic benchmarks 15 different threaded versions are generated and assigned a single core per thread.
 They are then all executed and their cycle count is recorded; this is repeated for 1000 unique synthetic applications. 
 Once all the data is generated, the number of threads that leads to the fastest execution time is saved to a table with a set of features that define the program.
 
@@ -41,17 +41,17 @@ The 10 features can be described as followed:
 \begin{itemize}
 \item Number of Distinct Multiplicities: the variety of different execution rates of filters per time slice.
 \vspace{-0.5em}
-\item Number of unconditionally executed blocks: amount of operations in a filter that always execute.
+\item Number of unconditionally executed blocks: number of operations in a filter that always execute.
 \vspace{-0.5em}
 \item Filters: number of filters found in the benchmark.
 \vspace{-0.5em}
 \item Pipelines: number of pipelines found in the benchmark.
 \vspace{-0.5em}
-\item Number of Loops: amount of loops present in the benchmark.
+\item Number of Loops: number of loops present in the benchmark.
 \vspace{-0.5em}
-\item Number of Vector Operations: amount of potential vector operations found in the benchmark.
+\item Number of Vector Operations: number of potential vector operations found in the benchmark.
 \vspace{-0.5em}
-\item Average Work in all SplitJoins: average amount of operations per SplitJoin.
+\item Average Work in all SplitJoins: average number of operations per SplitJoin.
 \vspace{-0.5em}
 \item Smallest Multiplicity: The smallest execution rate of a single filter.
 \vspace{-0.5em}
@@ -61,8 +61,8 @@ The 10 features can be described as followed:
 \end{itemize}
 
 According to Figure~\ref{fig:corr} the highest correlating value is Number of Distinct Multiplicities found in the StreamIt application.
-There are very little variables that highly correlate beyond Number of Distinct Multiplicities.
-A high number of distinct multiplicities implies that the StreamIt application features an important amount of filters with different execution rates.
+There are very few variables that highly correlate beyond Number of Distinct Multiplicities.
+A high number of distinct multiplicities implies that the StreamIt application features an important number of filters with different execution rates.
 This means that certain filters may be local bottlenecks in a Pipeline for example.
 Multithreading the pipelines with local bottlenecks will help alleviate the problem of multiple distinct multiplicities as it can isolate the filters with longer firing rates to allow smaller filters to execute more often.
 
@@ -76,7 +76,7 @@ It is also important to understand that a high number of Pipelines implies the u
 This is due to the fact that a StreamIt application with no SplitJoins will feature only a single Pipeline, thus a larger number of pipelines implies at least one SplitJoin.
 This is why the number of SplitJoins is not present in the correlating features; because the number of Pipeline already correlates with this feature.\\
 
-A method of determining how many threads an application requires is to build a database of programs.
+A method for determining how many threads an application requires is to build a database of programs.
 Each entry in the database contains a feature vector for a program and the number of threads that leads to the best performance.
 When a new program is encountered, the database can be searched to find applications that have similar features to determine the number of threads needed.
 To implement such a model, k-Nearest Neighbour (kNN) is deployed.

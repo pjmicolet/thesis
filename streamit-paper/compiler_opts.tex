@@ -1,6 +1,6 @@
 \subsection{Loop Unrolling}
 In some cases, filters must be modified in order to better match with the potential hardware optimisations.
-Filters containing a large amount of loops may result in blocks of operation that are too small to take advantage of fusing multiple cores.
+Filters containing a large number of loops may result in blocks of operation that are too small to take advantage of fusing multiple cores.
 Unrolling loops may also increase the size of hyperblocks as is decreases the amount of control flow.
 For example, when potential vectorization may not easily be extracted from a loop unrolling it may yield similar results.
 The StreamIt benchmarks often contain tightly knit loops that can be unrolled~\cite{}.

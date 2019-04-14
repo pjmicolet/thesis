@@ -3,15 +3,15 @@
 This chapter covers the different topics that are present in this thesis and is structured as followed:
 \begin{itemize}
 \item Sections~\ref{sec:cmp} and \ref{sec:hcmp} cover Chip Multicore Processors and Heterogeneous Chip Multicore Processors to motivate the use of Dynamic Multicore Processors (DMP).
-\item Section~\ref{sec:dmp}  describes the three types of DMP that currently exists.
+\item Section~\ref{sec:dmp}  describes the three types of DMP that currently exist.
 \item Section~\ref{chp:bg:sec:edge} describes the Explicit Data Graph Execution (EDGE) instruction set architecture (ISA) used by the DMP explored throughout this thesis.
 Subsection~\ref{sec:edge_isa} explains how EDGE blocks are formed, which is useful for Chapter~\ref{chp:streamit} and Chapter~\ref{chp:cases}.
 Subsection~\ref{sec:edge_arch} covers how blocks are executed on a single core, as well how they are executed when the cores are composed, this is important knowledge for Chapters~\ref{chp:streamit}, \ref{chp:cases} and \ref{chp:hardchanges}.
 \item Section~\ref{sec:valpred} explains how value predictors works, this is used in Chapter~\ref{chp:hardchanges}.
 \item Section~\ref{sec:bg:stream} describes streaming programming languages, explored in Chapter~\ref{chp:streamit}.
-\item Section~\ref{sec:ml} covers the different machine learning techniques and the evaluation method used.
+\item Section~\ref{sec:ml} covers the different machine-learning techniques and the evaluation method used.
 Linear regression, described in subsection~\ref{sec:lr} is used in both Chapter~\ref{chp:streamit} and \ref{chp:cases}.
-k Nearest Neighbours explained in subsection~\ref{sec:kNN} is used in Chapter~\ref{chp:streamit}, k-means clustering found at subsection~\ref{sec:kMeans} is used in Chapter~\ref{chp:cases}.
+k-Nearest Neighbours explained in subsection~\ref{sec:kNN} is used in Chapter~\ref{chp:streamit}, k-means clustering found at subsection~\ref{sec:kMeans} is used in Chapter~\ref{chp:cases}.
 Leave-one cross validation described in subsection~\ref{sec:valid} is used in Chapter~\ref{chp:streamit} and \ref{chp:cases}.
 \item Finally, Section~\ref{sec:esc} explains the Early Stopping Criterion used in Chapter~\ref{chp:streamit}.
 \end{itemize}
@@ -24,7 +24,7 @@ Leave-one cross validation described in subsection~\ref{sec:valid} is used in Ch
  \caption{Intel Core i7 processor internal die photograph taken from~\cite{turleywhite}}\label{fig:i7}
 \end{figure}
  
-Chip Multicore Processors (CMPs) are now ubiquitous due to the difficulty in scaling single core performance.
+Chip Multicore Processors (CMPs) are now ubiquitous due to the difficulty in scaling single-core performance.
 In a CMP, multiple processor cores are packaged on a single die as seen in Figure~\ref{fig:i7}.
 The most commonly adopted CMP design features homogeneous cores as it reduces the design complexity from a hardware perspective~\cite{asanovic2006landscape}.
 In a CMP the performance improvements come from running multiple tasks in parallel.
@@ -61,13 +61,13 @@ As all the cores are homogeneous, if the parallel fraction is low, then this cau
 Unlike CMPs, Heterogeneous Chip Multicore Processors (HCMPs) bring a variety of cores onto a single package.
 This variety may come in different forms, such as having multiple instruction set architectures (ISA) on the same system on chip (SoCs)~\cite{venkat2014harnessingisa,venkatHipstr2016} or different size cores on an SoC~\cite{armbig,jeff2012big}.
 Figure~\ref{fig:blarm} shows a schemata for ARM's big.LITTLE HCMP, where a high-performance Cortex-A15 is paired with a simpler, power efficient Cortex-A7.
-The two cores are connected via a cache coherent interconnect which provides data coherence at the bus-level, allowing the cores to make reads to its neighbour~\cite{armbig}.
+The two cores are connected via a cache-coherent interconnect which provides data coherence at the bus-level, allowing the cores to make reads to its neighbour~\cite{armbig}.
 Software is then executed on one of the cores depending on the user's requirement.
 
 Unlike CMPs, the variety of cores provide a flexibility to the hardware.
 This can be used for different purposes, such as security~\cite{venkatHipstr2016}, energy/power savings and speeding up applications~\cite{venkat2014harnessingisa}.
 Whilst the hardware diversity in HCMPs is an advantage compared to CMPs, it increases the complexity of the optimisation space.
-For example, Gupta et al. in ~\cite{Gupta2017Dypo} show that a single-ISA octa-core big.LITTLE architecture can have 20 different CPU core configurations, combined with the ability to dynamically modify the voltage, this leads to 4000 unique possible hardware configurations to choose from at runtime.
+For example, Gupta et al.~\cite{Gupta2017Dypo} show that a single-ISA octa-core big.LITTLE architecture can have 20 different CPU core configurations, combined with the ability to dynamically modify the voltage, this leads to 4000 unique possible hardware configurations to choose from at runtime.
 This highly increases the complexity of obtaining the correct settings for different programs.
 Multi-ISA HCMPs also face a similar issue as having more than a single ISA not only adds design challenges, but program migration between different cores may in fact deteriorate performance~\cite{DeVuystMigration2012}.
 %In their 2014 paper, Venkat et al.~\cite{venkat2014harnessingisa} demonstrate that a multi-ISA HCMP can improve performance by up to 1.4x and achieve energy savings of up to 40\% compared to a CMP on a peak-power budget of 40W.
@@ -102,14 +102,14 @@ Cores can fuse dynamically and create core compositions of any sizes.
 The exact mechanism of core composition is described later on in Section~\ref{chp:bg:sec:edge}.
 
 The advantage of a core composition DMP over the traditional CMP or HCMP is the ability to reconfigure the processor dynamically to better match the tasks at hand.
-For example, large sequential sections of code with high Instruction Level Parallelism (ILP) can be accelerated on a core composition that mimics a wide superscalar processor.
-On parallel workloads the DMP can be reconfigured by de-composing the composition as seen in Figure~\ref{fig:dynmulticore} to match the Thread Level Parallelism (TLP).
+For example, large sequential sections of code with high Instruction-Level Parallelism (ILP) can be accelerated on a core composition that mimics a wide superscalar processor.
+On parallel workloads the DMP can be reconfigured by de-composing the composition as seen in Figure~\ref{fig:dynmulticore} to match the Thread-Level Parallelism (TLP).
 
 \paragraph*{Resource Sharing Dynamic Multicore Processors}
 A more fine-grained DMP technique is resource-sharing.
 For example in the WiDGET DMP by Watanabe et al. \cite{Watanabe2010Widget}, cores are built out of Instruction Engine front-ends which function similarly to Out of Order (OoO) cores' front and back end pipeline functions.
 They then are connected to Execution Units which they can choose to use.
-Each core in WiDGET also has access to their neighbours Execution Units, allowing for more variation.
+Each core in WiDGET also has access to their neighbour's Execution Units, allowing for more variation.
 Another example of resource sharing is Rodrigues et al.'s work~\cite{rodrigues2014perf} where a core can use resources such as Arithmetic Logic Units (ALUs) from other cores.
 
 \paragraph*{Micro-architectural Reconfigurable Dynamic Multicore Processors}
@@ -177,7 +177,7 @@ Figure~\ref{fig:EdgeHB} shows the organisation of the new block, where the colou
 As the compiler needs to declare the number of stores and which registers are written to in the block header, extra instructions may need to be generated to ensure the block always executes the same amount of stores and register writes.
 In the case of Figure~\ref{fig:EdgeHB}, the last instruction is generated to ensure that a write to the register \textit{g71} always happens regardless of the predicate.
 This adds some complexity to hyperblock formation, as the size of the block may be artificially inflated if the merging blocks write to different registers or have a different number of stores.
-Even so hyperblocks allow for increased instruction level parallelism (ILP) as  which in turn improves the performance of the application being executed~\cite{smith2006edge}.
+Even so hyperblocks allow for increased instruction-level parallelism (ILP) as  which in turn improves the performance of the application being executed~\cite{smith2006edge}.
 Overall, the EDGE ISA enables the architecture to dispatch blocks speculatively, with low overhead~\cite{putnam2010e2,kim2007tflex}, therefore, increasing exploitation of ILP.
 
  \begin{figure}[t]
@@ -195,7 +195,7 @@ These are the segmentation of the instruction window, and the core-composition m
 
 \subsubsection{Core Lanes} 
 
-According to Smith et al. in ~\cite{smith2006edge}, the sizes of blocks generated by the compiler for a set of applications from SPEC2000~\cite{spec2000} and EEMBC~\cite{eembc} range from 5 instructions to 50 instructions and on average are 20.6 instructions long.
+According to Smith et al. ~\cite{smith2006edge}, the sizes of blocks generated by the compiler for a set of applications from SPEC2000~\cite{spec2000} and EEMBC~\cite{eembc} range from 5 instructions to 50 instructions and on average are 20.6 instructions long.
 If an EDGE processor is designed to fetch large blocks, which can be up to 128 instructions long, then the compiler is currently not able to generate large enough blocks.
 To maximise core-utilisation, an EDGE processor instruction window can be segmented into lanes.
 This allows the core to fetch more than a single block at a time.
@@ -214,8 +214,8 @@ Core Composition is achieved by fusing a set of \textit{physical} cores to creat
 In the processor used throughout the thesis this does not modify the physical structure of the processor, instead it provides a unified view of a group of physical cores to the software.
 The micro-architecture is distributed: register files, Load Store Queues (LSQs), L1 caches and ALUs all look like nodes on a network.
 This means that when cores are composed together, this is similar to adding an extra node to the network.
-Core composition is a dynamic modification and may occur during the execution of a program to better fit the workload.
-Unlike traditional CMPs, composed cores operate on the same thread and extract Instruction Level Parallelism (ILP) rather than Thread Level Parallelism (TLP)~\cite{micolet2016dmpstream,pricopi2012bahurupi}.
+Core-composition is a dynamic modification and may occur during the execution of a program to better fit the workload.
+Unlike traditional CMPs, composed cores operate on the same thread and extract Instruction-Level Parallelism (ILP) rather than Thread-Level Parallelism (TLP)~\cite{micolet2016dmpstream,pricopi2012bahurupi}.
 
 \begin{figure}
  \center
@@ -223,7 +223,7 @@ Unlike traditional CMPs, composed cores operate on the same thread and extract I
  \caption{Core Composition Mechanisms for the EDGE-based architecture.}\label{fig:dmp}
  \end{figure}
  
-\paragraph*{Core composition mechanism}
+\paragraph*{Core-composition mechanism}
 Figure~\ref{fig:dmp} shows the different stages and mechanisms of core composition for a four core EDGE system.
 When creating a new composition a master core informs all other cores about the fusion and sends the predicted next block address to an available fused core.
 When a new thread is started on a fused core the OS and runtime write the new core mapping to a system register.
@@ -237,7 +237,7 @@ In the second case, the programmer only defines the number of cores that must be
 
 When a core mispredicts a branch in a composition, it informs the other cores which flush any younger blocks.
 When un-fusing, the master core informs the other cores, which then commit or flush their blocks and power down while the master core continues to fetch and execute blocks from the thread.
-The extra hardware required to support dynamic reconfiguration is very minimal~\cite{kim2007tflex} since most of the machinery already in place can be reused such as the cache coherence protocol when fusing and un-fusing the cores.
+The extra hardware required to support dynamic reconfiguration is very minimal~\cite{kim2007tflex} since most of the machinery already in place can be reused such as the cache-coherence protocol when fusing and un-fusing the cores.
 
 \begin{figure}[t]
     \centering
@@ -256,7 +256,7 @@ Core \textit{C0} stops fetching blocks after this request, and will have to wait
 
 \paragraph*{Memory and register consistency} 
 When a core composition has multiple blocks on different cores, it can execute the instructions out of order.
-However instructions that modify memory or registers pass through the load store queue (LSQ) and register-file respectively and are executed in order to ensure memory and register value consistency.
+However instructions that modify memory or registers pass through the load-store queue (LSQ) and register-file respectively and are executed in order to ensure memory and register-value consistency.
 Register reads from younger blocks that depend on a register write from an older block will be stalled until the write is executed.
 In case of a memory violation caused by undetected dependencies a flush of all blocks younger than the violator, including the violating block, is performed.
 
@@ -377,7 +377,7 @@ The context box represents some information that is used by the predictor, such 
 A \textit{Context} predictor relies on the history of values an instruction outputs to generate a prediction.
 This means that a single instruction can occupy multiple entries of the predictor as each new value must be recorded.
 This is why, in Figure~\ref{fig:pred_examples}, the specific load instruction has multiple entries in the predictor, as the value generated by the load is different for each iteration of the loop.
-The \textit{Context} predictor can only predict the value the instruction if the specific value is already stored in the predictor as it does not have any ability to \textit{infer} the value.
+The \textit{Context} predictor can only predict the value of the instruction if the specific value is already stored in the predictor as it does not have any ability to \textit{infer} the value.
 The predicted value depends on the context, which can either be captured by dataflow information or branch history~\cite{peraisVTAGE2014}.
 Overall, whilst predictions may be simpler to generate they are considered space-inefficient~\cite{peraisBeBop2015}.
 
@@ -399,7 +399,7 @@ This section covers a specific implementation of a value predictor that is used 
 The Differential Value Tagged Geometric length Predictor (D-VTAGE) \cite{peraisBeBop2015} is a Computational value predictor that operates on blocks of instructions to minimise network pressure and increase the prediction output per cycle.
 To simplify the explanation of the predictor, the size of the block is set to 1 instruction.
 D-VTAGE is organised in two parts, a Last Value Table (LVT) that contains the last committed values for a given set of instructions, and a set of value tables (VT) which contain the strides.
-The left hand side of Figure~\ref{fig:stride_over} shows an overview of the predictor with N stride tables.
+The left-hand side of Figure~\ref{fig:stride_over} shows an overview of the predictor with N stride tables.
 The largest stride table is a tagless base predictor that is directly indexed, whereas VT1 to VTN are tagged by hashing the Program Counter of the instruction with varying amounts of the branch history.
 
 \begin{figure}[t]
@@ -429,7 +429,7 @@ The prediction will fetch values from the LVT and the stride tables.
 The base predictor and LVT are directly indexed, whereas the tables VT1 to VTN are tagged.
 The stride information will come from the table that has the longest branch history.
 The prediction is then generated by adding the stride to the value in the LVT.
-If the confidence counter of the entry is equal to the firing value then the prediction is used, it not then the prediction is kept alive until the instruction is committed to train the predictor.
+If the confidence counter of the entry is equal to the firing value of then the prediction is used, it not then the prediction is kept alive until the instruction is committed to train the predictor.
 
 \paragraph*{Updating the predictor}
 Predictions are validated at the commit phase of the instruction to simplify the hardware~\cite{peraisVTAGE2014}.
@@ -459,7 +459,7 @@ These applications, such as audio or video decoding can be commonly found in mob
 Unlike conventional programming languages such as C++, these languages abstract the concept of incoming and outgoing data to permit the programmer to focus on how the data should be treated.
 Programs are described as directed graphs where nodes are functions and their edges represent their input and output streams. 
 These languages offer primitives to describe such a graph~\cite{theis2002streamit} which expose parallelisable and serial sections of the application directly to the compiler. 
-Rates of incoming and out-coming data can also be defined to facilitate load balancing optimisations~\cite{chen2005rawstream}.
+Rates of incoming and out-coming data can also be defined to facilitate load-balancing optimisations~\cite{chen2005rawstream}.
 
 Features of streaming programming languages make them an ideal language for targeting multicore processors.
 The explicit data communication between the different tasks in the program, the ability to estimate the amount of work performed in each task and information about data rates between tasks allows the compiler to easily generate a multi-threaded application that can run on a dynamic multicore processor.
@@ -490,8 +490,8 @@ Finally a Feedback Loop (Figure~\ref{fig:streamittypes}(b)) provides a way for f
 The resulting program written in StreamIt represents a graph where the nodes are filters and their edges represent the incoming and outgoing data streams.
 
 \section{Machine-learning techniques and evaluation}~\label{sec:ml}
-This section covers the different machine learning techniques and evaluation methodology used throughout the thesis.
-The three techniques discussed are: linear regression, k-Means Clustering and k-Nearest Neighbours, whilst the evaluation technique is "leave-one out" cross validation.
+This section covers the different machine-learning techniques and evaluation methodology used throughout the thesis.
+The three techniques discussed are: linear regression, k-Means Clustering and k-Nearest Neighbours, whilst the evaluation technique is ``leave-one out" cross validation.
 
 \subsection{Linear Regression}~\label{sec:lr}
 
@@ -530,30 +530,30 @@ The linear regression takes the form of $y=4.77 + 0.88 \times x$ and is represen
 \end{figure}
 
 k-Means is a clustering technique that groups \textit{n} observations into \textit{k} clusters such that $k < n$.
-The original algorithm presented by Lloyd in~\cite{kMeans} first randomly places \textit{k} centroids \textit{c} at random locations in the space.
-Then, each point \textit{$x_{i}$} in the space of \textit{n} observations is assigned to a cluster who's centroid \textit{$c_{j}$} is closest to it.
+The original algorithm presented by Lloyd~\cite{kMeans} first randomly places \textit{k} centroids \textit{c} at random locations in the space.
+Then, each point \textit{$x_{i}$} in the space of \textit{n} observations is assigned to a cluster whose centroid \textit{$c_{j}$} is closest to it.
 Once each point has been assigned to a cluster, each centroid is recomputed by re-centering itself around the datapoints in the cluster.
 This is repeated until the centroids no longer move.
  
 Figure~\ref{fig:kmeanex} provides a visual example of a running k-Means on a toy dataset, with k set to two.
 Each colour in the graph represents a cluster, the squares represent the n observations, whilst the circles represent the centroids.
 \vspace{-1em}
-\subsection{k Nearest Neighbours}~\label{sec:kNN}
+\subsection{k-Nearest Neighbours}~\label{sec:kNN}
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.8\textwidth]{background/graphics/knn1.pdf}
-    \caption{Small example of k Nearest Neighbours classification on a toy dataset with two clusters and k = 4. The squares represent datapoints of the trained kNN dataset. The figure shows a new point (circle) being classified.}
+    \caption{Small example of k-Nearest Neighbours classification on a toy dataset with two clusters and k = 4. The squares represent datapoints of the trained kNN dataset. The figure shows a new point (circle) being classified.}
     \label{fig:knn}
 \end{figure}
-k Nearest Neighbours (kNN) can be used for both regression and classification.
+k-Nearest Neighbours (kNN) can be used for both regression and classification.
 In both situations an output is generated by averaging the \textit{k} nearest neighbours to the input from the training data.
 The average is often obtained by a weighted sum of the features of the k neighbours.
 Figure~\ref{fig:knn} shows an example of a kNN classification on a new point.
 The squares represent the trained kNN dataset, the colours represent the different classifications.
 When a new point is added (as seen on the right hand graph), the four closest neighbours are found, and it is classified under the same category.
 \vspace{-0.5em}
-\subsection{Leave One Out Cross Validation}~\label{sec:valid}
-The process of leave one out cross validation involves using the training dataset as the evaluation dataset.
+\subsection{Leave-One-Out-Cross-Validation}~\label{sec:valid}
+The process of leave-one-out-cross-validation involves using the training dataset as the evaluation dataset.
 Given a set of $n$ points in the training set, a new model is trained using $n-1$ of the points available.
 The last unused datapoint is evaluated against this new model.
 This procedure is repeated for every point in the dataset, and the results of the evaluation are averaged out to produce a final result.
