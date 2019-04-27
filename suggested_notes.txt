@@ -1,0 +1,176 @@
+Page 1:
+Tiled architecture is a processor with a high amount of cores, most of these
+simpler in design. As the complexity of cores isn't increasing like it
+previously was, we will end up with a tile-based arch in the future.
+Page 2:
+Hardware allows for legacy software to take advantage of the new
+reconfiguration without being recompiled, so hardare wins.
+
+Page 8:
+Based on desktop, smartphone and supercomputer environment. We're not
+concerned with microcontrollers here.
+(Dunno about reference)
+
+Page 12:
+Single entry multiple exits.
+This means that we cannot branch from one block to the middle of another
+block, however a single block can have multiple branches to other blocks.
+No for the second question
+Currently a maximum of two exit blocks can be supported
+
+Page 17:
+Clear that up in inkscape
+
+Chapter 3:
+Overall: clear up spec
+Page 25:
+Clear up that simplescalar is a simulator
+Page 26:
+For example, if an E2 core has four segments, each capable of fetching a block
+of up to 32 instructions long, then given a program composed of blocks of only
+32 instrcutions, an E2 core can execute 4x more blocks than a TFlex core.
+Page 29:
+Their offline model first profiles a program without composition and then
+feeds that profiling data to the runtime system to make a prediction, whereas
+their online model modifies the current size of a composition by +1/-1 core
+and then evaluates whether or not that change was beneficial to the
+performance of the program.
+Page 30:
+A refresh involves clearing the operand buffers whilst keeping the
+instructions in the instruction window, removing the need to refetch the
+block. 
+Page 32:
+Whatever
+Page 34:
+Reread
+Page 37:
+It's basically a bypass network for composition
+Page 38 && 39:
+whatever
+Page 40:
+They don't encode it in the same way. (Figure this one later)
+Page 46:
+Hyperblock formation is a separate flag.
+Page 47:
+It's both
+You will need to run and profile your application multiple times. If it's also
+dataset dependent then that adds more profiling time.
+Page 48:
+Add that line
+Page 50:
+Density represents a higher number of cycle counts that match this bucket.
+it's normalized to 1.
+Page 56:
+200
+Idk
+Page 58:
+No because some don't have up to 15 cores
+Fix FIR
+Page 60:
+For this, 32x
+Page 63
+Yes
+Page 66:
+They were present in the streamit compiler
+These were just the top ten features there were more
+Page 67:
+When output 1 item takes more inputs
+Page 68:
+It was
+No
+By testing multiple values of K
+It can vary because the training set will influence the data
+Page 69:
+Best of the sample space.
+Yes the figure shows features picked from the same set as used before.
+Page 70
+Having filters with different firing rates in the same program
+No, not well (cba)
+Because we can run different threads of the normal streamit applications under
+different confs
+Page 73
+Idk
+Page 80
+it's the same as later on
+Page 81
+Fix lines
+Page 85:
+Because a single core will have no synchronization cost
+Worst case estimate is that all blocks are super small and it causes the
+highest amount of synchronization
+Page 88:
+It might have an effect on icache misses but no it doesn't have an effect
+Page 89:
+Synthetic examples
+Page 90:
+Logical core is a composed core
+Page 95:
+No this is only a concept.
+Page 97:
+Yes, this is explained later on with active core
+Page 98:
+Not that I know of
+Page 99:
+In a homogeneous situation yes, if not we would look at heterogeneous systems
+that have a higher thread migration latency.
+Page 100:
+Because of the time it takes to execute
+True,only executions for powers of two
+Because we want to base a reconfiguration policy based on observed data
+Page 101:
+Static represents a configuration that never changes, however static suite is
+the same conf for all bechnarks
+Page 105:
+Keep performance constant as in optimal
+Not sure I care answering
+Page 106:
+Different because it's finer grained based on the block, but ultimately shares
+simialr information because that is good info.
+I forget
+Dunno how to answer
+Page 107:
+it's not rounding up it's full rounding
+Page 110
+Correct
+Page 111
+Yes
+Page112
+Fetching does involve getting the instructions
+Page 113
+Fairness in this context involves making sure each core in the composition has
+work to do
+Remove the real value predictor
+Page 114
+Caused by cache misses/latencies
+Page 115
+I forget
+Page 116
+Execution of instructions in ALU
+They're not blocks they're instructions being executed OOO
+Page 119
+Yes
+Yes
+Page 120:
+Cleaned up
+Page 121:
+It's only looking at what has changed in the commit stage
+Page 122:
+Sending instructions to ALU
+Page 124:
+Ignore
+Page 132:
+Each core has its own value predictor it's attached to, same as having a
+brench predictor
+Page 133:
+Count of unique reads
+dependencies between blocks
+Dynamic blocks
+Not sure I get that one
+Page 134:
+Whatever
+Page 135:
+Size isn't evaluated so ignore this
+Page 139:
+This is to match the same predictions given the fact that VTAGE now adds extra
+flushes
+
