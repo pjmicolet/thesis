@@ -99,7 +99,7 @@ for (i = 0; i < nr; i++)
 Applications often feature different phases of IPC due to varying loop patterns.
 To illustrate this Figure~\ref{fig:disp_ex} plots the IPC performance variation over the execution of the \bm{Disparity} Benchmark from the San-Diego Vision Benchmark Suite (SD-VBS)~\cite{sdvbs} on core compositions of sizes 4 and 16 respectively.
 IPC is a natural method of evaluating the performance of a core composition as increasing the size of the composition can lead to a higher number of instructions executing per cycle.
-In this Figure, the x-axis tick represents a certain number of blocks (see Chapter~\ref{chp:Background} Section~\ref{sec:edge_isa}) that are committed rather than being a measure of time in cycles.
+In this Figure, the x-axis tick represents 640 committed blocks (see Chapter~\ref{chp:Background} Section~\ref{sec:edge_isa}) that are committed rather than being a measure of time in cycles.
 This is why the high IPC phases for both compositions appear to last the same length of time even though the 16 core-composition executes the blocks faster.
 The reason why the number of blocks committed is used as a measurement of time is due to the fact that the number of blocks necessary to execute a program are independent of the size of a core-composition.
 On 4 cores, the performance oscillates between an IPC of 2 and 6 depending on the phase while on 16 cores the IPC can be as high as 16.
@@ -140,7 +140,7 @@ These optimisations are well known and do not require any structural modificatio
 Figure~\ref{fig:compmotiv} illustrates the impact of applying loop transformations on the \bm{Disparity} benchmark compared to a standard compiler not specifically tuned for the EDGE architecture.
 In this case, the two main transformations are loop unrolling and loop interchanging.
 The Figure shows the IPC performance of a 16 core composition with and without optimisations.
-For example, in Listing~\ref{lst:high_ipc}, the nested loop at lines 14 to 16 has a data dependency between iterations; switching the for loop headers can get rid of the dependency.
+For example, in Listing~\ref{lst:high_ipc}, the nested loop at lines 10 to 12 has a data dependency between iterations; switching the for loop headers can get rid of the dependency.
 As can be seen, the impact of these transformations can be large, leading to an 12x improvement in IPC.
 Figure~\ref{fig:compmotiv} shows that the optimisations allow the core-composition to sustain a high IPC phase longer than without the optimisations.
 Longer high IPC phases also means that the DMP will require less switching between core compositions, thus incurring less of a reconfiguration penalty.
