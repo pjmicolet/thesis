@@ -33,7 +33,7 @@ for(int i = 0; i < 1000; i++)
 \end{lstlisting}
 \end{center}
 \vspace{-2em}
-\captionof{lstlisting}{Example of an inner-most loop which should be completely unrolled.}
+\captionof{lstlisting}{Synthetic example of an inner-most loop which should be completely unrolled.}
 \label{lst:small}
 \vspace{-2em}
 \end{figure}
@@ -73,7 +73,7 @@ for(int i = 0; i < 1000; i++)
 \end{lstlisting}
 \end{center}
 \vspace{-1em}
-\captionof{lstlisting}{Data dependency which can be removed via loop interchange.}
+\captionof{lstlisting}{Synthetic example of a data dependency which can be removed via loop interchange.}
 \label{lst:dep}
 \vspace{1em}
 \end{figure}
@@ -91,12 +91,12 @@ However, as of the writing of this thesis, a block can only support a single pre
      \centering
      \includegraphics[width=\textwidth]{cases-paper/graphics/Exploration/ipc_comp.pdf}
 \vspace*{-3em}
-     \caption{Average IPC using the optimal sized logical-core, with and without optimisations. Higher is better.}
+     \caption{Average IPC using the optimal sized composition, with and without optimisations. Higher is better.}
      \label{fig:ipccom}
     \centering
     \includegraphics[width=\textwidth]{cases-paper/graphics/Exploration/comp_speed.pdf}
 \vspace*{-8mm}
-    \caption{Speedup from using code-optimisations over baseline source code using the same optimal sized logical-core.}
+    \caption{Speedup from using code-optimisations over baseline source code using the same optimal sized composition.}
     \label{fig:speedcomp}
 \vspace{5mm}
 \end{figure}
