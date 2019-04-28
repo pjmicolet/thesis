@@ -39,7 +39,7 @@ On a 16 core composition, each core is only actively executing a block 12.5\% of
 Cores are not being provisioned with blocks fast enough, thus, for a benchmark such as \bm{MSER}, the current fetching scheme leads to inefficient use of large compositions.
 %This is why the performance improvements are only slight with perfect branch prediction.
 
-To illustrate how modifying the fetching mechanism can improve performance of core composition, an oracle fetching mechanism (OF) is designed, in which cores can fetch in parallel and do not require any communication.
+To illustrate how modifying the fetching mechanism can improve performance of core composition, an oracle fetching mechanism (OF) is designed, in which cores can fetch in parallel and do not require any communication beyond receiving a prediction from another core.
 Figure~\ref{fig:motivation_fetch} shows the speedup obtained by using the OF scheme on \bm{MSER} with different branch prediction accuracies and a baseline of a single core.
 The figure shows that by modifying the fetching scheme a 16 core composition can potentially improve the performance of \bm{MSER} by 2x, compared to the 1.15x obtained when using the SF scheme.
 
@@ -86,7 +86,7 @@ For example, the code found in Listing~\ref{lst:mser_snipet} shows a loop found 
 \label{lst:mser_snipet}
     \centering
     \includegraphics[width=1\textwidth]{chapter3/graphics/mser_ex.pdf}
-    \caption{Example of how data-dependencies cause delays when executing four blocks in parallel. The blocks represent part of the loop body in Listing~\ref{lst:mser_snipet}.}
+		\captionof{figure}{Example of how data-dependencies cause delays when executing four blocks in parallel. The numbers represent part of the loop body in Listing~\ref{lst:mser_snipet}.}
     \label{fig:mser_nvsited}
 	\vspace{1em}
 \end{figure}

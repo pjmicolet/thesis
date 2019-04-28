@@ -91,7 +91,7 @@ If blocks are distributed equally amongst all cores using a round robin model, t
 This means that changing the fetching scheme to a round robin scheme does not necessarily stop cores from depending on one another to fetch blocks.
 However, once a core has a block it can use branch prediction to predict the next block it must fetch, rather than waiting for another fetch request from a core.
 As this new fetching mechanism employs a round robin scheme, the branch predictor must predict a block that is multiple steps into the future rather than the immediate branch.
-By allowing cores to fetch blocks in \textit{strides}, instead of sequentially, the new fetching mechanism not only ensures cores have an equal amount of work, but that they can fetch in parallel.
+By allowing cores to fetch blocks in \textit{strides}, instead of sequentially, the new fetching mechanism not only ensures cores have an equal amount of work (as long as the block size is equal), but that they can fetch in parallel.
 
 \begin{algorithm}
 
@@ -167,7 +167,7 @@ branches = prediction[i+1, i+n]\\
 	}
 }
 \vspace{-1em}
-\caption{Overview of commit stage for \textit{n} cores fused}~\label{alg:commit}
+\caption{Partial overview of commit stage for \textit{n} cores fused}~\label{alg:commit}
 \end{algorithm}
 
 \paragraph*{Fetching mechanism}
@@ -178,7 +178,7 @@ The predictions do not have to be done on the same cycle, however previous work 
 The core submits a fetch request to the next core in the composition for $block_{i+1}$ and then uses the prediction $block_{i+n}$ to fetch its next block.
 If the next core is not empty, then the current core simply predicts $block_{i+n}$.
 
-In case that a core cannot predict $block_{i+n}$, it simply submits a prediction for $block_{i+1}$ to the next core.
+In case that a core cannot predict $block_{i+n}$, it simply submits a prediction for $block_{i+1}$ to the next core and continues to execute $block_{i}$.
 The core will then have to wait for another core in the composition to send it the prediction for $block_{i+n}$.
 Whilst this case may impact overall throughput, it is no different than the SF scheme as SF would also stop fetching after $block_{i+n-1}$ and wait for $block_{i+n}$'s PC to be resolved.
 
@@ -188,7 +188,7 @@ Instead of sending the fetch request to another core, a core saves the block add
 In this chapter, a core can only have one buffered PC at a time.
 
 \paragraph*{Committing mechanism}
-Algorithm~\ref{alg:commit} shows how blocks are committed in RRF.
+Algorithm~\ref{alg:commit} shows the new steps added to committing blocks in RRF.
 When committing $block_i$, the core sets the next core in line to be the non-speculative core.
 This is due to the fact that the next core will always have $block_{i+1}$.
 If the next core in line does not yet have $block_{i+1}$ due to no prediction having been made, then the committing core will submit the resolved PC to the next core, rather than fetching it for itself.
@@ -228,6 +228,7 @@ Once $Core_1$ can make a branch prediction it will attempt to predict for $block
 \paragraph*{Limitation}
 
 Whilst RRF allows for cores to fetch out of order in parallel, blocks must still be dispatched in order.
+Here, dispatch represents the moment an instruction can be sent to an ALU.
 This is to ensure that blocks do not execute data-dependent register reads out of order, when dependencies are not yet determined.
 To achieve this, each core maintains a flag that tells it whether or not its oldest - not yet dispatched block - can be dispatched.
 Since blocks are fetched in a round-robin fashion, whenever a core starts dispatching a block, it sets the flag to false, and informs the next core to start fetching.

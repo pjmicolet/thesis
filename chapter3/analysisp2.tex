@@ -17,8 +17,8 @@ Due to the fact that the block size is fixed ahead of time~\cite{peraisBeBop2015
 Having a block with many values means that the D-VTAGE predictor can predict a higher number of register reads for a single EDGE block, however this comes at the expense of having fewer blocks in the predictor tables.
 On the other hand, a small block size allows to have multiple blocks stored at a time but means that not all instructions can have their values predicted in the EDGE block.
 
-To determine the size, all the EDGE blocks of the SD-VBS benchmarks are analysed to determine the average register read and write count per block.
-The writes are tracked as it provides information on the potential number of register dependencies found in each of the applications.
+To determine the size, all the EDGE blocks of the SD-VBS benchmarks are analysed to determine the average unique register read and write count per blocks throughout the execution of the benchmarks.
+The writes are tracked as it provides information on the potential number of register dependencies between blocks found in each of the applications.
 The left hand side of figure~\ref{fig:edge_reg_read} shows the average number of register read and writes for each of the benchmarks.
 Whilst \bm{Disparity} \bm{Localization}, \bm{Texture\_Synthesis} and \bm{Tracking} have higher register read counts than the average, most of them only have 5 writes per block.
 This means that having a D-VTAGE block size of 5 could capture all dependencies; however this would require detection of which reads are data-dependent, which is beyond the scope of this thesis.
@@ -38,7 +38,7 @@ As Section~\ref{chp:chp3:sec:analysis} showed these benchmarks benefit from valu
 One method of understanding how the block based D-VTAGE predictor will perform is to study the number of unique blocks found in each of the benchmarks.
 Benchmarks that feature a smaller number of unique blocks can potentially benefit more from value prediction as the predictor cannot hold many blocks at a time.
 Reporting all unique blocks executed is not a proper evaluation of the variety of blocks found in the benchmark, as some will most certainly be executed more times than others.
-To account for this, blocks are sorted by number of occurrences in descending order, and then added to the unique block counter as long the number of occurrences of visited blocks is under a percentage of total number of blocks executed.
+To account for this, blocks are only counter towards the unique block counter as long as they represent a certain percentage of the total number of blocks executed.
 
 The right hand side of figure~\ref{fig:edge_reg_read} shows the number of unique blocks found in each benchmark that account for 50\%,80\%,90\% and 99\% of the total number of executed blocks.
 As can be seen, applications \bm{Disparity}, \bm{Multi\_NCut} and \bm{Sift} \bm{Stitch} and \bm{Tracking} execute fewer than 50 unique blocks during 90\% of its total execution.
@@ -216,6 +216,7 @@ This explains why the low confidence counter sometimes performs worse than the h
 Finally, this section studies how non-perfect branch prediction affects the performance of the applications with RRF and value prediction.
 To conduct this analysis, the perfect branch predictor was modified to randomly mis-predict given a certain accuracy requirement.
 For each of the benchmarks, the branch prediction accuracies recorded in Chapter~\ref{chp:cases} are used.
+The modified branch predictor is used to ensure that the same accuracies are maintained, even with the potential influence of a value predictor.
 These accuracies can be found in Table~\ref{tab:sd-vbsbpred2}.
 
 Figure~\ref{fig:bpred} reports the speedup obtained with the different configurations using a non-perfect branch predictor.

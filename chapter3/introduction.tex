@@ -4,7 +4,7 @@ It also discussed limiting factors of performance such as branch prediction requ
 To improve the performance of core composition, Chapters~\ref{chp:streamit} and ~\ref{chp:cases} showed that source level modifications are a good method.
 These source-level modifications are often used to increase the size of the block which enables better utilisation of large core compositions.
 
-In situations where source or compiler optimisations cannot increase the size of a block, core composition cannot improve the performance of the application.
+In situations where source or compiler optimisations cannot increase the size of a small block, core composition cannot improve the performance of the application.
 This is due to the latencies introduced by fetching multiple small blocks execute on a composition.
 To increase the viability of core composition, other solutions must therefore be explored.
 Instead of only focusing on improving the source code, analysing how a composition functions at a hardware level can help determine other bottlenecks.
@@ -44,11 +44,11 @@ If multiple blocks are fetched and executed in parallel, and the bypassing is on
 With value prediction, cores can speculatively fetch register values without having to communicate, allowing for a greater amount of ILP to be exploited.
 
 This chapter is organised as follows: first a benchmark previously explored in Chapter~\ref{chp:cases} is re-analysed to underline how current hardware does not suffice to ensure performance improvements.
-Then a new fetching mechanism called Round Robin Fetch is introduced: cores are able to fetch blocks independently in a round robin fashion to improve fairness.
+Then a new fetching mechanism called Round Robin Fetch is introduced: cores are able to fetch blocks independently in a round robin fashion to improve the distribution of work amongst the cores in the composition.
 Then a current state-of-the art value predictor is discussed and shown to be applicable for the EDGE architecture.
 This is followed by an exploration of how these hardware modifications affect performance of core composition under an idealistic scenario, where perfect value prediction is enabled.
 The benchmarks used in this chapter are the San-Diego Vision benchmark suite, the same as Chapter~\ref{chp:cases}.
-Finally an evaluation of a real value predictor~\cite{peraisBeBop2015}, the block based differential VTAGE predictor (D-VTAGE) with the new fetching scheme is conducted.
+Finally an evaluation of a value predictor~\cite{peraisBeBop2015}, the block based differential VTAGE predictor (D-VTAGE) with the new fetching scheme is conducted.
 
 To summarise, the contributions are:
 
