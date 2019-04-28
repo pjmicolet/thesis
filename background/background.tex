@@ -24,7 +24,7 @@ Leave-one cross validation described in subsection~\ref{sec:valid} is used in Ch
  \caption{Intel Core i7 processor internal die photograph taken from~\cite{turleywhite}}\label{fig:i7}
 \end{figure}
  
-Chip Multicore Processors (CMPs) are now ubiquitous due to the difficulty in scaling single-core performance.
+Chip Multicore Processors (CMPs) are now ubiquitous in the desktop, server and smart-phone space due to the difficulty in scaling single-core performance.
 In a CMP, multiple processor cores are packaged on a single die as seen in Figure~\ref{fig:i7}.
 The most commonly adopted CMP design features homogeneous cores as it reduces the design complexity from a hardware perspective~\cite{asanovic2006landscape}.
 In a CMP the performance improvements come from running multiple tasks in parallel.
@@ -147,7 +147,7 @@ These restrictions are:
 \vspace{-1em}
 \item Load/Store: an EDGE block may have at most 32 load/store instructions.
 \vspace{-1em}
-\item Entry/Exit: an EDGE block may have a single exit but may have multiple exits.
+\item Entry/Exit: an EDGE block may have a single entry point which is the first instruction in the block but may have up to 3 exits (two predicated branches and a fallthrough branch).
 \end{itemize}
 If a block does not meet these requirements, it is broken down into smaller blocks.
 

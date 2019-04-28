@@ -12,17 +12,17 @@ The idea of composing physical cores was first introduced by Ipek et. al. in Cor
 CoreFusion employs a traditional architecture with 2 issue out of order cores.
 When cores are fused, they collectively fetch from the same thread, whenever an instruction cache miss issued, an eight word block is delivered and distributed across in all of the cores' caches.
 Fetches are aligned with the core responsible for the 2 oldest instructions.
-In the original paper, a 4 core composition obtains a 1.3x speedup on SPECINT and a 1.5x speedup on SPECFP over a 2 issue core.
+In the original paper, a 4 core composition obtains a 1.3x speedup on SPEC 2000 INT and a 1.5x speedup on SPEC FP over a 2 issue core.
  
 The Bahurupi~\cite{pricopi2012bahurupi} polymorphic heterogeneous multicore architecture proposed by Pricopi et. al. introduces a sentinel instruction which informs the hardware about the \textit{live-in} and \textit{live-out} registers of a basic block.
-Baharupi uses the SimpleScalar ISA~\cite{burger1997simplescalar}, and the compiler adds this instruction to the top of every basic block, splitting the program up into blocks similarly to EDGE.
-They show that, on average this introduces a 24\% code size increase for SPEC integer applications, 15\% for SPEC floating point and 19\% for Mediabench~\cite{mediabench} and MiBench~\cite{mibench} benchmarks.
+Baharupi uses the SimpleScalar Portable ISA (PISA)~\cite{burger1997simplescalar}, and the compiler adds this instruction to the top of every basic block, splitting the program up into blocks similarly to EDGE.
+They show that, on average this introduces a 24\% code size increase for SPEC 2006 INT, 15\% for SPEC FP and 19\% for Mediabench~\cite{mediabench} and MiBench~\cite{mibench} benchmarks.
 
 Another important piece of information contained in this instruction is the size of a block.
 Cores in a composition fetch basic blocks in a similar fashion to the one described in Chapter~\ref{chp:Background} Section~\ref{chp:Background:sec:EDGE}.
 However, cores must execute global register renaming in the sequential order of blocks.
 To ensure sequential renaming, a Global Program Counter (GPC) is introduced, and each core in the composition must lock the GPC before fetching a block and doing the renaming.
-Using a 4 core composition they report a performance improvement of 2x on SPECINT, 3x on SPECFP and 4x on Mibench/Mediabench compared to a 2 issue core. 
+Using a 4 core composition they report a performance improvement of 2x on SPEC 2006 INT, 3x on SPEC FP and 4x on Mibench/Mediabench compared to a 2 issue core. 
 
 TFlex~\cite{kim2007tflex} proposed by Kim et. al. is an EDGE processor that also deploys core composition.
 They motivate that EDGE simplifies distributing instructions across cores as EDGE itself is designed for distributed micro-architectures.
@@ -35,7 +35,7 @@ The E2 processor is another EDGE based processor that can dynamically compose it
 Unlike TFlex, a block is only executed on the core that fetches it, its instructions are not distributed.
 E2 introduces the concept of segmenting the instruction window into lanes, allowing cores to fetch multiple blocks.
 This allows E2 to be more adaptable to different block sizes; if the compiler can only generate small blocks, a core can have multiple blocks in its instruction window executing in parallel.
-For example, if E2 has four lanes, then if the program executing is composed only of 20 instructions, a four core composition on E2 can have up to 4 blocks $\times$ 20 instructions $\times$ 4 cores $=$ 320 instructions in flight, whilst TFlex will only have 4 blocks $\times$ 20 instructions $=$ 80 instructions in flight.
+For example, if an E2 core has four lanes, each able to fetch a block of up to 32 instructions, it will be able to execute four times as many blocks in parallel compared to a TFlex core when the program being executed is made of blocks smaller than 32 instructions.
 This means E2 can potentially extract more instruction level parallelism (ILP) from each core in the composition than TFlex can at any point.
 
 Watanabe et. al. propose a different type of dynamic multicore processor, where cores share execution units ~\cite{Watanabe2010Widget}.
@@ -85,7 +85,7 @@ They do not discuss what software characteristics help determine when to reconfi
 
 Gulati et. al. propose an offline and online scheduling algorithms for TFlex \cite{gulati2008multitaskingdmc}. 
 This work focuses on maximising speedup for a set of workloads in a multi-tasking environment.
-The offline model uses profiling data to make decisions whereas the online model measures the current performance of a task being executed and switches the size of the composition by +/- 1 based on a threshold.
+The offline model first profiles a program on different compositions and then uses that information to make a decision at runtime whilst their online model simply changes the size of the current composition by +/-1 core and then evaluates whether or not that modification improved performance.
 In their results they show that the offline profiling tool outperforms the online algorithm.
 As the threshold is set ahead of time, the online model is not able to fully utilise the system when applications do not meet the required threshold.
 They demonstrate that a DMP that can adapt to workloads can result in faster response times than a tradition CMP, between 21\% to 13x faster.
@@ -119,13 +119,14 @@ Fetching instructions on core compositions can be a challenge, as will be discus
 This section covers how thissue has been address in previous research.
 
 Robatmili et. al.~\cite{robatmili2011uniproc} discuss how to improve block fetching for the TFlex processor by selectively refreshing blocks.
+A block refresh involves keeping the block in the instruction window and flushing the buffer operands and then re-executing the block, skipping the re-fetch.
 First, they modify TFlex so that blocks are executed locally on the core instead of dispersing the instructions of a block on multiple cores.
 The two main assumptions made are that a core can only ever execute a single block at a time, and once the block is committed, it can remain in the instruction window.
 When a new block request is made, the coordinator core in charge of the new block checks to see if any inactive core has that block stored in their window.
 If it does, then that core is activated and starts re-executing the buffered block.
 If no idle core has the block in their window, then the coordinator core will ask one of those cores to fetch the block and start executing it.
 They show that cores may have to store up to 8 blocks in the instruction window to ensure that 75\% of the total executed blocks come from a refresh.
-Overall this technique can improve the performance of a 16 core composition on a set of SPEC benchmarks by 1.08x on average, with a maximum speedup of 1.16x.
+Overall this technique can improve the performance of a 16 core composition on a set of SPEC 2000 benchmarks by 1.08x on average, with a maximum speedup of 1.16x.
 
 This implementation depends on the concept that cores in the composition currently hold inactive blocks in their instruction window.
 Whilst this may be the case for TFlex, as it can only execute a single block per core, an E2 type processor is designed to not have idle blocks in its composition.
@@ -214,7 +215,7 @@ All tasks are maintained by a task-queue, and can be executed out of order.
 Swarm is extended by Abeydeera et. al. their speculation aware multithreading policy SAM~\cite{Abeydeera2017SpecMulti}.
 According to Abeydeera et. al. having a high number of speculative threads often leads to a large number of aborted tasks which impacts performance.
 SAM extends Swarm by ensuring that tasks with lower timestamps are prioritised as they are most likely to commit, thus reducing the number of aborted tasks.
-This achieved by performing issue stage prioritisation.
+This technique of determining which tasks to run is called issue stage prioritisation.
 They also relax conflict resolution by using a similar technique to Wait-n-GoTM~\cite{waitNGo2013}.
 Instead of assigning tie-breakers to tasks when they are spawned, SAM assigns them when a task acquires a dependence from another task with equal timestamp; this reduces the number of needless aborts.
 Overall, an 8 in order core Swarm processor with SAM improves performance by 2.33x compared to a single core for a set of graph algorithms.
@@ -240,27 +241,27 @@ The earliest work on value prediction can be retraced to Mikko et. al. where the
 They show that performance can be improved by up to 27\%.
 
 Perais et. al propose the VTAGE \textit{context} value predictor ~\cite{peraisVTAGE2014}, that adopts the same prediction scheme as the ITTAGE branch predictor~\cite{SeznecITTAGE}.
-Using global branch history, which is easier to maintain that data-flow history~\cite{peraisVTAGE2014}, VTAGE can improve performance of some SPEC applications by up to 65\%.
+Using global branch history, which is easier to maintain that data-flow history~\cite{peraisVTAGE2014}, VTAGE can improve performance of some SPEC 2000 and 2006 applications by up to 65\%.
 
 The block based D-VTAGE predictor~\cite{peraisBeBop2015} can quickly issue multiple predictions grouping up predictions as a single block.
 The basic prediction fetch and update mechanism are inherited from VTAGE, except D-VTAGE is a \textit{computational} value predictor.
 In order to improve value prediction for tightly knit loops where multiple iterations of the loop body can be live in parallel, the predictor employs a speculative window that is able to keep track of live speculative data.
-D-VTAGE is able to obtain up to a 1.7x speedup, and averages a 1.10x speedup on a set of SPEC applications. 
+D-VTAGE is able to obtain up to a 1.7x speedup, and averages a 1.10x speedup on a set of SPEC 2000 and 2006 applications. 
 
 Miguel et. al. propose a different technique for value prediction called load value approximation \cite{miguel2014LoadVal} for applications where value inexactness is acceptable.
 Applications such as image tracking or image comparison do not need to operate on exact values as they often allow for a margin of error.
-Therefore, these applications do not need to roll-back on a mispredicted value, and can continue to operate with incorrect data as long as it is sufficiently accurate.
+Therefore, these applications do not need to roll-back on a mispredicted value, and can continue to operate with incorrect data as long as it is sufficiently accurate (an error rate below 10\%).
 
 Sheikh et. al. present a value predictor that is able to avoid mispredictions caused by Load $\,\to\,$ Store $\,\to\,$ Load conflicts~\cite{sheikh2017value}.
 This achieved by predicting load memory address at the instruction fetch stage and checking the data cache for that memory address.
 If the memory address is contained in the data cache, then the value is fetched (this considered a prediction).
 If the address is not contained in the cache, then a data prefetch issued.
-Their new approach to value prediction generates a 4.8\% speedup on a set of SPEC, EEMBC and Octane applications.
+Their new approach to value prediction generates a 4.8\% speedup on a set of SPEC 2000 and 2006, EEMBC and Octane applications.
 This almost 2x more than the VTAGE predictor used in the paper (2.1\%).
 
 \paragraph*{Summary}
 Most of the predictors described in this section focus on value prediction for load instructions.
-Whilst loads are most often going to be the cause of data-dependencies, the EDGE architecture's reliance on registers for intra-block communication is also a prime suspect.
+Whilst loads can be slow to execute causing longer data-dependency stalls, the EDGE architecture's reliance on registers for intra-block communication is also a prime suspect.
 Overall, the D-VTAGE predictor is the most adequate solution for this thesis, as will be explained in greater detail in Chapter~\ref{chp:hardchanges} Section~\ref{chp3:sec:val}.
 
 \subsection{Data Prefetching}
@@ -286,7 +287,7 @@ This work uses the TFlex processor and presents the Distributed Block Criticalit
 The DBCA is able to detect and predict which instructions are late communication edges, that is the last register writes in a block that younger blocks depend on.
 When a block is fetched, the core calls the DBCA to get the predicted registers to determine which register writes are late communication edges.
 Once the values of these instructions are produced they are forwarded to the successive speculative block directly, bypassing the register file.
-Using this techniques, Robatmili et. al. show that for a 16 core composition (TFlex processor), the performance of a set of integer SPEC benchmarks can be improved by 1.08x on average and up to 1.16x at best.
+Using this techniques, Robatmili et. al. show that for a 16 core composition (TFlex processor), the performance of a set of integer SPEC 2000 benchmarks can be improved by 1.08x on average and up to 1.16x at best.
 
 The reason this technique cannot improve performance much more is due to the fact that it only attempts to detect which instructions should use register bypassing.
 This model can still involve significant latency, as the late communication edges may require data from previous instructions as well, increasing the critical path chain.
@@ -371,7 +372,7 @@ They train their deep learning model for two scenarios: GPU thread-coarsening an
 Compared to state of the art hand-crafted heuristics, the deep learning model is able to outperform both scenarios by 12\% and 14\% respectively.
 \vspace{-1.5em}
 \section{Summary}
-This chapter underlined that encoding instruction dependencies at the ISA level makes EDGE a more attractive architecture for core composition~\cite{kim2007tflex}.
+This chapter underlined that encoding instruction dependency order at the ISA level makes EDGE a more attractive architecture for core composition~\cite{kim2007tflex}.
 It then showed that of the two EDGE based architectures discussed, the fact that E2 can support a higher number of blocks that TFlex in a composition makes it more interesting, as a higher block count means more ILP can be exploited.
 The E2 processor is therefore used as a base in this thesis.
 
