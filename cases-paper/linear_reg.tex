@@ -27,7 +27,7 @@ Therefore, when building the model, a correlation analysis determined that store
  % a single data point is created per phase, averaging the features of all the ticks in a phase, resulting in a total of 34 pairs of optimal core number and features.
 
 To speedup the learning process, for each benchmark the features of all the ticks in a phase were averaged out to create a single data point, which is comprised of an IPC value, and the features described in Figure~\ref{fig:linmod}.
-This averaging out leads to 34 data points for all the benchmarks.
+This averaging out leads to 40 data points for all the benchmarks, as this is the sum of all the phases for the suite seen in Figure~\ref{fig:clust}.
 The training consists of finding the weights that minimise the error when predicting the optimal number of cores to use across all time ticks and benchmarks.
 Since only core configurations which use a power of two number of cores are considered, the linear model is built to predict the logarithm (base 2) of the number of cores.
 The prediction is rounded up to the nearest integer in the interval $[0,4]$.
@@ -41,7 +41,7 @@ The following equation represents the trained linear model which can be used to 
 It is important to note that this model was not used during the validation, as cross-validation (see Chapter~\ref{chp:Background}) was used to evaluate it.
 Instead, this represents a model where the data from all programs is used.
 For instance, if at runtime an average block size of 6 instructions, and 77\%, 1\% and 18\% of integer, floating point and load operations, respectively, then the predicted value will be 2.092.
-Rounded up to the nearest integer value, 2, the optimal number of cores predicted will, therefore, be 4.
+Rounded half up to the nearest integer value, 2, the optimal number of cores predicted will, therefore, be 4.
 
 As can be seen, the largest weight is on the percentage of loads operations.
 This is due to different reasons, mainly execution time and the fact that Load-Store Queues are fused.

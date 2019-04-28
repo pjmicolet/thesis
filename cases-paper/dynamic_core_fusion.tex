@@ -30,7 +30,7 @@ Dynamic core composition enables the ability to change the number of cores for e
 In order to explore the different performance and energy trade-offs that are possible to achieve with this technique, traces of execution for the application are collected.
 Figure~\ref{fig:tracegraph} is a visual overview of how dynamic traces are collected.
 First the application is executed on 1,2,4,8 and 16 composed cores and the performance is recorded for each time tick of 640 committed blocks.
-Using these 5 traces, any dynamic execution can be constructed to generate dynamic traces.
+Using these 5 traces, dynamic executions using any of the 5 different compositions can be constructed to generate dynamic traces.
 For this chapter, the dynamic trace are generated based on maximising speed whilst minimising energy consumption.
 
 To simplify the exploration process, time ticks that are attributed to the same phase are always given the same number of cores.
@@ -166,7 +166,7 @@ For these applications, the phase length is also tied to the size of the input, 
 Furthermore, there is always the option to reconfigure less often, in the case where a change in configuration only brings marginal reduction in energy.
 In such case it might be more beneficial to keep running on the slightly less optimal configuration than paying a cost for reconfiguration.
 Figure~\ref{fig:enlatency} illustrates this perfectly, showing how energy behaves as a function of the reconfiguration overhead (averaged across benchmarks).
-For each latency value, the best trace of reconfiguration is determined to keep performance constant while minimising energy (\textbf{DSpeed}).
+For each latency value, the best trace of reconfiguration is determined to keep performance equal to the best static configuration while minimising energy (\textbf{DSpeed}).
 The left y-axis expresses the energy savings relative to the static scheme, while the right y-axis shows the total number of switches.
 The energy savings remains high up to a latency of 1,000 cycles, with a noticeable decrease in the number of switches.
 For latency values over 1,000 cycles, the energy savings drop considerably, with very little switching occurring.

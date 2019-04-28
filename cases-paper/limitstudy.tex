@@ -60,7 +60,7 @@ Given a certain number of cores, if the prediction accuracy is under the limits 
 For a program to execute correctly, the cores in a composition must communicate when they have finished executing a block.
 This ensures that the cores fetch blocks from the correct control paths and update memory and registers consistently.
 A core may have to wait for other cores to commit before fetching a new block. 
-The worst-case estimate of this stall is defined as the \textbf{Synchronisation Cost}.
+The worst-case estimate, being the highest amount of potential stalling, is defined as the \textbf{Synchronisation Cost}.
 
 \begin{equation}\label{form:synccost}
 SyncCos(ABS,CompSize) = \frac{\sum_{CoreID=0}^{CompSize-1}\left(BlocksInFlight(ABS)\right) \times CoreID }{CompSize}
@@ -79,6 +79,7 @@ Blocks commit in a sequential fashion with the non-speculative block committing 
 If a core's instruction window is full then it must commit a block before it fetches a new one.
 The Synchronisation Cost, in cycles, is defined in equation~\ref{form:synccost} and is measured by averaging the overall number of cycles each core in a composition waits until it can continue to fetch and execute new blocks.
 \textit{AvBlocksInFlight} represents the average number of blocks in flight on a single core in the composition.
+When there is only a single core executing, the synchronisation cost will be 0, hence why CoreID begins at 0.
 This is a worst-case estimate as block sizes will fluctuate during the execution of a program.
 
 Figure~\ref{fig:sync_cost} shows how many cycles the Synchronisation Cost will be for a given core composition size and average block size.
