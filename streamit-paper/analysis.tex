@@ -4,7 +4,7 @@ The hardware side is about finding out the best core composition that maximises 
 
 \begin{figure}[t]
  \centering
-    \includegraphics[width=1\textwidth]{streamit-paper/graphics/threadingmaybe5.pdf}
+    \includegraphics[width=1\textwidth]{streamit-paper/graphics/threadingmaybe6.pdf}
     \caption{Speedup obtained when increasing the number of threads with and without core composition. Baseline is single core single-working-thread. Higher is better}\label{fig:threadtrend}  \vspace{-1em}
 
 \end{figure}
@@ -17,6 +17,7 @@ To simplify this study, the default streaming partitioner is used to decide on h
 
 On the hardware side, two scenarios are considered: the ``without composition scenario'' where there is exactly one core per thread and the ``with composition scenario'' where each thread receives between 1 and 15 cores.
 Figure~\ref{fig:threadtrend} plots how performance varies under both scenarios as a function of the number of threads.
+Not all programs can be split into 15 threads, which is why not all curves meet at \textit{x = 15}.
 In this figure, the ``with composition scenario`` uses points from the sample space that result in the fastest execution time for a given number of threads.
 Once again, performance is measured by comparing the execution time of a design point to that of the single core/single-working-thread as it represents the default configuration
 
@@ -73,7 +74,7 @@ One method of increasing the size of the blocks is through loop unrolling, and t
 
 \end{figure}
 
-In this Chapter, unrolling is done at the source level via a flag passed to the StreamIt source-to-source compiler.
+In this Chapter, unrolling is done at the source level via a flag passed to the StreamIt source-to-source compiler, where loops are unrolled by a factor of 32 when possible.
 Given a number of times the loops must be unrolled, the StreamIt source-to-source compiler will generate the multi-threaded C++ code with the loops unrolled.
 Figure~\ref{fig:fbunroll} presents an example of how loop unrolling affects performance on the \bench{FilterBank} benchmark.
 The graph presents the same information as Figure~\ref{fig:fbtotal} but comparing O2 optimisations with O2 and Unrolling.
@@ -92,13 +93,13 @@ Figure~\ref{fig:unroll_summary} shows how unrolling affects the amount of speedu
 The X axis represents the number of cores in the composition, ranging from single core to 15 whilst the Y axis compares the execution time in number of cycles for the benchmark using a single core vs. a given core composition.
 The colours of the lines represent with and without unrolling.
 As can be seen, five benchmarks benefit from unrolling, these are \bench{Beamformer}, \bench{ChannelVocoder}, \bench{FFT6}, \bench{FilterBank} and \bench{FMRadio}. 
-Figure~\ref{fig:unroll_bars} complements Figure~\ref{fig:unroll_summary} by showing the speedup obtained by unrolling loops when executing the benchmark on a single core.
+Figure~\ref{fig:unroll_bars} complements Figure~\ref{fig:unroll_summary} by showing the speedup obtained by unrolling loops compared to no-unrolling when executing the benchmark on a single core.
 On average, the information shown in Figure~\ref{fig:unroll_bars} and Figure~\ref{fig:unroll_summary} coincide: benchmarks that don't scale see no difference in performance when loop unrolling is called.
 
 \begin{figure}[t]
   \includegraphics[width=1\textwidth]{streamit-paper/graphics/unroll_speed_bars.pdf}
    \vspace{-2em}
- \caption{Speedup obtained when executing on a single core with and without loop unrolling. Higher is better.}\label{fig:unroll_bars}
+ \caption{Speedup obtained when executing on a single core with loop unrolling compared to without. Higher is better.}\label{fig:unroll_bars}
 \vspace{-0.5em}
   \includegraphics[width=1\textwidth]{streamit-paper/graphics/unrolling_size.pdf}  \vspace{-2em}
 

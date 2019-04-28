@@ -20,7 +20,7 @@ Thus high-threaded versions of applications must be ignored to avoid having inco
 For the exploration of core composition, the 15 StreamIt benchmarks explored throughout the design space exploration are used. %explain why.
 To increase the amount of data available, multiple versions of the benchmarks using different amounts of unrolling are included in the search space.
 Four different levels of unrolling are used in to build the model: 0,4,16 and 64.
-To determine the optimal number of cores only the training data that has a performance within 1\% of the best is selected.
+To determine the optimal number of cores only the training data that has a performance within 1\% of the best in the sample space is selected.
 
 \begin{figure}[t]
 \centering
@@ -31,7 +31,7 @@ To determine the optimal number of cores only the training data that has a perfo
 
 \subsubsection{Correlation Analysis}
 
-Figure~\ref{fig:corrCore} shows the highest correlating features with the optimal number of cores.
+Figure~\ref{fig:corrCore} shows the highest correlating features with the optimal number of cores, using the same set of features as the thread prediction.
 
 The ten features can be described as follows
 \begin{itemize}
@@ -47,7 +47,7 @@ The ten features can be described as follows
 \vspace{-1em}
 \item Percentage of blocks that have the largest number of operations.
 \vspace{-1em}
-\item Filters with mode multiplicity: number of filters that have the average mode multiplicity.
+\item Filters with mode multiplicity: number of filters that have the average firing rate.
 \vspace{-1em}
 \item Number of arithmetic operations found in the program.
 \vspace{-1em}

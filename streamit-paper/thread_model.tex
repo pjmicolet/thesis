@@ -64,7 +64,7 @@ According to Figure~\ref{fig:corr} the highest correlating value is Number of Di
 There are very few variables that highly correlate beyond Number of Distinct Multiplicities.
 A high number of distinct multiplicities implies that the StreamIt application features an important number of filters with different execution rates.
 This means that certain filters may be local bottlenecks in a Pipeline for example.
-Multithreading the pipelines with local bottlenecks will help alleviate the problem of multiple distinct multiplicities as it can isolate the filters with longer firing rates to allow smaller filters to execute more often.
+Multithreading the pipelines with local bottlenecks will help alleviate the problem of multiple distinct multiplicities as it can isolate the filters with longer firing rates (filters that require multiple inputs to produce a single output) to allow smaller filters to execute more often.
 
 For example, the benchmark \bench{ChannelVocoder} only has 66\% of its filters sharing the same average multiplicity of 50~\cite{thiesStreamit2010}, with a minimum multiplicity of 1. 
 The benchmark features a single SplitJoin yet when recalling section \ref{sec:streamit:dse}'s Figure~\ref{fig:overviewhist} \bench{ChannelVocoder}'s performance is greatly improved via multi-threading.
@@ -84,7 +84,7 @@ As programs will most likely not have the same values for each feature, using kN
 Given a new application, the classifier determines the $k$ closest synthetic applications.
 The distance between the features is measured using the Euclidean distance for each application.
 Once the set of $k$ nearest neighbours is identified, the model averages the best number of threads for each of the neighbours to make a prediction. 
-The parameter $k$ was determined experimentally using only the synthetic benchmarks.
+The parameter $k$ was determined experimentally using only the synthetic benchmarks by varying the parameter and evaluating the accuracy.
 A value of $k=7$ was found to lead to the best performance.
 The features chosen are the ten variables displayed in Figure~\ref{fig:corr}.
 
