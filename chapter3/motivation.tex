@@ -20,7 +20,7 @@ If the program executing mainly has small blocks, then if it is running on a 16 
 
 In Chapter~\ref{chp:cases}, \bm{MSER} had a low branch prediction accuracy of 85\%, leading to a performance improvement of only 1\% on a 2 core composition.
 To see how difference accuracies affect performance, a branch predictor that can predict at different accuracy levels is used.
-The left hand side of Figure~\ref{fig:mser_motiv} shows the speedup obtained when executing the SD-VBS benchmark \bm{MSER} on core compositions of size 2, 4, 8, 16 with different branch prediction accuracies.
+The left hand side of Figure~\ref{fig:mser_motiv} shows the speedup obtained when executing the SD-VBS benchmark \bm{MSER} on core compositions of size 2, 4, 8, 16 with different branch prediction accuracies on the cycle-accurate simulator.
 The speedup is obtained by comparing the performance to a single core.
 As the figure shows, increasing the accuracy to 100\% leads to a performance increase of 1.15x on a 16 core composition.
 
