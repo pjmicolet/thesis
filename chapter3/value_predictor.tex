@@ -88,12 +88,12 @@ This is to ensure that multiple values can co-exist in the predictor, increasing
 
 A value predictor for EDGE must be able to provide predictions in groups, as EDGE organises its instructions in blocks as this reduces the number of prediction requests per block.
 As core composition is mostly used to improve the performance of loops, a \textit{computational} predictor is more adequate than a context based one.
-Perais et al. propose such a predictor: a block based differential Value TAGE predictor~\cite{peraisBeBop2015}.
+Perais {\it et al.~}propose such a predictor: a block based differential Value TAGE predictor~\cite{peraisBeBop2015}.
 The next section covers briefly how this predictor works, however more details can be found in Chapter~\ref{chp:Background} Section ~\ref{sec:valpred}.
 
 \subsection{Block-based D-VTAGE predictor}
 
-In this chapter, a \textit{block} based differential value TAGE (D-VTAGE) predictor is implemented, based on the work of Perais et al.~\cite{peraisBeBop2015}.
+In this chapter, a \textit{block} based differential value TAGE (D-VTAGE) predictor is implemented, based on the work of Perais {\it et al.~}~\cite{peraisBeBop2015}.
 Full details on how such a value predictor works can be found in Chapter~\ref{chp:Background} Section~\ref{chp:bck:vtage}.
 To summarise, D-VTAGE is a \textit{computational} based value predictor: a prediction is composed of the last seen value for the instruction (found in a Last Value Table (LVT)), and a stride which represents the delta between the last two values for the instruction.
 When a prediction is made, the last seen value and stride are added together to make the predicted value.
@@ -114,7 +114,7 @@ When a block is flushed, it is also removed from the speculative window.
 %In this case, when an EDGE block is fetched, a single request has to be made to the predictor to fetch all predictions for register reads.
 
 %Finally, as EDGE blocks are single entry, multiple exits, this simplifies the update mechanism for the Speculative Window.
-%In the original proposal of D-VTAGE by Perais et al.~\cite{peraisBeBop2015} they discuss the issue of how to handle updates in the Speculative Window after a flush.
+%In the original proposal of D-VTAGE by Perais {\it et al.~}~\cite{peraisBeBop2015} they discuss the issue of how to handle updates in the Speculative Window after a flush.
 %This is due to the fact that in a traditional x86 environment, instructions being fetched after a flush may belong to a block of instructions that initiated the flush.
 %As this is not possible in EDGE, since whole blocks are flushed and fetched, there is no need for a complicated update policy.
 %Instead, a new prediction is always made when a block is fetched.

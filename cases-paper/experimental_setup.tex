@@ -29,7 +29,7 @@ Cycle count &	  	  571M& 577M& 516M& 374M &\\ \hline
 The SD-VBS benchmark suite comes with a different set of input sizes.
 Due to executing these benchmarks on a cycle accurate simulator, executing on large datasets can take a large amount of time.
 A single experiment can take up to 6 hours on a single machine (Intel i5 3570k 3GHz, 16 GB of DDR3 RAM), and the average Million instructions per second (MIPS) of the simulator is 0.1 when only simulating a single core.
-In the paper describing each of the applications in the SD-VBS suite~\cite{sdvbs}, Venkata et al. show that increasing the size of the input does not drastically change the phases of each benchmark.
+In the paper describing each of the applications in the SD-VBS suite~\cite{sdvbs}, Venkata {\it et al.~}show that increasing the size of the input does not drastically change the phases of each benchmark.
 Table~\ref{tab:sd-data} shows the datasets used for the benchmarks in this chapter.
 For this chapter, the aim is to have a dataset that leads to executing at least 100 million cycles as this ensures that the caches and branch predictor are warmed up~\cite{dubach13dynamic}.
 The execution time for each of the programs, using a single core, can be found in Table~\ref{tab:sd-data}.

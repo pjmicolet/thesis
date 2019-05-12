@@ -9,7 +9,7 @@ This chapter proposed a round-robin fetching mechanism, where cores do not fetch
 This enables cores to fetch independently from one another, without having to submit fetch requests to other cores.
 Using such a scheme can potentially increase the performance of large core compositions on small blocks by a factor of 2x to 3x.
 Then the idea of using a block based value predictor was covered.
-This value predictor was initially designed by Perais. et al.~\cite{peraisVTAGE2014, peraisBeBop2015}.
+This value predictor was initially designed by Perais. {\it et al.~}~\cite{peraisVTAGE2014, peraisBeBop2015}.
 The design choices behind the value predictor match some of the architectural features of EDGE, mainly to do predictions at the granularity of a block.
 
 To understand how these two additions can impact performance, the same set of benchmarks used in Chapter~\ref{chp:cases} are explored here.

@@ -209,7 +209,7 @@ What I propose as a first step is to try and explore new fetching mechanisms for
 Instead of "fetching until you're full", a core should start off by making 1 prediction for itself and 1 prediction for the next core in the fusion.
 Once it has executed this step it can continue fetching 3 other blocks whilst the next core repeats the process.
 This should ensure all cores are fetching 4 blocks almost in parallel.
-A paper from 1996 by Andre Seznec et al. from INRIA proposed a multi-block branch predictor that can generate 2 predictions in a single cycle.
+A paper from 1996 by Andre Seznec {\it et al.~}from INRIA proposed a multi-block branch predictor that can generate 2 predictions in a single cycle.
 We could use this work to do predictions for number of blocks.
 
 Currently, if we have 16 cores, each fetching 4 blocks, if we assume that it takes at least 4 cycles to fetch a block and send a prediction, we have
@@ -234,7 +234,7 @@ For example if we had 4 Cores, C1 would have blocks [1,5,9,13] C2:[2,6,10,14], C
 In this case, we only need to make 3 predictions to ensure that C4 has at least been somewhat useful.
 Previously, in a 16 core composition, if we had 64 blocks in flight, the 16th core could only be considered useful if 60 out of the 64 blocks were considered correct.
 This implied at least a 93.7\% accuracy just to ensure that all cores were running some correct code whereas in this new model, only 15 predictions would ensure a utilisation of the core, so dropping it to a mere 23\%.
-In Core-Fusion by Ipek et al. Figure 9 shows the distribution of fetch cycles for SPECINT and SPECFP benchmarks.
+In Core-Fusion by Ipek {\it et al.~}Figure 9 shows the distribution of fetch cycles for SPECINT and SPECFP benchmarks.
 They define 4 categories: pipeline stalls (cores are busy executing), wrong path (misprediction), FMU stalls (stalls caused by communicating to FMU) and true fetch, which I assume is cycles spent doing actual fetch work.
 Whilst they claim that the FMU only causes a 3\% overhead in fetch cycles, they fail to address the fact that, for some benchmarks in SPECINT, mispeculation can caust them up to 50\% of their fetch cycles which is huge.
 In these cases they percieve no speedup since they're getting branches wrong almost half the time.
