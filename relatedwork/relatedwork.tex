@@ -116,7 +116,7 @@ Using the optimisations previously defined improves the performance of hyperbloc
 \vspace{-1em}
 \section{Improving instruction fetching for composition}
 Fetching instructions on core compositions can be a challenge, as will be discussed in Chapter~\ref{chp:hardchanges}.
-This section covers how thissue has been address in previous research.
+This section covers how this issue has been address in previous research.
 
 Robatmili et. al.~\cite{robatmili2011uniproc} discuss how to improve block fetching for the TFlex processor by selectively refreshing blocks.
 A block refresh involves keeping the block in the instruction window and flushing the buffer operands and then re-executing the block, skipping the re-fetch.
@@ -229,7 +229,7 @@ By allowing tasks to generate domains, Fractal is able to exploit nested paralle
 This section has shown how an alternative form of speculation can be used to improve the performance of applications.
 This supported both at the hardware and software level.
 As seen throughout the section, speculative parallelism requires both hardware and software support to function (SWArm).
-This more involved than supporting core composition on an EDGE processor, where the ISA naturally lends itself to deep single-threaded execution speculation.
+This is more involved than supporting core composition on an EDGE processor, where the ISA naturally lends itself to deep single-threaded execution speculation.
 \vspace{-1em}
 \section{Tackling data-dependencies}
 This section covers the different techniques used to tackle data-dependencies that affect a processor's ability to extract instruction level parallelism, which is the main way core composition improves performance.
@@ -379,7 +379,7 @@ The E2 processor is therefore used as a base in this thesis.
 Then the different techniques for automatically configuring a DMP were explained.
 Overall, they rely on profiling applications in order to make decisions meaning that multiple executions of a program are required to create a profile that is used to configure the processor later on.
 This can be an expensive procedure if the number of configurations is large.
-This thesis tackles thissue by presenting models that use machine learning to determine the correct configuration of the DMP without requiring multiple executions of the program; making DMPs more practical to use.
+This thesis tackles this issue by presenting models that use machine learning to determine the correct configuration of the DMP without requiring multiple executions of the program; making DMPs more practical to use.
 
 This was followed by explaining how block fetching latencies can be reduced to improve the performance of core composition.
 This work was conducted on a TFlex processor and depends on idle-cores to selectively re-issue blocks on idle cores.

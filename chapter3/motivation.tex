@@ -114,7 +114,7 @@ If cores do not have to wait on data dependencies, this can increase efficiency 
 Figure~\ref{fig:motivation_reg} shows how an optimal configuration of the processor, one that can fetch blocks in parallel, has perfect branch prediction and can immediately resolve data dependencies can improve performance on \bm{MSER}.
 The speedup is obtained by comparing the execution time of core compositions to a normal single core, without perfect branch prediction.
 The figure also shows the performance of a ``normal" core composition configuration that has no perfect branch prediction, serialised block fetches and cannot resolve data dependencies immediately.
-A,s shown in the Figure~\ref{fig:motivation_reg}, a 16 core composition can now get a speedup of up to 3x, compared to the 2x when using only perfect branch prediction and the OF scheme.
+As shown in the Figure~\ref{fig:motivation_reg}, a 16 core composition can now get a speedup of up to 3x, compared to the 2x when using only perfect branch prediction and the OF scheme.
 %This is due to the fact that register dependencies are no longer serialising some of the computation between blocks, and thus blocks can be executed in parallel.
 
 Serialised execution due to data dependencies is a common problem for superscalar processors~\cite{peraisVTAGE2014}.

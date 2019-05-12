@@ -40,7 +40,7 @@ As Section~\ref{chp:chp3:sec:analysis} showed these benchmarks benefit from valu
 One method of understanding how the block based D-VTAGE predictor will perform is to study the number of unique blocks found in each of the benchmarks.
 Benchmarks that feature a smaller number of unique blocks can potentially benefit more from value prediction as the predictor cannot hold many blocks at a time.
 Reporting all unique blocks executed is not a proper evaluation of the variety of blocks found in the benchmark, as some will most certainly be executed more times than others.
-To account for this, blocks are only counter towards the unique block counter as long as they represent a certain percentage of the total number of blocks executed.
+To account for this, blocks only count towards the unique block count as long as they represent a certain percentage of the total number of blocks executed.
 
 The right hand side of figure~\ref{fig:edge_reg_read} shows the number of unique blocks found in each benchmark that account for 50\%,80\%,90\% and 99\% of the total number of executed blocks.
 As can be seen, applications \bm{Disparity}, \bm{Multi\_NCut} and \bm{Sift} \bm{Stitch} and \bm{Tracking} execute fewer than 50 unique blocks during 90\% of its total execution.

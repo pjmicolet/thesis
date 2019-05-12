@@ -3,7 +3,7 @@ A Dynamic Multicore Processor's (DMP) ability to reconfigure itself allows it to
 Whilst being able to reconfigure hardware is a promising approach to optimising execution, DMPs come with their own set of challenges when attempting to finding a good configuration for the program at hand.
 Given a program that can be parallelised, a DMP can either be configured to run a high number of threads on small groups of cores, a small number of threads on large groups of cores or a heterogeneous mix of both large and small cores.
 Without deep knowledge of the architecture, knowing what configuration of the processor is correct in order to be able to obtain the best performance, can be a highly time consuming task.
-This is due to the fact that determining the configuration can require multiple profiling passes if the configuration count is high, and this task will have to be repeated whenever signifincat modifications of the program are made.
+This is due to the fact that determining the configuration can require multiple profiling passes if the configuration count is high, and this task will have to be repeated whenever significant modifications of the program are made.
 This can be further complicated if the programming model does not provide any insights on how the program may be partitioned into threads.
 The problem of optimising multi-threaded software for DMPs can therefore be split into two distinct tasks.
 First, finding a programming model that makes software partitioning into threads explicit.
@@ -48,7 +48,7 @@ The main contributions of this chapter are:
 
 
 The chapter is structured as follow,
-Section~\ref{sec:motiviation} motivates this work by showing the complexity of the design space.
+Section~\ref{sec:motiviation-str} motivates this work by showing the complexity of the design space.
 Section~\ref{chp:stream:sec:setup} describes the methodology and section~\ref{sec:streamit:dse} presents an in-depth analysis of the design space.
 Section~\ref{sec:ml} develops a machine-learning model to predict the best thread mapping and core composition whilst section~\ref{sec:results} shows the performance of the model.
 Section~\ref{sec:conclusion} concludes this chapter.
