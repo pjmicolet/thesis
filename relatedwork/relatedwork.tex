@@ -29,7 +29,7 @@ They motivate that EDGE simplifies distributing instructions across cores as EDG
 Since instruction dependency orders are determined at compile time and encoded at the ISA level, the TFlex instruction fetching can be decentralised, as there is no need for centralised analysis like in a traditional ISA (such as register renaming or instruction number assignment).
 Unlike the model used throughout this thesis, a block's instructions can be distributed amongst the cores in the composition, with one of the cores being the block owner.
 As each core can be responsible for a single block, the total number of blocks in flight is equal to the number of cores in the composition.
-In their work~\cite{kim2007tflex} Kim {\it et al.~}show that a 32 core composition can outperforms a single TFlex core by 3x on a set of EEMBC benchmarks and SPEC2000 micro-benchmarks.
+In their work~\cite{kim2007tflex} Kim {\it et al.~}show that a 32 core composition outperforms a single TFlex core by 3x on a set of EEMBC benchmarks and SPEC2000 micro-benchmarks.
 
 The E2 processor is another EDGE based processor that can dynamically compose its cores~\cite{putnam2010e2}.
 Unlike TFlex, a block is only executed on the core that fetches it, its instructions are not distributed.
@@ -126,7 +126,7 @@ When a new block request is made, the coordinator core in charge of the new bloc
 If it does, then that core is activated and starts re-executing the buffered block.
 If no idle core has the block in their window, then the coordinator core will ask one of those cores to fetch the block and start executing it.
 They show that cores may have to store up to 8 blocks in the instruction window to ensure that 75\% of the total executed blocks come from a refresh.
-Overall this technique can improve the performance of a 16 core composition on a set of SPEC 2000 benchmarks by 1.08x on average, with a maximum speedup of 1.16x.
+This technique can improve the performance of a 16 core composition on a set of SPEC 2000 benchmarks by 1.08x on average, with a maximum speedup of 1.16x.
 
 This implementation depends on the concept that cores in the composition currently hold inactive blocks in their instruction window.
 Whilst this may be the case for TFlex, as it can only execute a single block per core, an E2 type processor is designed to not have idle blocks in its composition.
@@ -212,13 +212,13 @@ The Swarm architecture executes tasks that are identified via timestamps.
 Each task can access any data and has the ability to generate new tasks, also known as children, that will be assigned a greater timestamp.
 All tasks are maintained by a task-queue, and can be executed out of order.
 
-Swarm is extended by Abeydeera {\it et al.~}their speculation aware multi-threading policy SAM~\cite{Abeydeera2017SpecMulti}.
-According to Abeydeera {\it et al.~}having a high number of speculative threads often leads to a large number of aborted tasks which impacts performance.
-SAM extends Swarm by ensuring that tasks with lower timestamps are prioritised as they are most likely to commit, thus reducing the number of aborted tasks.
+Swarm is extended by Abeydeera {\it et al.~} in their speculation aware multi-threading policy SAM~\cite{Abeydeera2017SpecMulti}.
+They claim that having a high number of speculative threads often leads to a large number of aborted tasks which impacts performance.
+SAM ensures that tasks with lower timestamps are prioritised as they are most likely to commit, thus reducing the number of aborted tasks.
 This technique of determining which tasks to run is called issue stage prioritisation.
 They also relax conflict resolution by using a similar technique to Wait-n-GoTM~\cite{waitNGo2013}.
 Instead of assigning tie-breakers to tasks when they are spawned, SAM assigns them when a task acquires a dependence from another task with equal timestamp; this reduces the number of needless aborts.
-Overall, an 8 in order core Swarm processor with SAM improves performance by 2.33x compared to a single core for a set of graph algorithms.
+Overall, an 8 in-order core Swarm processor with SAM improves performance by 2.33x compared to a single core for a set of graph algorithms.
 
 Subramian {\it et al.~}present a new execution model that supports nested parallelism and is implemented for a Swarm~\cite{fractal2017} .
 Fractal introduces the concept of grouping tasks into hierarchies of nested \textit{domains}.
@@ -262,7 +262,7 @@ This almost 2x more than the VTAGE predictor used in the paper (2.1\%).
 \paragraph*{Summary}
 Most of the predictors described in this section focus on value prediction for load instructions.
 Whilst loads can be slow to execute causing longer data-dependency stalls, the EDGE architecture's reliance on registers for intra-block communication is also a prime suspect.
-Overall, the D-VTAGE predictor is the most adequate solution for this thesis, as will be explained in greater detail in Chapter~\ref{chp:hardchanges} Section~\ref{chp3:sec:val}.
+The D-VTAGE predictor is the most adequate solution for this thesis, as will be explained in greater detail in Chapter~\ref{chp:hardchanges} Section~\ref{chp3:sec:val}.
 
 \subsection{Data Prefetching}
 Whilst value prediction is used to mask data dependencies or long latencies caused by cache misses by predicting values, data prefetching attempts to make data available in L1 caches before it is needed.
