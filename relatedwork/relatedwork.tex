@@ -119,7 +119,7 @@ Fetching instructions on core compositions can be a challenge, as will be discus
 This section covers how this issue has been address in previous research.
 
 Robatmili {\it et al.~}\cite{robatmili2011uniproc} discuss how to improve block fetching for the TFlex processor by selectively refreshing blocks.
-A block refresh involves keeping the block in the instruction window and flushing the buffer operands and then re-executing the block, skipping the re-fetch.
+A block refresh involves keeping the block in the instruction window, flushing the buffer operands and then re-executing the block, skipping the re-fetch.
 First, they modify TFlex so that blocks are executed locally on the core instead of dispersing the instructions of a block on multiple cores.
 The two main assumptions made are that a core can only ever execute a single block at a time, and once the block is committed, it can remain in the instruction window.
 When a new block request is made, the coordinator core in charge of the new block checks to see if any inactive core has that block stored in their window.
