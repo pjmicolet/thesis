@@ -91,7 +91,7 @@ If blocks are distributed equally amongst all cores using a round robin model, t
 This means that changing the fetching scheme to a round robin scheme does not necessarily stop cores from depending on one another to fetch blocks.
 However, once a core has a block it can use branch prediction to predict the next block it must fetch, rather than waiting for another fetch request from a core.
 As this new fetching mechanism employs a round robin scheme, the branch predictor must predict a block that is multiple steps into the future rather than the immediate branch.
-By allowing cores to fetch blocks in \textit{strides}, instead of sequentially, the new fetching mechanism not only ensures cores have an equal amount of work (as long as the block size is equal), but that they can fetch in parallel.
+By allowing cores to fetch blocks in \textit{strides}, instead of sequentially, the new fetching mechanism not only ensures cores have an equal amount of work (as long as the blocks are of equal size), but that they can fetch in parallel.
 
 \begin{algorithm}
 

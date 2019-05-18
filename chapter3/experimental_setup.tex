@@ -25,7 +25,7 @@ These benchmarks are structured as pipelines with distinct passes that are often
 This means that performance improvements can be analysed without having to fully execute the program.
 
 As this chapter is only concerned with demonstrating that the new hardware modifications outperform the current implementation, the benchmarks are executed long enough to capture all the phases.
-The phase data gathered from Chapter~\ref{chp:cases} is used to determine hotspots.
+The phase data gathered from Chapter~\ref{chp:cases} is used to determine hot-spots.
 The benchmarks are then instrumented so that the main phases are captured, and executed for at least 100 million instructions.
 Of that 100 million instructions, 10 million instructions are for warming up the caches and predictor whilst the rest are used to record performance.
 Finally, the same data-sets from Chapter~\ref{chp:cases} are used, to maintain a consistency amongst the thesis; they can be found in Table~\ref{tab:sd-data2}.

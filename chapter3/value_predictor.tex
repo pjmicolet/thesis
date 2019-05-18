@@ -100,8 +100,8 @@ When a prediction is made, the last seen value and stride are added together to 
 Unlike a traditional value predictor that issues 1 prediction per instruction, this predictor issues multiple predictions at a time (\textit{blocks} of predictions).
 Predictions are validated during the commit phase of a block~\cite{peraisVTAGE2014}.
 This is achieved by comparing the predicted values with the real values read from the registers.
-In case of a mis-prediction, an pipeline squash is issued for all blocks younger than the mis-predicting block.
-The mis-predicting block is then re-executed, this time without value prediction.
+In case of a misprediction, a pipeline squash is issued for all blocks younger than the mispredicting block.
+The mispredicting block is then re-executed, this time without value prediction.
 
 The predictor also handles the fact that multiple blocks may be in flight, and thus the value found in the LVT may not be up to date.
 This is done via a speculative window that has its own LVT that is speculatively updated when new predictions are made.
