@@ -76,7 +76,7 @@ All benchmarks are executed using a 16 core composition.
 The D-VTAGE size configuration can be found in Table~\ref{tab:vtage-conf}.
 The Last-Value Table shares the same number of values as the Base Entry and uses a 5-bit tag.
 Each tagged entry has a tag of varying size (first table is 12 bits, second 13 bits so on and so forth).
-The total number of values for the D-VTAGE predictor is taken from Perais {\it et al}'s work ~\cite{peraisBeBop2015}.
+The total number of values for the D-VTAGE predictor is taken from Perais {\it et al.}'s work ~\cite{peraisBeBop2015}.
 The adopted size for this chapter is the medium predictor as it provides a good compromise between performance and total size of the predictor.
 The blocks in the speculative window represents the total number of in-flight blocks that can be handled by the speculative window, which is 4.
 
@@ -93,7 +93,7 @@ Modifying the required confidence explores the trade-off between high coverage a
 The original D-VTAGE uses Forward Probabilistic Counters (FPC)~\cite{riley2006fpc} to increment the confidence, and only used predictions once the counter was set to 7.
 This confidence rate ensured that the predictor had an accuracy of over 99\%, but at the expense of a low coverage, 20\% on average~\cite{peraisBeBop2015}.
 The confidence of 4 is chosen as it allows for very fast deployment of predictions, whilst still ensuring that the values have been trained at least a few times.
-The FPC vector used in this Chapter is the same as the one in Perais {\it et al}'s work $\{1,\frac{1}{16},\frac{1}{16},\frac{1}{16},\frac{1}{16},\frac{1}{16},\frac{1}{32},\frac{1}{32}\}$.
+The FPC vector used in this Chapter is the same as the one in Perais {\it et al.}'s work $\{1,\frac{1}{16},\frac{1}{16},\frac{1}{16},\frac{1}{16},\frac{1}{16},\frac{1}{32},\frac{1}{32}\}$.
 \vspace{-0.5em}
 \paragraph*{Block size}
 Whilst most applications only have 5 reads per block, \bm{Disparity} and \bm{Localization} have at least 8 reads and they both benefit from value prediction as seen in Section~\ref{chp:chp3:sec:analysis}.
@@ -170,7 +170,7 @@ This is normal: lower confidence allows predictions to be used earlier, which wi
 
 Whilst the block coverage is high, the coverage for registers reveals that not all registers are being predicted.
 Once again, lower confidence equates to higher coverage, however this time it's 30\% for a confidence of 4 and under 25\% for a confidence of 7 with FPC.
-The register coverage for a confidence of 7 is in line with the coverage reported in Perais. {\it et al}'s work ~\cite{peraisBeBop2015, peraisVTAGE2014} if not slightly higher.
+The register coverage for a confidence of 7 is in line with the coverage reported in Perais. {\it et al.}'s work ~\cite{peraisBeBop2015, peraisVTAGE2014} if not slightly higher.
 The coverage may be slightly higher due to the fact that the values being predicted are often either loop increments or memory increments which can easily be predicted.
 
 The register coverage helps explain why the high block coverage does not lead to better performance: whilst most blocks may have a valid prediction, some of the register reads cannot be predicted.
