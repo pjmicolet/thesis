@@ -1,5 +1,5 @@
 \chapter{Conclusion}~\label{chp:conclusion}
-This thesis has explored how static ahead of time reconfiguration, dynamic runtime adaptation and micro-architectural modifications can make dynamic multicore processors (DMP) more practical.
+This thesis has explored how static ahead of time reconfiguration, dynamic runtime adaptation and micro-architectural modifications can make dynamic multi-core processors (DMP) more practical.
 Chapter~\ref{chp:streamit} showed that a multi-threaded application can automatically be mapped ahead of time to a DMP, where different numbers of cores are composed for each thread.
 Chapter~\ref{chp:cases} demonstrated that at runtime the DMP can automatically change the size of a composition to ensure that the system is maximising speed whilst being energy efficient.
 Both chapters extract features from the software and use machine learning techniques such as linear regression and k Nearest Neighbours to determine correct configurations.
@@ -81,7 +81,7 @@ A Register-transfer level (RTL) implementation of the EDGE processor that featur
 \subsection{Processor configuration}
 The design exploration and results produced in this thesis all used the same core configuration.
 Naturally, this means that some of the observations are specific to the processor that was used during the experiments.
-The thesis does provide a solid methodology for creating models that can predict a good configuration for any dynamic multicore processor but it cannot provide absolute truths.
+The thesis does provide a solid methodology for creating models that can predict a good configuration for any dynamic multi-core processor but it cannot provide absolute truths.
 For example, if cores can only fetch a single block at any given time, then composing cores would most likely improve performance at a faster rate, since the performance of a single core would be lower.
 This means that the analysis of what loop optimisations make software run faster on compositions is potentially tied to the configuration of the cores.
 Thus, whilst the results presented throughout this thesis demonstrate that DMPs can be made more practical, it does not provide insights on when core composition should be a feature of a processor.
