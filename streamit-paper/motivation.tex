@@ -7,7 +7,7 @@
 %\end{figure}
 \subsection{Finding an optimal configuration}
 This section motivates the difficulty of finding a good combination of thread and core partitioning.
-First, a simple experiment is conducted where the \bench{FilterBank} StreamIt benchmark is analysed using a 16 core dynamic multicore processor.
+First, a simple experiment is conducted where the \bench{FilterBank} StreamIt benchmark is analysed using a 16 core dynamic multi-core processor.
 %Maybe reform this sentence
 \bench{FilterBank} distributes its inputs amongst an array of discrete Fourier transform (DFT) filters, the outputs of the DFT filters are down-sampled, up-sampled and then recombined to form a processed signal~\cite{streamitrepo}.
 The program's tasks are partitioned into threads and a varying number of cores are allocated to each of the threads.

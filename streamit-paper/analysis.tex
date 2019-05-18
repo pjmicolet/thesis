@@ -74,7 +74,7 @@ One method of increasing the size of the blocks is through loop unrolling, and t
 
 \end{figure}
 
-In this Chapter, unrolling is done at the source level via a flag passed to the StreamIt source-to-source compiler, where loops are unrolled by a factor of 32 when possible.
+In this Chapter, unrolling is done at the source level via a flag passed to the StreamIt source-to-source compiler, using an unrolling factor of 32 when possible.
 Given a number of times the loops must be unrolled, the StreamIt source-to-source compiler will generate the multi-threaded C++ code with the loops unrolled.
 Figure~\ref{fig:fbunroll} presents an example of how loop unrolling affects performance on the \bench{FilterBank} benchmark.
 The graph presents the same information as Figure~\ref{fig:fbtotal} but comparing O2 optimisations with O2 and Unrolling.

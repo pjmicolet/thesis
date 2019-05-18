@@ -134,7 +134,7 @@ This roughly corresponds to 100 core compositions for each number of threads; th
 For example, a single-working-thread can have only up to 15 different core-compositions (1 through 15) whilst 15 threads can only have a single core given to each thread.
 \bench{InsertionSort} is the only exception since it can at most only be split into 5 threads leading to 415 sample points.
 
-To generate the random space, 100 core to threads mappings are generated (when possible) for each number of worker threads possible (1 to 15).
+To generate the random space, 100 core to threads mappings are generated (when possible) for each number of worker threads (1 to 15).
 The only restrictions placed on the composition topologies are: the total sum of cores must not surpass the available physical core count (15), each thread must have at least one core and a composition must contain cores that are in sequential row order.
 The configurations generated do not have to utilise all available cores in the system, unused cores can simply be turned off.
 Overall, the space exploration requires one week of simulation on a supercomputer~\cite{ecdf}.
