@@ -150,7 +150,7 @@ This changes when taking unrolling into account as the core compositions can be 
 In this case, the speedup obtained from composing cores without multi-threading is only 13\% worse than using only threads.
 For the \bench{FMRadio} benchmark, unrolling makes using only core-composition better than using multi-threads without core composition.
 This information corroborates with the data seen in Figure~\ref{fig:unroll_summary}; it presents a unique case where the effect of core composition is important enough to change the dominant performance enhancer.
-The performance increase obtained via the source-level loop unrolling via the compiler demonstrates that some modifications to the code must be done to ensure optimal use of the dynamic multicore processor.
+The performance increase obtained via the source-level loop unrolling via the compiler demonstrates that some modifications to the code must be done to ensure optimal use of the dynamic multi-core processor.
 %Thus loop unrolling demonstrates that the StreamIt programs must be modified to take advantage of the core composition.
 
 Overall the results show that for these applications, multi-threading leads to more performance gains than using core composition.
