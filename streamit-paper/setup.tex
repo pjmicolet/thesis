@@ -54,7 +54,7 @@ These applications represent a variety of embedded applications and kernels, fro
 Table~\ref{tab:instancefilt} shows the number of filter instances and SplitJoins for each of the benchmarks.
 As a refresher from Chapter~\ref{chp:Background} Section~\ref{chp:bckg:streamit}, SplitJoin filters are functions which distribute and collect data from parallel filters.
 The applications feature a different number of SplitJoins which determine the task-level parallelism.
-This is to include a variety of situations to test the flexibility of the dynamic multicore processor.
+This is to include a variety of situations to test the flexibility of the dynamic multi-core processor.
 Whilst SplitJoins often facilitate the decision of how to partition the programs into threads, they are not the only way to exploit thread level parallelism.
 The applications which do not feature SplitJoins can still be split into threads and will operate in a pipelined fashion~\cite{theis2002streamit}.
 For each benchmark the default inputs provided in the repository~\cite{streamitrepo} are used and the default iteration count is set to 10. 
