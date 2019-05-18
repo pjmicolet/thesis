@@ -108,7 +108,7 @@ Using the information discussed in Section~\ref{sec:lim_study}, the size of bloc
 Figure~\ref{fig:block_sizes} helps explain why benchmarks \bm{MSER} and \bm{Multi\_NCut} do not perform any better with core-composition.
 For both cases, not only do they have a single detected phase, but both are predominantly formed of blocks that will occupy a single lane.
 In fact, the most frequent block in \bm{MSER}, comprising 21\% the total executed blocks are comprised of only 8 instructions, whilst 31\% of \bm{Multi\_NCut}'s blocks are of 28 instructions.
-Having such small blocks will always increase both the \textit{SynchronizationCost} and the branch-prediction requirements.
+Having such small blocks will always increase both the \textit{SynchronisationCost} and the branch-prediction requirements.
 
 For \bm{MSER}, the fact that an important percentage of blocks are only 8 instructions long signifies that the overhead of fetching enough blocks for a large core-composition and the synchronisation cost for committing them outweighs executing the blocks on a single core.
 The reason there is no degradation of performance is due to the fact that when fusing a high number of cores, if the overhead of fetching the blocks outweighs the time required to execute then a core will not submit a block address to be fetched by another core in the composition.
