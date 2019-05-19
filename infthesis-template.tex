@@ -101,7 +101,7 @@
 \newcommand{\bench}[1]{\textit{#1}\xspace}
 \usepackage[labelfont=bf]{caption}
 %% Information about the title, etc.
-\title{From Software to Hardware: Making Dynamic Multicore Processors Practical}
+\title{From Software to Hardware: Making Dynamic Multi-core Processors Practical}
 \author{Paul-Jules Micolet}
 
 %% If the year of submission is not the current year, uncomment this line and 
@@ -113,13 +113,13 @@
 
 %% Specify the abstract here.
 \abstract{%
-Heterogeneous processors such as ARM's big.LITTLE have become popular as they offer a choice between performance and energy efficiency.
+Heterogeneous processors such as Arm's big.LITTLE have become popular as they offer a choice between performance and energy efficiency.
 However, the core configurations are fixed at design time which offers a limited amount of adaptation. 
-Dynamic Multicore Processors (DMPs) bridge the gap between homogeneous and fully reconfigurable systems.
+Dynamic Multi-core Processors (DMPs) bridge the gap between homogeneous and fully reconfigurable systems.
 They present a new way of improving single-threaded performance by running a thread on groups of cores (compositions) and with the ability of changing the processor topology on the fly, they can better adapt themselves to any task at hand.
 However, these potential performance improvements are made difficult due to two main challenges: the difficulty of determining a processor configuration that leads to the optimal performance and knowing how to tackle hardware bottlenecks that may impede the performance of composition.
 
-This thesis first demonstrates that ahead-of-time thread and core partitioning used to improve the performance of multithreaded programs can be automated. 
+This thesis first demonstrates that ahead-of-time thread and core partitioning used to improve the performance of multi-threaded programs can be automated. 
 This is done by analysing static code features to generate a machine-learning model that determines a processor configuration that leads to good performance for an application. 
 The machine learning model is able to predict a configuration that is within 16\% of the performance of the best configuration from the search space.
 
@@ -142,7 +142,7 @@ Whilst this approach has been successful to a certain degree, some applications 
 To compensate for this, hardware designers propose heterogeneous processors where different types of cores are on the same package.
 However, this still requires that the design of the processor be determined before it is built.
 This reduces the flexibility of the system and thus may potentially limit performance on some applications.
-Therefore, a new processor model was created, one where the cores can be grouped together at any time in order to form larger cores: these processors are called Dynamic Multicore Processors (DMPs).
+Therefore, a new processor model was created, one where the cores can be grouped together at any time in order to form larger cores: these processors are called Dynamic Multi-core Processors (DMPs).
 DMPs can adapt themselves to the needs of the program at hand which helps improve the performance of the program.
 
 This thesis explores how to determine ways in which the DMP can automatically reconfigure itself to adapt to the needs of the program at hand.
