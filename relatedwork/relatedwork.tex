@@ -227,7 +227,7 @@ By allowing tasks to generate domains, Fractal is able to exploit nested paralle
 \vspace{-1em}
 \paragraph*{Summary}
 This section has shown how an alternative form of speculation can be used to improve the performance of applications.
-This supported both at the hardware and software level.
+This is supported both at the hardware and software level.
 As seen throughout the section, speculative parallelism requires both hardware and software support to function (SWARM).
 This is more involved than supporting core composition on an EDGE processor, where the ISA naturally lends itself to deep single-threaded execution speculation.
 \vspace{-1em}
@@ -253,11 +253,11 @@ Applications such as image tracking or image comparison do not need to operate o
 Therefore, these applications do not need to roll-back on a mispredicted value, and can continue to operate with incorrect data as long as it is sufficiently accurate (an error rate below 10\%).
 
 Sheikh {\it et al.~}present a value predictor that is able to avoid mispredictions caused by Load $\,\to\,$ Store $\,\to\,$ Load conflicts~\cite{sheikh2017value}.
-This achieved by predicting load memory address at the instruction fetch stage and checking the data cache for that memory address.
-If the memory address is contained in the data cache, then the value is fetched (this considered a prediction).
-If the address is not contained in the cache, then a data prefetch issued.
+This is achieved by predicting load memory address at the instruction fetch stage and checking the data cache for that memory address.
+If the memory address is contained in the data cache, then the value is fetched (this is considered a prediction).
+If the address is not contained in the cache, then a data prefetch is issued.
 Their new approach to value prediction generates a 4.8\% speedup on a set of SPEC 2000 and 2006, EEMBC and Octane applications.
-This almost 2x more than the VTAGE predictor used in the paper (2.1\%).
+This is almost 2x more than the VTAGE predictor used in the paper (2.1\%).
 
 \paragraph*{Summary}
 Most of the predictors described in this section focus on value prediction for load instructions.
