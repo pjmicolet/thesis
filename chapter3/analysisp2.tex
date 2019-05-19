@@ -19,7 +19,7 @@ On the other hand, a small block size allows to have multiple blocks stored at a
 This could be potentially remediated by allowing a single EDGE block to occupy multiple predictor blocks, however this technique is not explored in this thesis.
 
 
-To determine the size, all the EDGE blocks of the SD-VBS benchmarks are analysed to determine the average unique register read and write count per blocks throughout the execution of the benchmarks.
+To determine the size, all the EDGE blocks of the SD-VBS benchmarks are analysed to determine the average unique register read and write count per block throughout the execution of the benchmarks.
 The writes are tracked as it provides information on the potential number of register dependencies between blocks found in each of the applications.
 The left hand side of figure~\ref{fig:edge_reg_read} shows the average number of register read and writes for each of the benchmarks.
 Whilst \bm{Disparity} \bm{Localization}, \bm{Texture\_Synthesis} and \bm{Tracking} have higher register read counts than the average, most of them only have 5 writes per block.

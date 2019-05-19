@@ -44,7 +44,7 @@
 \section{Dynamic Multicore Processor Simulator}\label{chp:setup:conf}
 
 To evaluate the work a customisable cycle-level simulator for the EDGE architecture is used.
-The simulator is verified against RTL implementation of an EDGE core as described in~\cite{putnam2010e2} and is within 5\% from that implementation~\cite{micolet2016dmpstream}.
+The simulator is verified against RTL implementation of an EDGE core as described in Putnam {\it et al.}'s work~\cite{putnam2010e2} and is within 5\% from that implementation~\cite{micolet2016dmpstream}.
 This validation is done by running workloads on RTL and comparing the traces cycle-by-cycle with the simulator~\cite{micolet2017cases}.
 
 To maintain a homogeneous view of the system, the same core configuration was used throughout the thesis.
@@ -74,19 +74,19 @@ Also, having 16 cores available increases the number of possible configurations 
 \begin{figure}[t]
   \centering
     \includegraphics[width=1\textwidth]{setup/results.png}
-    \caption{Performance comparison of the R0 core with a little (A53) ARM core shown by Aaron Smith during the RISE lecture. The R0+ is an refined RTL model.}\label{fig:r0perf}
+    \caption{Performance comparison of the R0 core with a little (A53) Arm core shown by Aaron Smith during the RISE lecture. The R0+ is an refined RTL model.}\label{fig:r0perf}
 \end{figure}
 
 \subsection{Performance baseline}
-The EDGE architecture aims to improve the efficiency of out-of-order processors by involving the compiler more~\cite{aarontalk, gray2018edge}.
+The EDGE architecture aims to improve the efficiency of out-of-order (OoO) processors by involving the compiler more~\cite{aarontalk, gray2018edge}.
 EDGE is also intended to be used as a general-purpose architecture, able to run operating systems~\cite{aarontalk}.
 Even though an EDGE based processor lacks traditional OoO hardware such as a register-renaming unit (due to the compiler handling this task), it is still built around a traditional RISC 5-stage pipeline~\cite{gray2018edge}.
-As ARM represent a major player in the RISC space (from micro-controllers to high-performance general-purpose smartphone cores) it presents an important performance baseline for an EDGE core design.
+As Arm represent a major player in the RISC space (from micro-controllers to high-performance general-purpose smartphone cores) it presents an important performance baseline for an EDGE core design.
 
-In a presentation at the Research Institute of Sweden (RISE) organised by the Eurolab4HPC project~\cite{eurolab4hpc, aarontalk} , Aaron Smith presented a performance comparison of an EDGE core using the same parameters as the one used throughout this thesis with different ARM cores.
-The performance comparison was conducted by Qualcomm using an RTL model of an 8 issue EDGE core (Figure~\ref{fig:r0}, and an ARM Cortex-A53 from their SnapDragon SoC~\cite{aarontalk}.
+In a presentation at the Research Institute of Sweden (RISE) organised by the Eurolab4HPC project~\cite{eurolab4hpc, aarontalk} , Aaron Smith presented a performance comparison of an EDGE core using the same parameters as the one used throughout this thesis with different Arm cores.
+The performance comparison was conducted by Qualcomm using an RTL model of an 8 issue EDGE core (Figure~\ref{fig:r0}, and an Arm Cortex-A53 from their SnapDragon SoC~\cite{aarontalk}.
 To evaluate the performance, the SPECInt2000 benchmark suite was used, and both cores were clocked at 2GHz.
-As Figure~\ref{fig:r0perf} shows, a core using the parameters described in Table~\ref{tab:processor} are equivalent to that of a "little" ARM core clocked at 2GHz.
+As Figure~\ref{fig:r0perf} shows, a core using the parameters described in Table~\ref{tab:processor} are equivalent to that of a "little" Arm core clocked at 2GHz.
 
 \section{Benchmarks}
 This thesis explores both multi-threaded and single threaded applications to show how dynamic multicore processors (DMP) can adapt to a multitude of situations. 

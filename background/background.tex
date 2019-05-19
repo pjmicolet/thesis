@@ -92,7 +92,7 @@ Mitall's survey ~\cite{MittalSurv2016} defines three types of modifiable resourc
 \paragraph*{Core Composition Dynamic Multi-core Processors}
 
 
-A DMP that can modify its core count is built out of homogeneous cores with a re-configurable fabric on top.
+A DMP that can modify its core count is built out of homogeneous cores with a reconfigurable fabric on top.
 Physical cores can function either on their own or as a group.
 Figure~\ref{fig:dynmulticore} provides an high level view of a DMP: the physical cores \textit{P}, are composed into 3 separate compositions of sizes 2, 8 and 4.
 Each of the compositions executes a single thread, leveraging the power of the cores that are grouped together.
@@ -232,7 +232,7 @@ The hardware then flushes these cores if they are not idle and sets the PC of th
 
 The topology of the composition can either be hand-picked by a programmer via an API, or simply defined by specifying the number of cores that they wish to have composed.
 In the first case, the programmer specifies which cores should be fused and calls a function which will trigger the composition; the core that executes this call becomes the master core.
-In the second case, the programmer only defines the number of cores that must belong to the composition; then when the master core executes the composition call, it chooses the X cores that follow it in processor mapping.
+In the second case, the programmer only defines the number of cores that must belong to the composition; then when the master core executes the composition call, it chooses the X cores that follow it in the processor mapping.
 
 When a core mispredicts a branch in a composition, it informs the other cores which flush any younger blocks.
 When un-fusing, the master core informs the other cores, which then commit or flush their blocks and power down while the master core continues to fetch and execute blocks from the thread.
