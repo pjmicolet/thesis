@@ -23,7 +23,7 @@ Leave-one cross validation described in subsection~\ref{sec:valid} is used in Ch
  \caption{Intel Core i7 processor internal die photograph taken from~\cite{turleywhite}}\label{fig:i7}
 \end{figure}
  
-Chip Multi-core Processors (CMPs) are now ubiquitous in the desktop, server and smart-phone space due to the difficulty in scaling single-core performance.
+Chip Multi-core Processors (CMPs) are now ubiquitous in the desktop, server and smartphone space due to the difficulty in scaling single-core performance.
 In a CMP, multiple processor cores are packaged on a single die as seen in Figure~\ref{fig:i7}.
 The most commonly adopted CMP design features homogeneous cores as it reduces the design complexity from a hardware perspective~\cite{asanovic2006landscape}.
 In a CMP the performance improvements come from running multiple tasks in parallel.
@@ -436,7 +436,7 @@ If the entries are propagated to tables with tags, then the PC and branch predic
 The prediction and update schemes are directly inherited from the Tagged Geometric (TAGE) branch predictor~\cite{SeznecITTAGE}.
 
 \subsubsection{Speculative Window}
-As predictions are updated at commit time, if multiple blocks with the same PC are live, this can potentially cause multiple value mis-predictions as the information in the value predictor may be stale.
+As predictions are updated at commit time, if multiple blocks with the same PC are live, this can potentially cause multiple value mispredictions as the information in the value predictor may be stale.
 To ensure this is not the case, current live predictions must be held in a speculative window so that new predictions may use the last predicted values.
 The right hand side of figure~\ref{fig:stride_over} demonstrates how the speculative window works. 
 Instead of directly querying the value predictor, the last value table and speculative window are searched in parallel for a matching tag which in this case is the Program Counter (PC) of the block.
