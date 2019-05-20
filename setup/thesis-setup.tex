@@ -74,14 +74,14 @@ Also, having 16 cores available increases the number of possible configurations 
 \begin{figure}[t]
   \centering
     \includegraphics[width=1\textwidth]{setup/results.png}
-    \caption{Performance comparison of the R0 core with a little (A53) Arm core shown by Aaron Smith during the RISE lecture. The R0+ is an refined RTL model.}\label{fig:r0perf}
+    \caption{Performance comparison of the R0 core with a little (A53) Arm core shown by Aaron Smith during the RISE lecture. The R0+ is a refined RTL model.}\label{fig:r0perf}
 \end{figure}
 
 \subsection{Performance baseline}
 The EDGE architecture aims to improve the efficiency of out-of-order (OoO) processors by involving the compiler more~\cite{aarontalk, gray2018edge}.
 EDGE is also intended to be used as a general-purpose architecture, able to run operating systems~\cite{aarontalk}.
 Even though an EDGE based processor lacks traditional OoO hardware such as a register-renaming unit (due to the compiler handling this task), it is still built around a traditional RISC 5-stage pipeline~\cite{gray2018edge}.
-As Arm represent a major player in the RISC space (from micro-controllers to high-performance general-purpose smartphone cores) it presents an important performance baseline for an EDGE core design.
+As Arm represents a major player in the RISC space (from micro-controllers to high-performance general-purpose smartphone cores) it presents an important performance baseline for an EDGE core design.
 
 In a presentation at the Research Institute of Sweden (RISE) organised by the Eurolab4HPC project~\cite{eurolab4hpc, aarontalk} , Aaron Smith presented a performance comparison of an EDGE core using the same parameters as the one used throughout this thesis with different Arm cores.
 The performance comparison was conducted by Qualcomm using an RTL model of an 8 issue EDGE core (Figure~\ref{fig:r0}, and an Arm Cortex-A53 from their SnapDragon SoC~\cite{aarontalk}.

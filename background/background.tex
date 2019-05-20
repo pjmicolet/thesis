@@ -59,7 +59,7 @@ As all the cores are homogeneous, if the parallel fraction is low, then this cau
 
 Unlike CMPs, Heterogeneous Chip Multi-core Processors (HCMPs) bring a variety of cores onto a single package.
 This variety may come in different forms, such as having multiple instruction set architectures (ISA) on the same system on chip (SoCs)~\cite{venkat2014harnessingisa,venkatHipstr2016} or different size cores on an SoC~\cite{armbig,jeff2012big}.
-Figure~\ref{fig:blarm} shows a schemata for ARM's big.LITTLE HCMP, where a high-performance Cortex-A15 is paired with a simpler, power efficient Cortex-A7.
+Figure~\ref{fig:blarm} shows a schemata for Arm's big.LITTLE HCMP, where a high-performance Cortex-A15 is paired with a simpler, power efficient Cortex-A7.
 The two cores are connected via a cache-coherent interconnect which provides data coherence at the bus-level, allowing the cores to make reads to its neighbour~\cite{armbig}.
 Software is then executed on one of the cores depending on the user's requirement.
 
@@ -150,7 +150,7 @@ These restrictions are:
 \end{itemize}
 If a block does not meet these requirements, it is broken down into smaller blocks.
 
-Unlike traditional ISAs such as x86 or ARM, instructions in a block do not communicate via registers, but rather the output targets of instructions are encoded to instruction inputs~\cite{smith2006edge}.
+Unlike traditional ISAs such as x86 or Arm, instructions in a block do not communicate via registers, but rather the output targets of instructions are encoded to instruction inputs~\cite{smith2006edge}.
 Loads and stores in each EDGE block are assigned unique identifiers which are used to resolve load-store dependencies.
 Thus, the EDGE architecture encodes dependencies between instructions at the ISA level.
 Registers are also only used for inter-communication between blocks.

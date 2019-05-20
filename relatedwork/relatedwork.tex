@@ -10,7 +10,7 @@ This section covers work on both dynamic multi-core processors (DMP) and process
 \subsection{Dynamic Multi-core Processors}~\label{chp:rw:sec:dmp}
 The idea of composing physical cores was first introduced by Ipek {\it et al.~}in CoreFusion~\cite{ipek2007CoreFusion}.
 CoreFusion employs a traditional architecture with 2 issue out of order cores.
-When cores are fused, they collectively fetch from the same thread, whenever an instruction cache miss issued, an eight word block is delivered and distributed across in all of the cores' caches.
+When cores are fused, they collectively fetch from the same thread, whenever an instruction cache miss is issued, an eight word block is delivered and distributed across in all of the cores' caches.
 Fetches are aligned with the core responsible for the 2 oldest instructions.
 In the original paper, a 4 core composition obtains a 1.3x speedup on SPEC 2000 INT and a 1.5x speedup on SPEC FP over a 2 issue core.
  
@@ -69,13 +69,13 @@ Instead, each core can fetch a single block and dispatch instructions on all oth
 If blocks are small, then the instruction window of each core will never be filled, which in turn reduces the potential performance of core composition.
 E2 addresses this problem by segmenting the instruction window into separate lanes and allowing each core to fetch multiple blocks.
 This makes it more flexible than TFlex as each core will have more instructions to execute on average, allowing each core to extract more ILP.
-Thus, the processor used in this thesis based on the E2.
+Thus, the processor used in this thesis is based on the E2.
 
 \section{Automated processor reconfiguration}
 
 In Ipek {\it et al.~}'s. original work on CoreFusion~\cite{ipek2007CoreFusion} they introduce the \textit{FUSE}/\textit{SPLIT} instructions that allow for dynamic reconfiguration.
 However, their eight core system only has two possible configurations: either each core executes on their own or they are fused into groups of four cores; no details as to when to compose cores is discussed.
-This the same for the original proposal for TFlex~\cite{kim2007tflex}, where 5 different configurations are explored (2, 4, 8, 16 and 32 composed cores), but does not provide any insight as to how to determine the composition size automatically.
+This is the same for the original proposal for TFlex~\cite{kim2007tflex}, where 5 different configurations are explored (2, 4, 8, 16 and 32 composed cores), but does not provide any insight as to how to determine the composition size automatically.
 
 In the work of Pricopi {\it et al.~}\cite{pricopiSchedCoreComp2014}, they show how dynamic reconfiguration is beneficial when it comes to scheduling multiple tasks.
 However, they do not discuss any method of automatically deciding the optimal configuration beyond a 4 core composition.
@@ -99,7 +99,7 @@ They admit that this system is less efficient than profiling.
 
 These contributions lack the ability of determining a how to configure the DMP without the use of profiling information.
 If a model that can predict how the DMP should be configured to maximise either speedup or energy efficiency without requiring multiple executions of the program, then this would make using DMPs easier.
-This why this thesis examines how machine learning can be used to reconfigure the DMP.
+This is why this thesis examines how machine learning can be used to reconfigure the DMP.
 Machine learning can be used to generate models that \textit{learn} from how programs are affected by core composition to determine the correct configuration of the DMP for any new program.
 Through this method, the procedure of finding a good configuration can be reduced to a single analysis of the application at hand.
 
@@ -130,7 +130,7 @@ This technique can improve the performance of a 16 core composition on a set of 
 
 This implementation depends on the concept that cores in the composition currently hold inactive blocks in their instruction window.
 Whilst this may be the case for TFlex, as it can only execute a single block per core, an E2 type processor is designed to not have idle blocks in its composition.
-Therefore, another solution to improve fetching for the type of processor used in this thesis proposed in Chapter~\ref{chp:hardchanges}.
+Therefore, another solution to improve fetching for the type of processor used in this thesis is proposed in Chapter~\ref{chp:hardchanges}.
 
 \vspace{-1em}
 \section{Hardware techniques for power and energy efficiency}
@@ -192,7 +192,7 @@ This section covers work on speculative parallelism, where performance improveme
 \paragraph*{Software level}
 The idea of speculatively extracting parallelism at runtime was first introduced by Rauchwerger {\it et al.~}\cite{runtimeSpec}.
 They underline that compile-time analysis of single-threaded programs does not allow for the complete detection of parallel sections, and must be complemented by runtime analysis.
-They propose a framework for parallelising loops at runtime: instead of detecting if the loop is parallelisable or not, the loop is speculatively executed in parallel and then runtime analysis conducted to verify that no data-dependencies are violated.
+They propose a framework for parallelising loops at runtime: instead of detecting if the loop is parallelisable or not, the loop is speculatively executed in parallel and then runtime analysis is conducted to verify that no data-dependencies are violated.
 If any violations occur, the loop is re-executed serially.
 Loops must be marked as speculatively parallel by the compiler, the run-time system only verifies whether or not the speculative execution violates dependencies.
 
@@ -310,10 +310,10 @@ StreamIt was originally intended for the RAW~\cite{waingold1997raw} tile-based a
 Brook~\cite{buck2004brook} is another streaming programming language geared towards Graphical Processing Units (GPUs).
 Unlike StreamIt, Brook extends the C language by providing a new data type and function types.
 The new data type, called a \textit{stream}, provides a collection of data which can be operated on in parallel, which can be modified by stream functions.
-A stream function takes one or more stream inputs and will output one or more streams; this similar to a StreamIt \textit{filter}.
+A stream function takes one or more stream inputs and will output one or more streams; this is similar to a StreamIt \textit{filter}.
 To operate on streams in parallel, Brook defines a subset of stream functions called \textit{kernel} functions.
 These functions do not have access to global values, cannot call functions that aren't kernel functions as well, and are only allowed to access streams in a read-only \textit{OR} write-only way.
-This to facilitate the compiler generation of dataflow graphs for the program.
+This is to facilitate the compiler generation of dataflow graphs for the program.
 
 WaveScript on the other hand is developed for embedded systems that are low powered \cite{newton2008wavescript}.
 Unlike StreamIt, WaveScript uses an asynchronous streaming model, where the input and output rates of functions are not known at compile time.
@@ -383,7 +383,7 @@ This thesis tackles this issue by presenting models that use machine learning to
 
 This was followed by explaining how block fetching latencies can be reduced to improve the performance of core composition.
 This work was conducted on a TFlex processor and depends on idle-cores to selectively re-issue blocks on idle cores.
-Whilst this a promising approach for a TFlex processor, E2 avoids having idle cores by allowing them to fetch multiple blocks, and thus the concept of instruction buffering is not applicable.
+Whilst this is a promising approach for a TFlex processor, E2 avoids having idle cores by allowing them to fetch multiple blocks, and thus the concept of instruction buffering is not applicable.
 
 This was followed by exploring different hardware techniques used to reduce the energy consumption of applications, which is a topic approached in Chapter~\ref{chp:cases}.
 These techniques (DVFS and thread migration) often rely on the processor cores to be designed ahead of time to create performance models, and they can sacrifice some speed to reduce energy consumption.
@@ -395,7 +395,7 @@ These techniques are described to show the breadth of performance optimisations 
 Value prediction, data-prefetching and register bypassing were shown to be methods of reducing the impact of data-dependencies between instructions.
 Even though data-prefetching is successfully applied in commercial products, it does not allow instructions to execute with speculative data.
 Also, register bypassing and critical detection does not present the best solution to the problem as it is more focused on forwarding values with low overhead.
-As value prediction allows instructions to execute with speculative data, this a more promising approach for increasing ILP in core compositions, as will be explained in Chapter~\ref{chp:hardchanges}.
+As value prediction allows instructions to execute with speculative data, this is a more promising approach for increasing ILP in core compositions, as will be explained in Chapter~\ref{chp:hardchanges}.
 
 Then, dataflow programming languages, and the different methods used to partition applications written in these languages on multi-core processors was explained.
 The StreamIt programming language is explored in Chapter~\ref{chp:streamit} as it was designed for architectures similar to the one used in this thesis.
@@ -403,4 +403,4 @@ The work of Wang {\it et al.~}\cite{wang2013partitionstreamit} motivated the use
 This thesis pushes this work further by providing a model that can determine both thread count and number of cores composed.
 
 Finally, two examples of how machine learning has been used for performance optimisations were described.
-This to demonstrate that machine learning is becoming a promising method for the domain of improving the performance of programs and determining architectural parameters.
+This is to demonstrate that machine learning is becoming a promising method for the domain of improving the performance of programs and determining architectural parameters.
