@@ -75,7 +75,7 @@ This is most certainly due to the fact that whilst SplitJoins make parallelisabl
 It is also important to understand that a high number of Pipelines implies the use of SplitJoins.
 This is due to the fact that a StreamIt application with no SplitJoins will feature only a single Pipeline, thus a larger number of pipelines implies at least one SplitJoin.
 This is why the number of SplitJoins is not present in the correlating features; because the number of Pipeline already correlates with this feature.\\
-
+\vspace{-0.2em}
 A method for determining how many threads an application requires is to build a database of programs.
 Each entry in the database contains a feature vector for a program and the number of threads that leads to the best performance.
 When a new program is encountered, the database can be searched to find applications that have similar features to determine the number of threads needed.
