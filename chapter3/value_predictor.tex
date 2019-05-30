@@ -1,4 +1,5 @@
 %In an EDGE block, data dependent instructions do not pass data to each other via reads and writes to registers, instead the result of an instruction is passed to the operands of instructions who depend on the data (see Chapter~\ref{chp:Background} Section~\ref{sec:edge_isa} for more information).
+\vspace{1em}
 In the EDGE architecture registers are primarily used to pass values between blocks, which can cause data dependencies.
 In a core composition the register files of each core in the composition becomes distributed (Chapter~\ref{chp:Background} Section~\ref{chp:Background:sec:EDGE}) to ensure that each core has the same view of the current execution state.
 An example of values passed between blocks is the loop induction variable of the loop in Listing~\ref{lst:basic2}.% are going to be passed via 3 registers in the block that represents the body of the loop.
@@ -15,8 +16,9 @@ This of course will put stress on the NoC, and increase the latency of what is m
 	for(int i =0 ; i < 100000; i++)
 		a[i] = c[i]*b[i];
 \end{lstlisting}
+\vspace{-1em}
 \captionof{lstlisting}{Example of small loop.}\label{lst:basic2}
-\vspace{2em}
+\vspace{1em}
     \centering
     \includegraphics[width=1\textwidth]{chapter3/graphics/val_pred_overview.pdf}
     \captionof{figure}{Overview of how a value predictor should work for EDGE. Prediction is made at the fetch stage, and predictions are used when register reads are dispatched.}

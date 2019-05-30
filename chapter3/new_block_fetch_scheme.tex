@@ -249,12 +249,13 @@ Assuming, for this architecture, that a hop takes a single cycle, a block can th
 %Centralising the fetching mechanism increases the pressure on the network as each core will have to send a block PC to the scheduler, and the scheduler will then have to re-submit that PC to an available core.
 %This is twice as many network messages per block compared to SF and RF.
 %The implementation of a centralised fetching scheme is not explored throughout this Chapter, yet it is suggested as future work.
+\vspace{-1em}
 \subsection{Evaluating the round robin fetch scheme on a synthetic block}
 
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\textwidth]{chapter3/graphics/motivation_fetch2.pdf}
-   	\vspace{-2em}
+   	\vspace{-2.5em}
  \caption{Speedup when executing the synthetic block with varying execution times (facets) with SF and RRF. Higher is better.}
     \label{fig:motiv_res}
     \centering
@@ -263,7 +264,7 @@ Assuming, for this architecture, that a hop takes a single cycle, a block can th
 	\vspace{-0.5em}
 	\caption{Average execution time (in cycles) of blocks for the SD-VBS benchmarks. Each benchmark is executed on one core with perfect branch prediction.}
     \label{fig:svdbs_av}
-\vspace{2em}
+\vspace{1em}
 \end{figure}
 
 Before evaluating the performance of RRF on a set of benchmarks, it is important to measure the potential performance increase on a simpler case.

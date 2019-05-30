@@ -89,15 +89,9 @@ However, as of the writing of this thesis, a block can only support a single pre
 \begin{figure}[t]
      \centering
      \includegraphics[width=\textwidth]{cases-paper/graphics/Exploration/ipc_comp.pdf}
-\vspace*{-3em}
      \caption{Average IPC using the optimal sized composition, with and without optimisations. Higher is better.}
      \label{fig:ipccom}
-    \centering
-    \includegraphics[width=\textwidth]{cases-paper/graphics/Exploration/comp_speed.pdf}
-\vspace*{-8mm}
-    \caption{Speedup from using code-optimisations over baseline source code using the same optimal sized composition.}
-    \label{fig:speedcomp}
-\vspace{5mm}
+\vspace{1em}
 \end{figure}
 
 \subsection{Optimisation Methodology}
@@ -108,6 +102,14 @@ Statements are also re-ordered within the body of a loop to avoid having control
 For loop unrolling, the loops were unrolled to fit a single block.
 The source code modifications are then verified to have the intended effect by disassembling the binary file produced by the compiler.
 On average there are between 0 and 12 loops modifications depending on the benchmark.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{cases-paper/graphics/Exploration/comp_speed.pdf}
+    \caption{Speedup from using code-optimisations over baseline source code using the same optimal sized composition.}
+    \label{fig:speedcomp}
+\vspace{5mm}
+\end{figure}
 
 \subsection{Results}
 First the best static core composition using the optimised code is compared with the unmodified code, both version compiled with \texttt{-O2} which is the highest optimisation setting for the EDGE compiler.

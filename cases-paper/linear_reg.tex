@@ -8,12 +8,11 @@ Once trained, the model predicts the optimal number of cores based on the perfor
 \begin{figure}[t]
     \centering
 	\includegraphics[width=1\textwidth]{cases-paper/graphics/other/model3.pdf}
-	\vspace{-2em}
     \caption{Linear Model.}
     \label{fig:linmod}
 \end{figure}
+\vspace{-1em}
 \subsection{Model}
-
 As the decisions are made at runtime, a lightweight model that is able to predict the correct configuration that can be integrated in hardware is necessary.
 Linear regression, which makes predictions using a weighted sum of the input feature, has been demonstrated to be useful for predicting processor performance~\cite{Joseph2006LinReg}.
 It is chosen as it has been as it can easily be implemented in hardware~\cite{lee2006linreg,Lukefahr2012Composite} and has a low overhead when computing the sum.
